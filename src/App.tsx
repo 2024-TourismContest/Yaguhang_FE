@@ -7,7 +7,6 @@ function App() {
   return (
     <RecoilRoot>
       <Layout></Layout>
-      <Carousel />
     </RecoilRoot>
   );
 }
