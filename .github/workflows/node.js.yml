@@ -1,0 +1,36 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Remove old build files
+        run: rm -rf ./dist
+
+      - name: Build project
+        run: npm run build
+
+      - name: Stop existing PM2 process if running
+        run: |
+          if pm2 list | grep -q 'tourismContest'; then pm2 stop tourismContest; fi
+
+      - name: Copy build files
+        run: |
+          cp -r ./dist /home/mschoi/Desktop/tourismContest/Spring-FE
+
+      - name: Start server with PM2
+        run: pm2 start /home/mschoi/Desktop/tourismContest/Spring-FE/server.js --name "tourismContest" --watch
