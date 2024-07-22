@@ -16,8 +16,10 @@ jobs:
           ref: develop
 
       - name: Install Yarn
-        run: |
-          npm install -g yarn
+        run: curl -o- -L https://yarnpkg.com/install.sh | bash
+          
+      - name: Add Yarn to PATH
+        run: echo "$HOME/.yarn/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: yarn install
