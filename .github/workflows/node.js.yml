@@ -15,14 +15,18 @@ jobs:
         with:
           ref: develop
 
+      - name: Install Yarn
+        run: |
+          npm install -g yarn
+
       - name: Install dependencies
-        run: npm install
+        run: yarn install
 
       - name: Remove old build files
         run: rm -rf ./dist
 
       - name: Build project
-        run: npm run build
+        run: yarn build
 
       - name: Stop existing PM2 process if running
         run: |
