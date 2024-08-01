@@ -1,7 +1,6 @@
 import Slider from "react-slick";
-import styled from "styled-components";
-import heroData from "./dummydata.json"; // 더미 데이터 파일 경로를 확인하세요
-import HeroSection from "./HeroSection"; // HeroSection 컴포넌트 import
+import heroData from "./dummydata.json";
+import HeroSection from "./HeroSection";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
