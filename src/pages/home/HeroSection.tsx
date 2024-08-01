@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const HeroContainer = styled.div`
   height: 52.0833vh;
@@ -42,8 +43,23 @@ const TeamLogo = styled.img`
   height: auto;
 `;
 
-const HeroSection = ({ heroImage, heroTitle, heroText, teamLogo, altText }) => (
-  <HeroContainer heroImage={heroImage}>
+const Button = styled.button`
+  border-radius: 20px;
+  padding: 10px 30px;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #6A6A6A;
+  border: none;
+  cursor: pointer;
+`;
+
+const HeroSection = ({ key, heroImage, heroTitle, heroText, teamLogo, altText }) => {
+  const navigate = useNavigate();
+  const handleClickBtn = () => {
+    navigate(`/${key}`);
+  };
+  return(
+    <HeroContainer heroImage={heroImage}>
     <Wrapper>
     <HeroContentWrapper>
       <HeroTitle>{heroTitle}</HeroTitle>
@@ -51,7 +67,9 @@ const HeroSection = ({ heroImage, heroTitle, heroText, teamLogo, altText }) => (
     </HeroContentWrapper>
     <TeamLogo src={teamLogo} alt={altText} />
     </Wrapper>
+    <Button onClick={handleClickBtn}> 보러가기 </Button>
   </HeroContainer>
-);
+  )
+};
 
 export default HeroSection;
