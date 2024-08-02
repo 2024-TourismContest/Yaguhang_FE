@@ -1,7 +1,9 @@
+import Card from "../../components/home/Card";
+
 const HomePage = () => {
   return (
     <>
-      <h1>HomePage Component</h1>
+      <Card />
     </>
   );
 };
