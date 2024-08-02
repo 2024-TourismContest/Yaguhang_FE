@@ -12,6 +12,7 @@ const NavbarContainer = styled.nav`
   align-items: center;
   padding: 60px 30px;
   box-sizing: border-box;
+  z-index: 1000;
 `;
 
 const LogoIcon = styled.img`
@@ -31,11 +32,10 @@ const NavItem = styled.li`
 
 const NavLink = styled.a`
   text-decoration: none;
-  color: #333;
-  font-weight: bold;
+  color: white;
   font-size: 18pt;
   &:hover {
-    color: #007bff;
+    color: #b9b9b9;
   }
 `;
 
