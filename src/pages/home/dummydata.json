@@ -4,7 +4,7 @@
       "id": 1,
       "name": "Giants",
       "heroImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5v9woVcR655OkfB1G0yrxKLnXAv8MLCj2IA&s",
-      "teamLogo": "https://evewiki.kr/w/images/3/3c/플로라_롯데_자이언츠_엠블럼.svg",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/Lotte.png",
       "heroTitle": "자이언츠와 함께하는\n부산의 매력을 느껴보세요",
       "heroText": "부산의 바다와 도시를 동시에 즐길 수 있는 패키지!\n자이언츠와 함께하는 해변 산책과 시원한 해산물 투어."
     },
@@ -12,7 +12,7 @@
       "id": 2,
       "name": "Eagles",
       "heroImage": "https://www.midascad.com/hubfs/image-png-Feb-22-2024-11-28-44-2386-PM.png",
-      "teamLogo": "https://blog.kakaocdn.net/dn/dC1Yem/btrzxaBksXY/Xf3hjuLAekBo2cPLQiSwX0/img.png",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/Hanwha.png",
       "heroTitle": "이글스와 함께하는\n대전의 전통과 현대를 경험하세요",
       "heroText": "대전의 역사적인 명소와 최신 랜드마크를 함께 즐길 수 있는 여행!\n이글스와 함께하는 전통 시장 탐방과 최신 테마파크 체험."
     },
@@ -20,7 +20,7 @@
       "id": 3,
       "name": "Tigers",
       "heroImage": "https://images.unsplash.com/photo-1471295253337-3ceaaedca402?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTB8fHxlbnwwfHx8fHw%3D",
-      "teamLogo": "https://blog.kakaocdn.net/dn/bljax5/btrziguw8TT/iuOCMGZIC7yfQqkxW0qpYk/img.png",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/KIA.png",
       "heroTitle": "타이거스와 함께하는\n광주의 예술과 문화 여행",
       "heroText": "광주의 전통 문화와 현대 예술을 경험하세요!\n타이거스와 함께하는 문화 유산 탐방과 예술 갤러리 투어."
     },
@@ -28,7 +28,7 @@
       "id": 4,
       "name": "LG Twins",
       "heroImage": "https://p4.wallpaperbetter.com/wallpaper/24/268/993/stadium-baseball-sunset-wallpaper-preview.jpg",
-      "teamLogo": "https://blog.kakaocdn.net/dn/dC1Yem/btrzxaBksXY/Xf3hjuLAekBo2cPLQiSwX0/img.png",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/LGTwins.png",
       "heroTitle": "LG 트윈스와 함께하는\n서울의 핫플레이스 탐방",
       "heroText": "서울의 최신 핫플레이스와 전통 명소를 함께 즐기세요!\nLG 트윈스와 함께하는 한강 산책과 인기 맛집 투어."
     },
@@ -36,7 +36,7 @@
       "id": 5,
       "name": "Doosan Bears",
       "heroImage": "https://news.kbs.co.kr/data/fckeditor/image/11(375).jpg",
-      "teamLogo": "https://evewiki.kr/w/images/3/3c/플로라_롯데_자이언츠_엠블럼.svg",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/Doosan.png",
       "heroTitle": "두산 베어스와 함께하는\n서울의 전통과 현대를 느끼세요",
       "heroText": "서울의 전통 명소와 현대적인 문화가 만나는 패키지!\n두산 베어스와 함께하는 고궁 탐방과 최신 쇼핑 거리 체험."
     },
@@ -44,7 +44,7 @@
       "id": 6,
       "name": "Samsung Lions",
       "heroImage": "https://monthly.chosun.com/upload/1106/1106_206.jpg",
-      "teamLogo": "https://blog.kakaocdn.net/dn/bljax5/btrziguw8TT/iuOCMGZIC7yfQqkxW0qpYk/img.png",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/Samsung.png",
       "heroTitle": "삼성 라이온즈와 함께하는\n대구의 맛과 멋을 즐기세요",
       "heroText": "대구의 전통 시장과 맛집 투어를 즐기세요!\n삼성 라이온즈와 함께하는 대구의 유명한 먹거리와 명소 탐방."
     },
@@ -52,7 +52,7 @@
       "id": 7,
       "name": "KIA Tigers",
       "heroImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5v9woVcR655OkfB1G0yrxKLnXAv8MLCj2IA&s",
-      "teamLogo": "https://evewiki.kr/w/images/3/3c/플로라_롯데_자이언츠_엠블럼.svg",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/KIA.png",
       "heroTitle": "KIA 타이거즈와 함께하는\n전주 전통 음식 여행",
       "heroText": "전주의 전통 음식을 맛보세요!\nKIA 타이거즈와 함께하는 전주 한옥마을 탐방과 전통 음식 체험."
     },
@@ -60,7 +60,7 @@
       "id": 8,
       "name": "Nexen Heroes",
       "heroImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5v9woVcR655OkfB1G0yrxKLnXAv8MLCj2IA&s",
-      "teamLogo": "https://blog.kakaocdn.net/dn/dC1Yem/btrzxaBksXY/Xf3hjuLAekBo2cPLQiSwX0/img.png",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/Kiwoom.png",
       "heroTitle": "넥센 히어로즈와 함께하는\n의정부의 자연과 역사 여행",
       "heroText": "의정부의 아름다운 자연과 역사적 명소를 탐방하세요!\n넥센 히어로즈와 함께하는 자연 산책과 역사 유적지 투어."
     },
@@ -68,7 +68,7 @@
       "id": 9,
       "name": "SK Wyverns",
       "heroImage": "https://images.unsplash.com/photo-1471295253337-3ceaaedca402?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTB8fHxlbnwwfHx8fHw%3D",
-      "teamLogo": "https://blog.kakaocdn.net/dn/bljax5/btrziguw8TT/iuOCMGZIC7yfQqkxW0qpYk/img.png",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/SSGLanders.png",
       "heroTitle": "SK 와이번스와 함께하는\n인천의 바다와 해양 스포츠",
       "heroText": "인천의 해양 스포츠와 해변을 즐기세요!\nSK 와이번스와 함께하는 바다 탐방과 해양 액티비티."
     },
@@ -76,7 +76,7 @@
       "id": 10,
       "name": "Kiwoom Heroes",
       "heroImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBIKFzaXPQ0u_JjzUMD2OCGYjEvAzYx13zMA&s",
-      "teamLogo": "https://evewiki.kr/w/images/3/3c/플로라_롯데_자이언츠_엠블럼.svg",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/Kiwoom.png",
       "heroTitle": "키움 히어로즈와 함께하는\n강릉의 자연과 바다 여행",
       "heroText": "강릉의 아름다운 자연과 해변을 즐기세요!\n키움 히어로즈와 함께하는 강릉 바다 산책과 자연 탐방."
     }
