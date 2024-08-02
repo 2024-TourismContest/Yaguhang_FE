@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import heroImg from "../../assets/images/hero.png";
-import lotteLogo from "../../assets/images/lotte_logo.svg"
+import lotteLogo from "../../assets/images/lotte_logo.svg";
+import ImageSlider from "../../components/home/imageSlider";
 
 const HeroContainer = styled.div`
   height: 52.0833vh;
@@ -11,14 +12,14 @@ const HeroContainer = styled.div`
   background-size: cover;
   color: white;
   display: flex;
-  padding: 15.6250vw;
+  padding: 15.625vw;
 `;
 
 const HeroContentWrapper = styled.div`
   min-width: max-content;
   display: flex;
   flex-direction: column;
-` ;
+`;
 
 const HeroTitle = styled.h1`
   font-size: 46.82pt;
@@ -37,30 +38,29 @@ const HeroText = styled.p`
 const TeamLogo = styled.img`
   max-width: 26.0417vw;
   height: auto;
-
 `;
 
 const HomePage = () => {
-
   const HeroSection = () => (
     <HeroContainer>
       <HeroContentWrapper>
         <HeroTitle>
-          자이언츠와 함께하는 <br/>
+          자이언츠와 함께하는 <br />
           다이나믹 부산여행
         </HeroTitle>
         <HeroText>
-          마! 아직도 여기 안가봤나?! <br/>
+          마! 아직도 여기 안가봤나?! <br />
           무더운 여름을 날려보낼, 다양한 여름 스포츠 패패패패키지.
         </HeroText>
       </HeroContentWrapper>
-      <TeamLogo src={lotteLogo} alt="Lotte Logo"/>
+      <TeamLogo src={lotteLogo} alt="Lotte Logo" />
     </HeroContainer>
   );
 
   return (
     <>
       <HeroSection />
+      <ImageSlider />
     </>
   );
 };
