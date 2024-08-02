@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-const HeroContainer = styled.div`
+const HeroContainer = styled.div<{ heroImage: string }>`
   height: 52.0833vh;
   background: 
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
@@ -53,7 +53,16 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const HeroSection = ({ key, heroImage, heroTitle, heroText, teamLogo, altText }) => {
+interface HeroSectionProps {
+  key: string;
+  heroImage: string;
+  heroTitle: string;
+  heroText: string;
+  teamLogo: string;
+  altText: string;
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({ key, heroImage, heroTitle, heroText, teamLogo, altText }) => {
   const navigate = useNavigate();
   const handleClickBtn = () => {
     navigate(`/${key}`);
