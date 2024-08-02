@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { dummy } from "./dummy";
 import left from "../../assets/icons/arrow_left.svg";
 import right from "../../assets/icons/arrow_right.svg";
+import img from "/img.jpg";
 
 // 타입 정의
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
@@ -16,18 +17,22 @@ interface SpotBasicPreviewDto {
   address: string;
   imageUrl: string;
 }
+interface ArrowProps {
+  className?: string;
+  onClick?: () => void;
+}
 
 // Styled Components
 const Container = styled.div`
   max-width: 1400px;
-  margin: clamp(40px, 7vw, 150px) auto;
-  /* margin-top: 20px; */
+  margin: clamp(40px, 7vw, 200px) auto;
   padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 20px;
+  height: clamp(40px, 30vw, 720px);
 `;
 const Wrapper = styled.div`
   width: 90%;
@@ -83,6 +88,7 @@ const CategoryButton = styled.button<{ active: boolean }>`
 const SlideContainer = styled.div`
   position: relative;
   width: 14vw;
+  height: clamp(24px, 19vw, 370px);
   overflow: hidden;
   padding: 0 5px;
   display: flex;
@@ -153,15 +159,15 @@ const ArrowButton = styled.button`
   }
 `;
 
-const PrevArrow = styled(ArrowButton)`
-  left: -50px;
-  z-index: 100;
-`;
+// const PrevArrow = styled(ArrowButton)`
+//   left: -50px;
+//   z-index: 100;
+// `;
 
-const NextArrow = styled(ArrowButton)`
-  right: -50px;
-  z-index: 100;
-`;
+// const NextArrow = styled(ArrowButton)`
+//   right: -50px;
+//   z-index: 100;
+// `;
 
 const ArrowImage = styled.img`
   width: 30px; // 원하는 크기로 조정
@@ -178,6 +184,25 @@ const ImageSlider: React.FC = () => {
     setSpots(dummy[category] || []);
   }, [category]);
 
+  const PrevArrow: React.FC<ArrowProps> = (props) => {
+    const { className, onClick, ...rest } = props;
+    return (
+      <ArrowButton className={className} onClick={onClick} {...rest}>
+        <ArrowImage src={left} alt="Previous" />
+      </ArrowButton>
+    );
+  };
+
+  // NextArrow component
+  const NextArrow: React.FC<ArrowProps> = (props) => {
+    const { className, onClick, ...rest } = props;
+    return (
+      <ArrowButton className={className} onClick={onClick} {...rest}>
+        <ArrowImage src={right} alt="Next" />
+      </ArrowButton>
+    );
+  };
+
   const settings = {
     dots: true,
     infinite: true,
@@ -185,20 +210,13 @@ const ImageSlider: React.FC = () => {
     slidesToShow: 5,
     slidesToScroll: 5,
     arrow: true,
-    prevArrow: (
-      <PrevArrow>
-        <ArrowImage src={left} alt="Previous" />
-      </PrevArrow>
-    ),
-    nextArrow: (
-      <NextArrow>
-        <ArrowImage src={right} alt="Next" />
-      </NextArrow>
-    ),
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
   };
 
   return (
     <Container>
+      <img src={img} width={100} height={100} />
       <Wrapper>
         <TitleWrapper>
           <Title>KT 팬들에게 추천하는 잠실의 핫플레이스!</Title>
@@ -222,7 +240,7 @@ const ImageSlider: React.FC = () => {
       <StyledSlider {...settings}>
         {spots.map((spot) => (
           <SlideContainer key={spot.contentId}>
-            <SlideImage src={spot.imageUrl} alt={spot.name} />
+            <SlideImage src={img} alt={spot.name} />
             <SlideInfo>
               <SlideName>{spot.name}</SlideName>
               <SlideAddress>{spot.address}</SlideAddress>
