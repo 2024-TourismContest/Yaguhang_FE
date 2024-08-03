@@ -1,3 +1,5 @@
+
+import Card from "../../components/home/Card";
 import styled from "styled-components";
 import heroImg from "../../assets/images/hero.png";
 import lotteLogo from "../../assets/images/lotte_logo.svg"
@@ -60,6 +62,7 @@ const HomePage = () => {
 
   return (
     <>
+      <Card />
       <HeroSection />
     </>
   );
