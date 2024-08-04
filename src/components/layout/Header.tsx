@@ -8,11 +8,11 @@ export default function Header() {
 
   return (
     <NavbarContainer>
-      <div>
+      <LogoContainer>
         <Link to="/" className="logo">
           <LogoIcon src={logo} alt="Logo" />
-        </Link>        
-      </div>
+        </Link>
+      </LogoContainer>
       <NavList>
         <NavItem>
           <StyledNavLink to="/" isActive={currentPath === '/'}>홈</StyledNavLink>
@@ -38,7 +38,8 @@ const NavbarContainer = styled.nav`
   width: 100%;
   height: 20%;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: center; /* 가운데 정렬 */
   box-sizing: border-box;
   z-index: 1000;
   background: linear-gradient(
@@ -48,16 +49,18 @@ const NavbarContainer = styled.nav`
     rgba(0, 0, 0, 0.5) 75%, 
     rgba(0, 0, 0, 0) 100%
   );
+`;
+
+const LogoContainer = styled.div`
+  position: absolute;
+  left: 11.6146vw;
   display: flex;
   align-items: center;
-  justify-content: center;
+  z-index: 2;
 `;
 
 const LogoIcon = styled.img`
-  position: absolute;
-  left: 11.1111vw;
-  top: 4.5455vw;
-  height: 5vw;
+  width: 7.9768vw;
 `;
 
 const NavList = styled.ul`
@@ -66,8 +69,7 @@ const NavList = styled.ul`
   padding: 0;
   margin: 0;
   gap: 5.1rem;
-  position: relative;
-  z-index: 2; /* 내비게이션 리스트가 그라디언트 위에 위치하도록 설정 */
+  position: absolute;
 `;
 
 const NavItem = styled.li`
