@@ -1,6 +1,6 @@
 import Card from "../../components/home/Card";
-import HeroCarousel from "./HeroCarousel";
-import heroData from "./dummydata.json";
+import HeroCarousel from "../../components/home/HeroCarousel";
+import heroData from "../../dummy-data/dummy-hero-data.json";
 
 const HomePage: React.FC = () => {
   return (
