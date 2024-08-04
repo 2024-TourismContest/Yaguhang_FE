@@ -165,9 +165,9 @@ const HeroContainer = styled.div<{ heroImage: string }>`
     left: 0;
     background: linear-gradient(
       to bottom, 
-      rgba(0, 0, 0, 0.857) 0%, 
-      rgba(0, 0, 0, 0.5) 20%,
-      rgba(0, 0, 0, 0.3) 50%, 
+      rgba(255, 0, 0, 0) 0%, 
+      rgba(255, 0, 0, 0) 20%, 
+      rgba(0, 0, 0, 0) 50%, 
       rgba(0, 0, 0, 0.7) 80%,
       rgb(0, 0, 0) 100%
     );
