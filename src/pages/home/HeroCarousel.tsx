@@ -27,8 +27,8 @@ const HeroCarousel: React.FC<HeroData> = ({ teams }) => {
     autoplay: true,
     vertical: true,
     autoplaySpeed: 2800,
-    arrows: false,
-    
+    arrows: false, 
+    pauseOnHover: false
   };
 
   return (
