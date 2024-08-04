@@ -26,7 +26,7 @@ const HeroCarousel: React.FC<HeroData> = ({ teams }) => {
     slidesToScroll: 1,
     autoplay: true,
     vertical: true,
-    autoplaySpeed: 2800,
+    autoplaySpeed: 3000,
     arrows: false, 
     pauseOnHover: false
   };
@@ -105,6 +105,7 @@ const HeroCarouselItem: React.FC<HeroSectionProps> = ({
   );
 };
 const StyledSlider = styled(Slider)`
+  margin-bottom: 10vh;
   .slick-list {
     overflow: hidden;
   }
