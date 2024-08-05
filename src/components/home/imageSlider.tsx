@@ -3,23 +3,19 @@ import styled from "styled-components";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { dummy } from "./dummy";
-import left from "../../assets/icons/arrow_left.svg";
-import right from "../../assets/icons/arrow_right.svg";
-import img from "/img.jpg";
-
-// 타입 정의
+// import img from "/dummyImg.png";
+import festival from "../../assets/icons/festival.svg";
+import place from "../../assets/icons/place.svg";
+import shopping from "../../assets/icons/shopping.svg";
+import restaurant from "../../assets/icons/restaurant.svg";
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
+import { BsBookmarkStar } from "react-icons/bs";
 
 interface SpotBasicPreviewDto {
   contentId: number;
   name: string;
   address: string;
   imageUrl: string;
-}
-interface ArrowProps {
-  className?: string;
-  onClick?: () => void;
 }
 
 // Styled Components
@@ -34,106 +30,97 @@ const Container = styled.div`
   gap: 20px;
   height: clamp(40px, 30vw, 720px);
 `;
-const Wrapper = styled.div`
-  width: 90%;
-  display: flex;
-  justify-content: space-between;
-`;
-const TitleWrapper = styled.div`
-  margin-bottom: 10px;
-`;
-const Title = styled.h2`
-  font-size: 2.4vw;
-  font-size: clamp(24px, 2.4vw, 36px);
-  margin-bottom: 20px;
-  font-weight: 600;
-  color: white;
-`;
-const H4 = styled.h4`
-  font-size: 1.3vw;
-  font-size: clamp(13.5px, 1.3vw, 24px);
-  margin-bottom: 20px;
-  color: #a2a2a2;
-  font-weight: 400;
-`;
-const MoreButton = styled.button`
-  color: white;
-  background-color: transparent;
-  font-size: 1.3vw;
-  outline: none;
-  box-shadow: none;
-  border: none;
-`;
 
 const CategoryButtons = styled.div`
   display: flex;
   gap: 0px;
   margin-bottom: 20px;
-  width: 51vw;
+  width: clamp(44vw, 51vw, 51vw);
+  justify-content: space-around;
 `;
 
 const CategoryButton = styled.button<{ active: boolean }>`
-  width: 10.5vw;
+  position: relative;
+  width: clamp(100px, 11vw, 24px);
   padding: 10px 20px;
   border: none;
   background-color: transparent;
-  border-bottom: ${(props) => (props.active ? "1px solid #ffffff" : "none")};
+  border-bottom: ${(props) => (props.active ? "1px solid #000000" : "none")};
   font-weight: ${(props) => (props.active ? "600" : "500")};
-  color: #ffffff;
   cursor: pointer;
-  transition: all 0.5s ease;
+  transition: all 0.1s ease;
   font-size: clamp(18px, 1.6vw, 24px);
+
+  img {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 20px;
+    height: 20px;
+    opacity: ${(props) => (props.active ? 1 : 0)};
+    transition: opacity 0.3s ease;
+  }
 `;
 
 const SlideContainer = styled.div`
   position: relative;
-  width: 14vw;
-  height: clamp(24px, 19vw, 370px);
+  width: clamp(120px, 11.55vw, 370px);
+  height: clamp(150px, 14.99vw, 370px);
   overflow: hidden;
   padding: 0 5px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 2px solid magenta;
 `;
 
 const SlideImage = styled.img`
-  width: calc(100% - 10px);
+  width: clamp(120px, 11.55vw, 370px);
   height: 100%;
   object-fit: cover;
-  overflow: hidden;
+  object-fit: cover;
   border-radius: 10px;
+  background-color: red;
 `;
 
 const SlideInfo = styled.div`
   position: absolute;
+  width: clamp(120px, 11.55vw, 370px);
+  border: 1px solid magenta;
   bottom: 0;
-  left: 0;
+  left: 5px;
   right: 0;
-  height: 30%;
-  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.9));
+  height: 43%;
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.65));
   color: white;
-  padding: 10px;
   text-align: justify;
   display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: flex-end;
-  padding: 0 22px 24.65px 22px;
+  align-items: end;
+  padding: 10px 10px;
+  box-sizing: border-box;
+  border-radius: 0 0 10px 10px;
+
+  svg {
+    position: absolute;
+    right: 10px;
+    width: 25x;
+    height: 25px;
+  }
 `;
 
 const SlideName = styled.h3`
   margin: 0;
-  font-size: 16px;
+  font-size: clamp(10px, 0.88em, 370px);
 `;
 
 const SlideAddress = styled.p`
   margin: 5px 0 0;
-  font-size: 14px;
+  font-size: clamp(6px, 0.7em, 370px);
 `;
 
 const StyledSlider = styled(Slider)`
-  width: 90%;
-  /* height: 373px;/// */
+  width: 49.02vw;
+  width: clamp(500px, 49.02vw, 750px);
   .slick-prev,
   .slick-next {
     &:before {
@@ -144,106 +131,54 @@ const StyledSlider = styled(Slider)`
   align-items: center;
 `;
 
-const ArrowButton = styled.button`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  border: none;
-  padding: 0;
-  z-index: 10;
-  cursor: pointer;
-  font-size: 20px;
-
-  &:hover {
-    background-color: transparent;
-  }
-`;
-
-// const PrevArrow = styled(ArrowButton)`
-//   left: -50px;
-//   z-index: 100;
-// `;
-
-// const NextArrow = styled(ArrowButton)`
-//   right: -50px;
-//   z-index: 100;
-// `;
-
-const ArrowImage = styled.img`
-  width: 30px; // 원하는 크기로 조정
-  height: 30px;
-  z-index: 100;
-  color: white;
-`;
+const categoryIcons: Record<Category, string> = {
+  숙소: place,
+  맛집: restaurant,
+  쇼핑: shopping,
+  문화: festival,
+};
 
 const ImageSlider: React.FC = () => {
+  const url = `http://tong.visitkorea.or.kr/cms/resource/86/2832286_image2_1.jpg`;
   const [category, setCategory] = useState<Category>("숙소");
   const [spots, setSpots] = useState<SpotBasicPreviewDto[]>([]);
 
   useEffect(() => {
-    setSpots(dummy[category] || []);
+    setSpots(dummy[category]);
   }, [category]);
 
-  const PrevArrow: React.FC<ArrowProps> = (props) => {
-    const { className, onClick, ...rest } = props;
-    return (
-      <ArrowButton className={className} onClick={onClick} {...rest}>
-        <ArrowImage src={left} alt="Previous" />
-      </ArrowButton>
-    );
-  };
-
-  // NextArrow component
-  const NextArrow: React.FC<ArrowProps> = (props) => {
-    const { className, onClick, ...rest } = props;
-    return (
-      <ArrowButton className={className} onClick={onClick} {...rest}>
-        <ArrowImage src={right} alt="Next" />
-      </ArrowButton>
-    );
-  };
-
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 5,
-    arrow: true,
-    prevArrow: <PrevArrow />,
-    nextArrow: <NextArrow />,
+    slidesToShow: 4,
   };
 
   return (
     <Container>
-      <img src={img} width={100} height={100} />
-      <Wrapper>
-        <TitleWrapper>
-          <Title>KT 팬들에게 추천하는 잠실의 핫플레이스!</Title>
-          <H4>
-            열정 넘치는 스포츠와 함께 즐길 추천 콘텐츠로 더욱 여행이 풍족하도록!
-          </H4>
-        </TitleWrapper>
-        <MoreButton>More +</MoreButton>
-      </Wrapper>
+      {/* <img src={img} /> */}
       <CategoryButtons>
-        {["숙소", "맛집", "쇼핑", "문화"].map((cat) => (
+        {(["숙소", "맛집", "쇼핑", "문화"] as Category[]).map((cat) => (
           <CategoryButton
             key={cat}
             active={category === cat}
-            onClick={() => setCategory(cat as Category)}
+            onClick={() => setCategory(cat)}
           >
             {cat}
+            <img src={categoryIcons[cat as Category]} alt={`${cat} icon`} />
           </CategoryButton>
         ))}
       </CategoryButtons>
       <StyledSlider {...settings}>
         {spots.map((spot) => (
           <SlideContainer key={spot.contentId}>
-            <SlideImage src={img} alt={spot.name} />
+            <SlideImage src={url} alt={spot.name} />
             <SlideInfo>
-              <SlideName>{spot.name}</SlideName>
-              <SlideAddress>{spot.address}</SlideAddress>
+              <span>
+                <SlideName>{spot.name}</SlideName>
+                <SlideAddress>{spot.address}</SlideAddress>
+              </span>
+              <BsBookmarkStar />
             </SlideInfo>
           </SlideContainer>
         ))}
@@ -253,3 +188,254 @@ const ImageSlider: React.FC = () => {
 };
 
 export default ImageSlider;
+
+const dummy = {
+  숙소: [
+    {
+      contentId: 11,
+      name: "숙소1",
+      address: "서울특별시 송파구",
+      imageUrl: "https://loremflickr.com/270/370/kitty",
+    },
+    {
+      contentId: 12,
+      name: "숙소2",
+      address: "서울특별시 마포구",
+      imageUrl: "https://loremflickr.com/270/370/tiger",
+    },
+    {
+      contentId: 13,
+      name: "숙소3",
+      address: "서울특별시 종로구",
+      imageUrl: "https://loremflickr.com/270/370/cat",
+    },
+    {
+      contentId: 14,
+      name: "숙소4",
+      address: "서울특별시 강남구",
+      imageUrl: "https://loremflickr.com/270/370/dog",
+    },
+    {
+      contentId: 15,
+      name: "숙소5",
+      address: "서울특별시 강북구",
+      imageUrl: "https://loremflickr.com/270/370/panda",
+    },
+    {
+      contentId: 16,
+      name: "숙소6",
+      address: "서울특별시 서초구",
+      imageUrl: "https://loremflickr.com/270/370/puppy",
+    },
+    {
+      contentId: 17,
+      name: "숙소7",
+      address: "서울특별시 은평구",
+      imageUrl: "https://loremflickr.com/270/370/korea",
+    },
+    {
+      contentId: 18,
+      name: "숙소8",
+      address: "서울특별시 동작구",
+      imageUrl: "https://loremflickr.com/270/370/home,7",
+    },
+    {
+      contentId: 19,
+      name: "숙소9",
+      address: "서울특별시 관악구",
+      imageUrl: "https://loremflickr.com/270/370/home,8",
+    },
+    {
+      contentId: 20,
+      name: "숙소10",
+      address: "서울특별시 노원구",
+      imageUrl: "https://loremflickr.com/270/370/home,9",
+    },
+  ],
+  맛집: [
+    {
+      contentId: 1,
+      name: "맛집1",
+      address: "서울특별시 강남구",
+      imageUrl: "https://loremflickr.com/270/370/bread",
+    },
+    {
+      contentId: 2,
+      name: "맛집2",
+      address: "서울특별시 강북구",
+      imageUrl: "https://loremflickr.com/270/370/coffee",
+    },
+    {
+      contentId: 3,
+      name: "맛집3",
+      address: "서울특별시 서대문구",
+      imageUrl: "https://loremflickr.com/270/370/sushi",
+    },
+    {
+      contentId: 4,
+      name: "맛집4",
+      address: "서울특별시 용산구",
+      imageUrl: "https://loremflickr.com/270/370/meat",
+    },
+    {
+      contentId: 5,
+      name: "맛집5",
+      address: "서울특별시 성동구",
+      imageUrl: "https://loremflickr.com/270/370/hamburger",
+    },
+    {
+      contentId: 6,
+      name: "맛집6",
+      address: "서울특별시 마포구",
+      imageUrl: "https://loremflickr.com/270/370/pork",
+    },
+    {
+      contentId: 7,
+      name: "맛집7",
+      address: "서울특별시 중구",
+      imageUrl: "https://loremflickr.com/270/370/pasta",
+    },
+    {
+      contentId: 8,
+      name: "맛집8",
+      address: "서울특별시 동작구",
+      imageUrl: "https://loremflickr.com/270/370/coffee",
+    },
+    {
+      contentId: 9,
+      name: "맛집9",
+      address: "서울특별시 강서구",
+      imageUrl: "https://loremflickr.com/270/370/pizza",
+    },
+    {
+      contentId: 10,
+      name: "맛집10",
+      address: "서울특별시 송파구",
+      imageUrl: "https://loremflickr.com/270/370/cookie",
+    },
+  ],
+  쇼핑: [
+    {
+      contentId: 21,
+      name: "쇼핑몰1",
+      address: "서울특별시 동대문구",
+      imageUrl: "https://loremflickr.com/270/370/shopping",
+    },
+    {
+      contentId: 22,
+      name: "쇼핑몰2",
+      address: "서울특별시 서대문구",
+      imageUrl: "https://loremflickr.com/270/370/shopping",
+    },
+    {
+      contentId: 23,
+      name: "쇼핑몰3",
+      address: "서울특별시 광진구",
+      imageUrl: "https://loremflickr.com/270/370/shopping",
+    },
+    {
+      contentId: 24,
+      name: "쇼핑몰4",
+      address: "서울특별시 중구",
+      imageUrl: "https://loremflickr.com/270/370/shopping",
+    },
+    {
+      contentId: 25,
+      name: "쇼핑몰5",
+      address: "서울특별시 종로구",
+      imageUrl: "https://loremflickr.com/270/370/shopping",
+    },
+    {
+      contentId: 26,
+      name: "쇼핑몰6",
+      address: "서울특별시 성북구",
+      imageUrl: "https://loremflickr.com/270/370/shopping",
+    },
+    {
+      contentId: 27,
+      name: "쇼핑몰7",
+      address: "서울특별시 강남구",
+      imageUrl: "https://loremflickr.com/270/370/shopping",
+    },
+    {
+      contentId: 28,
+      name: "쇼핑몰8",
+      address: "서울특별시 강북구",
+      imageUrl: "https://loremflickr.com/270/370/shopping",
+    },
+    {
+      contentId: 29,
+      name: "쇼핑몰9",
+      address: "서울특별시 관악구",
+      imageUrl: "https://loremflickr.com/270/370/shopping",
+    },
+    {
+      contentId: 30,
+      name: "쇼핑몰10",
+      address: "서울특별시 노원구",
+      imageUrl: "https://loremflickr.com/270/370/shopping",
+    },
+  ],
+  문화: [
+    {
+      contentId: 31,
+      name: "문화공간1",
+      address: "서울특별시 강동구",
+      imageUrl: "https://loremflickr.com/270/370/culture",
+    },
+    {
+      contentId: 32,
+      name: "문화공간2",
+      address: "서울특별시 성동구",
+      imageUrl: "https://loremflickr.com/270/370/culture",
+    },
+    {
+      contentId: 33,
+      name: "문화공간3",
+      address: "서울특별시 강남구",
+      imageUrl: "https://loremflickr.com/270/370/culture",
+    },
+    {
+      contentId: 34,
+      name: "문화공간4",
+      address: "서울특별시 중랑구",
+      imageUrl: "https://loremflickr.com/270/370/culture",
+    },
+    {
+      contentId: 35,
+      name: "문화공간5",
+      address: "서울특별시 도봉구",
+      imageUrl: "https://loremflickr.com/270/370/culture",
+    },
+    {
+      contentId: 36,
+      name: "문화공간6",
+      address: "서울특별시 노원구",
+      imageUrl: "https://loremflickr.com/270/370/culture",
+    },
+    {
+      contentId: 37,
+      name: "문화공간7",
+      address: "서울특별시 구로구",
+      imageUrl: "https://loremflickr.com/270/370/culture",
+    },
+    {
+      contentId: 38,
+      name: "문화공간8",
+      address: "서울특별시 양천구",
+      imageUrl: "https://loremflickr.com/270/370/culture",
+    },
+    {
+      contentId: 39,
+      name: "문화공간9",
+      address: "서울특별시 서대문구",
+      imageUrl: "https://loremflickr.com/270/370/culture",
+    },
+    {
+      contentId: 40,
+      name: "문화공간10",
+      address: "서울특별시 마포구",
+      imageUrl: "https://loremflickr.com/270/370/culture",
+    },
+  ],
+};
