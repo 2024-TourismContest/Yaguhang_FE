@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Slider from "react-slick";
+// import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 // import img from "/dummyImg.png";
@@ -8,8 +8,9 @@ import festival from "../../assets/icons/festival.svg";
 import place from "../../assets/icons/place.svg";
 import shopping from "../../assets/icons/shopping.svg";
 import restaurant from "../../assets/icons/restaurant.svg";
-type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 import { BsBookmarkStar } from "react-icons/bs";
+
+type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 
 interface SpotBasicPreviewDto {
   contentId: number;
@@ -63,7 +64,6 @@ const CategoryButton = styled.button<{ active: boolean }>`
 `;
 
 const SlideContainer = styled.div`
-  position: relative;
   width: clamp(120px, 11.55vw, 370px);
   height: clamp(150px, 14.99vw, 370px);
   overflow: hidden;
@@ -72,18 +72,18 @@ const SlideContainer = styled.div`
   align-items: center;
   justify-content: center;
   border: 2px solid magenta;
+  position: relative;
 `;
 
 const SlideImage = styled.img`
   width: clamp(120px, 11.55vw, 370px);
-  height: 100%;
-  object-fit: cover;
+  height: clamp(150px, 14.99vw, 370px);
   object-fit: cover;
   border-radius: 10px;
-  background-color: red;
 `;
 
 const SlideInfo = styled.div`
+  z-index: 5;
   position: absolute;
   width: clamp(120px, 11.55vw, 370px);
   border: 1px solid magenta;
@@ -118,15 +118,22 @@ const SlideAddress = styled.p`
   font-size: clamp(6px, 0.7em, 370px);
 `;
 
-const StyledSlider = styled(Slider)`
+// const StyledSlider = styled(Slider)`
+//   width: 49.02vw;
+//   width: clamp(500px, 49.02vw, 750px);
+//   .slick-prev,
+//   .slick-next {
+//     &:before {
+//       display: none;
+//     }
+//   }
+//   display: flex;
+//   align-items: center;
+// `;
+
+const ImageWrapper = styled.div`
   width: 49.02vw;
   width: clamp(500px, 49.02vw, 750px);
-  .slick-prev,
-  .slick-next {
-    &:before {
-      display: none;
-    }
-  }
   display: flex;
   align-items: center;
 `;
@@ -147,16 +154,16 @@ const ImageSlider: React.FC = () => {
     setSpots(dummy[category]);
   }, [category]);
 
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-  };
+  // const settings = {
+  //   dots: false,
+  //   infinite: true,
+  //   speed: 500,
+  //   slidesToShow: 4,
+  // };
 
   return (
     <Container>
-      {/* <img src={img} /> */}
+      {/* <img src={url} /> */}
       <CategoryButtons>
         {(["숙소", "맛집", "쇼핑", "문화"] as Category[]).map((cat) => (
           <CategoryButton
@@ -169,7 +176,7 @@ const ImageSlider: React.FC = () => {
           </CategoryButton>
         ))}
       </CategoryButtons>
-      <StyledSlider {...settings}>
+      <ImageWrapper>
         {spots.map((spot) => (
           <SlideContainer key={spot.contentId}>
             <SlideImage src={url} alt={spot.name} />
@@ -182,7 +189,7 @@ const ImageSlider: React.FC = () => {
             </SlideInfo>
           </SlideContainer>
         ))}
-      </StyledSlider>
+      </ImageWrapper>
     </Container>
   );
 };
@@ -215,42 +222,6 @@ const dummy = {
       address: "서울특별시 강남구",
       imageUrl: "https://loremflickr.com/270/370/dog",
     },
-    {
-      contentId: 15,
-      name: "숙소5",
-      address: "서울특별시 강북구",
-      imageUrl: "https://loremflickr.com/270/370/panda",
-    },
-    {
-      contentId: 16,
-      name: "숙소6",
-      address: "서울특별시 서초구",
-      imageUrl: "https://loremflickr.com/270/370/puppy",
-    },
-    {
-      contentId: 17,
-      name: "숙소7",
-      address: "서울특별시 은평구",
-      imageUrl: "https://loremflickr.com/270/370/korea",
-    },
-    {
-      contentId: 18,
-      name: "숙소8",
-      address: "서울특별시 동작구",
-      imageUrl: "https://loremflickr.com/270/370/home,7",
-    },
-    {
-      contentId: 19,
-      name: "숙소9",
-      address: "서울특별시 관악구",
-      imageUrl: "https://loremflickr.com/270/370/home,8",
-    },
-    {
-      contentId: 20,
-      name: "숙소10",
-      address: "서울특별시 노원구",
-      imageUrl: "https://loremflickr.com/270/370/home,9",
-    },
   ],
   맛집: [
     {
@@ -276,42 +247,6 @@ const dummy = {
       name: "맛집4",
       address: "서울특별시 용산구",
       imageUrl: "https://loremflickr.com/270/370/meat",
-    },
-    {
-      contentId: 5,
-      name: "맛집5",
-      address: "서울특별시 성동구",
-      imageUrl: "https://loremflickr.com/270/370/hamburger",
-    },
-    {
-      contentId: 6,
-      name: "맛집6",
-      address: "서울특별시 마포구",
-      imageUrl: "https://loremflickr.com/270/370/pork",
-    },
-    {
-      contentId: 7,
-      name: "맛집7",
-      address: "서울특별시 중구",
-      imageUrl: "https://loremflickr.com/270/370/pasta",
-    },
-    {
-      contentId: 8,
-      name: "맛집8",
-      address: "서울특별시 동작구",
-      imageUrl: "https://loremflickr.com/270/370/coffee",
-    },
-    {
-      contentId: 9,
-      name: "맛집9",
-      address: "서울특별시 강서구",
-      imageUrl: "https://loremflickr.com/270/370/pizza",
-    },
-    {
-      contentId: 10,
-      name: "맛집10",
-      address: "서울특별시 송파구",
-      imageUrl: "https://loremflickr.com/270/370/cookie",
     },
   ],
   쇼핑: [
@@ -339,42 +274,6 @@ const dummy = {
       address: "서울특별시 중구",
       imageUrl: "https://loremflickr.com/270/370/shopping",
     },
-    {
-      contentId: 25,
-      name: "쇼핑몰5",
-      address: "서울특별시 종로구",
-      imageUrl: "https://loremflickr.com/270/370/shopping",
-    },
-    {
-      contentId: 26,
-      name: "쇼핑몰6",
-      address: "서울특별시 성북구",
-      imageUrl: "https://loremflickr.com/270/370/shopping",
-    },
-    {
-      contentId: 27,
-      name: "쇼핑몰7",
-      address: "서울특별시 강남구",
-      imageUrl: "https://loremflickr.com/270/370/shopping",
-    },
-    {
-      contentId: 28,
-      name: "쇼핑몰8",
-      address: "서울특별시 강북구",
-      imageUrl: "https://loremflickr.com/270/370/shopping",
-    },
-    {
-      contentId: 29,
-      name: "쇼핑몰9",
-      address: "서울특별시 관악구",
-      imageUrl: "https://loremflickr.com/270/370/shopping",
-    },
-    {
-      contentId: 30,
-      name: "쇼핑몰10",
-      address: "서울특별시 노원구",
-      imageUrl: "https://loremflickr.com/270/370/shopping",
-    },
   ],
   문화: [
     {
@@ -399,42 +298,6 @@ const dummy = {
       contentId: 34,
       name: "문화공간4",
       address: "서울특별시 중랑구",
-      imageUrl: "https://loremflickr.com/270/370/culture",
-    },
-    {
-      contentId: 35,
-      name: "문화공간5",
-      address: "서울특별시 도봉구",
-      imageUrl: "https://loremflickr.com/270/370/culture",
-    },
-    {
-      contentId: 36,
-      name: "문화공간6",
-      address: "서울특별시 노원구",
-      imageUrl: "https://loremflickr.com/270/370/culture",
-    },
-    {
-      contentId: 37,
-      name: "문화공간7",
-      address: "서울특별시 구로구",
-      imageUrl: "https://loremflickr.com/270/370/culture",
-    },
-    {
-      contentId: 38,
-      name: "문화공간8",
-      address: "서울특별시 양천구",
-      imageUrl: "https://loremflickr.com/270/370/culture",
-    },
-    {
-      contentId: 39,
-      name: "문화공간9",
-      address: "서울특별시 서대문구",
-      imageUrl: "https://loremflickr.com/270/370/culture",
-    },
-    {
-      contentId: 40,
-      name: "문화공간10",
-      address: "서울특별시 마포구",
       imageUrl: "https://loremflickr.com/270/370/culture",
     },
   ],
