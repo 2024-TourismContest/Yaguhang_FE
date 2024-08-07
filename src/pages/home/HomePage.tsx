@@ -1,9 +1,10 @@
-
 import Card from "../../components/home/Card";
 import styled from "styled-components";
 import heroImg from "../../assets/images/hero.png";
 import lotteLogo from "../../assets/images/lotte_logo.svg";
 import ImageSlider from "../../components/home/imageSlider";
+import * as S from "../../styles/common/TitleSection";
+import marker from "../../assets/images/marker.png";
 
 const HeroContainer = styled.div`
   height: 52.0833vh;
@@ -61,8 +62,22 @@ const HomePage = () => {
 
   return (
     <>
-      <Card />
       <HeroSection />
+      <Card />
+      <S.Wrapper>
+        <S.TitleWrapper>
+          <S.Span>
+            <div>
+              <S.Fan>위즈 팬들에게 추천하는</S.Fan>
+              <S.Title>잠실의 핫플레이스</S.Title>
+            </div>
+            <S.MarkerImg src={marker} />
+          </S.Span>
+          <S.H4>
+            열정 넘치는 스포츠와 함께 즐길 추천 콘텐츠로 더욱 여행이 풍족하도록!
+          </S.H4>
+        </S.TitleWrapper>
+      </S.Wrapper>
       <ImageSlider />
     </>
   );

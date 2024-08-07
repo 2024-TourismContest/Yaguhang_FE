@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-// import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-// import img from "/dummyImg.png";
 import festival from "../../assets/icons/festival.svg";
 import place from "../../assets/icons/place.svg";
 import shopping from "../../assets/icons/shopping.svg";
 import restaurant from "../../assets/icons/restaurant.svg";
 import { BsBookmarkStar } from "react-icons/bs";
+import { LuDot } from "react-icons/lu";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 
@@ -22,8 +21,8 @@ interface SpotBasicPreviewDto {
 // Styled Components
 const Container = styled.div`
   max-width: 1400px;
-  margin: clamp(40px, 7vw, 200px) auto;
-  padding: 20px;
+  /* margin: clamp(20px, 28.68vw, 200px) auto; */
+  padding: 20px clamp(20px, 28.68vw, 200px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -50,13 +49,13 @@ const CategoryButton = styled.button<{ active: boolean }>`
   font-weight: ${(props) => (props.active ? "600" : "500")};
   cursor: pointer;
   transition: all 0.1s ease;
-  font-size: clamp(18px, 1.6vw, 24px);
+  font-size: clamp(13px, 1.6vw, 24px);
 
   img {
     position: absolute;
-    top: -10px;
+    top: -3px;
     right: -10px;
-    width: 20px;
+    width: clamp(8px, 1.38vw, 20px);
     height: 20px;
     opacity: ${(props) => (props.active ? 1 : 0)};
     transition: opacity 0.3s ease;
@@ -71,7 +70,6 @@ const SlideContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid magenta;
   position: relative;
 `;
 
@@ -86,7 +84,6 @@ const SlideInfo = styled.div`
   z-index: 5;
   position: absolute;
   width: clamp(120px, 11.55vw, 370px);
-  border: 1px solid magenta;
   bottom: 0;
   left: 5px;
   right: 0;
@@ -118,19 +115,6 @@ const SlideAddress = styled.p`
   font-size: clamp(6px, 0.7em, 370px);
 `;
 
-// const StyledSlider = styled(Slider)`
-//   width: 49.02vw;
-//   width: clamp(500px, 49.02vw, 750px);
-//   .slick-prev,
-//   .slick-next {
-//     &:before {
-//       display: none;
-//     }
-//   }
-//   display: flex;
-//   align-items: center;
-// `;
-
 const ImageWrapper = styled.div`
   width: 49.02vw;
   width: clamp(500px, 49.02vw, 750px);
@@ -149,21 +133,23 @@ const ImageSlider: React.FC = () => {
   const url = `http://tong.visitkorea.or.kr/cms/resource/86/2832286_image2_1.jpg`;
   const [category, setCategory] = useState<Category>("숙소");
   const [spots, setSpots] = useState<SpotBasicPreviewDto[]>([]);
+  const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
+    {}
+  );
 
   useEffect(() => {
     setSpots(dummy[category]);
   }, [category]);
 
-  // const settings = {
-  //   dots: false,
-  //   infinite: true,
-  //   speed: 500,
-  //   slidesToShow: 4,
-  // };
+  const onClickMark = (contentId: number) => {
+    setMarkedSpots((prev) => ({
+      ...prev,
+      [contentId]: !prev[contentId],
+    }));
+  };
 
   return (
     <Container>
-      {/* <img src={url} /> */}
       <CategoryButtons>
         {(["숙소", "맛집", "쇼핑", "문화"] as Category[]).map((cat) => (
           <CategoryButton
@@ -185,7 +171,11 @@ const ImageSlider: React.FC = () => {
                 <SlideName>{spot.name}</SlideName>
                 <SlideAddress>{spot.address}</SlideAddress>
               </span>
-              <BsBookmarkStar />
+              {markedSpots[spot.contentId] ? (
+                <LuDot onClick={() => onClickMark(spot.contentId)} />
+              ) : (
+                <BsBookmarkStar onClick={() => onClickMark(spot.contentId)} />
+              )}
             </SlideInfo>
           </SlideContainer>
         ))}
