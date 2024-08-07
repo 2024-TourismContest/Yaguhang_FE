@@ -8,6 +8,7 @@ import shopping from "../../assets/icons/shopping.svg";
 import restaurant from "../../assets/icons/restaurant.svg";
 import { BsBookmarkStar } from "react-icons/bs";
 import { LuDot } from "react-icons/lu";
+import { home } from "../../apis/main/index";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 
@@ -17,6 +18,91 @@ interface SpotBasicPreviewDto {
   address: string;
   imageUrl: string;
 }
+
+const categoryIcons: Record<Category, string> = {
+  숙소: place,
+  맛집: restaurant,
+  쇼핑: shopping,
+  문화: festival,
+};
+
+const ImageSlider: React.FC = () => {
+  const [category, setCategory] = useState<Category>("숙소");
+  const [spots, setSpots] = useState<SpotBasicPreviewDto[]>([]);
+  const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
+    {}
+  );
+  const [placeData, setPlaceData] = useState(null);
+
+  const stadium = "사직";
+  useEffect(() => {
+    const fetchPlaceData = async () => {
+      try {
+        const response = await home.place(stadium, category);
+        setPlaceData(response.data);
+        // API 응답에서 spotPreviewDtos를 spots 상태로 설정
+        setSpots(response.data.spotPreviewDtos || []);
+      } catch (err) {
+        console.error("Error fetching place data:", err);
+      }
+    };
+
+    fetchPlaceData();
+  }, [stadium, category]);
+
+  const onClickMark = (contentId: number) => {
+    setMarkedSpots((prev) => ({
+      ...prev,
+      [contentId]: !prev[contentId],
+    }));
+  };
+
+  if (!placeData) return <div>Loading...</div>;
+  return (
+    <Container>
+      <CategoryButtons>
+        {(["숙소", "맛집", "쇼핑", "문화"] as Category[]).map((cat) => (
+          <CategoryButton
+            key={cat}
+            active={category === cat}
+            onClick={() => setCategory(cat)}
+          >
+            {cat}
+            <img src={categoryIcons[cat as Category]} alt={`${cat} icon`} />
+          </CategoryButton>
+        ))}
+      </CategoryButtons>
+      <ImageWrapper>
+        {spots.map((spot) => (
+          <SlideContainer key={spot.contentId}>
+            <SlideImage src={spot.imageUrl} alt={spot.name} />
+            <SlideInfo>
+              <span>
+                <SlideName>
+                  {spot.name.length > 7
+                    ? `${spot.name.slice(0, 7)}...`
+                    : spot.name}
+                </SlideName>
+                <SlideAddress>
+                  {spot.address.length > 10
+                    ? `${spot.address.slice(0, 10)}...`
+                    : spot.address}
+                </SlideAddress>
+              </span>
+              {markedSpots[spot.contentId] ? (
+                <LuDot onClick={() => onClickMark(spot.contentId)} />
+              ) : (
+                <BsBookmarkStar onClick={() => onClickMark(spot.contentId)} />
+              )}
+            </SlideInfo>
+          </SlideContainer>
+        ))}
+      </ImageWrapper>
+    </Container>
+  );
+};
+
+export default ImageSlider;
 
 // Styled Components
 const Container = styled.div`
@@ -62,7 +148,7 @@ const CategoryButton = styled.button<{ active: boolean }>`
 `;
 
 const SlideContainer = styled.div`
-  width: clamp(120px, 11.55vw, 370px);
+  width: clamp(130px, 11.6vw, 370px);
   height: clamp(150px, 14.99vw, 370px);
   overflow: hidden;
   padding: 0 5px;
@@ -73,7 +159,7 @@ const SlideContainer = styled.div`
 `;
 
 const SlideImage = styled.img`
-  width: clamp(120px, 11.55vw, 370px);
+  width: clamp(130px, 11.6vw, 370px);
   height: clamp(150px, 14.99vw, 370px);
   object-fit: cover;
   border-radius: 10px;
@@ -82,7 +168,7 @@ const SlideImage = styled.img`
 const SlideInfo = styled.div`
   z-index: 5;
   position: absolute;
-  width: clamp(120px, 11.55vw, 370px);
+  width: clamp(130px, 11.6vw, 370px);
   bottom: 0;
   left: 5px;
   right: 0;
@@ -101,6 +187,9 @@ const SlideInfo = styled.div`
     right: 10px;
     width: 25x;
     height: 25px;
+    @media screen and (max-width: 1128px) {
+      top: 0px;
+    }
   }
 `;
 
@@ -118,179 +207,7 @@ const SlideAddress = styled.p`
 `;
 
 const ImageWrapper = styled.div`
-  width: 49.02vw;
-  width: clamp(500px, 49.02vw, 750px);
+  width: clamp(540px, 49.02vw, 750px);
   display: flex;
   align-items: center;
 `;
-
-const categoryIcons: Record<Category, string> = {
-  숙소: place,
-  맛집: restaurant,
-  쇼핑: shopping,
-  문화: festival,
-};
-
-const ImageSlider: React.FC = () => {
-  const url = `http://tong.visitkorea.or.kr/cms/resource/86/2832286_image2_1.jpg`;
-  const [category, setCategory] = useState<Category>("숙소");
-  const [spots, setSpots] = useState<SpotBasicPreviewDto[]>([]);
-  const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
-    {}
-  );
-
-  useEffect(() => {
-    setSpots(dummy[category]);
-  }, [category]);
-
-  const onClickMark = (contentId: number) => {
-    setMarkedSpots((prev) => ({
-      ...prev,
-      [contentId]: !prev[contentId],
-    }));
-  };
-
-  return (
-    <Container>
-      <CategoryButtons>
-        {(["숙소", "맛집", "쇼핑", "문화"] as Category[]).map((cat) => (
-          <CategoryButton
-            key={cat}
-            active={category === cat}
-            onClick={() => setCategory(cat)}
-          >
-            {cat}
-            <img src={categoryIcons[cat as Category]} alt={`${cat} icon`} />
-          </CategoryButton>
-        ))}
-      </CategoryButtons>
-      <ImageWrapper>
-        {spots.map((spot) => (
-          <SlideContainer key={spot.contentId}>
-            <SlideImage src={url} alt={spot.name} />
-            <SlideInfo>
-              <span>
-                <SlideName>{spot.name}</SlideName>
-                <SlideAddress>{spot.address}</SlideAddress>
-              </span>
-              {markedSpots[spot.contentId] ? (
-                <LuDot onClick={() => onClickMark(spot.contentId)} />
-              ) : (
-                <BsBookmarkStar onClick={() => onClickMark(spot.contentId)} />
-              )}
-            </SlideInfo>
-          </SlideContainer>
-        ))}
-      </ImageWrapper>
-    </Container>
-  );
-};
-
-export default ImageSlider;
-
-const dummy = {
-  숙소: [
-    {
-      contentId: 11,
-      name: "숙소1",
-      address: "서울특별시 송파구",
-      imageUrl: "https://loremflickr.com/270/370/kitty",
-    },
-    {
-      contentId: 12,
-      name: "숙소2",
-      address: "서울특별시 마포구",
-      imageUrl: "https://loremflickr.com/270/370/tiger",
-    },
-    {
-      contentId: 13,
-      name: "숙소3",
-      address: "서울특별시 종로구",
-      imageUrl: "https://loremflickr.com/270/370/cat",
-    },
-    {
-      contentId: 14,
-      name: "숙소4",
-      address: "서울특별시 강남구",
-      imageUrl: "https://loremflickr.com/270/370/dog",
-    },
-  ],
-  맛집: [
-    {
-      contentId: 1,
-      name: "맛집1",
-      address: "서울특별시 강남구",
-      imageUrl: "https://loremflickr.com/270/370/bread",
-    },
-    {
-      contentId: 2,
-      name: "맛집2",
-      address: "서울특별시 강북구",
-      imageUrl: "https://loremflickr.com/270/370/coffee",
-    },
-    {
-      contentId: 3,
-      name: "맛집3",
-      address: "서울특별시 서대문구",
-      imageUrl: "https://loremflickr.com/270/370/sushi",
-    },
-    {
-      contentId: 4,
-      name: "맛집4",
-      address: "서울특별시 용산구",
-      imageUrl: "https://loremflickr.com/270/370/meat",
-    },
-  ],
-  쇼핑: [
-    {
-      contentId: 21,
-      name: "쇼핑몰1",
-      address: "서울특별시 동대문구",
-      imageUrl: "https://loremflickr.com/270/370/shopping",
-    },
-    {
-      contentId: 22,
-      name: "쇼핑몰2",
-      address: "서울특별시 서대문구",
-      imageUrl: "https://loremflickr.com/270/370/shopping",
-    },
-    {
-      contentId: 23,
-      name: "쇼핑몰3",
-      address: "서울특별시 광진구",
-      imageUrl: "https://loremflickr.com/270/370/shopping",
-    },
-    {
-      contentId: 24,
-      name: "쇼핑몰4",
-      address: "서울특별시 중구",
-      imageUrl: "https://loremflickr.com/270/370/shopping",
-    },
-  ],
-  문화: [
-    {
-      contentId: 31,
-      name: "문화공간1",
-      address: "서울특별시 강동구",
-      imageUrl: "https://loremflickr.com/270/370/culture",
-    },
-    {
-      contentId: 32,
-      name: "문화공간2",
-      address: "서울특별시 성동구",
-      imageUrl: "https://loremflickr.com/270/370/culture",
-    },
-    {
-      contentId: 33,
-      name: "문화공간3",
-      address: "서울특별시 강남구",
-      imageUrl: "https://loremflickr.com/270/370/culture",
-    },
-    {
-      contentId: 34,
-      name: "문화공간4",
-      address: "서울특별시 중랑구",
-      imageUrl: "https://loremflickr.com/270/370/culture",
-    },
-  ],
-};
