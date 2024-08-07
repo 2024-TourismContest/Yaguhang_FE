@@ -21,7 +21,6 @@ interface SpotBasicPreviewDto {
 // Styled Components
 const Container = styled.div`
   max-width: 1400px;
-  /* margin: clamp(20px, 28.68vw, 200px) auto; */
   padding: 20px clamp(20px, 28.68vw, 200px);
   display: flex;
   flex-direction: column;
@@ -113,6 +112,9 @@ const SlideName = styled.h3`
 const SlideAddress = styled.p`
   margin: 5px 0 0;
   font-size: clamp(6px, 0.7em, 370px);
+  @media screen and (max-width: 1128px) {
+    display: none;
+  }
 `;
 
 const ImageWrapper = styled.div`
