@@ -68,8 +68,8 @@ const HomePage = () => {
         <S.TitleWrapper>
           <S.Span>
             <div>
-              <S.Fan>위즈 팬들에게 추천하는</S.Fan>
-              <S.Title>잠실의 핫플레이스</S.Title>
+              <S.Fan>자이언츠 팬들에게 추천하는</S.Fan>
+              <S.Title>사직의 핫플레이스</S.Title>
             </div>
             <S.MarkerImg src={marker} />
           </S.Span>

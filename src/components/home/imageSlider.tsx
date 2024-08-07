@@ -122,6 +122,9 @@ const CategoryButtons = styled.div`
   margin-bottom: 20px;
   width: clamp(44vw, 51vw, 51vw);
   justify-content: space-around;
+  @media screen and (max-width: 800px) {
+    width: 75vw;
+  }
 `;
 
 const CategoryButton = styled.button<{ active: boolean }>`
