@@ -1,9 +1,18 @@
-
 import Card from "../../components/home/Card";
 import styled from "styled-components";
 import heroImg from "../../assets/images/hero.png";
 import lotteLogo from "../../assets/images/lotte_logo.svg";
 import ImageSlider from "../../components/home/imageSlider";
+import * as S from "../../styles/common/TitleSection";
+import {StyledButton} from "../../styles/common/Button"
+import marker from "../../assets/images/marker.png";
+
+const MainContainer= styled.div`
+width:100vw;
+display:flex;
+flex-direction:column;
+align-items :center;
+`
 
 const HeroContainer = styled.div`
   height: 52.0833vh;
@@ -60,11 +69,26 @@ const HomePage = () => {
   );
 
   return (
-    <>
-      <Card />
+    <MainContainer>
       <HeroSection />
+      <Card />
+      <S.Wrapper>
+        <S.TitleWrapper>
+          <S.Span>
+            <div>
+              <S.Fan>자이언츠 팬들에게 추천하는</S.Fan>
+              <S.Title>사직의 핫플레이스</S.Title>
+            </div>
+            <S.MarkerImg src={marker} />
+          </S.Span>
+          <S.H4>
+            열정 넘치는 스포츠와 함께 즐길 추천 콘텐츠로 더욱 여행이 풍족하도록!
+          </S.H4>
+        </S.TitleWrapper>
+      </S.Wrapper>
       <ImageSlider />
-    </>
+      <StyledButton bgColor="#1A278E">야구선수 PICK 보러가기</StyledButton>
+    </MainContainer>
   );
 };
 
