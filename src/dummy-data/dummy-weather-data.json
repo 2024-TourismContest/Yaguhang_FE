@@ -1,0 +1,171 @@
+{"weathers" : [
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "00",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 30,
+      "temp": 28
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "01",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 30,
+      "temp": 27
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "02",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 30,
+      "temp": 27
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "03",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 30,
+      "temp": 27
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "04",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 30,
+      "temp": 26
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "05",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 30,
+      "temp": 26
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "06",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 30,
+      "temp": 26
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "07",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 30,
+      "temp": 27
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "08",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 30,
+      "temp": 28
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "09",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 20,
+      "temp": 30
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "10",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 20,
+      "temp": 31
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "11",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 20,
+      "temp": 32
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "12",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 20,
+      "temp": 34
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "13",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 20,
+      "temp": 34
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "14",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 20,
+      "temp": 34
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "15",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 20,
+      "temp": 34
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "16",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 20,
+      "temp": 34
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "17",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 20,
+      "temp": 33
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "18",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 20,
+      "temp": 33
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "19",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 20,
+      "temp": 33
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "20",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 20,
+      "temp": 31
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "21",
+      "weatherForecast": "SHOWER",
+      "rainyPercent": 60,
+      "temp": 29
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "22",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 30,
+      "temp": 28
+    },
+    {
+      "fcstDate": "2024-08-05",
+      "fcstTime": "23",
+      "weatherForecast": "CLOUDY",
+      "rainyPercent": 30,
+      "temp": 28
+    }
+  ]
+}
