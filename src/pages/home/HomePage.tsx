@@ -8,8 +8,8 @@ import heroData from "../../dummy-data/dummy-hero-data.json";
 const HomePage: React.FC = () => {
   return (
     <>
-      <Card />
       <HeroCarousel teams={heroData.teams} />
+      <Card />
       <S.Wrapper>
         <S.TitleWrapper>
           <S.Span>
