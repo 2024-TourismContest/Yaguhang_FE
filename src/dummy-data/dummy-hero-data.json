@@ -1,0 +1,94 @@
+{
+  "teams": [
+    {
+      "id": 1,
+      "teamName": "롯데 자이언츠",
+      "region": "부산",
+      "heroImage": "https://images.unsplash.com/photo-1471295253337-3ceaaedca402?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTB8fHxlbnwwfHx8fHw%3D",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/Lotte.png",
+      "heroTitle": "롯데 자이언츠와 함께하는\n부산의 매력을 느껴보세요",
+      "heroText": "부산의 바다와 도시를 동시에 즐길 수 있는 패키지!\n자이언츠와 함께하는 해변 산책과 시원한 해산물 투어."
+    },
+    {
+      "id": 2,
+      "teamName": "한화 이글스",
+      "region": "대전",
+      "heroImage": "https://blog.kakaocdn.net/dn/d1Ts8s/btq7FiTzEZC/88Nqkx97fkrO4mp5HL6lbk/img.jpg",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/Hanwha.png",
+      "heroTitle": "한화 이글스와 함께하는\n대전의 전통과 현대를 경험하세요",
+      "heroText": "대전의 역사적인 명소와 최신 랜드마크를 함께 즐길 수 있는 여행!\n이글스와 함께하는 전통 시장 탐방과 최신 테마파크 체험."
+    },
+    {
+      "id": 3,
+      "teamName": "KIA 타이거즈",
+      "region": "광주",
+      "heroImage": "https://i.namu.wiki/i/sqE5aLGa-yxKiaF4ZnpQVYqu_Emqb-mzYvmKfOW6wDoPmIZ44S7XlGD-eZRoEkSpqeuS-qv2oS30Roi7Ll2QM9mO1dScHm8lB2pKg3idJXCbzEfs6hRQAKweLuR_FHqYsjOSGlbqhCGGdMj52uzmng.webp",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/KIA.png",
+      "heroTitle": "KIA 타이거즈와 함께하는\n광주의 예술과 문화 여행",
+      "heroText": "광주의 전통 문화와 현대 예술을 경험하세요!\n타이거즈와 함께하는 문화 유산 탐방과 예술 갤러리 투어."
+    },
+    {
+      "id": 4,
+      "teamName": "LG 트윈스",
+      "region": "고척",
+      "heroImage": "https://p4.wallpaperbetter.com/wallpaper/24/268/993/stadium-baseball-sunset-wallpaper-preview.jpg",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/LGTwins.png",
+      "heroTitle": "LG 트윈스와 함께하는\n고척의 핫플레이스 탐방",
+      "heroText": "고척의 최신 핫플레이스와 전통 명소를 함께 즐기세요!\nLG 트윈스와 함께하는 고척 구장 주변 명소 탐방과 인기 맛집 투어."
+    },
+    {
+      "id": 5,
+      "teamName": "두산 베어스",
+      "region": "고척",
+      "heroImage": "https://images.unsplash.com/photo-1471295253337-3ceaaedca402?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTB8fHxlbnwwfHx8fHw%3D",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/Doosan.png",
+      "heroTitle": "두산 베어스와 함께하는\n고척의 전통과 현대를 느끼세요",
+      "heroText": "고척의 전통 명소와 현대적인 문화가 만나는 패키지!\n두산 베어스와 함께하는 전통 탐방과 최신 쇼핑 거리 체험."
+    },
+    {
+      "id": 6,
+      "teamName": "삼성 라이온즈",
+      "region": "대구",
+      "heroImage": "https://blog.kakaocdn.net/dn/d1Ts8s/btq7FiTzEZC/88Nqkx97fkrO4mp5HL6lbk/img.jpg",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/Samsung.png",
+      "heroTitle": "삼성 라이온즈와 함께하는\n대구의 맛과 멋을 즐기세요",
+      "heroText": "대구의 전통 시장과 맛집 투어를 즐기세요!\n삼성 라이온즈와 함께하는 대구의 유명한 먹거리와 명소 탐방."
+    },
+    {
+      "id": 7,
+      "teamName": "KT 위즈",
+      "region": "수원",
+      "heroImage": "https://i.namu.wiki/i/-S0YufcdeAieF8BHfkMTcy1VfbMfpAh-GALGVV283KRm6WXQHIJz2XuZ-3yIHxHSOyjDUBd0BDgE4lO1hTFzAADGHav_d0dqTWswcqXWYxngvThwyAGk_rhJeWcU_tdGWMgVCxGqFYT3UXaz8jP4wQ.webp",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/KtWizs.png",
+      "heroTitle": "KT 위즈와 함께하는\n수원의 매력을 발견하세요",
+      "heroText": "수원의 역사와 현대를 동시에 즐기세요!\nKT 위즈와 함께하는 수원 화성 탐방과 지역 맛집 체험."
+    },
+    {
+      "id": 8,
+      "teamName": "키움 히어로즈",
+      "region": "고척",
+      "heroImage": "https://www.10wallpaper.com/wallpaper/1920x1080/1409/Baseball_Field-sports_HD_Wallpaper_1920x1080.jpg",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/Kiwoom.png",
+      "heroTitle": "키움 히어로즈와 함께하는\n고척의 자연과 역사 여행",
+      "heroText": "고척의 아름다운 자연과 역사적 명소를 탐방하세요!\n키움 히어로즈와 함께하는 자연 산책과 역사 유적지 투어."
+    },
+    {
+      "id": 9,
+      "teamName": "SSG 랜더스",
+      "region": "인천",
+      "heroImage": "https://image.lguplus.com/static/pc-contents/images/fcmm/cnts/imge/20230202-024931-510-L1kMYdG5.png",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/SSGLanders.png",
+      "heroTitle": "SSG 랜더스와 함께하는\n인천의 바다와 해양 스포츠",
+      "heroText": "인천의 해양 스포츠와 해변을 즐기세요!\nSSG 랜더스와 함께하는 바다 탐방과 해양 액티비티."
+    },
+    {
+      "id": 10,
+      "teamName": "NC 다이노스",
+      "region": "창원",
+      "heroImage": "https://p4.wallpaperbetter.com/wallpaper/24/268/993/stadium-baseball-sunset-wallpaper-preview.jpg",
+      "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/NCDinos.png",
+      "heroTitle": "NC 다이노스와 함께하는\n창원의 매력과 문화 여행",
+      "heroText": "창원의 역사와 현대 문화를 동시에 즐기세요!\nNC 다이노스와 함께하는 창원 관광과 지역 특산물 체험."
+    }
+  ]
+}
