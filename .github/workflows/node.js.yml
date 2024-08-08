@@ -27,6 +27,9 @@ jobs:
       - name: Remove old build files
         run: rm -rf ./dist
 
+      - name: Copy .env File
+        run: cp /home/mschoi/Desktop/tourismContest/Spring-FE/.env /home/mschoi/actions-runner-FE/_work/String-FE/String-FE
+        
       - name: Build project
         run: yarn build
 
