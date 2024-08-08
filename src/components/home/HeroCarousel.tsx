@@ -255,17 +255,17 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const DotsWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+// const DotsWrapper = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
-const Dot = styled.div`
-  width: 10px;
-  height: 10px;
-  background-color: white;
-  border-radius: 50%;
-`;
+// const Dot = styled.div`
+//   width: 10px;
+//   height: 10px;
+//   background-color: white;
+//   border-radius: 50%;
+// `;
 
 export default HeroCarousel;
