@@ -1,18 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ball from "../../assets/icons/ball.svg";
 import checkedball from "../../assets/icons/checkedball.svg";
+import left from "../../assets/icons/left.png";
+import right from "../../assets/icons/right.png";
+// import { format } from "date-fns";
+// import { ko } from "date-fns/locale";
+import Category from "./Category";
+// import useStore from "../../store/useStore";
+import * as S from "../../styles/common/TitleSection";
+import axios from "axios";
 
-const teamlogos: Record<string, string> = {
-  두산: "https://yaguhang.kro.kr:8443/teamLogos/Doosan.png",
-  한화: "https://yaguhang.kro.kr:8443/teamLogos/Hanwha.png",
-  키움: "https://yaguhang.kro.kr:8443/teamLogos/Kiwoom.png",
-  NC: "https://yaguhang.kro.kr:8443/teamLogos/NCDinos.png",
-  KT: "https://yaguhang.kro.kr:8443/teamLogos/KtWizs.png",
+const teamLogos: Record<string, string> = {
   LG: "https://yaguhang.kro.kr:8443/teamLogos/LGTwins.png",
+  KT: "https://yaguhang.kro.kr:8443/teamLogos/KtWizs.png",
+  SSG: "https://yaguhang.kro.kr:8443/teamLogos/SSGLanders.png",
+  NC: "https://yaguhang.kro.kr:8443/teamLogos/NCDinos.png",
+  두산: "https://yaguhang.kro.kr:8443/teamLogos/Doosan.png",
+  KIA: "https://yaguhang.kro.kr:8443/teamLogos/KIA.png",
   롯데: "https://yaguhang.kro.kr:8443/teamLogos/Lotte.png",
   삼성: "https://yaguhang.kro.kr:8443/teamLogos/Samsung.png",
-  SSG: "https://yaguhang.kro.kr:8443/teamLogos/SSGLanders.png",
+  한화: "https://yaguhang.kro.kr:8443/teamLogos/Hanwha.png",
+  키움: "https://yaguhang.kro.kr:8443/teamLogos/Kiwoom.png",
 };
 
 interface Schedule {
@@ -23,92 +32,39 @@ interface Schedule {
   date: string;
   time: string;
   weather: string;
+  homeTeamLogo: string;
+  awayTeamLogo: string;
+  weatherUrl: string;
   isScraped: boolean;
 }
 
-const schedules: Schedule[] = [
-  {
-    id: 1,
-    home: "롯데",
-    away: "두산",
-    stadium: "사직",
-    date: "2024-07-18-화요일",
-    time: "18:30",
-    weather: "맑음",
-    isScraped: false,
-  },
-  {
-    id: 2,
-    home: "롯데",
-    away: "LG",
-    stadium: "사직",
-    date: "2024-07-19-수요일",
-    time: "18:30",
-    weather: "흐림",
-    isScraped: true,
-  },
-  {
-    id: 3,
-    home: "롯데",
-    away: "LG",
-    stadium: "사직",
-    date: "2024-07-19-수요일",
-    time: "18:30",
-    weather: "흐림",
-    isScraped: true,
-  },
-  {
-    id: 4,
-    home: "롯데",
-    away: "LG",
-    stadium: "사직",
-    date: "2024-07-19-수요일",
-    time: "18:30",
-    weather: "흐림",
-    isScraped: false,
-  },
-  {
-    id: 5,
-    home: "롯데",
-    away: "삼성",
-    stadium: "사직",
-    date: "2024-07-19-수요일",
-    time: "18:30",
-    weather: "흐림",
-    isScraped: true,
-  },
-];
-
 interface StyledCardProps {
-  isScraped: boolean;
+  $isScraped: boolean;
 }
 
 const CardContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #000;
+  position: relative;
+  height: 50vh;
   overflow-x: auto;
 `;
 
 const StyledCard = styled.div<StyledCardProps>`
   position: relative;
-  width: 13vw;
-  max-width: 13rem;
-  height: 16vw;
-  max-height: 16rem;
+  width: 11vw;
+  max-width: 11rem;
+  height: 14vw;
+  max-height: 14rem;
   background-color: #4a4a4a;
   border-radius: 1.25rem;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
   color: white;
   text-align: center;
   padding: 1rem;
-  margin: 0.5rem;
+  margin: 0.8rem;
   border: 1px solid #ffffff;
-  // clip-path: path(
-  //   "M0,0 H100 V100 H0 Z M50,0 A10,10 0 0,1 60,10 A10,10 0 0,1 50,20 A10,10 0 0,1 40,10 A10,10 0 0,1 50,0"
-  // );
   &::before {
     content: "";
     position: absolute;
@@ -119,23 +75,11 @@ const StyledCard = styled.div<StyledCardProps>`
     height: 4rem;
     background-color: #fff;
     border-radius: 50%;
-    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
-    background-image: url(${(props) => (props.isScraped ? checkedball : ball)});
+    box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.7);
+    background-image: url(${(props) =>
+      props.$isScraped ? checkedball : ball});
     background-size: cover;
     z-index: 99;
-  }
-
-  &:after {
-    content: "";
-    position: absolute;
-    top: -0.08rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4.1rem;
-    height: 2rem;
-    background-color: #000;
-    border-radius: 0 0 2rem 2rem;
-    border: 1px solid #fff;
   }
 `;
 
@@ -147,76 +91,107 @@ const Divider = styled.div`
 `;
 
 const DateContainer = styled.div`
-  position: absolute;
-  bottom: 1.3rem;
-  left: 1rem;
   color: #fff;
   font-weight: 600;
+  margin-right: 2.5rem;
 `;
 
-const ButtonContainer = styled.div`
+const WeatherIcon = styled.img`
+  width: 2.5rem;
+  height: 2.5rem;
+`;
+
+const DateAndWeatherContainer = styled.div`
   display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
+  align-items: center;
+  margin-top: -1vh;
 `;
 
-const Button = styled.button`
-  margin: 0 0.5rem;
-  padding: 0.5rem 1rem;
-  background-color: #4a4a4a;
-  color: white;
+const PaginationButton = styled.button`
+  background-color: transparent;
   border: none;
-  border-radius: 0.5rem;
   cursor: pointer;
-  &:hover {
-    background-color: #6a6a6a;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  img {
+    width: 2rem;
+    height: 2rem;
   }
 `;
 
-const Card: React.FC = () => {
-  const [filteredSchedules, setFilteredSchedules] =
-    useState<Schedule[]>(schedules);
+const PrevButton = styled(PaginationButton)`
+  left: 12vw;
+`;
 
-  const filterSchedules = (team: string) => {
-    if (team === "전체") {
-      setFilteredSchedules(
-        schedules.filter((schedule) => schedule.date === "2024-07-18-화요일")
-      ); // 오늘 날짜로 필터링
-    } else {
-      setFilteredSchedules(
-        schedules
-          .filter(
-            (schedule) => schedule.home === team || schedule.away === team
-          )
-          .slice(0, 5)
-      ); // 팀 이름으로 필터링하고 5개의 일정만 표시
+const NextButton = styled(PaginationButton)`
+  right: 12vw;
+`;
+
+const Card: React.FC = () => {
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const fetchSchedules = async (team: string) => {
+    try {
+      const response = await axios.get<{ schedules: Schedule[] }>(
+        `https://yaguhang.kro.kr:8443/api/main/schedule/?team=${encodeURIComponent(
+          team
+        )}&page=0&size=50`
+      );
+      setSchedules(response.data.schedules);
+      setCurrentPage(0); // 페이지를 초기화합니다.
+    } catch (error) {
+      console.error("Error fetching schedules:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSchedules("전체");
+  }, []);
+
+  const schedulesPerPage = 5;
+  const indexOfLastSchedule = (currentPage + 1) * schedulesPerPage;
+  const indexOfFirstSchedule = indexOfLastSchedule - schedulesPerPage;
+  const currentSchedules = schedules.slice(
+    indexOfFirstSchedule,
+    indexOfLastSchedule
+  );
+
+  const nextPage = () => {
+    if (indexOfLastSchedule < schedules.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
     }
   };
 
   return (
     <>
-      <ButtonContainer>
-        {[
-          "전체",
-          "두산",
-          "한화",
-          "키움",
-          "NC",
-          "KT",
-          "LG",
-          "롯데",
-          "삼성",
-          "SSG",
-        ].map((team) => (
-          <Button key={team} onClick={() => filterSchedules(team)}>
-            {team}
-          </Button>
-        ))}
-      </ButtonContainer>
+      <Category filterSchedules={fetchSchedules} teamLogos={teamLogos} />{" "}
+      <S.Wrapper gap="100px">
+        <S.TitleWrapper>
+          <S.Title style={{ color: "#ffffff" }}>오늘의 경기 일정</S.Title>
+          <S.H4>
+            열정과 감동을 선사하는 스포츠! 그 현장을 직접 경험해보세요!
+          </S.H4>
+        </S.TitleWrapper>
+      </S.Wrapper>
       <CardContainer>
-        {filteredSchedules.map((schedule) => (
-          <StyledCard key={schedule.id} isScraped={schedule.isScraped}>
-            <div style={{ marginTop: "3rem" }}>
+        <PrevButton onClick={prevPage} disabled={currentPage === 0}>
+          <img src={left} alt="이전" />
+        </PrevButton>
+        {currentSchedules.map((schedule) => (
+          <StyledCard key={schedule.id} $isScraped={schedule.isScraped}>
+            <div style={{ marginTop: "2rem" }}>
               <div>
                 {schedule.stadium} | {schedule.time}
               </div>
@@ -225,30 +200,49 @@ const Card: React.FC = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  margin: "1rem 0",
+                  marginTop: "2.5vh",
                 }}
               >
                 <img
-                  src={teamlogos[schedule.home]}
-                  alt={`${schedule.home} 로고`}
-                  style={{ width: "3.5rem", height: "3rem" }}
+                  src={schedule.homeTeamLogo}
+                  alt={`${schedule.home}`}
+                  style={{ width: "3rem", height: "2.5rem" }}
                 />
                 <span style={{ margin: "0 1rem" }}>VS</span>
                 <img
-                  src={teamlogos[schedule.away]}
-                  alt={`${schedule.away} 로고`}
-                  style={{ width: "3.5rem", height: "3rem" }}
+                  src={schedule.awayTeamLogo}
+                  alt={`${schedule.away}`}
+                  style={{ width: "3rem", height: "2.5rem" }}
                 />
               </div>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <span>{schedule.home}</span>
-                <span>{schedule.away}</span>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  marginTop: "10px",
+                  fontSize: "0.8rem",
+                }}
+              >
+                <span style={{ whiteSpace: "pre-line" }}>{schedule.home}</span>
+                <span style={{ whiteSpace: "pre-line" }}>{schedule.away}</span>
               </div>
               <Divider />
-              <DateContainer>{schedule.date}</DateContainer>
+              <DateAndWeatherContainer>
+                <DateContainer>{schedule.date}</DateContainer>
+                <WeatherIcon
+                  src={schedule.weatherUrl}
+                  alt={`${schedule.weather}`}
+                />
+              </DateAndWeatherContainer>
             </div>
           </StyledCard>
         ))}
+        <NextButton
+          onClick={nextPage}
+          disabled={indexOfLastSchedule >= schedules.length}
+        >
+          <img src={right} alt="다음" />
+        </NextButton>
       </CardContainer>
     </>
   );
