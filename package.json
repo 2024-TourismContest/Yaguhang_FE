@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/react-slick": "^0.23.13",
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
     "react": "^18.3.1",
@@ -21,6 +22,7 @@
     "zustand": "^4.5.4"
   },
   "devDependencies": {
+    "@types/node": "^22.1.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/react-icons": "^3.0.0",
