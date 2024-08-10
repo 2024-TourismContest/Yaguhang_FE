@@ -5,7 +5,7 @@ import marker from "../../assets/images/marker.png";
 import HeroCarousel from "./HeroCarousel";
 import heroData from "../../dummy-data/dummy-hero-data.json";
 
-const HomePage: React.FC = () => {
+const HomePage = () => {
   return (
     <>
       <HeroCarousel teams={heroData.teams} />
