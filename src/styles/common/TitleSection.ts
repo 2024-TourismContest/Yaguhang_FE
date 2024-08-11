@@ -4,11 +4,9 @@ interface WrapperProps {
   gap?: string;
 }
 export const Wrapper = styled.div<WrapperProps>`
-  width: 100vw;
   display: flex;
   justify-content: flex-start;
   gap: ${({ gap }) => gap || "30px"};
-  padding-left: 14.68vw;
   padding-top: clamp(80px, 9.58vw, 200px);
 `;
 export const TitleWrapper = styled.div`
