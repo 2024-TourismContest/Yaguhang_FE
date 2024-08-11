@@ -11,9 +11,15 @@ jobs:
 
     steps:
       - name: Checkout develop branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: develop
+          
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # Node.js 20.x 버전 사용
+
 
       - name: Install Yarn
         run: curl -o- -L https://yarnpkg.com/install.sh | bash

@@ -8,7 +8,7 @@ import WeatherCard from "../../components/home/WeatherCard"
 import styled from "styled-components";
 import WeatherGraph from "../../components/home/WeatherGraph";
 
-const HomePage: React.FC = () => {
+const HomePage = () => {
   return (
     <>
     <HeroCarousel teams={heroData.teams} />

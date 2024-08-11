@@ -1,4 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 .App {
   font-family: "Inter", sans-serif;
+  background-color: black;
+}
+body {
+  background-color: black;
 }
