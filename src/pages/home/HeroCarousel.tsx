@@ -151,11 +151,11 @@ const StyledSlider = styled(Slider)`
 `;
 
 const HeroContainer = styled.div<{ heroImage: string }>`
+  width: 100vw;
+  height: 100vh;
   position: relative;
-  height: 56.8125rem;
   background: url(${(props) => props.heroImage}) no-repeat center center;
   background-size: cover;
-  
   &::before {
     content: '';
     position: absolute;
@@ -171,12 +171,11 @@ const HeroContainer = styled.div<{ heroImage: string }>`
       rgba(0, 0, 0, 0.7) 80%,
       rgb(0, 0, 0) 100%
     );
-    z-index: 1;
   }
   
   & > * {
     position: relative;
-    z-index: 2;
+    z-index: 5;
   }
 `;
 
