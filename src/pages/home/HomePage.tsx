@@ -1,4 +1,3 @@
-import React from "react";
 import Card from "../../components/home/Card";
 import ImageSlider from "../../components/home/imageSlider";
 import * as S from "../../styles/common/TitleSection";
@@ -49,7 +48,21 @@ const HomePageContainer = styled.div`
   min-height: 100vh;
   padding: 0 16vw;
   overflow: hidden;
-  z-index: 1;
+  & > * {
+    position: relative;
+    z-index: 0;
+  }
+`;
+const RoundBackground = styled.div`
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 180vw; 
+  height: 90%;
+  background-color: #000000;
+  border-radius: 100%;
+  transform: translate(-50%, -30%);
+  z-index: 0;
 `;
 
 const WeatherContainer = styled.div`
@@ -63,18 +76,6 @@ const ScrollContainer = styled.div`
   overflow-x: auto;
   white-space: nowrap;
   background-color: #f5f5f5;
-`;
-
-//배경 원 추가
-const RoundBackground = styled.div`
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 150vw; 
-  height: 150vh;
-  background-color: #000000;
-  border-radius: 100%;
-  transform: translate(-50%, -30%)
 `;
 
 export default HomePage;

@@ -116,6 +116,7 @@ const StyledSlider = styled(Slider)`
     display: flex !important;
     justify-content: center;
     align-items: center;
+    z-index: 10;
   }
 
   .slick-dots li {
@@ -152,7 +153,7 @@ const StyledSlider = styled(Slider)`
 
 const HeroContainer = styled.div<{ heroImage: string }>`
   width: 100vw;
-  height: 100vh;
+  height: 97vh;
   position: relative;
   background: url(${(props) => props.heroImage}) no-repeat center center;
   background-size: cover;
@@ -175,7 +176,7 @@ const HeroContainer = styled.div<{ heroImage: string }>`
   
   & > * {
     position: relative;
-    z-index: 5;
+    z-index: 2;
   }
 `;
 
