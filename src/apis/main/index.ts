@@ -8,8 +8,7 @@ export const home = {
       console.log(response);
       return response;
     } catch (error) {
-      console.error("Error fetching profile:", error);
-      console.log(stadium, category);
+      console.error("카테고리별추천 에러", error);
       throw error;
     }
   },
