@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ball from "../../assets/icons/ball.svg";
 import checkedball from "../../assets/icons/checkedball.svg";
@@ -143,7 +143,6 @@ const Card: React.FC = () => {
           team
         )}&page=0&size=50`
       );
-      console.log(team);
       setSchedules(response.data.schedules);
       setCurrentPage(0); // 페이지를 초기화합니다.
     } catch (error) {
@@ -151,9 +150,9 @@ const Card: React.FC = () => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchSchedules("전체");
-  // }, []);
+  useEffect(() => {
+    fetchSchedules("전체");
+  }, []);
 
   const schedulesPerPage = 5;
   const indexOfLastSchedule = (currentPage + 1) * schedulesPerPage;
