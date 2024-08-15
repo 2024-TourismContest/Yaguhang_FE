@@ -5,11 +5,11 @@ import checkedball from "../../assets/icons/checkedball.svg";
 import left from "../../assets/icons/left.png";
 import right from "../../assets/icons/right.png";
 import Category from "./Category";
-// import useStore from "../../store/useStore";
 import * as S from "../../styles/common/TitleSection";
 import { toast } from "react-toastify";
 import { fetchSchedules } from "../../apis/main";
 import { scrapSchedule } from "../../apis/main";
+import useTeamStore from "../../store/TeamStore";
 
 export const teamLogos: Record<string, string> = {
   LG: "https://yaguhang.kro.kr:8443/teamLogos/LGTwins.png",
@@ -135,14 +135,16 @@ const NextButton = styled(PaginationButton)`
 const Card: React.FC = () => {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const { selectedTeam } = useTeamStore();
 
   useEffect(() => {
     const loadSchedules = async () => {
-      const schedules = await fetchSchedules("전체");
+      const schedules = await fetchSchedules(selectedTeam);
       setSchedules(schedules);
+      setCurrentPage(0); // 팀이 변경될 때 페이지를 초기화
     };
     loadSchedules();
-  }, []);
+  }, [selectedTeam]); // selectedTeam이 변경될 때마다 경기일정 필터링
 
   const schedulesPerPage = 5;
   const indexOfLastSchedule = (currentPage + 1) * schedulesPerPage;
