@@ -10,6 +10,7 @@ import Category from "./Category";
 // import useStore from "../../store/useStore";
 import * as S from "../../styles/common/TitleSection";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const teamLogos: Record<string, string> = {
   LG: "https://yaguhang.kro.kr:8443/teamLogos/LGTwins.png",
@@ -65,22 +66,22 @@ const StyledCard = styled.div<StyledCardProps>`
   padding: 1rem;
   margin: 0.8rem;
   border: 1px solid #ffffff;
-  &::before {
-    content: "";
-    position: absolute;
-    top: -2.2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4rem;
-    height: 4rem;
-    background-color: #fff;
-    border-radius: 50%;
-    box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.7);
-    background-image: url(${(props) =>
-      props.$isScraped ? checkedball : ball});
-    background-size: cover;
-    z-index: 99;
-  }
+`;
+
+const BeforeElement = styled.div<StyledCardProps>`
+  position: absolute;
+  top: -2.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4rem;
+  height: 4rem;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.7);
+  background-image: url(${(props) => (props.$isScraped ? checkedball : ball)});
+  background-size: cover;
+  z-index: 99;
+  cursor: pointer;
 `;
 
 const Divider = styled.div`
@@ -137,11 +138,17 @@ const Card: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const fetchSchedules = async (team: string) => {
+    const token = localStorage.getItem("token") || "";
     try {
       const response = await axios.get<{ schedules: Schedule[] }>(
         `https://yaguhang.kro.kr:8443/api/main/schedule/?team=${encodeURIComponent(
           team
-        )}&page=0&size=50`
+        )}&page=0&size=50`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setSchedules(response.data.schedules);
       setCurrentPage(0); // 페이지를 초기화합니다.
@@ -174,6 +181,38 @@ const Card: React.FC = () => {
     }
   };
 
+  const scrapSchedule = async (gameId: number) => {
+    try {
+      const token = localStorage.getItem("token") || "";
+      const response = await axios.patch<{}>(
+        `https://yaguhang.kro.kr:8443/api/scraps/schedule/scrap?gameId=${gameId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const isScraped = response.data === "add scrap";
+
+      setSchedules((prevSchedules) =>
+        prevSchedules.map((schedule) =>
+          schedule.id === gameId
+            ? { ...schedule, isScraped: !schedule.isScraped }
+            : schedule
+        )
+      );
+
+      toast.success(
+        isScraped ? "스크랩에 추가되었습니다." : "스크랩에서 제거되었습니다."
+      );
+    } catch (error) {
+      toast.error("스크랩 중 오류가 발생했습니다.");
+      console.error("Error scrapping schedule:", error);
+    }
+  };
+
   return (
     <>
       <Category filterSchedules={fetchSchedules} teamLogos={teamLogos} />{" "}
@@ -191,6 +230,10 @@ const Card: React.FC = () => {
         </PrevButton>
         {currentSchedules.map((schedule) => (
           <StyledCard key={schedule.id} $isScraped={schedule.isScraped}>
+            <BeforeElement
+              $isScraped={schedule.isScraped}
+              onClick={() => scrapSchedule(schedule.id)}
+            />
             <div style={{ marginTop: "2rem" }}>
               <div>
                 {schedule.stadium} | {schedule.time}
