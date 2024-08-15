@@ -11,7 +11,7 @@ import Category from "./Category";
 import * as S from "../../styles/common/TitleSection";
 import axios from "axios";
 
-const teamLogos: Record<string, string> = {
+export const teamLogos: Record<string, string> = {
   LG: "https://yaguhang.kro.kr:8443/teamLogos/LGTwins.png",
   KT: "https://yaguhang.kro.kr:8443/teamLogos/KtWizs.png",
   SSG: "https://yaguhang.kro.kr:8443/teamLogos/SSGLanders.png",

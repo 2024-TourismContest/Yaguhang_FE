@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import festival from "../../assets/icons/festival.svg";
-import place from "../../assets/icons/place.svg";
-import shopping from "../../assets/icons/shopping.svg";
-import restaurant from "../../assets/icons/restaurant.svg";
 import { BsBookmarkStar } from "react-icons/bs";
 import { LuDot } from "react-icons/lu";
 import { home } from "../../apis/main/index";
-
-type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 
 interface SpotBasicPreviewDto {
   contentId: number;
@@ -19,15 +11,7 @@ interface SpotBasicPreviewDto {
   imageUrl: string;
 }
 
-const categoryIcons: Record<Category, string> = {
-  숙소: place,
-  맛집: restaurant,
-  쇼핑: shopping,
-  문화: festival,
-};
-
 const ImageSlider: React.FC = () => {
-  const [category, setCategory] = useState<Category>("숙소");
   const [spots, setSpots] = useState<SpotBasicPreviewDto[]>([]);
   const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
     {}
@@ -35,6 +19,7 @@ const ImageSlider: React.FC = () => {
   const [placeData, setPlaceData] = useState(null);
 
   const stadium = "사직";
+  const category = "숙소";
   useEffect(() => {
     const fetchPlaceData = async () => {
       try {
@@ -43,12 +28,12 @@ const ImageSlider: React.FC = () => {
         // API 응답에서 spotPreviewDtos를 spots 상태로 설정
         setSpots(response.data.spotPreviewDtos || []);
       } catch (err) {
-        console.error("Error fetching place data:", err);
+        console.error("카테고리별추천 에러:", err);
       }
     };
 
     fetchPlaceData();
-  }, [stadium, category]);
+  }, []);
 
   const onClickMark = (contentId: number) => {
     setMarkedSpots((prev) => ({
@@ -60,18 +45,6 @@ const ImageSlider: React.FC = () => {
   if (!placeData) return <div>Loading...</div>;
   return (
     <Container>
-      <CategoryButtons>
-        {(["숙소", "맛집", "쇼핑", "문화"] as Category[]).map((cat) => (
-          <CategoryButton
-            key={cat}
-            active={category === cat}
-            onClick={() => setCategory(cat)}
-          >
-            {cat}
-            <img src={categoryIcons[cat as Category]} alt={`${cat} icon`} />
-          </CategoryButton>
-        ))}
-      </CategoryButtons>
       <ImageWrapper>
         {spots.map((spot) => (
           <SlideContainer key={spot.contentId}>
@@ -103,52 +76,6 @@ const ImageSlider: React.FC = () => {
 };
 
 export default ImageSlider;
-
-// Styled Components
-const Container = styled.div`
-  max-width: 1400px;
-  padding: 20px clamp(20px, 28.68vw, 200px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  height: clamp(40px, 30vw, 720px);
-`;
-
-const CategoryButtons = styled.div`
-  display: flex;
-  gap: 0px;
-  margin-bottom: 20px;
-  width: clamp(44vw, 51vw, 51vw);
-  justify-content: space-around;
-  @media screen and (max-width: 800px) {
-    width: 75vw;
-  }
-`;
-
-const CategoryButton = styled.button<{ active: boolean }>`
-  position: relative;
-  width: clamp(100px, 11vw, 24px);
-  padding: 10px 20px;
-  border: none;
-  background-color: transparent;
-  border-bottom: ${(props) => (props.active ? "1px solid #000000" : "none")};
-  font-weight: ${(props) => (props.active ? "600" : "500")};
-  cursor: pointer;
-  transition: all 0.1s ease;
-  font-size: clamp(13px, 1.6vw, 24px);
-
-  img {
-    position: absolute;
-    top: -3px;
-    right: -10px;
-    width: clamp(8px, 1.38vw, 20px);
-    height: 20px;
-    opacity: ${(props) => (props.active ? 1 : 0)};
-    transition: opacity 0.3s ease;
-  }
-`;
 
 const SlideContainer = styled.div`
   width: clamp(130px, 11.6vw, 370px);
@@ -213,4 +140,14 @@ const ImageWrapper = styled.div`
   width: clamp(540px, 49.02vw, 750px);
   display: flex;
   align-items: center;
+`;
+
+const Container = styled.div`
+  max-width: 1400px;
+  padding: 15px clamp(20px, 28.68vw, 200px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5vw;
 `;
