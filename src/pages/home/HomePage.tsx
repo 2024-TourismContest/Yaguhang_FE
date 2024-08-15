@@ -34,7 +34,7 @@ const HomePage = () => {
         <WeatherContainer>
           <WeatherCard />
           <ScrollContainer>
-            <WeatherGraph />
+            <WeatherGraph gameId={38} />
           </ScrollContainer>
         </WeatherContainer>
       </HomePageContainer>
