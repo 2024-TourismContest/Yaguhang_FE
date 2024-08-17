@@ -12,4 +12,19 @@ export const home = {
       throw error;
     }
   },
+  bookmark: async (contentId: string, stadiumId: string) => {
+    try {
+      const response = await defaultApi.get(`/api/scraps/spot`, {
+        params: {
+          stadiumId,
+          contentId,
+        },
+      });
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.error("북마크", error);
+      throw error;
+    }
+  },
 };
