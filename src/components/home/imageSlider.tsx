@@ -52,7 +52,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
   const onClickContent = (contentId: number) => {
     navigate(`/details/${contentId}`);
   };
-  if (!spots || spots.length === 0) return <div>No data available</div>;
+  if (!spots || spots.length === 0) return <Container></Container>;
 
   return (
     <Container>
