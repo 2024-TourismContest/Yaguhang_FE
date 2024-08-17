@@ -10,6 +10,8 @@ import restaurant from "../../assets/icons/restaurant_white.svg";
 import place from "../../assets/icons/place_whtie.svg";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import useTeamStore from "../../store/TeamStore";
+import { teamToStadiumMap } from "../../assets/data/data";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 
@@ -32,10 +34,12 @@ const StadiumPage = () => {
   const fetchSchedules = async () => {
     console.log("선택된 팀");
   };
+  const selectedTeam = useTeamStore((state) => state.selectedTeam);
+  const stadiumNumber = teamToStadiumMap[selectedTeam];
 
   const fetchPlaceData = async (category: Category) => {
     const queryParams = {
-      stadiumId: 1,
+      stadiumId: stadiumNumber,
       category,
       pagesize: 4,
       pageindex: 0,
@@ -68,8 +72,8 @@ const StadiumPage = () => {
     fetchPlaceData("맛집");
     fetchPlaceData("쇼핑");
     fetchPlaceData("문화");
-    fetchPlayerPickData(1);
-  }, []);
+    fetchPlayerPickData(stadiumNumber);
+  }, [stadiumNumber]);
 
   const handleMoreClick = (category: string) => {
     navigate(`/category/${category}`);

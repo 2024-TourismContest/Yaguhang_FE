@@ -37,9 +37,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
     const stadiumId = "5"; // 수정 필요
 
     try {
-      // 북마크 요청 보내기
       await home.bookmark(contentId.toString(), stadiumId);
-      // 상태 업데이트
       setMarkedSpots((prev) => ({
         ...prev,
         [contentId]: !prev[contentId],
@@ -48,7 +46,6 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
       console.error("북마크 상태 변경 오류:", error);
     }
   };
-  console.log("이미지슬라이더", spots);
   const onClickContent = (contentId: number) => {
     navigate(`/details/${contentId}`);
   };
