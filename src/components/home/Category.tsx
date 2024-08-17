@@ -1,5 +1,5 @@
-import { useState } from "react";
 import styled from "styled-components";
+import { useTeamStore } from "../../store/TeamStore";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -84,7 +84,7 @@ interface CategoryProps {
 }
 
 const Category: React.FC<CategoryProps> = ({ filterSchedules, teamLogos }) => {
-  const [selectedTeam, setSelectedTeam] = useState<string>("전체");
+  const { selectedTeam, setSelectedTeam } = useTeamStore();
 
   const handleButtonClick = (team: string) => {
     setSelectedTeam(team);
