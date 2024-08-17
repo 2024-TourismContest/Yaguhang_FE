@@ -2,11 +2,15 @@ import styled from "styled-components";
 
 interface ButtonProps {
   onClick: () => void; // 클릭 시 실행할 함수
+  text: string;
+  bgColor?: string;
 }
-export const Button: React.FC<ButtonProps> = ({ onClick }) => {
+export const Button: React.FC<ButtonProps> = ({ onClick, text, bgColor }) => {
   return (
     <Wrapper>
-      <StyledButton onClick={onClick}>야구선수 PICK 보러가기</StyledButton>
+      <StyledButton bgColor={bgColor} onClick={onClick}>
+        {text}
+      </StyledButton>
     </Wrapper>
   );
 };

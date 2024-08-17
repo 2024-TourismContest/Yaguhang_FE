@@ -8,6 +8,7 @@ import { TitleSection } from "./TitleSection";
 import { home } from "../../apis/main";
 import { Button } from "../../components/button/Button";
 import { useNavigate } from "react-router-dom";
+import useTeamStore from "../../store/TeamStore";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 interface SpotBasicPreviewDto {
@@ -39,14 +40,19 @@ const HomePage = () => {
     fetchPlaceData();
   }, [selectedCategory]);
 
-  const handleButtonClick = () => {
-    navigate("/stadium");
+  const handleButtonClick = (page: string) => {
+    navigate(`/${page}`);
   };
 
   return (
     <>
       <HeroCarousel teams={heroData.teams} />
       <Card />
+      <Button
+        text="MY 야구공 스탬프 모아보기 "
+        onClick={() => handleButtonClick("mypage")}
+        bgColor="#FF0000"
+      />
       <TitleSection />
       <CategorySelector
         category={selectedCategory}
@@ -54,7 +60,10 @@ const HomePage = () => {
         color="white"
       />
       <ImageSlider spots={placeData?.spotPreviewDtos || []} />
-      <Button onClick={handleButtonClick} />
+      <Button
+        text="야구선수 PICK 보러가기"
+        onClick={() => handleButtonClick("stadium")}
+      />
     </>
   );
 };
