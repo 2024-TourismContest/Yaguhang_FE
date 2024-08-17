@@ -8,7 +8,6 @@ import { TitleSection } from "./TitleSection";
 import { home } from "../../apis/main";
 import { Button } from "../../components/button/Button";
 import { useNavigate } from "react-router-dom";
-import useTeamStore from "../../store/TeamStore";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 interface SpotBasicPreviewDto {
