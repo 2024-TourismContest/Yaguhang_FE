@@ -9,7 +9,7 @@ export const Wrapper = styled.div<WrapperProps>`
   justify-content: flex-start;
   gap: ${({ gap }) => gap || "30px"};
   padding-left: 14.68vw;
-  padding-top: clamp(80px, 9.58vw, 200px);
+  padding-top: clamp(80px, 3vw, 200px);
 `;
 export const TitleWrapper = styled.div`
   margin-bottom: 10px;
@@ -49,4 +49,5 @@ export const MarkerImg = styled.img`
 `;
 export const Span = styled.span`
   display: flex;
+  align-items: center;
 `;

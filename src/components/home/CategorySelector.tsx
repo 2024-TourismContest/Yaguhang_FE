@@ -14,7 +14,7 @@ const categoryIcons: Record<Category, string> = {
 };
 
 interface CategorySelectorProps {
-  category: Category;
+  category: Category | null;
   setCategory: (category: Category) => void;
   color?: string;
 }
@@ -46,7 +46,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
 const CategoryButtons = styled.div<{ color: string }>`
   display: flex;
   gap: 0px;
-  margin-bottom: 20px;
+  margin: 4vh 0;
   width: clamp(44vw, 51vw, 51vw);
   justify-content: center;
   width: 100%;

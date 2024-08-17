@@ -1,54 +1,72 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { BsBookmarkStar } from "react-icons/bs";
 import { LuDot } from "react-icons/lu";
-import { home } from "../../apis/main/index";
+import defaultImg from "../../assets/icons/logo_gray.svg";
+import { useNavigate } from "react-router-dom";
+import { home } from "../../apis/main";
 
 interface SpotBasicPreviewDto {
   contentId: number;
   name: string;
   address: string;
   imageUrl: string;
+  isScraped?: boolean;
+  picker?: string;
 }
 
-const ImageSlider: React.FC = () => {
-  const [spots, setSpots] = useState<SpotBasicPreviewDto[]>([]);
+interface ImageSliderProps {
+  spots: SpotBasicPreviewDto[];
+}
+
+const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
   const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
     {}
   );
-  const [placeData, setPlaceData] = useState(null);
+  const navigate = useNavigate();
 
-  const stadium = "사직";
-  const category = "숙소";
-  useEffect(() => {
-    const fetchPlaceData = async () => {
-      try {
-        const response = await home.place(stadium, category);
-        setPlaceData(response.data);
-        // API 응답에서 spotPreviewDtos를 spots 상태로 설정
-        setSpots(response.data.spotPreviewDtos || []);
-      } catch (err) {
-        console.error("카테고리별추천 에러:", err);
-      }
-    };
+  const onClickMark = async (contentId: number) => {
+    const token = localStorage.getItem("authToken");
 
-    fetchPlaceData();
-  }, []);
+    if (!token) {
+      // 토큰이 없으면 로그인 화면으로 이동
+      navigate("/login");
+      alert("로그인이 필요합니다");
+      return;
+    }
+    const stadiumId = "5"; // 수정 필요
 
-  const onClickMark = (contentId: number) => {
-    setMarkedSpots((prev) => ({
-      ...prev,
-      [contentId]: !prev[contentId],
-    }));
+    try {
+      await home.bookmark(contentId.toString(), stadiumId);
+      setMarkedSpots((prev) => ({
+        ...prev,
+        [contentId]: !prev[contentId],
+      }));
+    } catch (error) {
+      console.error("북마크 상태 변경 오류:", error);
+    }
   };
+  const onClickContent = (contentId: number) => {
+    navigate(`/details/${contentId}`);
+  };
+  if (!spots || spots.length === 0) return <Container></Container>;
 
-  if (!placeData) return <div>Loading...</div>;
   return (
     <Container>
       <ImageWrapper>
         {spots.map((spot) => (
-          <SlideContainer key={spot.contentId}>
-            <SlideImage src={spot.imageUrl} alt={spot.name} />
+          <SlideContainer
+            key={spot.contentId}
+            onClick={() => onClickContent(spot.contentId)}
+          >
+            <StyledMark pick={spot.picker || "none"}>
+              {spot.picker ? spot.picker : ""}
+            </StyledMark>
+            {spot.imageUrl ? (
+              <SlideImage src={spot.imageUrl} alt={spot.name} />
+            ) : (
+              <DefaultImage src={defaultImg} alt={spot.name} />
+            )}
             <SlideInfo>
               <span>
                 <SlideName>
@@ -81,26 +99,51 @@ const SlideContainer = styled.div`
   width: clamp(130px, 11.6vw, 370px);
   height: clamp(150px, 14.99vw, 370px);
   overflow: hidden;
-  padding: 0 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  background-color: rgba(236, 234, 234, 0.3);
+  border-radius: 0.9vw;
+  filter: drop-shadow(0px 3.101px 3.101px rgba(0, 0, 0, 0.25));
 `;
 
 const SlideImage = styled.img`
-  width: clamp(130px, 11.6vw, 370px);
+  width: 100%;
   height: clamp(150px, 14.99vw, 370px);
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 0.9vw;
+`;
+
+const DefaultImage = styled.img`
+  width: 85%;
+  object-fit: cover;
+  border-radius: 0.9vw;
+`;
+const StyledMark = styled.div<{ pick: string }>`
+  z-index: 5;
+  position: absolute;
+  width: 50%;
+  top: 0;
+  right: 10%;
+  height: 12%;
+  background: #000000;
+  color: white;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 0 0 10px 10px;
+  font-size: 0.85em;
+  display: grid;
+  place-items: center;
+  visibility: ${(props) => (props.pick === "none" ? "hidden" : "visible")};
+  font-weight: 600;
 `;
 
 const SlideInfo = styled.div`
   z-index: 5;
   position: absolute;
-  width: clamp(130px, 11.6vw, 370px);
+  width: 100%;
   bottom: 0;
-  left: 5px;
   right: 0;
   height: 43%;
   background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.65));
@@ -140,6 +183,7 @@ const ImageWrapper = styled.div`
   width: clamp(540px, 49.02vw, 750px);
   display: flex;
   align-items: center;
+  gap: 1.2vw;
 `;
 
 const Container = styled.div`

@@ -1,13 +1,14 @@
 import * as S from "../../styles/common/TitleSection";
 import marker from "../../assets/images/marker.png";
-
+import useTeamStore from "../../store/TeamStore";
 export const TitleSection = () => {
+  const selectedTeam = useTeamStore((state) => state.selectedTeam);
   return (
     <S.Wrapper>
       <S.TitleWrapper>
         <S.Span>
           <div>
-            <S.Fan>자이언츠 팬들에게 추천하는</S.Fan>
+            <S.Fan>{selectedTeam} 팬들에게 추천하는</S.Fan>
             <S.Title>사직의 핫플레이스</S.Title>
           </div>
           <S.MarkerImg src={marker} />
