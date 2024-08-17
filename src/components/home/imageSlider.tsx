@@ -49,14 +49,19 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
     }
   };
   console.log("이미지슬라이더", spots);
-
+  const onClickContent = (contentId: number) => {
+    navigate(`/details/${contentId}`);
+  };
   if (!spots || spots.length === 0) return <div>No data available</div>;
 
   return (
     <Container>
       <ImageWrapper>
         {spots.map((spot) => (
-          <SlideContainer key={spot.contentId}>
+          <SlideContainer
+            key={spot.contentId}
+            onClick={() => onClickContent(spot.contentId)}
+          >
             <StyledMark pick={spot.picker || "none"}>
               {spot.picker ? spot.picker : ""}
             </StyledMark>
