@@ -1,18 +1,21 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { login } from "../../apis/login";
+import { useNavigate } from "react-router-dom"; 
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-  
+
     try {
       const response = await login.login(email, password);
       console.log(response);
+      navigate("/");
     } catch (err) {
       setError("로그인에 실패했습니다.");
     }
