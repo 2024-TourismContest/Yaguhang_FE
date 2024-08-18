@@ -11,7 +11,6 @@ import { TitleSection } from "./TitleSection";
 import { home } from "../../apis/main";
 import { Button } from "../../components/button/Button";
 import { useNavigate } from "react-router-dom";
-import * as S from "../../styles/common/TitleSection";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 interface SpotBasicPreviewDto {
@@ -83,7 +82,6 @@ const HomePage = () => {
 const HomePageContainer = styled.div`
   position: relative;
   min-height: 100vh;
-  padding: 0 16vw;
   overflow: hidden;
   & > * {
     position: relative;
@@ -95,7 +93,7 @@ const RoundBackground = styled.div`
   top: 0;
   left: 50%;
   width: 180vw; 
-  height: 1600px;
+  height: 1700px;
   background-color: #000000;
   border-radius: 100%;
   transform: translate(-50%, -30%);
@@ -105,6 +103,7 @@ const RoundBackground = styled.div`
 const WeatherContainer = styled.div`
   display: flex;
   flex-direction: row;
+  padding: 0 16vw;
   gap: 4vw;
 `;
 
