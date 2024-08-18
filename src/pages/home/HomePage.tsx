@@ -32,7 +32,7 @@ const HomePage = () => {
         </S.Wrapper>
         <ImageSlider />
         <WeatherContainer>
-          <WeatherCard />
+          <WeatherCard gameId={38}/>
           <ScrollContainer>
             <WeatherGraph gameId={38} />
           </ScrollContainer>

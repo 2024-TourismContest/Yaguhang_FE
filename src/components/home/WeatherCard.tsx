@@ -33,20 +33,17 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ gameId }) => {
     fetchWeatherData();
   }, [gameId]);
 
-  if (!weatherData) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <WeatherSummaryContainer>
-      <WeatherIcon src={weatherData.skyUrl} alt="Weather Icon" />
+      <WeatherIcon src={weatherData?.skyUrl} alt="Weather Icon" />
       <div>
-        <RegionText>{`${"서울"} | ${weatherData.stadium}`}</RegionText>
-        <TemperatureText>{`${weatherData.temp}°`}</TemperatureText>
+        <RegionText>{`${weatherData?.stadium}`}</RegionText>
+        <TemperatureText>{`${weatherData?.temp}°`}</TemperatureText>
         <WeatherDetailContainer>
-          <WeatherDetail>{`최고: ${weatherData.maxTemp}°  최저: ${weatherData.minTemp}°`}</WeatherDetail>
-          <WeatherDetail>{`강수량: ${weatherData.rainFall}mm`}</WeatherDetail>
-          <WeatherDetail>{`습도: ${weatherData.humidity}%`}</WeatherDetail>
+          <WeatherDetail>{`최고: ${weatherData?.maxTemp}°  최저: ${weatherData?.minTemp}°`}</WeatherDetail>
+          <WeatherDetail>{`강수량: ${weatherData?.rainFall}mm`}</WeatherDetail>
+          <WeatherDetail>{`습도: ${weatherData?.humidity}%`}</WeatherDetail>
           <WeatherText>{`오후 20시부터 부분적으로 흐린 상태가 예상됩니다.`}</WeatherText>
         </WeatherDetailContainer>
       </div>
@@ -96,7 +93,7 @@ const WeatherIcon = styled.img`
   position: absolute;
   top: 2.69rem;
   right: 1.13rem;
-  width: 6rem;
+  width: 6.125rem;
 `;
 
 const WeatherDetail = styled.p`

@@ -144,7 +144,6 @@ const Card: React.FC = () => {
         )}&page=0&size=50`
       );
       setSchedules(response.data.schedules);
-      console.log("아영이가확인함:", schedules)
       setCurrentPage(0); // 페이지를 초기화합니다.
     } catch (error) {
       console.error("Error fetching schedules:", error);
