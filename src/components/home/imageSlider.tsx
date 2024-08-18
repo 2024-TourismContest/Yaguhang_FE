@@ -1,81 +1,72 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import festival from "../../assets/icons/festival.svg";
-import place from "../../assets/icons/place.svg";
-import shopping from "../../assets/icons/shopping.svg";
-import restaurant from "../../assets/icons/restaurant.svg";
 import { BsBookmarkStar } from "react-icons/bs";
 import { LuDot } from "react-icons/lu";
-import { home } from "../../apis/main/index";
-
-type Category = "숙소" | "맛집" | "쇼핑" | "문화";
+import defaultImg from "../../assets/icons/logo_gray.svg";
+import { useNavigate } from "react-router-dom";
+import { home } from "../../apis/main";
 
 interface SpotBasicPreviewDto {
   contentId: number;
   name: string;
   address: string;
   imageUrl: string;
+  isScraped?: boolean;
+  picker?: string;
 }
 
-const categoryIcons: Record<Category, string> = {
-  숙소: place,
-  맛집: restaurant,
-  쇼핑: shopping,
-  문화: festival,
-};
+interface ImageSliderProps {
+  spots: SpotBasicPreviewDto[];
+}
 
-const ImageSlider: React.FC = () => {
-  const [category, setCategory] = useState<Category>("숙소");
-  const [spots, setSpots] = useState<SpotBasicPreviewDto[]>([]);
+const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
   const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
     {}
   );
-  const [placeData, setPlaceData] = useState(null);
+  const navigate = useNavigate();
 
-  const stadium = "사직";
-  useEffect(() => {
-    const fetchPlaceData = async () => {
-      try {
-        const response = await home.place(stadium, category);
-        setPlaceData(response.data);
-        // API 응답에서 spotPreviewDtos를 spots 상태로 설정
-        setSpots(response.data.spotPreviewDtos || []);
-      } catch (err) {
-        console.error("Error fetching place data:", err);
-      }
-    };
+  const onClickMark = async (contentId: number) => {
+    const token = localStorage.getItem("authToken");
 
-    fetchPlaceData();
-  }, [stadium, category]);
+    if (!token) {
+      // 토큰이 없으면 로그인 화면으로 이동
+      navigate("/login");
+      alert("로그인이 필요합니다");
+      return;
+    }
+    const stadiumId = "5"; // 수정 필요
 
-  const onClickMark = (contentId: number) => {
-    setMarkedSpots((prev) => ({
-      ...prev,
-      [contentId]: !prev[contentId],
-    }));
+    try {
+      await home.bookmark(contentId.toString(), stadiumId);
+      setMarkedSpots((prev) => ({
+        ...prev,
+        [contentId]: !prev[contentId],
+      }));
+    } catch (error) {
+      console.error("북마크 상태 변경 오류:", error);
+    }
   };
+  const onClickContent = (contentId: number) => {
+    navigate(`/details/${contentId}`);
+  };
+  if (!spots || spots.length === 0) return <Container></Container>;
 
-  if (!placeData) return <div>Loading...</div>;
   return (
     <Container>
-      <CategoryButtons>
-        {(["숙소", "맛집", "쇼핑", "문화"] as Category[]).map((cat) => (
-          <CategoryButton
-            key={cat}
-            active={category === cat}
-            onClick={() => setCategory(cat)}
-          >
-            {cat}
-            <img src={categoryIcons[cat as Category]} alt={`${cat} icon`} />
-          </CategoryButton>
-        ))}
-      </CategoryButtons>
       <ImageWrapper>
         {spots.map((spot) => (
-          <SlideContainer key={spot.contentId}>
-            <SlideImage src={spot.imageUrl} alt={spot.name} />
+          <SlideContainer
+            key={spot.contentId}
+            onClick={() => onClickContent(spot.contentId)}
+          >
+            <StyledMark pick={spot.picker || "none"}>
+              {spot.picker ? spot.picker : ""}
+            </StyledMark>
+            {spot.imageUrl ? (
+              <SlideImage src={spot.imageUrl} alt={spot.name} />
+            ) : (
+              <DefaultImage src={defaultImg} alt={spot.name} />
+            )}
             <SlideInfo>
               <span>
                 <SlideName>
@@ -104,76 +95,55 @@ const ImageSlider: React.FC = () => {
 
 export default ImageSlider;
 
-// Styled Components
-const Container = styled.div`
-  max-width: 1400px;
-  padding: 20px clamp(20px, 28.68vw, 200px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  height: clamp(40px, 30vw, 720px);
-`;
-
-const CategoryButtons = styled.div`
-  display: flex;
-  gap: 0px;
-  margin-bottom: 20px;
-  width: clamp(44vw, 51vw, 51vw);
-  justify-content: space-around;
-  @media screen and (max-width: 800px) {
-    width: 75vw;
-  }
-`;
-
-const CategoryButton = styled.button<{ active: boolean }>`
-  position: relative;
-  width: clamp(100px, 11vw, 24px);
-  padding: 10px 20px;
-  border: none;
-  background-color: transparent;
-  border-bottom: ${(props) => (props.active ? "1px solid #000000" : "none")};
-  font-weight: ${(props) => (props.active ? "600" : "500")};
-  cursor: pointer;
-  transition: all 0.1s ease;
-  font-size: clamp(13px, 1.6vw, 24px);
-
-  img {
-    position: absolute;
-    top: -3px;
-    right: -10px;
-    width: clamp(8px, 1.38vw, 20px);
-    height: 20px;
-    opacity: ${(props) => (props.active ? 1 : 0)};
-    transition: opacity 0.3s ease;
-  }
-`;
-
 const SlideContainer = styled.div`
   width: clamp(130px, 11.6vw, 370px);
   height: clamp(150px, 14.99vw, 370px);
   overflow: hidden;
-  padding: 0 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  background-color: rgba(236, 234, 234, 0.3);
+  border-radius: 0.9vw;
+  filter: drop-shadow(0px 3.101px 3.101px rgba(0, 0, 0, 0.25));
 `;
 
 const SlideImage = styled.img`
-  width: clamp(130px, 11.6vw, 370px);
+  width: 100%;
   height: clamp(150px, 14.99vw, 370px);
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 0.9vw;
+`;
+
+const DefaultImage = styled.img`
+  width: 85%;
+  object-fit: cover;
+  border-radius: 0.9vw;
+`;
+const StyledMark = styled.div<{ pick: string }>`
+  z-index: 5;
+  position: absolute;
+  width: 50%;
+  top: 0;
+  right: 10%;
+  height: 12%;
+  background: #000000;
+  color: white;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 0 0 10px 10px;
+  font-size: 0.85em;
+  display: grid;
+  place-items: center;
+  visibility: ${(props) => (props.pick === "none" ? "hidden" : "visible")};
+  font-weight: 600;
 `;
 
 const SlideInfo = styled.div`
   z-index: 5;
   position: absolute;
-  width: clamp(130px, 11.6vw, 370px);
+  width: 100%;
   bottom: 0;
-  left: 5px;
   right: 0;
   height: 43%;
   background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.65));
@@ -213,4 +183,15 @@ const ImageWrapper = styled.div`
   width: clamp(540px, 49.02vw, 750px);
   display: flex;
   align-items: center;
+  gap: 1.2vw;
+`;
+
+const Container = styled.div`
+  max-width: 1400px;
+  padding: 15px clamp(20px, 28.68vw, 200px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5vw;
 `;

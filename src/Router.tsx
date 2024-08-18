@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
+import StadiumPage from "./pages/stadium/stadiumPage";
 import LoginPage from "./pages/login/LoginPage";
 import SignupPage from "./pages/signup/SignupPage";
 
@@ -12,6 +13,7 @@ export default function Router({ isAuthenticated }: RouterProps) {
       {isAuthenticated ? (
         <>
           <Route path="/" element={<HomePage />} />
+          <Route path="/stadium" element={<StadiumPage />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </>
       ) : (

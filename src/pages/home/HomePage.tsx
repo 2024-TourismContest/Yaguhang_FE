@@ -1,36 +1,74 @@
+import { useState, useEffect } from "react";
 import Card from "../../components/home/Card";
 import ImageSlider from "../../components/home/imageSlider";
-import * as S from "../../styles/common/TitleSection";
-import marker from "../../assets/images/marker.png";
 import HeroCarousel from "./HeroCarousel";
 import heroData from "../../dummy-data/dummy-hero-data.json";
 import WeatherCard from "../../components/home/WeatherCard";
 import styled from "styled-components";
 import WeatherGraph from "../../components/home/WeatherGraph";
+import { CategorySelector } from "../../components/home/CategorySelector";
+import { TitleSection } from "./TitleSection";
+import { home } from "../../apis/main";
+import { Button } from "../../components/button/Button";
+import { useNavigate } from "react-router-dom";
+import * as S from "../../styles/common/TitleSection";
 
+type Category = "숙소" | "맛집" | "쇼핑" | "문화";
+interface SpotBasicPreviewDto {
+  contentId: number;
+  name: string;
+  address: string;
+  imageUrl: string;
+}
+
+interface PlaceData {
+  spotPreviewDtos: SpotBasicPreviewDto[];
+  // 필요시 다른 필드 추가
+}
 const HomePage = () => {
+  const [selectedCategory, setSelectedCategory] = useState<Category>("숙소");
+  const [placeData, setPlaceData] = useState<PlaceData | null>(null);
+  const navigate = useNavigate();
+  const stadium = "사직";
+
+  useEffect(() => {
+    const fetchPlaceData = async () => {
+      try {
+        const response = await home.place(stadium, selectedCategory);
+        setPlaceData(response.data);
+      } catch (err) {
+        console.error("카테고리별추천 에러:", err);
+      }
+    };
+    fetchPlaceData();
+  }, [selectedCategory]);
+
+  const handleButtonClick = (page: string) => {
+    navigate(`/${page}`);
+  };
+
   return (
     <>
       <HeroCarousel teams={heroData.teams} />
       <HomePageContainer className="home-page">
         <RoundBackground />
         <Card />
-        <S.Wrapper>
-          <S.TitleWrapper>
-            <S.Span>
-              <div>
-                <S.Fan>자이언츠 팬들에게 추천하는</S.Fan>
-                <S.Title>사직의 핫플레이스</S.Title>
-              </div>
-              <S.MarkerImg src={marker} />
-            </S.Span>
-            <S.H4>
-              열정 넘치는 스포츠와 함께 즐길 추천 콘텐츠로 더욱 여행이
-              풍족하도록!
-            </S.H4>
-          </S.TitleWrapper>
-        </S.Wrapper>
-        <ImageSlider />
+          <Button
+            text="MY 야구공 스탬프 모아보기 "
+            onClick={() => handleButtonClick("mypage")}
+            bgColor="#FF0000"
+          />
+          <TitleSection />
+          <CategorySelector
+            category={selectedCategory}
+            setCategory={setSelectedCategory}
+            color="white"
+          />
+          <ImageSlider spots={placeData?.spotPreviewDtos || []} />
+          <Button
+            text="야구선수 PICK 보러가기"
+            onClick={() => handleButtonClick("stadium")}
+          />
         <WeatherContainer>
           <WeatherCard gameId={38}/>
           <ScrollContainer>
