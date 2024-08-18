@@ -64,7 +64,7 @@ export const scrapSchedule = async (gameId: number) => {
 
     return response.data === "add scrap";
   } catch (error) {
-    console.error("Error scrapping schedule:", error);
+    console.error("Error stamp:", error);
     throw error;
   }
 };

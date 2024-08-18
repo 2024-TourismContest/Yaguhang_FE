@@ -3,6 +3,7 @@ import HomePage from "./pages/home/HomePage";
 import StadiumPage from "./pages/stadium/stadiumPage";
 import LoginPage from "./pages/login/LoginPage";
 import SignupPage from "./pages/signup/SignupPage";
+import DetailPage from "./pages/detail/DetailPage";
 
 interface RouterProps {
   isAuthenticated: boolean;
@@ -14,7 +15,11 @@ export default function Router({ isAuthenticated }: RouterProps) {
         <>
           <Route path="/" element={<HomePage />} />
           <Route path="/stadium" element={<StadiumPage />} />
-          <Route path="*" element={<Navigate replace to="/" />} />
+          <Route
+            path="/details/:category/:contentId"
+            element={<DetailPage />}
+          />
+          {/* <Route path="*" element={<Navigate replace to="/" />} /> */}
         </>
       ) : (
         <>

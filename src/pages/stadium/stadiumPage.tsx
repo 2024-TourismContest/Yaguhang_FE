@@ -90,7 +90,10 @@ const StadiumPage = () => {
         imageSrc={ball}
         onMoreClick={() => handleMoreClick("선수pick")}
       />
-      <ImageSlider spots={playerPickData?.spotPreviewDtos.slice(0, 4) || []} />
+      <ImageSlider
+        spots={playerPickData?.spotPreviewDtos.slice(0, 4) || []}
+        category="선수pick"
+      />
       <Hr />
       <TitleSection
         title="야구장 근처 숙소 추천!"
@@ -98,7 +101,10 @@ const StadiumPage = () => {
         imageSrc={place}
         onMoreClick={() => handleMoreClick("숙소")}
       />
-      <ImageSlider spots={placeData["숙소"]?.spotPreviewDtos || []} />
+      <ImageSlider
+        spots={placeData["숙소"]?.spotPreviewDtos || []}
+        category="숙소"
+      />
       <Hr />
       <TitleSection
         title="야구장 근처 맛집 추천!"
@@ -106,7 +112,10 @@ const StadiumPage = () => {
         imageSrc={restaurant}
         onMoreClick={() => handleMoreClick("맛집")}
       />
-      <ImageSlider spots={placeData["맛집"]?.spotPreviewDtos || []} />
+      <ImageSlider
+        spots={placeData["맛집"]?.spotPreviewDtos || []}
+        category="맛집"
+      />
       <Hr />
       <TitleSection
         title="야구보고 쇼핑하고!"
@@ -114,7 +123,10 @@ const StadiumPage = () => {
         imageSrc={shopping}
         onMoreClick={() => handleMoreClick("쇼핑")}
       />
-      <ImageSlider spots={placeData["쇼핑"]?.spotPreviewDtos || []} />
+      <ImageSlider
+        spots={placeData["쇼핑"]?.spotPreviewDtos || []}
+        category="쇼핑"
+      />
       <Hr />
       <TitleSection
         title="야구만큼 재밌는 문화생활!"
@@ -122,7 +134,10 @@ const StadiumPage = () => {
         imageSrc={festival}
         onMoreClick={() => handleMoreClick("문화")}
       />
-      <ImageSlider spots={placeData["문화"]?.spotPreviewDtos || []} />
+      <ImageSlider
+        spots={placeData["문화"]?.spotPreviewDtos || []}
+        category="문화"
+      />
       <Hr />
     </>
   );

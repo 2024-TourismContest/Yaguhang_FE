@@ -5,6 +5,7 @@ import { LuDot } from "react-icons/lu";
 import loading from "../../assets/images/loading.svg";
 import { useNavigate } from "react-router-dom";
 import { home } from "../../apis/main";
+import { toast } from "react-toastify";
 
 interface SpotBasicPreviewDto {
   contentId: number;
@@ -17,9 +18,10 @@ interface SpotBasicPreviewDto {
 
 interface ImageSliderProps {
   spots: SpotBasicPreviewDto[];
+  category: string;
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
+const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
   const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
     {}
   );
@@ -31,7 +33,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
     if (!token) {
       // 토큰이 없으면 로그인 화면으로 이동
       navigate("/login");
-      alert("로그인이 필요합니다");
+      toast("로그인이 필요합니다");
       return;
     }
     const stadiumId = "5"; // 수정 필요
@@ -47,7 +49,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
     }
   };
   const onClickContent = (contentId: number) => {
-    navigate(`/details/${contentId}`);
+    navigate(`/details/${category}/${contentId}`);
   };
   if (!spots || spots.length === 0) return <Container></Container>;
 
