@@ -1,17 +1,44 @@
+import { useState } from "react";
 import styled from "styled-components";
+import { login } from "../../apis/login";
 
 const LoginForm = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+  
+    try {
+      const response = await login.login(email, password);
+      console.log(response);
+    } catch (err) {
+      setError("로그인에 실패했습니다.");
+    }
+  };
   return (
     <FormContainer>
       <Title>로그인</Title>
       <KaKaoButton>카카오톡으로 계속하기</KaKaoButton>
       <Line />
-      <InputContainer>
-        <Input placeholder="ID" />
-        <Input placeholder="Password" type="password" />
-        <LinkText href="#">비밀번호를 잃어버렸나요?</LinkText>
-      </InputContainer>
-      <SubmitBtn>LOGIN</SubmitBtn>
+        <InputContainer>
+          <Input
+            placeholder="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            placeholder="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <LinkText href="#">비밀번호를 잃어버렸나요?</LinkText>
+        </InputContainer>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        <SubmitBtn onClick={handleSubmit}>LOGIN</SubmitBtn>
     </FormContainer>
   );
 };
@@ -86,7 +113,7 @@ const SubmitBtn = styled.button`
   padding: 0.75em 2.5em;
   border-radius: 1.5625em;
   background: #fff;
-  border:none;
+  border: none;
   color: #000;
   text-align: center;
   font-family: Inter, sans-serif;
@@ -95,6 +122,11 @@ const SubmitBtn = styled.button`
   cursor: pointer;
   margin-top: auto;
 `;
-
+const ErrorMessage = styled.p`
+  color: #ff6262;
+  font-family: Inter, sans-serif;
+  font-size: 0.875rem;
+  margin-top: 1em;
+`;
 
 export default LoginForm;
