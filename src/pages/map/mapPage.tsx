@@ -1,8 +1,10 @@
-const mapPage = () => {
+import MapTest from "../../components/map/map";
+
+const MapPage = () => {
   return (
     <>
-      <h1>mapPage Component</h1>
+      <MapTest />
     </>
   );
 };
-export default mapPage;
+export default MapPage;
