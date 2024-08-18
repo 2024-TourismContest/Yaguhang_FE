@@ -42,7 +42,6 @@ const HomePage = () => {
   );
 };
 
-// 스타일 컴포넌트 정의
 const HomePageContainer = styled.div`
   position: relative;
   min-height: 100vh;
@@ -58,7 +57,7 @@ const RoundBackground = styled.div`
   top: 0;
   left: 50%;
   width: 180vw; 
-  height: 90%;
+  height: 1600px;
   background-color: #000000;
   border-radius: 100%;
   transform: translate(-50%, -30%);

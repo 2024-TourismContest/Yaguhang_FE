@@ -16,7 +16,6 @@ interface HeroData {
   }[];
 }
 
-// 캐러셀
 const HeroCarousel: React.FC<HeroData> = ({ teams }) => {
   const settings = {
     dots: true,
@@ -70,7 +69,6 @@ const HeroCarouselItem: React.FC<HeroSectionProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  // 버튼
   const handleClickBtn = () => {
     navigate(`/${teamName}`);
   };
