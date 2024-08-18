@@ -1,28 +1,52 @@
-import React from 'react';
-import styled from 'styled-components';
-import sunny from '../../assets/icons/sunny.svg';
-import overcast from '../../assets/icons/overcast.svg';
-import cloudy from '../../assets/icons/cloudy.svg';
-import rainy from '../../assets/icons/rain.svg';
-import shower from '../../assets/icons/shower.svg';
-import snow from '../../assets/icons/snow.svg';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { home } from "../../apis/main";
 
-interface WeatherProps {
-  weather?: string;
+interface WeatherCardProps {
+  gameId: number;
 }
 
-// Weather 컴포넌트 정의
-const WeatherCard: React.FC<WeatherProps> = ({ weather = rainy }) => {
+interface WeatherData {
+  minTemp: number;
+  maxTemp: number;
+  humidity: number;
+  temp: number;
+  rainFall: number;
+  sky: string;
+  skyUrl: string;
+  stadium: string;
+}
+
+const WeatherCard: React.FC<WeatherCardProps> = ({ gameId }) => {
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      try {
+        const data: WeatherData = await home.weatherCardAPI(gameId);
+        setWeatherData(data);
+      } catch (err) {
+        console.error("Error fetching weatherCardAPI data:", err);
+      }
+    };
+
+    fetchWeatherData();
+  }, [gameId]);
+
+  if (!weatherData) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <WeatherSummaryContainer>
-      <WeatherIcon src={weather} alt="Weather Icon" />
+      <WeatherIcon src={weatherData.skyUrl} alt="Weather Icon" />
       <div>
-        <RegionText>{`${'서울'} | ${'잠실'}`}</RegionText>
-        <TemperatureText>{`${'30'}°`}</TemperatureText>
+        <RegionText>{`${"서울"} | ${weatherData.stadium}`}</RegionText>
+        <TemperatureText>{`${weatherData.temp}°`}</TemperatureText>
         <WeatherDetailContainer>
-          <WeatherDetail>{`최고: ${34}°  최저: ${26}°`}</WeatherDetail>
-          <WeatherDetail>{`강수량: ${25}mm`}</WeatherDetail>
-          <WeatherDetail>{`습도: ${90}%`}</WeatherDetail>
+          <WeatherDetail>{`최고: ${weatherData.maxTemp}°  최저: ${weatherData.minTemp}°`}</WeatherDetail>
+          <WeatherDetail>{`강수량: ${weatherData.rainFall}mm`}</WeatherDetail>
+          <WeatherDetail>{`습도: ${weatherData.humidity}%`}</WeatherDetail>
           <WeatherText>{`오후 20시부터 부분적으로 흐린 상태가 예상됩니다.`}</WeatherText>
         </WeatherDetailContainer>
       </div>
@@ -30,10 +54,9 @@ const WeatherCard: React.FC<WeatherProps> = ({ weather = rainy }) => {
   );
 };
 
-
 const baseTextStyle = `
   color: #FFF;
-  font-family: Inter, sans-serif; /* fallback 추가 */
+  font-family: Inter, sans-serif;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -44,7 +67,7 @@ const WeatherSummaryContainer = styled.div`
   position: relative;
   width: fit-content;
   border-radius: 1.5625rem;
-  background: linear-gradient(180deg, #B6D3FF 0%, #D1D1D1 100%);
+  background: linear-gradient(180deg, #b6d3ff 0%, #d1d1d1 100%);
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   padding: 3.75rem 3.13rem 2.69rem 3.62rem;
 `;
@@ -73,22 +96,22 @@ const WeatherIcon = styled.img`
   position: absolute;
   top: 2.69rem;
   right: 1.13rem;
-  width: 6.125rem;
+  width: 6rem;
 `;
 
 const WeatherDetail = styled.p`
   ${baseTextStyle}
   font-size: 0.875rem;
   padding-bottom: 0.5rem;
-  border-bottom: #FFFFFF solid 0.03125rem;
+  border-bottom: #ffffff solid 0.03125rem;
 `;
 
 const WeatherText = styled.p`
   ${baseTextStyle}
   font-size: 0.875rem;
   padding-top: 3.06rem;
-  white-space: pre-wrap; 
-  word-break: break-word; 
+  white-space: pre-wrap;
+  word-break: break-word;
 `;
 
 export default WeatherCard;

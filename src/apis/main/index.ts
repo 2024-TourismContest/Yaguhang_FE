@@ -20,11 +20,22 @@ export const home = {
       const response = await defaultApi.get('/api/main/weatherOfGame', {
         params: { gameId, page, size },
       });
-      console.log(response.data);
-      return response.data; // Adjust based on your response structure
+      return response.data;
     } catch (error) {
-      console.error('Error fetching weather data:', error);
+      console.error('Error fetching weatherGraph data:', error);
       throw error;
     }
+},
+weatherCardAPI: async (gameId: number) => {
+  try {
+    const response = await defaultApi.get('/api/main/weatherCardOfGame', {
+      params: { gameId },
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching weatherCard data:', error);
+    throw error;
+  }
 },
 }
