@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Card from "../../components/home/Card";
 import ImageSlider from "../../components/home/imageSlider";
-import HeroCarousel from "./HeroCarousel";
+import HeroCarousel from "../../components/home/HeroCarousel";
 import heroData from "../../dummy-data/dummy-hero-data.json";
 import WeatherCard from "../../components/home/WeatherCard";
 import styled from "styled-components";

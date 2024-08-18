@@ -16,7 +16,6 @@ interface HeroData {
   }[];
 }
 
-// 캐러셀
 const HeroCarousel: React.FC<HeroData> = ({ teams }) => {
   const settings = {
     dots: true,
@@ -26,7 +25,7 @@ const HeroCarousel: React.FC<HeroData> = ({ teams }) => {
     slidesToScroll: 1,
     autoplay: true,
     vertical: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 2800,
     arrows: false, 
     pauseOnHover: false
   };
@@ -70,7 +69,6 @@ const HeroCarouselItem: React.FC<HeroSectionProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  // 버튼
   const handleClickBtn = () => {
     navigate(`/${teamName}`);
   };
@@ -105,7 +103,6 @@ const HeroCarouselItem: React.FC<HeroSectionProps> = ({
   );
 };
 const StyledSlider = styled(Slider)`
-  margin-bottom: 10vh;
   .slick-list {
     overflow: hidden;
   }
@@ -117,6 +114,7 @@ const StyledSlider = styled(Slider)`
     display: flex !important;
     justify-content: center;
     align-items: center;
+    z-index: 10;
   }
 
   .slick-dots li {
@@ -152,11 +150,11 @@ const StyledSlider = styled(Slider)`
 `;
 
 const HeroContainer = styled.div<{ heroImage: string }>`
+  width: 100vw;
+  height: 97vh;
   position: relative;
-  height: 56.8125rem;
   background: url(${(props) => props.heroImage}) no-repeat center center;
   background-size: cover;
-  
   &::before {
     content: '';
     position: absolute;
@@ -166,13 +164,12 @@ const HeroContainer = styled.div<{ heroImage: string }>`
     left: 0;
     background: linear-gradient(
       to bottom, 
-      rgba(0, 0, 0, 0.857) 0%, 
-      rgba(0, 0, 0, 0.5) 20%,
-      rgba(0, 0, 0, 0.3) 50%, 
+      rgba(255, 0, 0, 0) 0%, 
+      rgba(255, 0, 0, 0) 20%, 
+      rgba(0, 0, 0, 0) 50%, 
       rgba(0, 0, 0, 0.7) 80%,
       rgb(0, 0, 0) 100%
     );
-    z-index: 1;
   }
   
   & > * {
@@ -254,18 +251,5 @@ const Button = styled.button`
   line-height: normal;
   cursor: pointer;
 `;
-
-// const DotsWrapper = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// `;
-
-// const Dot = styled.div`
-//   width: 10px;
-//   height: 10px;
-//   background-color: white;
-//   border-radius: 50%;
-// `;
 
 export default HeroCarousel;
