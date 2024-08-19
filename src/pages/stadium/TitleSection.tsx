@@ -16,17 +16,19 @@ export const TitleSection: React.FC<TitleSectionProps> = ({
   onMoreClick,
 }) => {
   return (
-    <Wrapper gap="30%">
-      <S.Span>
+    <Wrapper>
+      <Span>
         {imageSrc && <Img src={imageSrc} alt="Dynamic Image" />}
-        <S.TitleWrapper>
-          <Title>{title}</Title>
-          <S.H4>{h4Text}</S.H4>
-        </S.TitleWrapper>
-      </S.Span>
-      <MoreButton onClick={onMoreClick}>
-        more <HiPlus />
-      </MoreButton>
+        <StyledDiv gap="30%">
+          <TitleWrapper>
+            <Title>{title}</Title>
+            <S.H4>{h4Text}</S.H4>
+          </TitleWrapper>
+          <MoreButton onClick={onMoreClick}>
+            more <HiPlus />
+          </MoreButton>
+        </StyledDiv>
+      </Span>
     </Wrapper>
   );
 };
@@ -49,25 +51,50 @@ const MoreButton = styled.button`
   }
 `;
 const Img = styled.img`
-  height: 100%;
-  margin-right: 15px;
+  height: 45px;
+  position: relative;
+  right: 15px;
+  @media screen and (max-width: 1050px) {
+    height: 4vw;
+  }
 `;
 
 export const Title = styled.h2`
-  font-size: clamp(24px, 2.4em, 30px);
+  font-size: clamp(12px, 2.4em, 30px);
   margin-bottom: 20px;
   font-weight: 600;
   color: #ffffff;
   margin-bottom: 6px;
   margin-top: 5px;
+
+  @media screen and (max-width: 1050px) {
+    font-size: clamp(10px, 4.5vw, 24px);
+  }
 `;
 export const Wrapper = styled.div<{ gap?: string }>`
-  /* width: 100vw; */
+  width: 100vw;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   gap: ${({ gap }) => gap || "30px"};
-  padding-left: 14.68vw;
-  padding-top: 50px;
+  padding: 50px 0 30px 0;
   align-items: center;
   box-sizing: border-box;
+`;
+export const TitleWrapper = styled.div`
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  justify-content: center;
+`;
+export const StyledDiv = styled.div<{ gap?: string }>`
+  display: flex;
+  gap: ${({ gap }) => gap || "30px"};
+  justify-content: space-between;
+  width: clamp(540px, 60vw, 900px);
+`;
+export const Span = styled.span`
+  display: flex;
+  align-items: center;
+  position: relative;
 `;
