@@ -14,7 +14,10 @@ export default function Router({ isAuthenticated }: RouterProps) {
         <>
           <Route path="/" element={<HomePage />} />
           <Route path="/stadium" element={<StadiumPage />} />
-          <Route path="/mapPage" element={<MapPage />} />
+          <Route
+            path="/category/:category/:selectedTeam"
+            element={<MapPage />}
+          />
           <Route path="*" element={<Navigate replace to="/" />} />
         </>
       ) : (

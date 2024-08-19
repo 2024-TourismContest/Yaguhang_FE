@@ -76,7 +76,7 @@ const StadiumPage = () => {
   }, [stadiumNumber]);
 
   const handleMoreClick = (category: string) => {
-    navigate(`/category/${category}`);
+    navigate(`/category/${category}/${selectedTeam}`);
   };
 
   return (
