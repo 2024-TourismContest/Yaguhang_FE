@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getSpotsByStadium } from "../../apis/map";
+import useMap from "./useMap";
+import { teamToStadiumMap } from "../../assets/data/data";
 
+type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 declare global {
   interface Window {
     kakao: any;
@@ -9,59 +12,56 @@ declare global {
 }
 interface MapTestProps {
   selectedTeamId: number;
-  mapX?: number;
-  mapY?: number;
+  mapX: number;
+  mapY: number;
+  category: Category;
 }
+type Location = {
+  contentId: number;
+  title: string;
+  address: string;
+  mapX: number;
+  mapY: number;
+  image: string;
+};
 
-const MapTest: React.FC<MapTestProps> = ({ selectedTeamId, mapX, mapY }) => {
+const MapTest: React.FC<MapTestProps> = ({
+  category,
+  selectedTeamId,
+  mapX,
+  mapY,
+}) => {
+  const [visible, setVisible] = useState(false);
+  const { center, level, map } = useMap(mapX, mapY);
+
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${
-      import.meta.env.VITE_REACT_APP_KAKAO_KEY
-    }&autoload=false`;
-    script.async = true;
-
-    script.onload = () => {
-      window.kakao.maps.load(() => {
-        const container = document.getElementById("map");
-        const options = {
-          center: new window.kakao.maps.LatLng(35.1944007, 129.061996459),
-          level: 3,
-        };
-        const kakaoMap = new window.kakao.maps.Map(container, options);
-
-        window.kakao.maps.event.addListener(kakaoMap, "idle", () => {
-          console.log("변경됨");
-        });
-      });
-    };
-
-    document.head.appendChild(script);
-  }, [mapX, mapY, selectedTeamId]);
+    setVisible(true);
+  }, [center]);
 
   const handleButtonClick = async () => {
-    const dummyCategory = "숙소"; // 예: 'restaurant' 카테고리
-    const dummyLevel = 1; // 예: 3단계 필터링
-    const dummyNowX = 129.06199645996094; // 예: 현재 위치의 X좌표 (경도)
-    const dummyNowY = 35.194400787353516; // 예: 현재 위치의 Y좌표 (위도)
-
+    setVisible(false);
+    console.log("선택팀", selectedTeamId);
     try {
       const response = await getSpotsByStadium(
         selectedTeamId,
-        dummyCategory,
-        dummyLevel,
-        dummyNowX,
-        dummyNowY
+        category,
+        level,
+        mapX,
+        mapY
       );
-      console.log(response);
-    } catch (error) {}
+      console.log("로케이션", response.data);
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+    }
   };
 
   return (
     <>
       <MapWrapper>
         <div id="map" style={{ width: "50vw", height: "30vw" }}></div>
-        <Button onClick={handleButtonClick}>현 위치에서 검색</Button>
+        {visible && (
+          <Button onClick={handleButtonClick}>현 위치에서 검색</Button>
+        )}
       </MapWrapper>
     </>
   );

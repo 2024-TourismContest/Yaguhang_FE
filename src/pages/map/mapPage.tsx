@@ -10,18 +10,6 @@ import { getStadiumCoordinate } from "../../apis/map";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 
-interface MapTestProps {
-  selectedTeamId: number;
-  mapX: number;
-  mapY: number;
-}
-interface StadiumCoordinate {
-  name: string;
-  stadiumId: number;
-  mapX: number;
-  mapY: number;
-}
-
 const MapPage = () => {
   const { category, urlTeam } = useParams<{
     category: string;
@@ -35,10 +23,15 @@ const MapPage = () => {
   );
 
   const { selectedTeam, setSelectedTeam } = useTeamStore();
-
+  console.log(selectedTeam);
+  const [mapCoordinates, setMapCoordinates] = useState<{
+    mapX: number;
+    mapY: number;
+  } | null>(null);
   const stadiumNumber = teamToStadiumMap[selectedTeam];
   useEffect(() => {
-    setSelectedTeam(urlTeam ? urlTeam : "LG");
+    setSelectedTeam(urlTeam ? urlTeam : selectedTeam);
+    fetchStadiumData();
   }, []);
   const fetchStadiumData = async () => {
     try {
@@ -46,11 +39,20 @@ const MapPage = () => {
       if (stadiumNumber) {
         const response = await getStadiumCoordinate(stadiumNumber);
         console.log(response);
+        setMapCoordinates({
+          mapX: response.mapX,
+          mapY: response.mapY,
+        });
       }
     } catch (error) {
       console.error("Error fetching stadium coordinates:", error);
     }
   };
+  useEffect(() => {
+    fetchStadiumData();
+    console.log("구장좌표받아오기요청");
+  }, [selectedTeam]);
+
   return (
     <>
       <div style={{ width: "100vw", height: "13vh" }}></div>
@@ -58,8 +60,13 @@ const MapPage = () => {
         category={selectedCategory}
         setCategory={setSelectedCategory}
         color="white"
+      />{" "}
+      <MapTest
+        selectedTeamId={stadiumNumber ? stadiumNumber : 1}
+        mapX={mapCoordinates ? mapCoordinates.mapX : 126.9786567}
+        mapY={mapCoordinates ? mapCoordinates.mapY : 37.566826}
+        category={selectedCategory}
       />
-      <MapTest selectedTeamId={stadiumNumber ? stadiumNumber : 1} />
       <Category filterSchedules={fetchStadiumData} teamLogos={teamLogos} />
     </>
   );
