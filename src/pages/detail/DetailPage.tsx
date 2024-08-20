@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import HeaderImg from "../../components/detail/HeaderImg";
+import DetailGrid from "./DetailGrid";
 
 interface SpotDetailDto {
   contentId: number;
@@ -10,11 +11,20 @@ interface SpotDetailDto {
   address: string;
   isScraped: boolean;
   phoneNumber: string;
-  businessHours: string;
-  closedDays: string;
+  businessHours?: string;
+  closedDays?: string;
   description: string;
-  parkingFacilities: string;
+  parkingFacilities?: string;
   images: string[];
+  checkIn?: string;
+  checkOut?: string;
+  homepage?: string;
+  size?: string;
+  items?: string;
+  animalZone?: string;
+  firstmenu?: string;
+  treatmenu?: string;
+  usefee?: string;
 }
 
 const DetailPage = () => {
@@ -42,6 +52,10 @@ const DetailPage = () => {
     fetchDetailData();
   }, [category, contentId]);
 
+  const getDisplayValue = (value?: string) => {
+    return value && value.trim() !== "" ? value : "-";
+  };
+
   return (
     <>
       <HeaderImg
@@ -52,39 +66,18 @@ const DetailPage = () => {
       <Container>
         <Content>
           <Section>
-            <h2>상세소개</h2>
-            <p>{detailData?.description}</p>
+            <Title>{detailData?.name}</Title>
+            <Address>{detailData?.address}</Address>
+            <Description>{detailData?.description}</Description>
           </Section>
           <Section>
-            <h2>운영시간</h2>
-            <p>{detailData?.businessHours}</p>
-          </Section>
-          <Section>
-            <h2>문의 및 전화</h2>
-            <p>{detailData?.phoneNumber}</p>
-          </Section>
-          <Section>
-            <h2>웹사이트</h2>
-            {/* <a href={detailData?.website}>{detailData?.website}</a> */}
-          </Section>
-          <Section>
-            <h2>이용요금</h2>
-            {/* <p>{detailData?.fees}</p> */}
-          </Section>
-          <Section>
-            <h2>애완동물 동반여부</h2>
-            {/* <p>{detailData?.petFriendly ? "가능" : "불가능"}</p> */}
-          </Section>
-          <Section>
-            <h2>주차시설 및 편의시설</h2>
-            <p>{detailData?.parkingFacilities}</p>
+            <DetailGrid
+              category={category}
+              detailData={detailData}
+              getDisplayValue={getDisplayValue}
+            />
           </Section>
         </Content>
-        {/* <ReviewSection>
-        <h2>야구행 리뷰</h2>
-        <ReviewInput placeholder="여기를 클릭해서 리뷰를 입력하세요. (최대 300자)" />
-       <ReviewList>리뷰</ReviewList>
-      </ReviewSection> */}
       </Container>
     </>
   );
@@ -97,39 +90,33 @@ const Container = styled.div`
   margin: 0 auto;
   padding: 20px;
   color: white;
+  letter-spacing: 1px;
 `;
 
 const Content = styled.div`
-  display: flex;
-  flex-wrap: wrap;
   gap: 20px;
   margin-top: 20px;
 `;
 
-const Section = styled.div`
-  flex: 1 1 45%;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 20px;
-  border-radius: 5px;
-  h2 {
-    margin-top: 0;
-  }
+const Title = styled.h1`
+  font-size: 1.5625rem; /* 25px */
+  margin-bottom: 2vh;
+  font-weight: bold;
 `;
 
-// const ReviewSection = styled.div`
-//   margin-top: 40px;
-// `;
+const Address = styled.h3`
+  margin-bottom: 2vh;
+  font-size: 1.25rem; /* 20px */
+`;
 
-// const ReviewInput = styled.textarea`
-//   width: 100%;
-//   height: 100px;
-//   padding: 10px;
-//   border-radius: 5px;
-//   border: none;
-//   resize: none;
-// `;
+const Description = styled.p`
+  margin-bottom: 1.25rem; /* 20px */
+  font-size: 1.125rem; /* 18px */
+`;
 
-// const ReviewList = styled.div`
-//   margin-top: 20px;
-//   /* 리뷰 리스트 스타일 */
-// `;
+const Section = styled.div`
+  flex: 1 1 45%;
+  padding: 3.125rem; /* 50px */
+  border-bottom: 1px solid #ffffff;
+  flex-direction: row;
+`;
