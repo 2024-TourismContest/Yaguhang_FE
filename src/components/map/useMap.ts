@@ -1,14 +1,26 @@
 import { useEffect, useState } from "react";
 
+interface Position {
+  contentId: number;
+  title: string;
+  address: string;
+  mapX: number;
+  mapY: number;
+  image: string;
+}
 type MapCenter = {
   lat: number;
   lng: number;
 };
 
-const useMap = (mapX: number, mapY: number) => {
+const useMap = (mapX: number, mapY: number, positions: Position[]) => {
   const [map, setMap] = useState(null);
-  const [level, getLevel] = useState<number>(5);
-  const [center, setCenter] = useState<MapCenter>({ lat: mapY, lng: mapX });
+  const [level, setLevel] = useState<number>(5);
+  const [center, setCenter] = useState<MapCenter>({
+    lat: mapY,
+    lng: mapX,
+  });
+  const [markers, setMarkers] = useState<any[]>([]); // 마커들을 저장할 상태 추가
   useEffect(() => {
     // 카카오 맵 SDK 동적 로드
     const script = document.createElement("script");
@@ -25,17 +37,41 @@ const useMap = (mapX: number, mapY: number) => {
           level: level,
         };
 
-        // 맵 생성 후 상태에 저장
         const kakaoMap = new window.kakao.maps.Map(container, options);
         setMap(kakaoMap);
 
-        // 맵 이벤트 등록
+        // 마커를 생성하고 기존 마커 제거하는 함수
+        const createMarkers = () => {
+          // 이전 마커들 제거
+          markers.forEach((marker) => marker.setMap(null));
+
+          // 새로운 마커 생성
+          const newMarkers = positions.map((position) => {
+            const marker = new window.kakao.maps.Marker({
+              map: kakaoMap,
+              position: new window.kakao.maps.LatLng(
+                position.mapY,
+                position.mapX
+              ),
+              title: position.title,
+            });
+            return marker;
+          });
+
+          // 새로 생성된 마커들을 저장
+          setMarkers(newMarkers);
+        };
+
+        // 맵 생성 시 초기 마커 생성
+        createMarkers();
+
+        // 맵 이벤트 등록 및 지도 중심 변경 처리
         window.kakao.maps.event.addListener(kakaoMap, "idle", () => {
           setCenter({
             lat: kakaoMap.getCenter().getLat(),
             lng: kakaoMap.getCenter().getLng(),
           });
-          getLevel(kakaoMap.getLevel());
+          setLevel(kakaoMap.getLevel());
         });
       });
     };
@@ -45,9 +81,33 @@ const useMap = (mapX: number, mapY: number) => {
     // 언마운트 시 스크립트 및 맵 정리
     return () => {
       if (script) document.head.removeChild(script);
-      setMap(null); // 맵 초기화
+      setMap(null);
+      markers.forEach((marker) => marker.setMap(null)); // 마커들 정리
     };
   }, [mapX, mapY, level]);
+
+  // positions 상태가 업데이트될 때마다 마커 재생성
+  useEffect(() => {
+    if (map) {
+      const createMarkers = () => {
+        markers.forEach((marker) => marker.setMap(null)); // 이전 마커 제거
+        const newMarkers = positions.map((position) => {
+          const marker = new window.kakao.maps.Marker({
+            map: map,
+            position: new window.kakao.maps.LatLng(
+              position.mapY,
+              position.mapX
+            ),
+            title: position.title,
+          });
+          return marker;
+        });
+        setMarkers(newMarkers); // 새로운 마커 저장
+      };
+      createMarkers();
+    }
+    console.log("position", positions);
+  }, [positions]); // positions 변경 시 실행
 
   return { center, level, map };
 };

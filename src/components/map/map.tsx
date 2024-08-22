@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getSpotsByStadium } from "../../apis/map";
 import useMap from "./useMap";
-import { teamToStadiumMap } from "../../assets/data/data";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 declare global {
@@ -16,14 +15,14 @@ interface MapTestProps {
   mapY: number;
   category: Category;
 }
-type Location = {
+interface Position {
   contentId: number;
   title: string;
   address: string;
   mapX: number;
   mapY: number;
   image: string;
-};
+}
 
 const MapTest: React.FC<MapTestProps> = ({
   category,
@@ -31,16 +30,22 @@ const MapTest: React.FC<MapTestProps> = ({
   mapX,
   mapY,
 }) => {
-  const [visible, setVisible] = useState(false);
-  const { center, level, map } = useMap(mapX, mapY);
+  const [visible, setVisible] = useState(true);
+  const [positions, setPosition] = useState<Position[]>([]);
+  const { center, level } = useMap(mapX, mapY, positions);
+  console.log(level);
 
   useEffect(() => {
+    // handleButtonClick();
     setVisible(true);
+  }, [selectedTeamId]);
+  useEffect(() => {
+    setVisible(true);
+    // handleButtonClick();
   }, [center]);
 
   const handleButtonClick = async () => {
     setVisible(false);
-    console.log("선택팀", selectedTeamId);
     try {
       const response = await getSpotsByStadium(
         selectedTeamId,
@@ -49,7 +54,7 @@ const MapTest: React.FC<MapTestProps> = ({
         mapX,
         mapY
       );
-      console.log("로케이션", response.data);
+      setPosition(response.data);
     } catch (error) {
       console.error("Error fetching locations:", error);
     }
@@ -58,7 +63,7 @@ const MapTest: React.FC<MapTestProps> = ({
   return (
     <>
       <MapWrapper>
-        <div id="map" style={{ width: "50vw", height: "30vw" }}></div>
+        <div id="map" style={{ width: "65vw", height: "35vw" }}></div>
         {visible && (
           <Button onClick={handleButtonClick}>현 위치에서 검색</Button>
         )}
