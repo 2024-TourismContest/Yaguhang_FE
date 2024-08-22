@@ -2,7 +2,7 @@ import { CategorySelector } from "../../components/home/CategorySelector";
 import { useState, useEffect } from "react";
 import MapTest from "../../components/map/map";
 import { useParams } from "react-router-dom";
-import Category from "../../components/home/Category";
+import Category from "../../components/stadium/Category";
 import { teamLogos } from "../../components/home/Card";
 import { teamToStadiumMap } from "../../assets/data/data";
 import useTeamStore from "../../store/TeamStore";

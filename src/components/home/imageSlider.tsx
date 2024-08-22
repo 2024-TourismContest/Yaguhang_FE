@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { BsBookmarkStar } from "react-icons/bs";
 import { LuDot } from "react-icons/lu";
-import defaultImg from "../../assets/icons/logo_gray.svg";
+import loading from "../../assets/images/loading.svg";
 import { useNavigate } from "react-router-dom";
 import { home } from "../../apis/main";
 
@@ -65,7 +65,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
             {spot.imageUrl ? (
               <SlideImage src={spot.imageUrl} alt={spot.name} />
             ) : (
-              <DefaultImage src={defaultImg} alt={spot.name} />
+              <DefaultImage src={loading} alt={spot.name} />
             )}
             <SlideInfo>
               <span>
@@ -116,7 +116,8 @@ const SlideImage = styled.img`
 `;
 
 const DefaultImage = styled.img`
-  width: 85%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 0.9vw;
 `;
@@ -180,14 +181,14 @@ const SlideAddress = styled.p`
 `;
 
 const ImageWrapper = styled.div`
-  width: clamp(540px, 49.02vw, 750px);
+  width: clamp(540px, 49.02vw, 900px);
   display: flex;
   align-items: center;
   gap: 1.2vw;
 `;
 
 const Container = styled.div`
-  max-width: 1400px;
+  max-width: 100vw;
   padding: 15px clamp(20px, 28.68vw, 200px);
   display: flex;
   flex-direction: column;

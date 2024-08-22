@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Category from "../../components/home/Category";
+import Category from "../../components/stadium/Category";
 import { teamLogos } from "../../components/home/Card";
 import ImageSlider from "../../components/home/imageSlider";
 import { stadium } from "../../apis/stadium";
@@ -8,6 +8,7 @@ import shopping from "../../assets/icons/Shopping_white.svg";
 import festival from "../../assets/icons/festival_white.svg";
 import restaurant from "../../assets/icons/restaurant_white.svg";
 import place from "../../assets/icons/place_whtie.svg";
+import ball from "../../assets/icons/baseball.svg";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useTeamStore from "../../store/TeamStore";
@@ -86,7 +87,7 @@ const StadiumPage = () => {
       <TitleSection
         title="맛잘알 프로야구선수들의 맛집은?"
         h4Text="오늘 승리하고 뒷풀이는 여기?!"
-        imageSrc={restaurant}
+        imageSrc={ball}
         onMoreClick={() => handleMoreClick("선수pick")}
       />
       <ImageSlider spots={playerPickData?.spotPreviewDtos.slice(0, 4) || []} />
