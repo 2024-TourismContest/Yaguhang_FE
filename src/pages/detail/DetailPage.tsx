@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import HeaderImg from "../../components/detail/HeaderImg";
-import DetailGrid from "./DetailGrid";
+import DetailGrid from "../../components/detail/DetailGrid";
 
 interface SpotDetailDto {
   contentId: number;
@@ -64,20 +64,11 @@ const DetailPage = () => {
         description={detailData?.description}
       />
       <Container>
-        <Content>
-          <Section>
-            <Title>{detailData?.name}</Title>
-            <Address>{detailData?.address}</Address>
-            <Description>{detailData?.description}</Description>
-          </Section>
-          <Section>
-            <DetailGrid
-              category={category}
-              detailData={detailData}
-              getDisplayValue={getDisplayValue}
-            />
-          </Section>
-        </Content>
+        <DetailGrid
+          category={category}
+          detailData={detailData}
+          getDisplayValue={getDisplayValue}
+        />
       </Container>
     </>
   );
@@ -86,37 +77,12 @@ const DetailPage = () => {
 export default DetailPage;
 
 const Container = styled.div`
-  max-width: 1200px;
+  max-width: 1250px;
   margin: 0 auto;
   padding: 20px;
   color: white;
   letter-spacing: 1px;
-`;
-
-const Content = styled.div`
-  gap: 20px;
-  margin-top: 20px;
-`;
-
-const Title = styled.h1`
-  font-size: 1.5625rem; /* 25px */
-  margin-bottom: 2vh;
-  font-weight: bold;
-`;
-
-const Address = styled.h3`
-  margin-bottom: 2vh;
-  font-size: 1.25rem; /* 20px */
-`;
-
-const Description = styled.p`
-  margin-bottom: 1.25rem; /* 20px */
-  font-size: 1.125rem; /* 18px */
-`;
-
-const Section = styled.div`
+  justify-content: space-between;
+  align-items: center;
   flex: 1 1 45%;
-  padding: 3.125rem; /* 50px */
-  border-bottom: 1px solid #ffffff;
-  flex-direction: row;
 `;
