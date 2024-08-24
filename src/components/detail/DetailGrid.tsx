@@ -129,11 +129,11 @@ const DetailGrid: React.FC<DetailGridProps> = ({
           <p>{getDisplayValue(detailData?.phoneNumber)}</p>
         </Box>
         <Box>
-          <h2>포장 여부</h2>
+          <h2>주차 시설 이용</h2>
           <p>{getDisplayValue(detailData?.parkingFacilities)}</p>
         </Box>
       </GridContainer>
-      <Line />
+      <DotLine />
     </>
   );
 };
@@ -198,4 +198,9 @@ const Line = styled.div`
   width: 1250px;
   height: 1px;
   background-color: #c8c3c3;
+`;
+
+const DotLine = styled.div`
+  width: 1250px;
+  border-top: 1px dotted gray;
 `;

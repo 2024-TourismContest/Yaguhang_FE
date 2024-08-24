@@ -4,6 +4,8 @@ import axios from "axios";
 import styled from "styled-components";
 import HeaderImg from "../../components/detail/HeaderImg";
 import DetailGrid from "../../components/detail/DetailGrid";
+import Around from "../../components/detail/Around";
+import Review from "../../components/detail/Review";
 
 interface SpotDetailDto {
   contentId: number;
@@ -69,6 +71,8 @@ const DetailPage = () => {
           detailData={detailData}
           getDisplayValue={getDisplayValue}
         />
+        <Around />
+        <Review contentId={Number(contentId)} />
       </Container>
     </>
   );
