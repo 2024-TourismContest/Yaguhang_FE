@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Category from "../../components/stadium/Category";
-import { teamLogos } from "../../components/home/Card";
+import { teamLogos } from "../../types/teamLogos";
 import ImageSlider from "../../components/home/imageSlider";
 import { stadium } from "../../apis/stadium";
 import { TitleSection } from "./TitleSection";
