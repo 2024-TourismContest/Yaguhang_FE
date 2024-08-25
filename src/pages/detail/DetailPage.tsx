@@ -6,8 +6,10 @@ import HeaderImg from "../../components/detail/HeaderImg";
 import DetailGrid from "../../components/detail/DetailGrid";
 import Around from "../../components/detail/Around";
 import Review from "../../components/detail/Review";
+import MoreImage from "../../components/detail/MoreImage";
+// import MoreImage from "../../components/detail/MoreImage";
 
-interface SpotDetailDto {
+export interface SpotDetailDto {
   contentId: number;
   name: string;
   address: string;
@@ -55,7 +57,7 @@ const DetailPage = () => {
   }, [category, contentId]);
 
   const getDisplayValue = (value?: string) => {
-    return value && value.trim() !== "" ? value : "-";
+    return value ? value : "정보 준비중";
   };
 
   return (
@@ -68,9 +70,10 @@ const DetailPage = () => {
       <Container>
         <DetailGrid
           category={category}
-          detailData={detailData}
+          detailData={detailData ?? undefined}
           getDisplayValue={getDisplayValue}
         />
+        <MoreImage images={detailData?.images || []} />
         <Around />
         <Review contentId={Number(contentId)} />
       </Container>

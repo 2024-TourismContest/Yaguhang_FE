@@ -25,7 +25,7 @@ export const home = {
       console.log(response);
       return response;
     } catch (error) {
-      console.error("북마크", error);
+      console.error("북마크 에러", error);
       throw error;
     }
   },

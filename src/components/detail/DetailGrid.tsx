@@ -2,14 +2,16 @@ import React from "react";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import { FiShare } from "react-icons/fi";
+import { SpotDetailDto } from "../../pages/detail/DetailPage";
 
 interface DetailGridProps {
   category: string | undefined;
-  detailData?: any;
+  detailData?: SpotDetailDto;
+  images?: string[];
   getDisplayValue: (value?: string) => string;
 }
 
-const handleShare = (detailData: any) => {
+const handleShare = (detailData: SpotDetailDto) => {
   // 공유하기 기능 구현
   if (navigator.share) {
     navigator
@@ -34,7 +36,7 @@ const DetailGrid: React.FC<DetailGridProps> = ({
     <>
       <Header>
         <Title>{detailData?.name}</Title>
-        <ShareIcon onClick={() => handleShare(detailData)}>
+        <ShareIcon onClick={() => detailData && handleShare(detailData)}>
           <FiShare />
         </ShareIcon>
       </Header>
