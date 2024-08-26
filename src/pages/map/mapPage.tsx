@@ -1,5 +1,5 @@
 import { CategorySelector } from "../../components/home/CategorySelector";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import MapTest from "../../components/map/map";
 import { useParams } from "react-router-dom";
 import Category from "../../components/stadium/Category";
@@ -23,34 +23,45 @@ const MapPage = () => {
   );
 
   const { selectedTeam, setSelectedTeam } = useTeamStore();
-  console.log(selectedTeam);
+
   const [mapCoordinates, setMapCoordinates] = useState<{
     mapX: number;
     mapY: number;
   } | null>(null);
-  const stadiumNumber = teamToStadiumMap[selectedTeam];
+
+  const latestTeamRef = useRef<string>(selectedTeam);
+
   useEffect(() => {
-    setSelectedTeam(urlTeam ? urlTeam : selectedTeam);
-    fetchStadiumData();
-  }, []);
+    latestTeamRef.current = selectedTeam;
+  }, [selectedTeam]);
+
   const fetchStadiumData = async () => {
     try {
       const stadiumNumber = teamToStadiumMap[selectedTeam];
       if (stadiumNumber) {
         const response = await getStadiumCoordinate(stadiumNumber);
-        console.log(response);
-        setMapCoordinates({
-          mapX: response.mapX,
-          mapY: response.mapY,
-        });
+
+        // 선택된 팀이 가장 최근에 선택된 팀이 맞는지 체크
+        if (latestTeamRef.current === selectedTeam) {
+          console.log(stadiumNumber, selectedTeam);
+          setMapCoordinates({
+            mapX: response.mapX,
+            mapY: response.mapY,
+          });
+        }
       }
     } catch (error) {
       console.error("Error fetching stadium coordinates:", error);
     }
   };
+
+  useEffect(() => {
+    setSelectedTeam(urlTeam ? urlTeam : selectedTeam);
+    fetchStadiumData();
+  }, [urlTeam]);
+
   useEffect(() => {
     fetchStadiumData();
-    console.log("구장좌표받아오기요청");
   }, [selectedTeam]);
 
   return (
@@ -60,9 +71,9 @@ const MapPage = () => {
         category={selectedCategory}
         setCategory={setSelectedCategory}
         color="white"
-      />{" "}
+      />
       <MapTest
-        selectedTeamId={stadiumNumber ? stadiumNumber : 1}
+        selectedTeamId={teamToStadiumMap[selectedTeam] || 1}
         mapX={mapCoordinates ? mapCoordinates.mapX : 126.9786567}
         mapY={mapCoordinates ? mapCoordinates.mapY : 37.566826}
         category={selectedCategory}
@@ -71,4 +82,5 @@ const MapPage = () => {
     </>
   );
 };
+
 export default MapPage;
