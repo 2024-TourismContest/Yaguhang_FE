@@ -1,14 +1,25 @@
-import { CategorySelector } from "../../components/home/CategorySelector";
-import { useState, useEffect, useRef } from "react";
-import MapTest from "../../components/map/map";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import Category from "../../components/stadium/Category";
-import { teamLogos } from "../../components/home/Card";
+import { getStadiumCoordinate, getSpotsByStadium } from "../../apis/map";
 import { teamToStadiumMap } from "../../assets/data/data";
+import { teamLogos } from "../../components/home/Card";
+import { CategorySelector } from "../../components/home/CategorySelector";
+import MapTest from "../../components/map/map";
+import Category from "../../components/stadium/Category";
 import useTeamStore from "../../store/TeamStore";
-import { getStadiumCoordinate } from "../../apis/map";
+import usePositionStore from "../../store/MapPositionsStore";
+import { MapPosition } from "../../components/map/MapPosition";
+import { SelectedPosition } from "../../components/map/SelectedPosition";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
+export interface Position {
+  contentId: number;
+  title: string;
+  address: string;
+  mapX: number;
+  mapY: number;
+  image: string;
+}
 
 const MapPage = () => {
   const { category, urlTeam } = useParams<{
@@ -27,23 +38,19 @@ const MapPage = () => {
   const [mapCoordinates, setMapCoordinates] = useState<{
     mapX: number;
     mapY: number;
-  } | null>(null);
-
+  }>();
   const latestTeamRef = useRef<string>(selectedTeam);
-
+  const stadiumNumber = teamToStadiumMap[selectedTeam];
   useEffect(() => {
     latestTeamRef.current = selectedTeam;
-  }, [selectedTeam]);
+  }, [selectedTeam, mapCoordinates]);
 
   const fetchStadiumData = async () => {
     try {
-      const stadiumNumber = teamToStadiumMap[selectedTeam];
       if (stadiumNumber) {
         const response = await getStadiumCoordinate(stadiumNumber);
 
-        // 선택된 팀이 가장 최근에 선택된 팀이 맞는지 체크
         if (latestTeamRef.current === selectedTeam) {
-          console.log(stadiumNumber, selectedTeam);
           setMapCoordinates({
             mapX: response.mapX,
             mapY: response.mapY,
@@ -66,7 +73,7 @@ const MapPage = () => {
 
   return (
     <>
-      <div style={{ width: "100vw", height: "13vh" }}></div>
+      <div style={{ width: "100vw", height: "14vh" }}></div>
       <CategorySelector
         category={selectedCategory}
         setCategory={setSelectedCategory}
@@ -77,8 +84,11 @@ const MapPage = () => {
         mapX={mapCoordinates ? mapCoordinates.mapX : 126.9786567}
         mapY={mapCoordinates ? mapCoordinates.mapY : 37.566826}
         category={selectedCategory}
+        boolean={latestTeamRef.current === selectedTeam}
       />
       <Category filterSchedules={fetchStadiumData} teamLogos={teamLogos} />
+      <SelectedPosition />
+      <MapPosition />
     </>
   );
 };

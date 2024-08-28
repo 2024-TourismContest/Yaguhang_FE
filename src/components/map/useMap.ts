@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
-
-interface Position {
-  contentId: number;
-  title: string;
-  address: string;
-  mapX: number;
-  mapY: number;
-  image: string;
-}
+import usePositionStore from "../../store/MapPositionStore";
+import { Position } from "./map";
 type MapCenter = {
   lat: number;
   lng: number;
@@ -20,7 +13,8 @@ const useMap = (mapX: number, mapY: number, positions: Position[]) => {
     lat: mapY,
     lng: mapX,
   });
-  const [markers, setMarkers] = useState<any[]>([]); // 마커들을 저장할 상태 추가
+  const [markers, setMarkers] = useState<any[]>([]);
+  const setPosition = usePositionStore((state) => state.setPosition);
   useEffect(() => {
     // 카카오 맵 SDK 동적 로드
     const script = document.createElement("script");
@@ -54,7 +48,14 @@ const useMap = (mapX: number, mapY: number, positions: Position[]) => {
                 position.mapX
               ),
               title: position.title,
+              clickable: true, // 마커 클릭 가능하게 설정
             });
+
+            // 마커 클릭 이벤트 리스너 추가
+            window.kakao.maps.event.addListener(marker, "click", () => {
+              setPosition(position);
+            });
+
             return marker;
           });
 
@@ -99,14 +100,23 @@ const useMap = (mapX: number, mapY: number, positions: Position[]) => {
               position.mapX
             ),
             title: position.title,
+            clickable: true,
           });
+
+          // 마커 클릭 이벤트 리스너 추가
+          window.kakao.maps.event.addListener(marker, "click", () => {
+            const infowindow = new window.kakao.maps.InfoWindow({
+              content: `<div style="padding:5px;">${position.title}</div>`,
+            });
+            infowindow.open(map, marker); // 클릭된 마커 위에 인포윈도우 열기
+          });
+
           return marker;
         });
         setMarkers(newMarkers); // 새로운 마커 저장
       };
       createMarkers();
     }
-    console.log("position", positions);
   }, [positions]); // positions 변경 시 실행
 
   return { center, level, map };
