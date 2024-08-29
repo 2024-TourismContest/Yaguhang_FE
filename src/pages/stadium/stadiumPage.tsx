@@ -32,9 +32,7 @@ const StadiumPage = () => {
   );
   const [playerPickData, setPlayerPickData] = useState<PlaceData | null>(null);
   const navigate = useNavigate();
-  const fetchSchedules = async () => {
-    console.log("선택된 팀");
-  };
+  const fetchSchedules = async () => {};
   const selectedTeam = useTeamStore((state) => state.selectedTeam);
   const stadiumNumber = teamToStadiumMap[selectedTeam];
 
@@ -60,7 +58,6 @@ const StadiumPage = () => {
   const fetchPlayerPickData = async (stadiumId: number) => {
     try {
       const response = await stadium.playerPick(stadiumId);
-      console.log("Player Pick Data:", response.data);
       setPlayerPickData(response.data);
     } catch (error) {
       console.error("선수픽맛집 에러", error);
