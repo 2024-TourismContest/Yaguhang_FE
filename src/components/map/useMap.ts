@@ -7,6 +7,7 @@ type MapCenter = {
 };
 
 const useMap = (mapX: number, mapY: number, positions: Position[]) => {
+  const clearPosition = usePositionStore((state) => state.clearPosition);
   const [map, setMap] = useState(null);
   const [level, setLevel] = useState<number>(5);
   const [center, setCenter] = useState<MapCenter>({
@@ -87,11 +88,13 @@ const useMap = (mapX: number, mapY: number, positions: Position[]) => {
     };
   }, [mapX, mapY, level]);
 
-  // positions 상태가 업데이트될 때마다 마커 재생성
   useEffect(() => {
+    clearPosition();
     if (map) {
       const createMarkers = () => {
-        markers.forEach((marker) => marker.setMap(null)); // 이전 마커 제거
+        // 기존 마커 제거
+        markers.forEach((marker) => marker.setMap(null));
+
         const newMarkers = positions.map((position) => {
           const marker = new window.kakao.maps.Marker({
             map: map,
@@ -103,18 +106,66 @@ const useMap = (mapX: number, mapY: number, positions: Position[]) => {
             clickable: true,
           });
 
-          // 마커 클릭 이벤트 리스너 추가
+          // 커스텀 오버레이 내용 정의
+          const customOverlayContent = `
+            <div style="
+              padding: 10px;
+              background: white;
+              border-radius: 5px;
+              box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+              text-align: center;
+              white-space: nowrap;
+              font-size: 14px;
+              color: black;
+            ">
+              ${position.title}
+            </div>
+          `;
+
+          const customOverlay = new window.kakao.maps.CustomOverlay({
+            content: customOverlayContent,
+            position: marker.getPosition(),
+            xAnchor: 0.5,
+            yAnchor: 2.1,
+            zIndex: 3,
+            clickable: true,
+          });
+          let hideOverlayTimeout: NodeJS.Timeout | null = null;
+          let lastExecutionTime = 0; // 마지막 실행 시간을 저장할 변수
+
+          // 마우스 오버 시 오버레이 표시 (5초 동안 다시 실행되지 않도록 설정)
+          window.kakao.maps.event.addListener(marker, "mouseover", () => {
+            const currentTime = new Date().getTime(); // 현재 시간
+            if (currentTime - lastExecutionTime < 1500) {
+              return; // 마지막 실행으로부터 5초가 지나지 않았으면 실행하지 않음
+            }
+
+            lastExecutionTime = currentTime; // 마지막 실행 시간 업데이트
+
+            if (hideOverlayTimeout) {
+              clearTimeout(hideOverlayTimeout); // 이전 타임아웃 취소
+            }
+            customOverlay.setMap(map); // 오버레이 표시
+          });
+
+          // 마우스 아웃 시 오버레이를 약간의 지연 후 제거
+          window.kakao.maps.event.addListener(marker, "mouseout", () => {
+            hideOverlayTimeout = setTimeout(() => {
+              customOverlay.setMap(null); // 오버레이 제거
+            }, 500);
+          });
+
+          // 마커 클릭 시 위치 설정
           window.kakao.maps.event.addListener(marker, "click", () => {
-            const infowindow = new window.kakao.maps.InfoWindow({
-              content: `<div style="padding:5px;">${position.title}</div>`,
-            });
-            infowindow.open(map, marker); // 클릭된 마커 위에 인포윈도우 열기
+            setPosition(position);
           });
 
           return marker;
         });
+
         setMarkers(newMarkers); // 새로운 마커 저장
       };
+
       createMarkers();
     }
   }, [positions]); // positions 변경 시 실행
