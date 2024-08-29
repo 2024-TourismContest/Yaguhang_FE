@@ -1,11 +1,48 @@
 import { styled } from "styled-components";
-// 여기서 올바른 store 경로로 수정
 import loadingImg from "../../assets/images/loadingImg.svg";
 import usePositionStore from "../../store/MapPositionStore";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { home } from "../../apis/main";
+import BookmarkIcon from "./BookMarkIcon";
+import { teamToStadiumMap } from "../../assets/data/data";
+import useTeamStore from "../../store/TeamStore";
+import { toast } from "react-toastify";
 
 export const SelectedPosition = () => {
   const position = usePositionStore((state) => state.position); // 단일 position 객체 가져오기
+  const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
+    {}
+  );
+  const navigate = useNavigate();
+  const { selectedTeam } = useTeamStore();
+  const stadiumNumber = teamToStadiumMap[selectedTeam];
 
+  const onClickMark = async (contentId: number) => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+      navigate("/login");
+      alert("로그인이 필요합니다");
+      return;
+    }
+    const stadiumId = stadiumNumber;
+
+    try {
+      await home.bookmark(contentId, stadiumId);
+      setMarkedSpots((prev) => ({
+        ...prev,
+        [contentId]: !prev[contentId],
+      }));
+      toast.success(
+        !markedSpots[contentId]
+          ? "스크랩에 추가되었습니다."
+          : "스크랩에서 제거되었습니다."
+      );
+    } catch (error) {
+      console.error("북마크 상태 변경 오류:", error);
+    }
+  };
   if (!position) {
     return <div></div>; // position이 없을 때의 처리
   }
@@ -30,7 +67,13 @@ export const SelectedPosition = () => {
           </section>
           <Ul>
             <li>리뷰 {position.reviewCount}</li>
-            <li>스크랩 별</li>
+            <li>
+              스크랩
+              <BookmarkIcon
+                isMarked={markedSpots[position.contentId] || false}
+                onClick={() => onClickMark(position.contentId)}
+              />
+            </li>
           </Ul>
         </ItemWrapper>
       </Container>
@@ -101,10 +144,15 @@ export const TextWrapper = styled.div`
 export const Ul = styled.ul`
   color: white;
   display: flex;
-  gap: 5px;
+  gap: 10px;
   margin: 0;
   height: 50%;
   flex-shrink: 0;
+  li {
+    text-align: center;
+    display: flex;
+    gap: 3px;
+  }
 `;
 export const A = styled.a`
   color: white;

@@ -4,6 +4,7 @@ import loadingImg from "../../assets/images/loadingImg.svg";
 
 export const MapPosition = () => {
   const positions = usePositionsStore((state) => state.positions);
+
   return (
     <Container>
       <ItemList>
