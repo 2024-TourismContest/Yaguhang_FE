@@ -7,9 +7,9 @@ import { CategorySelector } from "../../components/home/CategorySelector";
 import MapTest from "../../components/map/map";
 import Category from "../../components/stadium/Category";
 import useTeamStore from "../../store/TeamStore";
-import usePositionStore from "../../store/MapPositionsStore";
 import { MapPosition } from "../../components/map/MapPosition";
 import { SelectedPosition } from "../../components/map/SelectedPosition";
+import { styled } from "styled-components";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 export interface Position {
@@ -22,6 +22,7 @@ export interface Position {
 }
 
 const MapPage = () => {
+  window.scrollTo(0, 0);
   const { category, urlTeam } = useParams<{
     category: string;
     urlTeam: string;
@@ -88,9 +89,16 @@ const MapPage = () => {
       />
       <Category filterSchedules={fetchStadiumData} teamLogos={teamLogos} />
       <SelectedPosition />
+      <Hr />
       <MapPosition />
     </>
   );
 };
 
 export default MapPage;
+const Hr = styled.hr`
+  width: 70%;
+  border-bottom: 1px solid #c8c3c3;
+  margin-top: 50px;
+  margin-bottom: 50px;
+`;

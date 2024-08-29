@@ -38,18 +38,18 @@ const MapTest: React.FC<MapTestProps> = ({
   const [visible, setVisible] = useState(true);
   const [positions, setPosition] = useState<Position[]>([]);
   const { center, level } = useMap(mapX, mapY, positions);
-  console.log(positions);
 
   useEffect(() => {
     setVisible(true);
   }, [center]);
 
   useEffect(() => {
-    handleButtonClick();
-  }, [boolean, selectedTeamId, category]);
+    if (mapX && mapY && boolean) {
+      handleButtonClick();
+    }
+  }, [boolean, selectedTeamId, category, mapX, mapY]);
 
   const handleButtonClick = async () => {
-    setVisible(false);
     try {
       const response = await getSpotsByStadium(
         selectedTeamId,
@@ -60,6 +60,9 @@ const MapTest: React.FC<MapTestProps> = ({
       );
       setPosition(response.data);
       usePositionStore.getState().setPositions(response.data);
+      if (response.data) {
+        setVisible(false);
+      }
     } catch (error) {
       console.error("Error fetching locations:", error);
     }
