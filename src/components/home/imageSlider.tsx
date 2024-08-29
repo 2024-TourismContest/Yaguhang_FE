@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { BsBookmarkStar } from "react-icons/bs";
-import { LuDot } from "react-icons/lu";
+import { toast } from "react-toastify";
 import loading from "../../assets/images/loading.svg";
 import { useNavigate } from "react-router-dom";
 import { home } from "../../apis/main";
+import BookmarkIcon from "../map/BookMarkIcon";
 
 interface SpotBasicPreviewDto {
   contentId: number;
@@ -29,25 +29,30 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
     const token = localStorage.getItem("authToken");
 
     if (!token) {
-      // 토큰이 없으면 로그인 화면으로 이동
       navigate("/login");
       alert("로그인이 필요합니다");
       return;
     }
-    const stadiumId = "5"; // 수정 필요
+    const stadiumId = 5;
 
     try {
-      await home.bookmark(contentId.toString(), stadiumId);
+      await home.bookmark(contentId, stadiumId);
       setMarkedSpots((prev) => ({
         ...prev,
         [contentId]: !prev[contentId],
       }));
+      toast.success(
+        !markedSpots[contentId]
+          ? "스크랩에 추가되었습니다."
+          : "스크랩에서 제거되었습니다."
+      );
     } catch (error) {
       console.error("북마크 상태 변경 오류:", error);
     }
   };
   const onClickContent = (contentId: number) => {
     navigate(`/details/${contentId}`);
+    console.log("실행");
   };
   if (!spots || spots.length === 0) return <Container></Container>;
 
@@ -80,11 +85,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
                     : spot.address}
                 </SlideAddress>
               </span>
-              {markedSpots[spot.contentId] ? (
-                <LuDot onClick={() => onClickMark(spot.contentId)} />
-              ) : (
-                <BsBookmarkStar onClick={() => onClickMark(spot.contentId)} />
-              )}
+              <BookmarkIcon
+                isMarked={markedSpots[spot.contentId] || false}
+                onClick={() => onClickMark(spot.contentId)}
+              />
             </SlideInfo>
           </SlideContainer>
         ))}
