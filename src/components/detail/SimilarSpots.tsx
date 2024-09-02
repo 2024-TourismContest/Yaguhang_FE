@@ -17,6 +17,7 @@ interface SimilarSpotsProps {
   bookmarkStates: { [key: number]: boolean };
   handleBookmarkToggle: (contentId: number) => void;
   onClickContent: (contentId: number) => void;
+  id?: string;
 }
 
 const SimilarSpots: React.FC<SimilarSpotsProps> = ({
@@ -24,38 +25,41 @@ const SimilarSpots: React.FC<SimilarSpotsProps> = ({
   bookmarkStates,
   handleBookmarkToggle,
   onClickContent,
+  id,
 }) => {
   return (
-    <Section>
-      <h1>비슷한 관광지</h1>
-      <SimilarSpotsContainer>
-        {similarSpots.map((spot) => (
-          <CardContainer
-            key={spot.contentId}
-            onClick={() => onClickContent(spot.contentId)}
-          >
-            <BookmarkIcon
-              onClick={(e) => {
-                e.stopPropagation();
-                handleBookmarkToggle(spot.contentId);
-              }}
+    <div id={id}>
+      <Section>
+        <h1>비슷한 관광지</h1>
+        <SimilarSpotsContainer>
+          {similarSpots.map((spot) => (
+            <CardContainer
+              key={spot.contentId}
+              onClick={() => onClickContent(spot.contentId)}
             >
-              {bookmarkStates[spot.contentId] ? (
-                <BsBookmarkFill style={{ fontSize: "2rem" }} />
+              <BookmarkIcon
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleBookmarkToggle(spot.contentId);
+                }}
+              >
+                {bookmarkStates[spot.contentId] ? (
+                  <BsBookmarkFill style={{ fontSize: "2rem" }} />
+                ) : (
+                  <BsBookmarkStar style={{ fontSize: "2rem" }} />
+                )}
+              </BookmarkIcon>
+              {spot.imageUrl ? (
+                <SpotImage src={spot.imageUrl} alt={spot.name} />
               ) : (
-                <BsBookmarkStar style={{ fontSize: "2rem" }} />
+                <DefaultImage src={loading} alt={spot.name} />
               )}
-            </BookmarkIcon>
-            {spot.imageUrl ? (
-              <SpotImage src={spot.imageUrl} alt={spot.name} />
-            ) : (
-              <DefaultImage src={loading} alt={spot.name} />
-            )}
-            <LocationText>{spot.name}</LocationText>
-          </CardContainer>
-        ))}
-      </SimilarSpotsContainer>
-    </Section>
+              <LocationText>{spot.name}</LocationText>
+            </CardContainer>
+          ))}
+        </SimilarSpotsContainer>
+      </Section>
+    </div>
   );
 };
 

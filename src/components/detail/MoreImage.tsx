@@ -3,11 +3,12 @@ import styled from "styled-components";
 import left from "../../assets/icons/left.png";
 import right from "../../assets/icons/right.png";
 
-interface MoreImageProps {
+export interface MoreImageProps {
   images: string[];
+  id?: string;
 }
 
-const MoreImage: React.FC<MoreImageProps> = ({ images }) => {
+const MoreImage: React.FC<MoreImageProps> = ({ images, id }) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const imagesPerPage = 4;
@@ -28,7 +29,7 @@ const MoreImage: React.FC<MoreImageProps> = ({ images }) => {
   };
 
   return (
-    <>
+    <div id={id}>
       <Section>
         <h1>사진 정보</h1>
         <PrevButton onClick={prevPage} disabled={currentPage === 0}>
@@ -46,7 +47,7 @@ const MoreImage: React.FC<MoreImageProps> = ({ images }) => {
           <img src={right} alt="다음" />
         </NextButton>
       </Section>
-    </>
+    </div>
   );
 };
 

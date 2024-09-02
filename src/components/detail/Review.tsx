@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 interface ReviewProps {
   contentId: number;
+  id?: string;
 }
 
 interface ReviewData {
@@ -45,7 +46,7 @@ const dummyReviews: ReviewData[] = [
   },
 ];
 
-const Review: React.FC<ReviewProps> = ({ contentId }) => {
+const Review: React.FC<ReviewProps> = ({ contentId, id }) => {
   const [reviews, setReviews] = useState<ReviewData[]>(dummyReviews);
   const [newReview, setNewReview] = useState("");
   const [rating, setRating] = useState(0);
@@ -69,31 +70,33 @@ const Review: React.FC<ReviewProps> = ({ contentId }) => {
   };
 
   return (
-    <ReviewContainer>
-      <ReviewHeader>
-        <ReviewInput
-          placeholder="여기를 클릭해서 리뷰를 입력하세요. (최대 300자)"
-          value={newReview}
-          onChange={(e) => setNewReview(e.target.value)}
-        />
-        <RatingInput
-          type="number"
-          placeholder="평점 (0-5)"
-          value={rating}
-          onChange={(e) => setRating(Number(e.target.value))}
-        />
-        <SubmitButton onClick={handleReviewSubmit}>리뷰 작성</SubmitButton>
-      </ReviewHeader>
-      <ReviewList>
-        {reviews.map((review) => (
-          <ReviewItem key={review.reviewId}>
-            <ReviewTitle>{review.authorName}</ReviewTitle>
-            <ReviewRating>⭐ {review.rating}</ReviewRating>
-            <ReviewContent>{review.content}</ReviewContent>
-          </ReviewItem>
-        ))}
-      </ReviewList>
-    </ReviewContainer>
+    <div id={id}>
+      <ReviewContainer>
+        <ReviewHeader>
+          <ReviewInput
+            placeholder="여기를 클릭해서 리뷰를 입력하세요. (최대 300자)"
+            value={newReview}
+            onChange={(e) => setNewReview(e.target.value)}
+          />
+          <RatingInput
+            type="number"
+            placeholder="평점 (0-5)"
+            value={rating}
+            onChange={(e) => setRating(Number(e.target.value))}
+          />
+          <SubmitButton onClick={handleReviewSubmit}>리뷰 작성</SubmitButton>
+        </ReviewHeader>
+        <ReviewList>
+          {reviews.map((review) => (
+            <ReviewItem key={review.reviewId}>
+              <ReviewTitle>{review.authorName}</ReviewTitle>
+              <ReviewRating>⭐ {review.rating}</ReviewRating>
+              <ReviewContent>{review.content}</ReviewContent>
+            </ReviewItem>
+          ))}
+        </ReviewList>
+      </ReviewContainer>
+    </div>
   );
 };
 

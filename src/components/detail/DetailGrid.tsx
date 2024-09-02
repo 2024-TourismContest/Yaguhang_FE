@@ -9,6 +9,7 @@ interface DetailGridProps {
   detailData?: SpotDetailDto;
   images?: string[];
   getDisplayValue: (value?: string) => string;
+  id?: string;
 }
 
 const handleShare = (detailData: SpotDetailDto) => {
@@ -31,9 +32,10 @@ const DetailGrid: React.FC<DetailGridProps> = ({
   category,
   detailData,
   getDisplayValue,
+  id,
 }) => {
   return (
-    <>
+    <div id={id}>
       <Header>
         <Title>{detailData?.name}</Title>
         <ShareIcon onClick={() => detailData && handleShare(detailData)}>
@@ -136,7 +138,7 @@ const DetailGrid: React.FC<DetailGridProps> = ({
         </Box>
       </GridContainer>
       <DotLine />
-    </>
+    </div>
   );
 };
 

@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import styled from "styled-components";
 import { toast } from "react-toastify";
 import HeaderImg from "../../components/detail/HeaderImg";
 import DetailGrid from "../../components/detail/DetailGrid";
@@ -47,7 +47,9 @@ const DetailPage = () => {
   const [similarSpots, setSimilarSpots] = useState<SpotPreviewDto[]>([]);
   const [bookmarkStates, setBookmarkStates] = useState<{
     [key: number]: boolean;
-  }>({}); // 북마크 상태를 객체로 관리
+  }>({});
+  const [activeSection, setActiveSection] = useState("details");
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const stadiumId = queryParams.get("stadiumId");
@@ -68,7 +70,6 @@ const DetailPage = () => {
         );
         setDetailData(response.data);
 
-        // 비슷한 관광지 데이터를 받아온 후 북마크 상태 초기화
         if (response.data?.stadiumId) {
           fetchSimilarSpots(response.data.stadiumId);
         }
@@ -94,7 +95,6 @@ const DetailPage = () => {
         const spotData = response.data.spotPreviewDtos;
         setSimilarSpots(spotData);
 
-        // 서버에서 받아온 북마크 상태를 초기화
         const initialBookmarkStates = spotData.reduce(
           (acc: { [key: number]: boolean }, spot: SpotPreviewDto) => {
             acc[spot.contentId] = spot.isScraped;
@@ -112,6 +112,28 @@ const DetailPage = () => {
     fetchDetailData();
   }, [category, contentId]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll("section");
+      let currentSection = "details";
+
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop;
+        if (window.scrollY >= sectionTop - 60) {
+          currentSection = section.getAttribute("id")!;
+        }
+      });
+
+      setActiveSection(currentSection);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const handleBookmarkToggle = async (contentId: number) => {
     const token = localStorage.getItem("token");
 
@@ -124,7 +146,7 @@ const DetailPage = () => {
     try {
       setBookmarkStates((prev) => ({
         ...prev,
-        [contentId]: !prev[contentId], // 현재 상태를 반전시킴
+        [contentId]: !prev[contentId],
       }));
 
       toast.success(
@@ -147,6 +169,13 @@ const DetailPage = () => {
     window.scrollTo(0, 0);
   };
 
+  const handleScrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <>
       <HeaderImg
@@ -154,22 +183,50 @@ const DetailPage = () => {
         title={detailData?.name}
         description={detailData?.description}
       />
+      <MenuContainer>
+        <MenuItem
+          onClick={() => handleScrollToSection("details")}
+          active={activeSection === "details"}
+        >
+          상세소개
+        </MenuItem>
+        <MenuItem
+          onClick={() => handleScrollToSection("images")}
+          active={activeSection === "images"}
+        >
+          사진 정보
+        </MenuItem>
+        <MenuItem
+          onClick={() => handleScrollToSection("similarSpots")}
+          active={activeSection === "similarSpots"}
+        >
+          비슷한 관광지
+        </MenuItem>
+        <MenuItem
+          onClick={() => handleScrollToSection("reviews")}
+          active={activeSection === "reviews"}
+        >
+          리뷰
+        </MenuItem>
+      </MenuContainer>
       <Container>
         <DetailGrid
+          id="details"
           category={category}
           detailData={detailData ?? undefined}
           getDisplayValue={getDisplayValue}
         />
-        <MoreImage images={detailData?.images || []} />
+        <MoreImage id="images" images={detailData?.images || []} />
         <DotLine />
         <SimilarSpots
+          id="similarSpots"
           similarSpots={similarSpots}
           bookmarkStates={bookmarkStates}
           handleBookmarkToggle={handleBookmarkToggle}
           onClickContent={onClickContent}
         />
         <DotLine />
-        <Review contentId={Number(contentId)} />
+        <Review id="reviews" contentId={Number(contentId)} />
       </Container>
     </>
   );
@@ -191,4 +248,32 @@ const Container = styled.div`
 const DotLine = styled.div`
   width: 1250px;
   border-top: 1px dotted gray;
+`;
+
+const MenuContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  padding: 1rem 0;
+  position: sticky;
+  z-index: 1000;
+`;
+
+const MenuItem = styled.div<{ active: boolean }>`
+  flex: 1;
+  max-width: 150px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 40px;
+  margin: 0 1.5rem;
+  font-size: 1rem;
+  color: #fff;
+  cursor: pointer;
+  border-bottom: ${(props) => (props.active ? "1px solid #fff" : "none")};
+  &:hover {
+    text-decoration: underline;
+  }
 `;
