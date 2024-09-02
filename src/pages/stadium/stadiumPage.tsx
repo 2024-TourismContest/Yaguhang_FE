@@ -78,7 +78,7 @@ const StadiumPage = () => {
   }, [stadiumNumber]);
 
   const handleMoreClick = (category: string) => {
-    navigate(`/details/${category}?stadiumId=${stadiumNumber}`);
+    navigate(`/category/${category}`);
   };
 
   return (

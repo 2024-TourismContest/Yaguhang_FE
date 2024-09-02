@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
+import { BsBookmarkFill, BsBookmarkStar } from "react-icons/bs";
+import { toast } from "react-toastify";
 import HeaderImg from "../../components/detail/HeaderImg";
 import DetailGrid from "../../components/detail/DetailGrid";
-import { BsBookmarkStar } from "react-icons/bs";
 import Review from "../../components/detail/Review";
 import MoreImage from "../../components/detail/MoreImage";
 import loading from "../../assets/images/loading.svg";
+import { home } from "../../apis/main";
 
 export interface SpotDetailDto {
   contentId: number;
@@ -45,9 +47,13 @@ const DetailPage = () => {
   const { category, contentId } = useParams();
   const [detailData, setDetailData] = useState<SpotDetailDto | null>(null);
   const [similarSpots, setSimilarSpots] = useState<SpotPreviewDto[]>([]);
+  const [bookmarkStates, setBookmarkStates] = useState<{
+    [key: number]: boolean;
+  }>({}); // 북마크 상태를 객체로 관리
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const stadiumId = queryParams.get("stadiumId");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDetailData = async () => {
@@ -64,7 +70,7 @@ const DetailPage = () => {
         );
         setDetailData(response.data);
 
-        // Similar spots를 detailData를 받은후 호출
+        // 비슷한 관광지 데이터를 받아온 후 북마크 상태 초기화
         if (response.data?.stadiumId) {
           fetchSimilarSpots(response.data.stadiumId);
         }
@@ -86,7 +92,20 @@ const DetailPage = () => {
             },
           }
         );
-        setSimilarSpots(response.data.spotPreviewDtos);
+
+        const spotData = response.data.spotPreviewDtos;
+        setSimilarSpots(spotData);
+
+        // 서버에서 받아온 북마크 상태를 초기화
+        const initialBookmarkStates = spotData.reduce(
+          (acc: { [key: number]: boolean }, spot: SpotPreviewDto) => {
+            acc[spot.contentId] = spot.isScraped;
+            return acc;
+          },
+          {}
+        );
+
+        setBookmarkStates(initialBookmarkStates);
       } catch (error) {
         console.error("비슷한 관광지 불러오기 에러:", error);
       }
@@ -95,8 +114,41 @@ const DetailPage = () => {
     fetchDetailData();
   }, [category, contentId]);
 
+  const handleBookmarkToggle = async (contentId: number) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      toast.error("로그인이 필요합니다");
+      return;
+    }
+
+    try {
+      const response = await home.bookmark(contentId, Number(stadiumId));
+
+      setBookmarkStates((prev) => ({
+        ...prev,
+        [contentId]: !prev[contentId], // 현재 상태를 반전시킴
+      }));
+
+      toast.success(
+        !bookmarkStates[contentId]
+          ? "스크랩에 추가되었습니다."
+          : "스크랩에서 제거되었습니다."
+      );
+    } catch (error) {
+      console.error("북마크 상태 변경 오류:", error);
+      toast.error("북마크 중 오류가 발생했습니다.");
+    }
+  };
+
   const getDisplayValue = (value?: string) => {
     return value ? value : "정보 준비중";
+  };
+
+  const onClickContent = (contentId: number) => {
+    navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -118,9 +170,21 @@ const DetailPage = () => {
           <h1>비슷한 관광지</h1>
           <SimilarSpotsContainer>
             {similarSpots.map((spot) => (
-              <CardContainer key={spot.contentId}>
-                <BookmarkIcon>
-                  <BsBookmarkStar style={{ fontSize: "2rem" }} />
+              <CardContainer
+                key={spot.contentId}
+                onClick={() => onClickContent(spot.contentId)}
+              >
+                <BookmarkIcon
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleBookmarkToggle(spot.contentId);
+                  }}
+                >
+                  {bookmarkStates[spot.contentId] ? (
+                    <BsBookmarkFill style={{ fontSize: "2rem" }} />
+                  ) : (
+                    <BsBookmarkStar style={{ fontSize: "2rem" }} />
+                  )}
                 </BookmarkIcon>
                 {spot.imageUrl ? (
                   <SpotImage src={spot.imageUrl} alt={spot.name} />
@@ -141,6 +205,7 @@ const DetailPage = () => {
 
 export default DetailPage;
 
+// Styled Components 정의 (변경사항 없음)
 const Container = styled.div`
   max-width: 1250px;
   margin: 0 auto;
@@ -180,15 +245,21 @@ const SimilarSpotsContainer = styled.div`
 `;
 
 const CardContainer = styled.div`
-  width: 260px; /* 카드 크기 조정 */
+  width: 260px;
   height: 260px;
   background-color: #ccc;
-  border-radius: 50%; /* 원형으로 변경 */
+  border-radius: 50%;
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 텍스트를 카드의 중앙에 위치 */
+  justify-content: center;
   align-items: center;
+
+  &:hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
 `;
 const DefaultImage = styled.img`
   width: 100%;
@@ -204,7 +275,7 @@ const BookmarkIcon = styled.div`
   width: 60px; /* 아이콘 크기 조정 */
   height: 65px;
   background-color: #1a278e;
-  clip-path: polygon(100% 0, 100% 100%, 0 0); /* 상단 모서리에 아이콘 배치 */
+  clip-path: polygon(100% 0, 100% 100%, 0 0);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -219,6 +290,7 @@ const SpotImage = styled.img`
   object-fit: cover;
   border-radius: 50%;
 `;
+
 const LocationText = styled.p`
   width: 150px;
   font-size: 1rem;

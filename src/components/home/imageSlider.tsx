@@ -41,7 +41,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
     const stadiumId = "5"; // 수정 필요
 
     try {
-      await home.bookmark(contentId.toString(), stadiumId);
+      await home.bookmark(contentId, Number(stadiumId));
       setMarkedSpots((prev) => ({
         ...prev,
         [contentId]: !prev[contentId],
@@ -50,8 +50,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
       console.error("북마크 상태 변경 오류:", error);
     }
   };
+
   const onClickContent = (contentId: number) => {
     navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
+    window.scrollTo(0, 0);
   };
   if (!spots || spots.length === 0) return <Container></Container>;
 
