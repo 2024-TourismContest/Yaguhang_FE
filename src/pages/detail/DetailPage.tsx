@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -49,7 +49,6 @@ const DetailPage = () => {
   const [bookmarkStates, setBookmarkStates] = useState<{
     [key: number]: boolean;
   }>({});
-  const [activeSection, setActiveSection] = useState("details");
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -124,8 +123,6 @@ const DetailPage = () => {
           currentSection = section.getAttribute("id")!;
         }
       });
-
-      setActiveSection(currentSection);
     };
 
     window.addEventListener("scroll", handleScroll);
