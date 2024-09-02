@@ -7,6 +7,7 @@ import DetailGrid from "../../components/detail/DetailGrid";
 import { BsBookmarkStar } from "react-icons/bs";
 import Review from "../../components/detail/Review";
 import MoreImage from "../../components/detail/MoreImage";
+import loading from "../../assets/images/loading.svg";
 
 export interface SpotDetailDto {
   contentId: number;
@@ -80,7 +81,7 @@ const DetailPage = () => {
             params: {
               stadiumId,
               category,
-              pagesize: 8,
+              pagesize: 6,
               radius: 10,
             },
           }
@@ -118,8 +119,14 @@ const DetailPage = () => {
           <SimilarSpotsContainer>
             {similarSpots.map((spot) => (
               <CardContainer key={spot.contentId}>
-                <BookmarkIcon />
-                <SpotImage src={spot.imageUrl} alt={spot.name} />
+                <BookmarkIcon>
+                  <BsBookmarkStar style={{ fontSize: "2rem" }} />
+                </BookmarkIcon>
+                {spot.imageUrl ? (
+                  <SpotImage src={spot.imageUrl} alt={spot.name} />
+                ) : (
+                  <DefaultImage src={loading} alt={spot.name} />
+                )}
                 <LocationText>{spot.name}</LocationText>
               </CardContainer>
             ))}
@@ -173,48 +180,52 @@ const SimilarSpotsContainer = styled.div`
 `;
 
 const CardContainer = styled.div`
-  width: 230px;
-  height: 380px;
+  width: 260px; /* 카드 크기 조정 */
+  height: 260px;
   background-color: #ccc;
-  border-radius: 110px;
+  border-radius: 50%; /* 원형으로 변경 */
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center; /* 텍스트를 카드의 중앙에 위치 */
   align-items: center;
-  padding-bottom: 20px;
-  overflow: hidden;
+`;
+const DefaultImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 `;
 
-const BookmarkIcon = styled(BsBookmarkStar)`
+const BookmarkIcon = styled.div`
   position: absolute;
   top: 0;
   right: 0;
-  width: 98px;
-  height: 90px;
-  color: #fff;
+  width: 60px; /* 아이콘 크기 조정 */
+  height: 65px;
   background-color: #1a278e;
-  clip-path: polygon(100% 0, 100% 100%, 0 0);
+  clip-path: polygon(100% 0, 100% 100%, 0 0); /* 상단 모서리에 아이콘 배치 */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
-  box-sizing: border-box;
-  font-size: 24px;
-  padding-left: 55px; /* 이모지 위치 조정 */
-  padding-bottom: 40px; /* 이모지 위치 조정 */
+  padding-left: 50px;
+  padding-bottom: 45px;
+  color: #fff;
 `;
 
 const SpotImage = styled.img`
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
+  border-radius: 50%;
 `;
-
 const LocationText = styled.p`
-  font-size: 1.2rem;
+  width: 150px;
+  font-size: 1rem;
   font-weight: bold;
   color: #fff;
   margin: 0;
   text-align: center;
+  position: absolute;
+  bottom: 40px;
 `;
