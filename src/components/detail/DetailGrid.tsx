@@ -166,13 +166,20 @@ const GridContainer = styled.div`
   margin-top: 7vh;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, auto);
-  gap: 1.25rem; /* 20px */
+  gap: 1.25rem;
+  justify-items: center;
+  align-items: center;
+  padding-bottom: 6vh;
 `;
 
 const Box = styled.div`
-  max-width: 16.25rem; /* 260px */
-  height: 7.5rem; /* 120px */
+  width: 16.25rem;
+  height: 7.5rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   h2 {
     font-weight: bold;
