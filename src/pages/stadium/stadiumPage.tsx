@@ -36,6 +36,7 @@ const StadiumPage = () => {
     console.log("선택된 팀");
   };
   const selectedTeam = useTeamStore((state) => state.selectedTeam);
+  const setStadiumId = useTeamStore((state) => state.setStadiumId); // stadiumId 설정 함수 가져오기
   const stadiumNumber = teamToStadiumMap[selectedTeam];
 
   const fetchPlaceData = async (category: Category) => {
@@ -69,6 +70,7 @@ const StadiumPage = () => {
 
   // 각 카테고리에 대해 데이터 로드
   useEffect(() => {
+    setStadiumId(stadiumNumber);
     fetchPlaceData("숙소");
     fetchPlaceData("맛집");
     fetchPlaceData("쇼핑");

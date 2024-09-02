@@ -115,8 +115,24 @@ const Card: React.FC = () => {
               border:
                 selectedGame?.date === schedule.date &&
                 selectedGame?.stadium === schedule.stadium
-                  ? "2px solid #FF0000"
+                  ? "5px solid #ffffff"
                   : "1px solid #ffffff",
+              boxShadow:
+                selectedGame?.date === schedule.date &&
+                selectedGame?.stadium === schedule.stadium
+                  ? "0 0 20px rgba(255, 255, 255, 0.7)"
+                  : "none",
+              transform:
+                selectedGame?.date === schedule.date &&
+                selectedGame?.stadium === schedule.stadium
+                  ? "scale(1.05)"
+                  : "scale(1)",
+              backgroundColor:
+                selectedGame?.date === schedule.date &&
+                selectedGame?.stadium === schedule.stadium
+                  ? "rgba(255, 255, 255, 0.1)"
+                  : "transparent",
+              transition: "all 0.3s ease-in-out",
             }}
           >
             <BeforeElement

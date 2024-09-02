@@ -46,7 +46,6 @@ const MoreImage: React.FC<MoreImageProps> = ({ images }) => {
           <img src={right} alt="다음" />
         </NextButton>
       </Section>
-      <DotLine />
     </>
   );
 };
@@ -67,11 +66,6 @@ const Section = styled.div`
   }
 `;
 
-const DotLine = styled.div`
-  width: 1250px;
-  border-top: 1px dotted gray;
-`;
-
 const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -80,7 +74,7 @@ const ImageContainer = styled.div`
 `;
 
 const ImageItem = styled.img`
-  width: 15vw;
+  width: 230px;
   height: 23vh;
   object-fit: cover;
   border-radius: 25px;

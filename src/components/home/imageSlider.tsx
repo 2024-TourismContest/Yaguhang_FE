@@ -6,8 +6,9 @@ import loading from "../../assets/images/loading.svg";
 import { useNavigate } from "react-router-dom";
 import { home } from "../../apis/main";
 import { toast } from "react-toastify";
+import useTeamStore from "../../store/TeamStore";
 
-interface SpotBasicPreviewDto {
+export interface SpotBasicPreviewDto {
   contentId: number;
   name: string;
   address: string;
@@ -25,6 +26,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
   const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
     {}
   );
+  const stadiumId = useTeamStore((state) => state.stadiumId); // stadiumId 가져오기
   const navigate = useNavigate();
 
   const onClickMark = async (contentId: number) => {
@@ -49,7 +51,9 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
     }
   };
   const onClickContent = (contentId: number) => {
-    navigate(`/details/${category}/${contentId}`);
+    navigate(`/details/${category}/${contentId}`, {
+      state: { stadiumId }, // stadiumId를 상세페이지에 전달
+    });
   };
   if (!spots || spots.length === 0) return <Container></Container>;
 
