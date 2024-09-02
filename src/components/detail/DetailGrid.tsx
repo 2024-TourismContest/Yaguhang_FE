@@ -1,4 +1,3 @@
-import React from "react";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import { FiShare } from "react-icons/fi";

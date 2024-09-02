@@ -8,6 +8,7 @@ import DetailGrid from "../../components/detail/DetailGrid";
 import Review from "../../components/detail/Review";
 import MoreImage from "../../components/detail/MoreImage";
 import SimilarSpots from "../../components/detail/SimilarSpots";
+import MenuContainer from "../../components/detail/MenuContainer";
 
 export interface SpotDetailDto {
   contentId: number;
@@ -183,32 +184,7 @@ const DetailPage = () => {
         title={detailData?.name}
         description={detailData?.description}
       />
-      <MenuContainer>
-        <MenuItem
-          onClick={() => handleScrollToSection("details")}
-          active={activeSection === "details"}
-        >
-          상세소개
-        </MenuItem>
-        <MenuItem
-          onClick={() => handleScrollToSection("images")}
-          active={activeSection === "images"}
-        >
-          사진 정보
-        </MenuItem>
-        <MenuItem
-          onClick={() => handleScrollToSection("similarSpots")}
-          active={activeSection === "similarSpots"}
-        >
-          비슷한 관광지
-        </MenuItem>
-        <MenuItem
-          onClick={() => handleScrollToSection("reviews")}
-          active={activeSection === "reviews"}
-        >
-          리뷰
-        </MenuItem>
-      </MenuContainer>
+      <MenuContainer handleScrollToSection={handleScrollToSection} />
       <Container>
         <DetailGrid
           id="details"
@@ -248,32 +224,4 @@ const Container = styled.div`
 const DotLine = styled.div`
   width: 1250px;
   border-top: 1px dotted gray;
-`;
-
-const MenuContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #000;
-  padding: 1rem 0;
-  position: sticky;
-  z-index: 1000;
-`;
-
-const MenuItem = styled.div<{ active: boolean }>`
-  flex: 1;
-  max-width: 150px;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  height: 40px;
-  margin: 0 1.5rem;
-  font-size: 1rem;
-  color: #fff;
-  cursor: pointer;
-  border-bottom: ${(props) => (props.active ? "1px solid #fff" : "none")};
-  &:hover {
-    text-decoration: underline;
-  }
 `;
