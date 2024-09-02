@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import HeaderImg from "../../components/detail/HeaderImg";
@@ -7,10 +7,10 @@ import DetailGrid from "../../components/detail/DetailGrid";
 import { BsBookmarkStar } from "react-icons/bs";
 import Review from "../../components/detail/Review";
 import MoreImage from "../../components/detail/MoreImage";
-import useTeamStore from "../../store/TeamStore";
 
 export interface SpotDetailDto {
   contentId: number;
+  stadiumId: number;
   name: string;
   address: string;
   isScraped: boolean;
@@ -37,13 +37,16 @@ export interface SpotPreviewDto {
   address: string;
   imageUrl: string;
   isScraped: boolean;
+  stadiumId: number;
 }
 
 const DetailPage = () => {
   const { category, contentId } = useParams();
   const [detailData, setDetailData] = useState<SpotDetailDto | null>(null);
   const [similarSpots, setSimilarSpots] = useState<SpotPreviewDto[]>([]);
-  const stadiumId = useTeamStore((state) => state.stadiumId);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const stadiumId = queryParams.get("stadiumId");
 
   useEffect(() => {
     const fetchDetailData = async () => {
@@ -52,29 +55,30 @@ const DetailPage = () => {
           `https://yaguhang.kro.kr:8443/api/spot/detail`,
           {
             params: {
+              stadiumId,
               category,
               contentId,
             },
           }
         );
         setDetailData(response.data);
+
+        // Similar spots를 detailData를 받은후 호출
+        if (response.data?.stadiumId) {
+          fetchSimilarSpots(response.data.stadiumId);
+        }
       } catch (error) {
         console.error("상세 데이터 불러오기 에러:", error);
       }
     };
 
-    const fetchSimilarSpots = async () => {
-      if (!stadiumId) {
-        console.error("stadiumId가 없습니다.");
-        return;
-      }
-
+    const fetchSimilarSpots = async (stadiumId: number) => {
       try {
         const response = await axios.get(
           "https://yaguhang.kro.kr:8443/api/stadium",
           {
             params: {
-              stadiumId, // stadiumId를 사용하여 비슷한 관광지 검색
+              stadiumId,
               category,
               pagesize: 8,
               radius: 10,
@@ -88,8 +92,7 @@ const DetailPage = () => {
     };
 
     fetchDetailData();
-    fetchSimilarSpots();
-  }, [category, contentId, stadiumId]);
+  }, [category, contentId]);
 
   const getDisplayValue = (value?: string) => {
     return value ? value : "정보 준비중";

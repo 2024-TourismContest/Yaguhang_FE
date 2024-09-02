@@ -47,7 +47,6 @@ const StadiumPage = () => {
       pageindex: 0,
       radius: 3,
     };
-
     try {
       const response = await stadium.Category(queryParams);
       setPlaceData((prevData) => ({
@@ -79,7 +78,7 @@ const StadiumPage = () => {
   }, [stadiumNumber]);
 
   const handleMoreClick = (category: string) => {
-    navigate(`/category/${category}`);
+    navigate(`/details/${category}?stadiumId=${stadiumNumber}`);
   };
 
   return (

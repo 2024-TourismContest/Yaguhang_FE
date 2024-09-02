@@ -51,9 +51,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
     }
   };
   const onClickContent = (contentId: number) => {
-    navigate(`/details/${category}/${contentId}`, {
-      state: { stadiumId }, // stadiumId를 상세페이지에 전달
-    });
+    navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
   };
   if (!spots || spots.length === 0) return <Container></Container>;
 
