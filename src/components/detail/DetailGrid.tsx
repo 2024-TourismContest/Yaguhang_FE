@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 import { FiShare } from "react-icons/fi";
 import { SpotDetailDto } from "../../pages/detail/DetailPage";
+import { BsBookmarkFill, BsBookmarkStar } from "react-icons/bs";
 
 interface DetailGridProps {
   category: string | undefined;
@@ -9,37 +10,52 @@ interface DetailGridProps {
   images?: string[];
   getDisplayValue: (value?: string) => string;
   id?: string;
+  bookmarkStates: { [key: number]: boolean };
+  handleBookmarkToggle: (contentId: number) => void;
 }
-
-const handleShare = (detailData: SpotDetailDto) => {
-  // 공유하기 기능 구현
-  if (navigator.share) {
-    navigator
-      .share({
-        title: detailData?.name,
-        text: detailData?.description,
-        url: window.location.href,
-      })
-      .catch((error) => console.error("공유하기 에러:", error));
-  } else {
-    // 공유 API를 지원하지 않는 경우 다른 방법으로 처리
-    toast("공유하기 기능을 지원하지 않는 브라우저입니다.");
-  }
-};
 
 const DetailGrid: React.FC<DetailGridProps> = ({
   category,
   detailData,
   getDisplayValue,
   id,
+  bookmarkStates,
+  handleBookmarkToggle,
 }) => {
+  const handleShare = (detailData: SpotDetailDto) => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: detailData?.name,
+          text: detailData?.description,
+          url: window.location.href,
+        })
+        .catch((error) => console.error("공유하기 에러:", error));
+    } else {
+      toast("공유하기 기능을 지원하지 않는 브라우저입니다.");
+    }
+  };
+
   return (
     <div id={id}>
       <Header>
         <Title>{detailData?.name}</Title>
-        <ShareIcon onClick={() => detailData && handleShare(detailData)}>
-          <FiShare />
-        </ShareIcon>
+        <IconContainer>
+          <BookmarkIcon
+            onClick={() =>
+              detailData && handleBookmarkToggle(detailData.contentId)
+            }
+          >
+            {bookmarkStates[detailData?.contentId!] ? (
+              <BsBookmarkFill style={{ fontSize: "2rem" }} />
+            ) : (
+              <BsBookmarkStar style={{ fontSize: "2rem" }} />
+            )}
+          </BookmarkIcon>
+          <ShareIcon onClick={() => detailData && handleShare(detailData)}>
+            <FiShare />
+          </ShareIcon>
+        </IconContainer>
       </Header>
       <Section>
         <Address>{detailData?.address}</Address>
@@ -118,7 +134,7 @@ const DetailGrid: React.FC<DetailGridProps> = ({
               <p>{getDisplayValue(detailData?.closedDays)}</p>
             </Box>
             <Box>
-              <h2>이용로</h2>
+              <h2>이용료</h2>
               <p>{getDisplayValue(detailData?.usefee)}</p>
             </Box>
             <Box>
@@ -146,6 +162,7 @@ export default DetailGrid;
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   max-width: 1100px;
   flex: 1 1 45%;
   padding: 2rem 0 1rem 7rem;
@@ -155,9 +172,21 @@ const Title = styled.h1`
   font-size: 1.5625rem; /* 25px */
   font-weight: bold;
   margin-right: 2rem;
+  flex-grow: 1;
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 `;
 
 const ShareIcon = styled.div`
+  font-size: 1.5rem; /* 24px */
+  cursor: pointer;
+`;
+
+const BookmarkIcon = styled.div`
   font-size: 1.5rem; /* 24px */
   cursor: pointer;
 `;
