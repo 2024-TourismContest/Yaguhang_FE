@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+const redirect_uri = import.meta.env.VITE_REACT_APP_KAKAO_REDIRECT_URI;
+import { login } from "../../apis/login";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -8,13 +10,14 @@ const LoginForm = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // 카카오 로그인 버튼 클릭 시 호출되는 함수
+
   const handleKakaoLogin = () => {
-    const kakaoLoginUrl = "https://yaguhang.kro.kr:8443/oauth2/authorization/kakao?redirect_uri=http://localhost:5173/users/login";
+   const kakaoLoginUrl = "https://yaguhang.kro.kr:8443/oauth2/authorization/kakao?redirect_uri=http://localhost:5173/users/login";
+    // const kakaoLoginUrl = `https://yaguhang.kro.kr:8443/oauth2/authorization/kakao?redirect_uri=${redirect_uri}`;
     window.location.href = kakaoLoginUrl;
   };
 
-  // 카카오 로그인 후 리디렉션 URL에서 액세스 토큰을 추출하여 저장하는 함수
+  // 카카오 로그인 후 리디렉션 URL에서 액세스 토큰을 추출 후 저장
   useEffect(() => {
     const handleTokenExtraction = () => {
       const queryParams = new URLSearchParams(window.location.search);
@@ -35,14 +38,13 @@ const LoginForm = () => {
     handleTokenExtraction(); // 페이지가 로드될 때 토큰 추출 함수 호출
   }, [navigate]);
 
-  // 폼 제출 처리 함수
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
+  
     try {
-      // 여기에 이메일과 비밀번호를 사용하여 로그인 API를 호출하는 로직 추가
-      console.log("로그인 처리: ", email, password);
-      navigate("/");
+      const response = await login.login(email, password);
+      console.log(response);
     } catch (err) {
       setError("로그인에 실패했습니다.");
     }
