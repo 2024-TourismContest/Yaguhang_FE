@@ -59,6 +59,7 @@ const DetailPage = () => {
   useEffect(() => {
     const fetchDetailData = async () => {
       try {
+        const token = localStorage.getItem("token");
         const response = await axios.get(
           `https://yaguhang.kro.kr:8443/api/spot/detail`,
           {
@@ -66,6 +67,9 @@ const DetailPage = () => {
               stadiumId,
               category,
               contentId,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -153,7 +157,6 @@ const DetailPage = () => {
 
     try {
       console.log("Bookmarking contentId:", contentId, "stadiumId:", stadiumId);
-      // home.bookmark 메서드를 사용하여 API 호출
       await home.bookmark(contentId, Number(stadiumId));
 
       setBookmarkStates((prev) => ({
@@ -237,7 +240,6 @@ const DotLine = styled.div`
   width: 1250px;
   border-top: 1px dotted gray;
 `;
-
 // import { useState, useEffect } from "react";
 // import styled from "styled-components";
 // import { useLocation, useParams, useNavigate } from "react-router-dom";

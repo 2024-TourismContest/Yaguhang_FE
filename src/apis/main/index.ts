@@ -17,7 +17,7 @@ export const home = {
     }
   },
   bookmark: async (contentId: number, stadiumId: number) => {
-    const token = localStorage.getItem("token") || "";
+    const token = getAuthToken();
     try {
       const response = await defaultApi.patch(
         `/api/scraps/spot?contentId=${contentId}&stadiumId=${stadiumId}`,
