@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-const redirect_uri = import.meta.env.VITE_REACT_APP_KAKAO_REDIRECT_URI;
+const redirect_uri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 import { login } from "../../apis/login";
 
 const LoginForm = () => {
@@ -12,8 +12,8 @@ const LoginForm = () => {
 
 
   const handleKakaoLogin = () => {
-   const kakaoLoginUrl = "https://yaguhang.kro.kr:8443/oauth2/authorization/kakao?redirect_uri=http://localhost:5173/users/login";
-    // const kakaoLoginUrl = `https://yaguhang.kro.kr:8443/oauth2/authorization/kakao?redirect_uri=${redirect_uri}`;
+    const kakaoLoginUrl = `https://yaguhang.kro.kr:8443/oauth2/authorization/kakao?redirect_uri=${redirect_uri}`;
+    console.log(kakaoLoginUrl);
     window.location.href = kakaoLoginUrl;
   };
 
