@@ -28,18 +28,36 @@ const PageContainer = styled.div`
   height: 100vh;
   min-width: 500px;
   background-color: #000;
+
+  @media (max-width: 768px) {
+    padding-top: 20vh;
+    min-width: 100vw;
+  }
 `;
 
 const RowContainer = styled.div`
   margin-top: 100px;
   display: flex;
   gap: 7vw;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    gap: 3vh;
+  }
 `;
 
 const LineVertical = styled.div`
   width: 1px;
   height: 100%;
   background: #fff;
+
+  @media (max-width: 768px) {
+    width: 70%;
+    height: 1px;
+    margin-bottom: 3vh;
+  }
 `;
 
 const LineHorizontal = styled.div`
@@ -48,6 +66,11 @@ const LineHorizontal = styled.div`
   border-radius: 4px;
   border: 1px solid #fff;
   background: #acabab;
+
+  @media (max-width: 768px) {
+    width: 50px;
+    height: 5px;
+  }
 `;
 
 const LeftContainer = styled.div`
@@ -56,10 +79,15 @@ const LeftContainer = styled.div`
   align-items: center;
   gap: 50px;
   margin-top: 80px;
+
+  @media (max-width: 768px) {
+    gap: 30px;
+    margin-top: 40px;
+  }
 `;
 
 const Title = styled.h1`
-  color: #FFF;
+  color: #fff;
   text-align: center;
   font-family: Inter;
   font-size: 23.921px;
@@ -68,6 +96,10 @@ const Title = styled.h1`
   line-height: normal;
   white-space: pre-line;
 
+  @media (max-width: 768px) {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
 `;
 
 const TextLarge = styled.span`
@@ -78,6 +110,10 @@ const TextLarge = styled.span`
   font-weight: 500;
   line-height: normal;
   white-space: pre-line;
+
+  @media (max-width: 768px) {
+    font-size: 2em;
+  }
 `;
 
 const TextMini = styled.p`
@@ -88,6 +124,10 @@ const TextMini = styled.p`
   line-height: normal;
   text-align: center;
   white-space: pre-line;
+
+  @media (max-width: 768px) {
+    font-size: 0.875em;
+  }
 `;
 
 const SubmitBtn = styled.button`
@@ -102,6 +142,11 @@ const SubmitBtn = styled.button`
   font-weight: 400;
   cursor: pointer;
   margin-top: auto;
+
+  @media (max-width: 768px) {
+    padding: 0.5em 2em;
+    font-size: 1.5rem;
+  }
 `;
 
 export default LoginPage;
