@@ -1,7 +1,13 @@
 import LoginForm from "../../components/users/LoginForm";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom"; 
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
+  const onClickSignup = async (event: React.FormEvent) => {
+      navigate("/users/signup");
+  };
   return (
     <PageContainer>
       <Title>{"오늘은 어떤 즐거운 일들이 \n전국 각지에서 일어나고 있을까요?"}</Title>
@@ -10,7 +16,7 @@ const LoginPage = () => {
           <TextLarge>{"HELLO,\nTraveller!"}</TextLarge>
           <LineHorizontal />
           <TextMini>{"야구와 함께하는 여행은\n 처음이신가요?"}</TextMini>
-          <SubmitBtn>SIGN UP</SubmitBtn>
+          <SubmitBtn onClick={onClickSignup}>SIGN UP</SubmitBtn>
         </LeftContainer>
         <LineVertical />
         <LoginForm />
