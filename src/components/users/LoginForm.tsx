@@ -3,13 +3,14 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 const redirect_uri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 import { login } from "../../apis/login";
+import useAuthStore from "../../store/authStore";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+  const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
 
   const handleKakaoLogin = () => {
     const kakaoLoginUrl = `https://yaguhang.kro.kr:8443/oauth2/authorization/kakao?redirect_uri=${redirect_uri}`;
@@ -22,13 +23,9 @@ const LoginForm = () => {
     const handleTokenExtraction = () => {
       const queryParams = new URLSearchParams(window.location.search);
       const token = queryParams.get('token');
-
-      console.log("Current URL:", window.location.href);
-      console.log("Search Params:", window.location.search);
-      console.log("Extracted Token:", token);
-
       if (token) {
         localStorage.setItem('accessToken', token);
+        setIsAuthenticated(true);
         navigate('/'); // 토큰이 저장된 후 홈으로 리디렉션
       } else {
         console.log("No token found in URL.");
@@ -155,6 +152,7 @@ const SubmitBtn = styled.button`
   cursor: pointer;
   margin-top: auto;
 `;
+
 
 const ErrorMessage = styled.p`
   color: #ff6262;

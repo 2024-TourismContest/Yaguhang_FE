@@ -4,7 +4,9 @@ import styled from "styled-components";
 const LoginPage = () => {
   return (
     <PageContainer>
-      <Title>{"오늘은 어떤 즐거운 일들이 \n전국 각지에서 일어나고 있을까요?"}</Title>
+      <Title>
+        {"오늘은 어떤 즐거운 일들이 \n전국 각지에서 일어나고 있을까요?"}
+      </Title>
       <RowContainer>
         <LeftContainer>
           <TextLarge>{"HELLO,\nTraveller!"}</TextLarge>
@@ -36,15 +38,15 @@ const PageContainer = styled.div`
 `;
 
 const RowContainer = styled.div`
-  margin-top: 100px;
+  margin-top: 10rem;
   display: flex;
-  gap: 7vw;
+  gap: 7rem;
 
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
-    gap: 3vh;
+    margin-top: 5rem;
+    gap: 3rem;
   }
 `;
 
@@ -54,9 +56,9 @@ const LineVertical = styled.div`
   background: #fff;
 
   @media (max-width: 768px) {
-    width: 70%;
+    width: 100%;
     height: 1px;
-    margin-bottom: 3vh;
+    margin-bottom: 3rem; //48px
   }
 `;
 
@@ -89,16 +91,15 @@ const LeftContainer = styled.div`
 const Title = styled.h1`
   color: #fff;
   text-align: center;
-  font-family: Inter;
-  font-size: 23.921px;
-  font-style: normal;
+  font-family: Inter, sans-serif;
+  font-size: 1.125rem; // 18px
   font-weight: 400;
   line-height: normal;
   white-space: pre-line;
 
   @media (max-width: 768px) {
-    font-size: 18px;
-    margin-bottom: 20px;
+    font-size: 1.125rem; // 18px
+    margin-bottom: 1.25rem; // 20px
   }
 `;
 
@@ -106,27 +107,27 @@ const TextLarge = styled.span`
   color: #fff;
   text-align: center;
   font-family: Inter, sans-serif;
-  font-size: 2.58em;
+  font-size: 1.625rem;
   font-weight: 500;
   line-height: normal;
   white-space: pre-line;
 
   @media (max-width: 768px) {
-    font-size: 2em;
+    font-size: 1.25rem; // 20px
   }
 `;
 
 const TextMini = styled.p`
   color: #fff;
   font-family: Inter, sans-serif;
-  font-size: 1em;
+  font-size: 1rem; // 16px
   font-weight: 400;
   line-height: normal;
   text-align: center;
   white-space: pre-line;
 
   @media (max-width: 768px) {
-    font-size: 0.875em;
+    font-size: 0.875rem; // 14px
   }
 `;
 
@@ -142,11 +143,7 @@ const SubmitBtn = styled.button`
   font-weight: 400;
   cursor: pointer;
   margin-top: auto;
+  white-space: nowrap; 
 
-  @media (max-width: 768px) {
-    padding: 0.5em 2em;
-    font-size: 1.5rem;
-  }
 `;
-
 export default LoginPage;
