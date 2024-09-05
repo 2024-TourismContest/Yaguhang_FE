@@ -42,6 +42,7 @@ const LoginForm = () => {
     try {
       const response = await login.login(email, password);
       console.log(response);
+      navigate('/');
     } catch (err) {
       setError("로그인에 실패했습니다.");
     }

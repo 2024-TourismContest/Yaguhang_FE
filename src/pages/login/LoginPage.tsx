@@ -26,8 +26,9 @@ const PageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 10vh;
-  height: 100vh;
+  padding-top: 30vh;
+  padding-bottom: 10vh;
+  height: 100%;
   min-width: 500px;
   background-color: #000;
 
@@ -41,6 +42,7 @@ const RowContainer = styled.div`
   margin-top: 10rem;
   display: flex;
   gap: 7rem;
+  height: fit-content;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -54,11 +56,10 @@ const LineVertical = styled.div`
   width: 1px;
   height: 100%;
   background: #fff;
-
   @media (max-width: 768px) {
     width: 100%;
     height: 1px;
-    margin-bottom: 3rem; //48px
+    margin-bottom: 48px
   }
 `;
 

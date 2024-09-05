@@ -68,10 +68,11 @@ const NavbarContainer = styled.nav`
   box-sizing: border-box;
   z-index: 1000;
   background: linear-gradient(
-    rgba(0, 0, 0, 0.9) 0%,  // 상단 색상 (어두운 검정)
-    rgba(0, 0, 0, 0.7) 50%, // 중간 색상
-    rgba(0, 0, 0, 0.5) 75%, // 하단 색상
-    rgba(0, 0, 0, 0) 100%   // 끝 색상 (투명)
+    to bottom,
+    rgba(0, 0, 0, 0.9) 0%,   // 상단 색상 (어두운 검정)
+    rgba(0, 0, 0, 0.7) 50%,   // 중간 색상
+    rgba(0, 0, 0, 0.5) 75%,   // 하단 색상
+    rgba(0, 0, 0, 0) 100%     // 끝 색상 (투명)
   );
 `;
 
@@ -110,7 +111,6 @@ const StyledNavLink = styled(Link)<{ isActive: boolean }>`
   line-height: normal;
   padding: 0.75rem 1.5rem; // 넓은 위아래 패딩
   position: relative;
-
   ${({ isActive }) =>
     isActive &&
     `
@@ -144,5 +144,4 @@ const StyledLoginButton = styled.button`
   font-weight: 400;
   cursor: pointer;
   white-space: nowrap;
-
 `;
