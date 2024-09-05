@@ -5,6 +5,7 @@ import loading from "../../assets/images/loading.svg";
 import { useNavigate } from "react-router-dom";
 import { home } from "../../apis/main";
 import BookmarkIcon from "../map/BookMarkIcon";
+import DefailImg from "../../assets/images/defaltImg.svg";
 
 interface SpotBasicPreviewDto {
   contentId: number;
@@ -52,9 +53,13 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
   };
   const onClickContent = (contentId: number) => {
     navigate(`/details/${contentId}`);
-    console.log("실행");
   };
-  if (!spots || spots.length === 0) return <Container></Container>;
+  if (!spots || spots.length === 0)
+    return (
+      <Container>
+        <img src={DefailImg} alt="준비중입니다" style={{ width: "20%" }} />
+      </Container>
+    );
 
   return (
     <Container>

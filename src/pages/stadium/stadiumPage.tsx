@@ -34,6 +34,11 @@ const StadiumPage = () => {
   const navigate = useNavigate();
   const fetchSchedules = async () => {};
   const selectedTeam = useTeamStore((state) => state.selectedTeam);
+  const setSelectedTeam = useTeamStore((state) => state.setSelectedTeam);
+
+  useEffect(() => {
+    setSelectedTeam("LG");
+  }, []);
   const stadiumNumber = teamToStadiumMap[selectedTeam];
 
   const fetchPlaceData = async (category: Category) => {
