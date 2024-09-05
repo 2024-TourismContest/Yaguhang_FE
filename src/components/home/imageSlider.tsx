@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { BsBookmarkStar } from "react-icons/bs";
 import { LuDot } from "react-icons/lu";
 import loading from "../../assets/images/loading.svg";
 import { useNavigate } from "react-router-dom";
 import { home } from "../../apis/main";
+import { toast } from "react-toastify";
+import useTeamStore from "../../store/TeamStore";
 
-interface SpotBasicPreviewDto {
+export interface SpotBasicPreviewDto {
   contentId: number;
   name: string;
   address: string;
@@ -17,12 +19,14 @@ interface SpotBasicPreviewDto {
 
 interface ImageSliderProps {
   spots: SpotBasicPreviewDto[];
+  category: string;
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
+const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
   const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
     {}
   );
+  const stadiumId = useTeamStore((state) => state.stadiumId); // stadiumId 가져오기
   const navigate = useNavigate();
 
   const onClickMark = async (contentId: number) => {
@@ -31,13 +35,13 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
     if (!token) {
       // 토큰이 없으면 로그인 화면으로 이동
       navigate("/login");
-      alert("로그인이 필요합니다");
+      toast("로그인이 필요합니다");
       return;
     }
     const stadiumId = "5"; // 수정 필요
 
     try {
-      await home.bookmark(contentId.toString(), stadiumId);
+      await home.bookmark(contentId, Number(stadiumId));
       setMarkedSpots((prev) => ({
         ...prev,
         [contentId]: !prev[contentId],
@@ -46,8 +50,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
       console.error("북마크 상태 변경 오류:", error);
     }
   };
+
   const onClickContent = (contentId: number) => {
-    navigate(`/details/${contentId}`);
+    navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
+    window.scrollTo(0, 0);
   };
   if (!spots || spots.length === 0) return <Container></Container>;
 
