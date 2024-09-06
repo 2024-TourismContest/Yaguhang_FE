@@ -1,7 +1,5 @@
-//전체 선택 제외버전
 import styled from "styled-components";
 import { useTeamStore } from "../../store/TeamStore";
-import { useEffect } from "react";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -105,8 +103,7 @@ const Category: React.FC<CategoryProps> = ({ filterSchedules, teamLogos }) => {
             key={team}
             onClick={() => handleButtonClick(team)}
             selected={selectedTeam === team}
-            teamName={team}
-          >
+            teamName={team}>
             <img src={teamLogos[team]} alt={`${team} 로고`} />
             <div className="team-name">{team}</div>
           </Button>
