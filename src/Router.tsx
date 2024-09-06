@@ -1,9 +1,11 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import DetailPage from "./pages/detail/DetailPage";
 import HomePage from "./pages/home/HomePage";
-import StadiumPage from "./pages/stadium/stadiumPage";
 import LoginPage from "./pages/login/LoginPage";
-import SignupPage from "./pages/signup/SignupPage";
 import MapPage from "./pages/map/mapPage";
+import SignupPage from "./pages/signup/SignupPage";
+import StadiumPage from "./pages/stadium/stadiumPage";
+
 interface RouterProps {
   isAuthenticated: boolean;
 }
@@ -18,7 +20,12 @@ export default function Router({ isAuthenticated }: RouterProps) {
             path="/category/:category/:selectedTeam"
             element={<MapPage />}
           />
-          <Route path="*" element={<Navigate replace to="/" />} />
+          <Route path="*" element={<Navigate replace to="/" />} />{" "}
+          <Route
+            path="/details/:category/:contentId"
+            element={<DetailPage />}
+          />
+          {/* <Route path="*" element={<Navigate replace to="/" />} /> */}
         </>
       ) : (
         <>

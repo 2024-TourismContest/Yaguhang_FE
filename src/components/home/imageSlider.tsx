@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { toast } from "react-toastify";
-import loading from "../../assets/images/loading.svg";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import styled from "styled-components";
 import { home } from "../../apis/main";
-import BookmarkIcon from "../map/BookMarkIcon";
 import DefailImg from "../../assets/images/defaltImg.svg";
+import loading from "../../assets/images/loading.svg";
+import useTeamStore from "../../store/TeamStore";
+import BookmarkIcon from "../map/BookMarkIcon";
 
-interface SpotBasicPreviewDto {
+export interface SpotBasicPreviewDto {
   contentId: number;
   name: string;
   address: string;
@@ -18,12 +19,14 @@ interface SpotBasicPreviewDto {
 
 interface ImageSliderProps {
   spots: SpotBasicPreviewDto[];
+  category: string;
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
+const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
   const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
     {}
   );
+  const stadiumId = useTeamStore((state) => state.stadiumId); // stadiumId 가져오기
   const navigate = useNavigate();
 
   const onClickMark = async (contentId: number) => {
@@ -31,7 +34,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
 
     if (!token) {
       navigate("/login");
-      alert("로그인이 필요합니다");
+      toast("로그인이 필요합니다");
       return;
     }
     const stadiumId = 5;
@@ -51,8 +54,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
       console.error("북마크 상태 변경 오류:", error);
     }
   };
+
   const onClickContent = (contentId: number) => {
-    navigate(`/details/${contentId}`);
+    navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
+    window.scrollTo(0, 0);
   };
   if (!spots || spots.length === 0)
     return (
@@ -67,8 +72,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
         {spots.map((spot) => (
           <SlideContainer
             key={spot.contentId}
-            onClick={() => onClickContent(spot.contentId)}
-          >
+            onClick={() => onClickContent(spot.contentId)}>
             <StyledMark pick={spot.picker || "none"}>
               {spot.picker ? spot.picker : ""}
             </StyledMark>

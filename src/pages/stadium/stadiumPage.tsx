@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
-import Category from "../../components/stadium/Category";
-import { teamLogos } from "../../components/home/Card";
-import ImageSlider from "../../components/home/imageSlider";
-import { stadium } from "../../apis/stadium";
-import { TitleSection } from "./TitleSection";
-import shopping from "../../assets/icons/Shopping_white.svg";
-import festival from "../../assets/icons/festival_white.svg";
-import restaurant from "../../assets/icons/restaurant_white.svg";
-import place from "../../assets/icons/place_whtie.svg";
-import ball from "../../assets/icons/baseball.svg";
-import styled from "styled-components";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useTeamStore from "../../store/TeamStore";
+import styled from "styled-components";
+import { stadium } from "../../apis/stadium";
 import { teamToStadiumMap } from "../../assets/data/data";
+import shopping from "../../assets/icons/Shopping_white.svg";
+import ball from "../../assets/icons/baseball.svg";
+import festival from "../../assets/icons/festival_white.svg";
+import place from "../../assets/icons/place_whtie.svg";
+import restaurant from "../../assets/icons/restaurant_white.svg";
+import ImageSlider from "../../components/home/imageSlider";
+import Category from "../../components/stadium/Category";
+import useTeamStore from "../../store/TeamStore";
+import { teamLogos } from "../../types/teamLogos";
+import { TitleSection } from "./TitleSection";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 
@@ -92,7 +92,10 @@ const StadiumPage = () => {
         imageSrc={ball}
         onMoreClick={() => handleMoreClick("선수pick")}
       />
-      <ImageSlider spots={playerPickData?.spotPreviewDtos.slice(0, 4) || []} />
+      <ImageSlider
+        category="선수PICK"
+        spots={playerPickData?.spotPreviewDtos.slice(0, 4) || []}
+      />
       <Hr />
       <TitleSection
         title="야구장 근처 숙소 추천!"
@@ -100,7 +103,11 @@ const StadiumPage = () => {
         imageSrc={place}
         onMoreClick={() => handleMoreClick("숙소")}
       />
-      <ImageSlider spots={placeData["숙소"]?.spotPreviewDtos || []} />
+      <ImageSlider
+        category="숙소
+      "
+        spots={placeData["숙소"]?.spotPreviewDtos || []}
+      />
       <Hr />
       <TitleSection
         title="야구장 근처 맛집 추천!"
@@ -108,7 +115,10 @@ const StadiumPage = () => {
         imageSrc={restaurant}
         onMoreClick={() => handleMoreClick("맛집")}
       />
-      <ImageSlider spots={placeData["맛집"]?.spotPreviewDtos || []} />
+      <ImageSlider
+        category="맛집"
+        spots={placeData["맛집"]?.spotPreviewDtos || []}
+      />
       <Hr />
       <TitleSection
         title="야구보고 쇼핑하고!"
@@ -116,7 +126,10 @@ const StadiumPage = () => {
         imageSrc={shopping}
         onMoreClick={() => handleMoreClick("쇼핑")}
       />
-      <ImageSlider spots={placeData["쇼핑"]?.spotPreviewDtos || []} />
+      <ImageSlider
+        category="쇼핑"
+        spots={placeData["쇼핑"]?.spotPreviewDtos || []}
+      />
       <Hr />
       <TitleSection
         title="야구만큼 재밌는 문화생활!"
@@ -124,7 +137,10 @@ const StadiumPage = () => {
         imageSrc={festival}
         onMoreClick={() => handleMoreClick("문화")}
       />
-      <ImageSlider spots={placeData["문화"]?.spotPreviewDtos || []} />
+      <ImageSlider
+        category="문화"
+        spots={placeData["문화"]?.spotPreviewDtos || []}
+      />
       <Hr />
     </>
   );
