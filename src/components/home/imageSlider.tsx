@@ -1,12 +1,12 @@
 import { useState } from "react";
-import styled from "styled-components";
-import { BsBookmarkStar } from "react-icons/bs";
-import { LuDot } from "react-icons/lu";
-import loading from "../../assets/images/loading.svg";
 import { useNavigate } from "react-router-dom";
-import { home } from "../../apis/main";
 import { toast } from "react-toastify";
+import styled from "styled-components";
+import { home } from "../../apis/main";
+import DefailImg from "../../assets/images/defaltImg.svg";
+import loading from "../../assets/images/loading.svg";
 import useTeamStore from "../../store/TeamStore";
+import BookmarkIcon from "../map/BookMarkIcon";
 
 export interface SpotBasicPreviewDto {
   contentId: number;
@@ -33,19 +33,23 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
     const token = localStorage.getItem("authToken");
 
     if (!token) {
-      // 토큰이 없으면 로그인 화면으로 이동
       navigate("/login");
       toast("로그인이 필요합니다");
       return;
     }
-    const stadiumId = "5"; // 수정 필요
+    const stadiumId = 5;
 
     try {
-      await home.bookmark(contentId, Number(stadiumId));
+      await home.bookmark(contentId, stadiumId);
       setMarkedSpots((prev) => ({
         ...prev,
         [contentId]: !prev[contentId],
       }));
+      toast.success(
+        !markedSpots[contentId]
+          ? "스크랩에 추가되었습니다."
+          : "스크랩에서 제거되었습니다."
+      );
     } catch (error) {
       console.error("북마크 상태 변경 오류:", error);
     }
@@ -55,7 +59,12 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
     navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
     window.scrollTo(0, 0);
   };
-  if (!spots || spots.length === 0) return <Container></Container>;
+  if (!spots || spots.length === 0)
+    return (
+      <Container>
+        <img src={DefailImg} alt="준비중입니다" style={{ width: "20%" }} />
+      </Container>
+    );
 
   return (
     <Container>
@@ -63,8 +72,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
         {spots.map((spot) => (
           <SlideContainer
             key={spot.contentId}
-            onClick={() => onClickContent(spot.contentId)}
-          >
+            onClick={() => onClickContent(spot.contentId)}>
             <StyledMark pick={spot.picker || "none"}>
               {spot.picker ? spot.picker : ""}
             </StyledMark>
@@ -86,11 +94,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
                     : spot.address}
                 </SlideAddress>
               </span>
-              {markedSpots[spot.contentId] ? (
-                <LuDot onClick={() => onClickMark(spot.contentId)} />
-              ) : (
-                <BsBookmarkStar onClick={() => onClickMark(spot.contentId)} />
-              )}
+              <BookmarkIcon
+                isMarked={markedSpots[spot.contentId] || false}
+                onClick={() => onClickMark(spot.contentId)}
+              />
             </SlideInfo>
           </SlideContainer>
         ))}

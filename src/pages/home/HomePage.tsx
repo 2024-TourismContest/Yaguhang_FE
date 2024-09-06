@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import Card from "../../components/home/Card";
-import ImageSlider from "../../components/home/imageSlider";
-import HeroCarousel from "./HeroCarousel";
-import heroData from "../../dummy-data/dummy-hero-data.json";
-import { CategorySelector } from "../../components/home/CategorySelector";
-import { TitleSection } from "./TitleSection";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { home } from "../../apis/main";
 import { Button } from "../../components/button/Button";
-import { useNavigate } from "react-router-dom";
+import Card from "../../components/home/Card";
+import { CategorySelector } from "../../components/home/CategorySelector";
+import ImageSlider from "../../components/home/imageSlider";
+import heroData from "../../dummy-data/dummy-hero-data.json";
+import HeroCarousel from "./HeroCarousel";
+import { TitleSection } from "./TitleSection";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 interface SpotBasicPreviewDto {
@@ -59,8 +59,8 @@ const HomePage = () => {
         color="white"
       />
       <ImageSlider
-        spots={placeData?.spotPreviewDtos || []}
         category={selectedCategory}
+        spots={placeData?.spotPreviewDtos || []}
       />
       <Button
         text="야구선수 PICK 보러가기"

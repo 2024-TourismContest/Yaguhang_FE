@@ -9,7 +9,6 @@ export const home = {
       const response = await defaultApi.get(
         `/api/main/place/${stadium}/${category}`
       );
-      console.log(response);
       return response;
     } catch (error) {
       console.error("카테고리별추천 에러", error);

@@ -88,12 +88,6 @@ interface CategoryProps {
 const Category: React.FC<CategoryProps> = ({ filterSchedules, teamLogos }) => {
   const { selectedTeam, setSelectedTeam } = useTeamStore();
 
-  useEffect(() => {
-    // 컴포넌트가 처음 마운트될 때 LG를 선택된 팀으로 설정
-    setSelectedTeam("LG");
-    filterSchedules("LG");
-  }, []);
-
   const handleButtonClick = (team: string) => {
     setSelectedTeam(team);
     filterSchedules(team);
