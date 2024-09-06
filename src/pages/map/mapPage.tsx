@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getStadiumCoordinate, getSpotsByStadium } from "../../apis/map";
+import { styled } from "styled-components";
+import { getStadiumCoordinate } from "../../apis/map";
 import { teamToStadiumMap } from "../../assets/data/data";
-import { teamLogos } from "../../components/home/Card";
 import { CategorySelector } from "../../components/home/CategorySelector";
 import MapTest from "../../components/map/map";
-import Category from "../../components/stadium/Category";
-import useTeamStore from "../../store/TeamStore";
 import { MapPosition } from "../../components/map/MapPosition";
 import { SelectedPosition } from "../../components/map/SelectedPosition";
-import { styled } from "styled-components";
+import Category from "../../components/stadium/Category";
+import useTeamStore from "../../store/TeamStore";
+import { teamLogos } from "../../types/teamLogos";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 export interface Position {
