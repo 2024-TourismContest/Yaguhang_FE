@@ -4,7 +4,9 @@ import styled from "styled-components";
 const LoginPage = () => {
   return (
     <PageContainer>
-      <Title>{"오늘은 어떤 즐거운 일들이 \n전국 각지에서 일어나고 있을까요?"}</Title>
+      <Title>
+        {"오늘은 어떤 즐거운 일들이 \n전국 각지에서 일어나고 있을까요?"}
+      </Title>
       <RowContainer>
         <LeftContainer>
           <TextLarge>{"HELLO,\nTraveller!"}</TextLarge>
@@ -24,22 +26,41 @@ const PageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 10vh;
-  height: 100vh;
+  padding-top: 30vh;
+  padding-bottom: 10vh;
+  height: 100%;
   min-width: 500px;
   background-color: #000;
+
+  @media (max-width: 768px) {
+    padding-top: 20vh;
+    min-width: 100vw;
+  }
 `;
 
 const RowContainer = styled.div`
-  margin-top: 100px;
+  margin-top: 10rem;
   display: flex;
-  gap: 7vw;
+  gap: 7rem;
+  height: fit-content;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5rem;
+    gap: 3rem;
+  }
 `;
 
 const LineVertical = styled.div`
   width: 1px;
   height: 100%;
   background: #fff;
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 1px;
+    margin-bottom: 48px
+  }
 `;
 
 const LineHorizontal = styled.div`
@@ -48,6 +69,11 @@ const LineHorizontal = styled.div`
   border-radius: 4px;
   border: 1px solid #fff;
   background: #acabab;
+
+  @media (max-width: 768px) {
+    width: 50px;
+    height: 5px;
+  }
 `;
 
 const LeftContainer = styled.div`
@@ -56,38 +82,54 @@ const LeftContainer = styled.div`
   align-items: center;
   gap: 50px;
   margin-top: 80px;
+
+  @media (max-width: 768px) {
+    gap: 30px;
+    margin-top: 40px;
+  }
 `;
 
 const Title = styled.h1`
-  color: #FFF;
+  color: #fff;
   text-align: center;
-  font-family: Inter;
-  font-size: 23.921px;
-  font-style: normal;
+  font-family: Inter, sans-serif;
+  font-size: 1.125rem; // 18px
   font-weight: 400;
   line-height: normal;
   white-space: pre-line;
 
+  @media (max-width: 768px) {
+    font-size: 1.125rem; // 18px
+    margin-bottom: 1.25rem; // 20px
+  }
 `;
 
 const TextLarge = styled.span`
   color: #fff;
   text-align: center;
   font-family: Inter, sans-serif;
-  font-size: 2.58em;
+  font-size: 1.625rem;
   font-weight: 500;
   line-height: normal;
   white-space: pre-line;
+
+  @media (max-width: 768px) {
+    font-size: 1.25rem; // 20px
+  }
 `;
 
 const TextMini = styled.p`
   color: #fff;
   font-family: Inter, sans-serif;
-  font-size: 1em;
+  font-size: 1rem; // 16px
   font-weight: 400;
   line-height: normal;
   text-align: center;
   white-space: pre-line;
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem; // 14px
+  }
 `;
 
 const SubmitBtn = styled.button`
@@ -102,6 +144,7 @@ const SubmitBtn = styled.button`
   font-weight: 400;
   cursor: pointer;
   margin-top: auto;
-`;
+  white-space: nowrap; 
 
+`;
 export default LoginPage;
