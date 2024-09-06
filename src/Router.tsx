@@ -14,16 +14,9 @@ export default function Router() {
           <Route path="*" element={<Navigate replace to="/" />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route
-            path="/category/:category/:selectedTeam"
-            element={<MapPage />}
-          />
-          <Route path="*" element={<Navigate replace to="/" />} />{" "}
-          <Route
-            path="/details/:category/:contentId"
-            element={<DetailPage />}
-          />
-        </>
+          <Route path="/category/:category/:selectedTeam" element={<MapPage />}/>
+          <Route path="*" element={<Navigate replace to="/" />} />
+          <Route path="/details/:category/:contentId" element={<DetailPage />}/>
     </Routes>
   );
 }
