@@ -128,7 +128,7 @@ const DetailPage = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = document.querySelectorAll("section");
+      // const sections = document.querySelectorAll("section");
     };
 
     window.addEventListener("scroll", handleScroll);
