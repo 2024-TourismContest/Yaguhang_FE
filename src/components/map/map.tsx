@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getSpotsByStadium } from "../../apis/map";
-import useMap from "./useMap";
 import usePositionStore from "../../store/MapPositionsStore";
+import useMap from "./useMap";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 declare global {
@@ -28,7 +28,7 @@ export interface Position {
   isScrapped: boolean;
 }
 
-const MapTest: React.FC<MapTestProps> = ({
+const Map: React.FC<MapTestProps> = ({
   category,
   selectedTeamId,
   mapX,
@@ -80,7 +80,7 @@ const MapTest: React.FC<MapTestProps> = ({
   );
 };
 
-export default MapTest;
+export default Map;
 
 const MapWrapper = styled.div`
   width: 100vw;
