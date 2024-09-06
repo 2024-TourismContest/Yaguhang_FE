@@ -129,7 +129,7 @@ const DetailPage = () => {
   useEffect(() => {
     const handleScroll = () => {
       const sections = document.querySelectorAll("section");
-      let currentSection = "details";
+      // let currentSection = "details";
 
       sections.forEach((section) => {
         const sectionTop = section.offsetTop;
