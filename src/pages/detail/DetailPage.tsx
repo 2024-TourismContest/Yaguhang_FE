@@ -129,14 +129,6 @@ const DetailPage = () => {
   useEffect(() => {
     const handleScroll = () => {
       const sections = document.querySelectorAll("section");
-      // let currentSection = "details";
-
-      sections.forEach((section) => {
-        // const sectionTop = section.offsetTop;
-        // if (window.scrollY >= sectionTop - 60) {
-        //   currentSection = section.getAttribute("id")!;
-        // }
-      });
     };
 
     window.addEventListener("scroll", handleScroll);
