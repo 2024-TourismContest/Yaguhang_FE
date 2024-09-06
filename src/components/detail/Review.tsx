@@ -46,7 +46,7 @@ const dummyReviews: ReviewData[] = [
   },
 ];
 
-const Review: React.FC<ReviewProps> = ({ contentId, id }) => {
+const Review: React.FC<ReviewProps> = ({ id }) => {
   const [reviews, setReviews] = useState<ReviewData[]>(dummyReviews);
   const [newReview, setNewReview] = useState("");
   const [rating, setRating] = useState(0);
@@ -266,11 +266,6 @@ const ReviewContent = styled.p`
   margin: 0;
   font-size: 0.875rem;
   color: #ccc;
-`;
-
-const ReviewBottom = styled.div`
-  display: flex;
-  align-items: center;
 `;
 
 const LikesContainer = styled.div`
