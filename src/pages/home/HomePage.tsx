@@ -58,7 +58,10 @@ const HomePage = () => {
         setCategory={setSelectedCategory}
         color="white"
       />
-      <ImageSlider spots={placeData?.spotPreviewDtos || []} />
+      <ImageSlider
+        spots={placeData?.spotPreviewDtos || []}
+        category={selectedCategory}
+      />
       <Button
         text="야구선수 PICK 보러가기"
         onClick={() => handleButtonClick("stadium")}

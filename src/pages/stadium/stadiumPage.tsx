@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import Category from "../../components/home/Category";
-import { teamLogos } from "../../components/home/Card";
+import Category from "../../components/stadium/Category";
+import { teamLogos } from "../../types/teamLogos";
 import ImageSlider from "../../components/home/imageSlider";
 import { stadium } from "../../apis/stadium";
 import { TitleSection } from "./TitleSection";
@@ -8,6 +8,7 @@ import shopping from "../../assets/icons/Shopping_white.svg";
 import festival from "../../assets/icons/festival_white.svg";
 import restaurant from "../../assets/icons/restaurant_white.svg";
 import place from "../../assets/icons/place_whtie.svg";
+import ball from "../../assets/icons/baseball.svg";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useTeamStore from "../../store/TeamStore";
@@ -35,6 +36,7 @@ const StadiumPage = () => {
     console.log("선택된 팀");
   };
   const selectedTeam = useTeamStore((state) => state.selectedTeam);
+  const setStadiumId = useTeamStore((state) => state.setStadiumId); // stadiumId 설정 함수 가져오기
   const stadiumNumber = teamToStadiumMap[selectedTeam];
 
   const fetchPlaceData = async (category: Category) => {
@@ -45,7 +47,6 @@ const StadiumPage = () => {
       pageindex: 0,
       radius: 3,
     };
-
     try {
       const response = await stadium.Category(queryParams);
       setPlaceData((prevData) => ({
@@ -68,6 +69,7 @@ const StadiumPage = () => {
 
   // 각 카테고리에 대해 데이터 로드
   useEffect(() => {
+    setStadiumId(stadiumNumber);
     fetchPlaceData("숙소");
     fetchPlaceData("맛집");
     fetchPlaceData("쇼핑");
@@ -86,10 +88,13 @@ const StadiumPage = () => {
       <TitleSection
         title="맛잘알 프로야구선수들의 맛집은?"
         h4Text="오늘 승리하고 뒷풀이는 여기?!"
-        imageSrc={restaurant}
+        imageSrc={ball}
         onMoreClick={() => handleMoreClick("선수pick")}
       />
-      <ImageSlider spots={playerPickData?.spotPreviewDtos.slice(0, 4) || []} />
+      <ImageSlider
+        spots={playerPickData?.spotPreviewDtos.slice(0, 4) || []}
+        category="선수pick"
+      />
       <Hr />
       <TitleSection
         title="야구장 근처 숙소 추천!"
@@ -97,7 +102,10 @@ const StadiumPage = () => {
         imageSrc={place}
         onMoreClick={() => handleMoreClick("숙소")}
       />
-      <ImageSlider spots={placeData["숙소"]?.spotPreviewDtos || []} />
+      <ImageSlider
+        spots={placeData["숙소"]?.spotPreviewDtos || []}
+        category="숙소"
+      />
       <Hr />
       <TitleSection
         title="야구장 근처 맛집 추천!"
@@ -105,7 +113,10 @@ const StadiumPage = () => {
         imageSrc={restaurant}
         onMoreClick={() => handleMoreClick("맛집")}
       />
-      <ImageSlider spots={placeData["맛집"]?.spotPreviewDtos || []} />
+      <ImageSlider
+        spots={placeData["맛집"]?.spotPreviewDtos || []}
+        category="맛집"
+      />
       <Hr />
       <TitleSection
         title="야구보고 쇼핑하고!"
@@ -113,7 +124,10 @@ const StadiumPage = () => {
         imageSrc={shopping}
         onMoreClick={() => handleMoreClick("쇼핑")}
       />
-      <ImageSlider spots={placeData["쇼핑"]?.spotPreviewDtos || []} />
+      <ImageSlider
+        spots={placeData["쇼핑"]?.spotPreviewDtos || []}
+        category="쇼핑"
+      />
       <Hr />
       <TitleSection
         title="야구만큼 재밌는 문화생활!"
@@ -121,7 +135,10 @@ const StadiumPage = () => {
         imageSrc={festival}
         onMoreClick={() => handleMoreClick("문화")}
       />
-      <ImageSlider spots={placeData["문화"]?.spotPreviewDtos || []} />
+      <ImageSlider
+        spots={placeData["문화"]?.spotPreviewDtos || []}
+        category="문화"
+      />
       <Hr />
     </>
   );
