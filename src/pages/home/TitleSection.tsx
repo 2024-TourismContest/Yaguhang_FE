@@ -2,7 +2,7 @@ import * as S from "../../styles/common/TitleSection";
 import marker from "../../assets/images/marker.png";
 
 interface TitleSectionProps {
-  subtitle: string;
+  subtitle?: string;
   title: string;
   description: string;
   icon?: 'marker';

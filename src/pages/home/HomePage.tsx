@@ -23,10 +23,10 @@ interface SpotBasicPreviewDto {
 
 interface PlaceData {
   spotPreviewDtos: SpotBasicPreviewDto[];
-  // 필요시 다른 필드 추가
+  // Add other fields if necessary
 }
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category>("숙소");
   const [placeData, setPlaceData] = useState<PlaceData | null>(null);
   const navigate = useNavigate();
@@ -34,22 +34,16 @@ const HomePage = () => {
   const selectedTeam = useTeamStore((state) => state.selectedTeam);
 
   useEffect(() => {
-    console.log("Selected Game:", selectedGame); // 콘솔에 selectedGame 값 출력
-  }, [selectedGame]);
-
-  const stadium = "사직";
-
-  useEffect(() => {
     const fetchPlaceData = async () => {
       try {
-        const response = await home.place(stadium, selectedCategory);
+        const response = await home.place("사직", selectedCategory);
         setPlaceData(response.data);
       } catch (err) {
         console.error("카테고리별추천 에러:", err);
       }
     };
     fetchPlaceData();
-  }, [selectedCategory]);
+  }, [selectedCategory, selectedTeam]);
 
   const handleButtonClick = (page: string) => {
     navigate(`/${page}`);
@@ -68,10 +62,8 @@ const HomePage = () => {
         />
         <TitleSection
           subtitle={`${selectedTeam} 팬들에게 추천하는`}
-          title={"사직의 핫플레이스"}
-          description={
-            "열정 넘치는 스포츠와 함께 즐길 추천 콘텐츠로 더욱 여행이 풍족하도록!"
-          }
+          title="사직의 핫플레이스"
+          description="열정 넘치는 스포츠와 함께 즐길 추천 콘텐츠로 더욱 여행이 풍족하도록!"
           icon="marker"
         />
         <CategorySelector
@@ -87,18 +79,18 @@ const HomePage = () => {
           text="야구선수 PICK 보러가기"
           onClick={() => handleButtonClick("stadium")}
         />
-        
+
         {selectedGame?.id && (
-                  <TitleSection
-                  title={"현재 잠실구장의 날씨는?"}
-                  description={
-                    "오늘은 비가 안와야 할텐데.."
-                  }
-                />
-          <WeatherContainer>
-            <WeatherCard gameId={selectedGame.id} />
-            <WeatherGraph gameId={selectedGame.id} />
-          </WeatherContainer>
+          <>
+            <TitleSection
+              title="현재 잠실구장의 날씨는?"
+              description="오늘은 비가 안와야 할텐데.."
+            />
+            <WeatherContainer>
+              <WeatherCard gameId={selectedGame.id} />
+              <WeatherGraph gameId={selectedGame.id} />
+            </WeatherContainer>
+          </>
         )}
       </HomePageContainer>
     </>
