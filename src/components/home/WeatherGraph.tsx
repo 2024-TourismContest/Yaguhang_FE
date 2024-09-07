@@ -46,7 +46,11 @@ const WeatherGraph: React.FC<WeatherGraphProps> = ({ gameId }) => {
   }, [gameId]);
 
   if (!weatherData || !weatherData.weathers.length) {
-    return <NoDataMessage>날씨 정보가 없습니다.</NoDataMessage>;
+    return (
+      <ChartContainer>
+        <NoDataMessage>날씨 정보가 없습니다.</NoDataMessage>
+      </ChartContainer>
+    );
   }
 
   return (
@@ -118,8 +122,10 @@ const ChartContainer = styled.div`
   background-color: #fff;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   min-width: 500px;
-width: 100%;
+  width: 100%;
 `;
 
 const WeatherImagesContainer = styled.div`

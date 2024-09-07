@@ -127,7 +127,7 @@ const WeatherContainer = styled.div`
   flex-direction: row;
   max-width: 1200px;
   gap: 4vw;
-  margin: 0 auto;
+  margin: 60px auto;
 
   @media (max-width: 1024px) {
     flex-direction: column;

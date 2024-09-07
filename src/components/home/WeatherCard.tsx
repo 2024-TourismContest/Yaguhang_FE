@@ -39,7 +39,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ gameId }) => {
   return (
     <WeatherSummaryContainer>
       {error ? (
-        <ErrorMessage>날씨 정보를 조회할 수 없습니다.</ErrorMessage>
+        <ErrorMessage>{`날씨 정보를\n 조회할 수 없습니다.`}</ErrorMessage>
       ) : (
         <>
           <WeatherIcon src={weatherData?.skyUrl} alt="Weather Icon" />
@@ -117,6 +117,8 @@ const ErrorMessage = styled.p`
   ${baseTextStyle}
   font-size: 16px;
   text-align: center;
+  white-space: pre-line;
+
 `;
 
 export default WeatherCard;
