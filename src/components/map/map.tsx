@@ -4,7 +4,6 @@ import { getSpotsByStadium } from "../../apis/map";
 import usePositionStore from "../../store/MapPositionsStore";
 import useMap from "./useMap";
 
-type Category = "숙소" | "맛집" | "쇼핑" | "문화" | "선수PICK";
 declare global {
   interface Window {
     kakao: any;
@@ -14,7 +13,7 @@ interface MapTestProps {
   selectedTeamId: number;
   mapX: number;
   mapY: number;
-  category: Category;
+  category: string;
   boolean: boolean;
 }
 export interface Position {

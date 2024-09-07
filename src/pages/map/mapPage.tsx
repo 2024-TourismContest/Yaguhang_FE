@@ -30,7 +30,7 @@ const MapPage = () => {
   const isValidCategory = (category: string): category is Category => {
     return ["숙소", "맛집", "쇼핑", "문화", "선수PICK"].includes(category);
   };
-  const [selectedCategory, setSelectedCategory] = useState<Category>(
+  const [selectedCategory, setSelectedCategory] = useState<string>(
     category && isValidCategory(category) ? category : "숙소"
   );
 
@@ -84,6 +84,7 @@ const MapPage = () => {
         category={selectedCategory}
         setCategory={setSelectedCategory}
         color="white"
+        categoryList={["선수PICK", "숙소", "맛집", "쇼핑", "문화"]}
       />
       <Map
         selectedTeamId={teamToStadiumMap[selectedTeam] || 1}

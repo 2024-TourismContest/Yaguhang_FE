@@ -9,7 +9,6 @@ import heroData from "../../dummy-data/dummy-hero-data.json";
 import HeroCarousel from "./HeroCarousel";
 import { TitleSection } from "./TitleSection";
 
-type Category = "숙소" | "맛집" | "쇼핑" | "문화" | "선수PICK";
 interface SpotBasicPreviewDto {
   contentId: number;
   name: string;
@@ -21,7 +20,7 @@ interface PlaceData {
   spotPreviewDtos: SpotBasicPreviewDto[];
 }
 const HomePage = () => {
-  const [selectedCategory, setSelectedCategory] = useState<Category>("숙소");
+  const [selectedCategory, setSelectedCategory] = useState<string>("숙소");
   const [placeData, setPlaceData] = useState<PlaceData | null>(null);
   const navigate = useNavigate();
   const stadium = "사직";
@@ -56,6 +55,7 @@ const HomePage = () => {
         category={selectedCategory}
         setCategory={setSelectedCategory}
         color="white"
+        categoryList={["숙소", "맛집", "쇼핑", "문화"]}
       />
       <ImageSlider
         category={selectedCategory}
