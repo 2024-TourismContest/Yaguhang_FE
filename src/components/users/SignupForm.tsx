@@ -3,25 +3,14 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import InputWithLabel from "../input/InputWithLabel";
 import { accounts } from "../../apis/auth";
-import pencilIcon from "../../assets/icons/pencil.svg";
-
-const ProfileSection = () => (
-  <ProfileSectionContainer>
-    <ProfileImgContainer>
-      <ProfileImg />
-      <UploadBtn>
-        <img src={pencilIcon} alt="Upload profile" />
-      </UploadBtn>
-    </ProfileImgContainer>
-    <ProfileText>프로필 이미지</ProfileText>
-  </ProfileSectionContainer>
-);
+import ProfileEditSection from "../profile/ProfileEditSection";
 
 const SignupForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -34,6 +23,7 @@ const SignupForm = () => {
       password,
       nickname,
       phoneNumber,
+      profileImage,
     };
 
     try {
@@ -44,11 +34,25 @@ const SignupForm = () => {
     }
   };
 
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result as string); // 이미지 상태 업데이트
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <FormContainer>
       <Title>회원가입</Title>
       <FormWrapper>
-        <ProfileSection />
+        <ProfileEditSection
+          profileImage={profileImage}
+          onImageChange={handleImageChange}
+        />
         <Form onSubmit={handleSubmit}>
           <InputWithLabel
             label="Email"
@@ -107,7 +111,6 @@ const FormWrapper = styled.div`
   }
 `;
 
-
 const Title = styled.h1`
   color: #fff;
   font-family: "Inter", sans-serif;
@@ -126,46 +129,6 @@ const ProfileSectionContainer = styled.div`
   @media (max-width: 768px) {
     margin-right: 0;
   }
-`;
-
-const ProfileImgContainer = styled.div`
-  position: relative;
-  width: 100px;
-  height: 100px;
-`;
-
-const ProfileImg = styled.div`
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background-color: #fff;
-`;
-
-const UploadBtn = styled.button`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: #888;
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  img {
-    width: 16px;
-    height: 16px;
-  }
-`;
-
-const ProfileText = styled.span`
-  color: #fff;
-  font-family: "Inter", sans-serif;
-  font-size: 0.875rem;
-  text-align: center;
-  margin-top: 0.5rem;
 `;
 
 const Form = styled.form`
