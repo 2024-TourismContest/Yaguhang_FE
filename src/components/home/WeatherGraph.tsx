@@ -7,6 +7,7 @@ import {
   Bar,
   LabelList,
   YAxis,
+  ResponsiveContainer,
 } from "recharts";
 import styled from "styled-components";
 import { home } from "../../apis/main";
@@ -45,19 +46,17 @@ const WeatherGraph: React.FC<WeatherGraphProps> = ({ gameId }) => {
   }, [gameId]);
 
   if (!weatherData || !weatherData.weathers.length) {
-    return <div>Loading...</div>;
+    return <NoDataMessage>날씨 정보가 없습니다.</NoDataMessage>;
   }
 
   return (
-    <OuterContainer>
-      <ChartContainer>
+    <ChartContainer>
+      <ResponsiveContainer width="100%" height={260}>
         <LineChart
-          width={1600}
-          height={300}
           data={weatherData.weathers}
           margin={{
             top: 50,
-            left: 30,
+            left: 50,
             right: 50,
           }}
         >
@@ -66,7 +65,7 @@ const WeatherGraph: React.FC<WeatherGraphProps> = ({ gameId }) => {
             domain={["auto", "auto"]}
             tickFormatter={(value) => `${value}시`}
           />
-          <YAxis domain={["dataMin - 5", "dataMax + 5"]} hide={true} />
+          <YAxis domain={["dataMin - 3", "dataMax + 3"]} hide={true} />
           <Line
             type="monotone"
             dataKey="temp"
@@ -82,27 +81,27 @@ const WeatherGraph: React.FC<WeatherGraphProps> = ({ gameId }) => {
             />
           </Line>
         </LineChart>
+      </ResponsiveContainer>
 
-        <WeatherImagesContainer>
-          {weatherData.weathers.map((weather, index) => (
-            <WeatherImage
-              key={index}
-              src={weather.weatherImgUrl}
-              alt={`Weather icon for ${weather.fcstTime}`}
-            />
-          ))}
-        </WeatherImagesContainer>
+      <WeatherImagesContainer>
+        {weatherData.weathers.map((weather, index) => (
+          <WeatherImage
+            key={index}
+            src={weather.weatherImgUrl}
+            alt={`Weather icon for ${weather.fcstTime}`}
+          />
+        ))}
+      </WeatherImagesContainer>
 
+      <ResponsiveContainer width="100%" height={100}>
         <BarChart
-          width={1600}
-          height={100}
           data={weatherData.weathers}
           margin={{
             top: 20,
           }}
         >
           <XAxis dataKey="fcstTime" tick={false} />
-          <Bar dataKey="rainyPercent" fill="#8884d8" barSize={20}>
+          <Bar dataKey="rainyPercent" fill="#8884d8" barSize={30}>
             <LabelList
               dataKey="rainyPercent"
               position="top"
@@ -110,35 +109,39 @@ const WeatherGraph: React.FC<WeatherGraphProps> = ({ gameId }) => {
             />
           </Bar>
         </BarChart>
-      </ChartContainer>
-    </OuterContainer>
+      </ResponsiveContainer>
+    </ChartContainer>
   );
 };
-
-const OuterContainer = styled.div`
-  background-color: #fff;
-  overflow-x: auto;
-  padding: 0;
-`;
 
 const ChartContainer = styled.div`
   background-color: #fff;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  min-width: 500px;
+width: 100%;
 `;
 
 const WeatherImagesContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  width: 1600px;
-  margin: 10px 0;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 10px 20px;
 `;
 
 const WeatherImage = styled.img`
   width: 50px;
   height: 50px;
-  margin-right: 10px;
+  flex-shrink: 0;
+`;
+
+const NoDataMessage = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 1.5rem;
+  color: #888;
 `;
 
 export default WeatherGraph;

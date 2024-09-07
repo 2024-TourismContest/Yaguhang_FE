@@ -31,6 +31,7 @@ const HomePage = () => {
   const [placeData, setPlaceData] = useState<PlaceData | null>(null);
   const navigate = useNavigate();
   const { selectedGame } = useTeamStore();
+  const selectedTeam = useTeamStore((state) => state.selectedTeam);
 
   useEffect(() => {
     console.log("Selected Game:", selectedGame); // 콘솔에 selectedGame 값 출력
@@ -65,7 +66,14 @@ const HomePage = () => {
           onClick={() => handleButtonClick("mypage")}
           bgColor="#FF0000"
         />
-        <TitleSection />
+        <TitleSection
+          subtitle={`${selectedTeam} 팬들에게 추천하는`}
+          title={"사직의 핫플레이스"}
+          description={
+            "열정 넘치는 스포츠와 함께 즐길 추천 콘텐츠로 더욱 여행이 풍족하도록!"
+          }
+          icon="marker"
+        />
         <CategorySelector
           category={selectedCategory}
           setCategory={setSelectedCategory}
@@ -79,12 +87,17 @@ const HomePage = () => {
           text="야구선수 PICK 보러가기"
           onClick={() => handleButtonClick("stadium")}
         />
+        
         {selectedGame?.id && (
+                  <TitleSection
+                  title={"현재 잠실구장의 날씨는?"}
+                  description={
+                    "오늘은 비가 안와야 할텐데.."
+                  }
+                />
           <WeatherContainer>
             <WeatherCard gameId={selectedGame.id} />
-            <ScrollContainer>
-              <WeatherGraph gameId={selectedGame.id} />
-            </ScrollContainer>
+            <WeatherGraph gameId={selectedGame.id} />
           </WeatherContainer>
         )}
       </HomePageContainer>
@@ -96,17 +109,14 @@ const HomePageContainer = styled.div`
   position: relative;
   min-height: 100vh;
   overflow: hidden;
-  & > * {
-    position: relative;
-    z-index: 0;
-  }
+  justify-content: center;
 `;
 
 const RoundBackground = styled.div`
   position: absolute;
   top: 0;
   left: 50%;
-  width: 180vw;
+  width: 2700px;
   height: 1300px;
   background-color: #000000;
   border-radius: 100%;
@@ -123,27 +133,18 @@ const RoundBackground = styled.div`
 const WeatherContainer = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 0 16vw;
+  max-width: 1200px;
   gap: 4vw;
+  margin: 0 auto;
 
   @media (max-width: 1024px) {
     flex-direction: column;
-    padding: 0 8vw;
+    padding: 0 50px;
+    align-items: center;
   }
 
   @media (max-width: 768px) {
     padding: 0 4vw;
-  }
-`;
-
-const ScrollContainer = styled.div`
-  width: 100vw;
-  overflow-x: auto;
-  white-space: nowrap;
-  background-color: #f5f5f5;
-
-  @media (max-width: 768px) {
-    width: 100%;
   }
 `;
 

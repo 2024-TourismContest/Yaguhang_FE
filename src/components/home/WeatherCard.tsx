@@ -19,34 +19,41 @@ interface WeatherData {
 
 const WeatherCard: React.FC<WeatherCardProps> = ({ gameId }) => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
         const data: WeatherData = await home.weatherCardAPI(gameId);
         setWeatherData(data);
+        setError(false);
       } catch (err) {
         console.error("Error fetching weatherCardAPI data:", err);
+        setError(true);
       }
     };
 
     fetchWeatherData();
   }, [gameId]);
 
-
   return (
     <WeatherSummaryContainer>
-      <WeatherIcon src={weatherData?.skyUrl} alt="Weather Icon" />
-      <div>
-        <RegionText>{`${weatherData?.stadium}`}</RegionText>
-        <TemperatureText>{`${weatherData?.temp}°`}</TemperatureText>
-        <WeatherDetailContainer>
-          <WeatherDetail>{`최고: ${weatherData?.maxTemp}°  최저: ${weatherData?.minTemp}°`}</WeatherDetail>
-          <WeatherDetail>{`강수량: ${weatherData?.rainFall}mm`}</WeatherDetail>
-          <WeatherDetail>{`습도: ${weatherData?.humidity}%`}</WeatherDetail>
-          <WeatherText>{`오후 20시부터 부분적으로 흐린 상태가 예상됩니다.`}</WeatherText>
-        </WeatherDetailContainer>
-      </div>
+      {error ? (
+        <ErrorMessage>날씨 정보를 조회할 수 없습니다.</ErrorMessage>
+      ) : (
+        <>
+          <WeatherIcon src={weatherData?.skyUrl} alt="Weather Icon" />
+          <div>
+            <RegionText>{weatherData?.stadium}</RegionText>
+            <TemperatureText>{`${weatherData?.temp}°`}</TemperatureText>
+            <WeatherDetailContainer>
+              <WeatherDetail>{`최고: ${weatherData?.maxTemp}°  최저: ${weatherData?.minTemp}°`}</WeatherDetail>
+              <WeatherDetail>{`강수량: ${weatherData?.rainFall}mm`}</WeatherDetail>
+              <WeatherDetail>{`습도: ${weatherData?.humidity}%`}</WeatherDetail>
+            </WeatherDetailContainer>
+          </div>
+        </>
+      )}
     </WeatherSummaryContainer>
   );
 };
@@ -62,53 +69,54 @@ const baseTextStyle = `
 
 const WeatherSummaryContainer = styled.div`
   position: relative;
-  width: fit-content;
-  border-radius: 1.5625rem;
+  max-width: 360px;
+  min-width: 300px;
+  height: fit-content;
+  border-radius: 25px;
   background: linear-gradient(180deg, #b6d3ff 0%, #d1d1d1 100%);
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  padding: 3.75rem 3.13rem 2.69rem 3.62rem;
+  padding: 100px 50px 100px 50px;
+  box-sizing: border-box;
 `;
 
 const RegionText = styled.p`
   ${baseTextStyle}
-  font-size: 0.925rem;
-  margin-bottom: 0.44rem;
+  font-size: 15px;
+  margin-bottom: 7px;
 `;
 
 const TemperatureText = styled.p`
   ${baseTextStyle}
-  font-size: 3.59344rem;
-  margin-bottom: 0.75rem;
+  font-size: 57px;
+  margin-bottom: 12px;
   font-weight: 600;
 `;
 
 const WeatherDetailContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 12.5rem;
-  gap: 0.5rem;
+  gap: 8px;
 `;
 
 const WeatherIcon = styled.img`
   position: absolute;
-  top: 2.69rem;
-  right: 1.13rem;
-  width: 6.125rem;
+  top: 14%;
+  right: 10%;
+  width: 98px;
+  height: auto;
 `;
 
 const WeatherDetail = styled.p`
   ${baseTextStyle}
-  font-size: 0.875rem;
-  padding-bottom: 0.5rem;
-  border-bottom: #ffffff solid 0.03125rem;
+  font-size: 14px;
+  padding-bottom: 8px;
+  border-bottom: #ffffff solid 1px;
 `;
 
-const WeatherText = styled.p`
+const ErrorMessage = styled.p`
   ${baseTextStyle}
-  font-size: 0.875rem;
-  padding-top: 3.06rem;
-  white-space: pre-wrap;
-  word-break: break-word;
+  font-size: 16px;
+  text-align: center;
 `;
 
 export default WeatherCard;
