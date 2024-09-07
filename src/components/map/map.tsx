@@ -26,6 +26,7 @@ export interface Position {
   image: string;
   reviewCount: string;
   isScrapped: boolean;
+  stadiumName: string;
 }
 
 const Map: React.FC<MapTestProps> = ({

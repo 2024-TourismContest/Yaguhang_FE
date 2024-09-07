@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { getStadiumCoordinate } from "../../apis/map";
 import { teamToStadiumMap } from "../../assets/data/data";
 import { CategorySelector } from "../../components/home/CategorySelector";
-import MapTest from "../../components/map/map";
+import Map from "../../components/map/map";
 import { MapPosition } from "../../components/map/MapPosition";
 import { SelectedPosition } from "../../components/map/SelectedPosition";
 import Category from "../../components/stadium/Category";
@@ -72,6 +72,11 @@ const MapPage = () => {
     fetchStadiumData();
   }, [selectedTeam]);
 
+  const navigate = useNavigate();
+  const onClickContent = (contentId: number) => {
+    navigate(`/details/${category}/${contentId}?stadiumId=${stadiumNumber}`);
+    window.scrollTo(0, 0);
+  };
   return (
     <>
       <div style={{ width: "100vw", height: "14vh" }}></div>
@@ -80,7 +85,7 @@ const MapPage = () => {
         setCategory={setSelectedCategory}
         color="white"
       />
-      <MapTest
+      <Map
         selectedTeamId={teamToStadiumMap[selectedTeam] || 1}
         mapX={mapCoordinates ? mapCoordinates.mapX : 126.9786567}
         mapY={mapCoordinates ? mapCoordinates.mapY : 37.566826}
@@ -88,9 +93,9 @@ const MapPage = () => {
         boolean={latestTeamRef.current === selectedTeam}
       />
       <Category filterSchedules={fetchStadiumData} teamLogos={teamLogos} />
-      <SelectedPosition />
+      <SelectedPosition onClickContent={onClickContent} />
       <Hr />
-      <MapPosition />
+      <MapPosition onClickContent={onClickContent} />
     </>
   );
 };

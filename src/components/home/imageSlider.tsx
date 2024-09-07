@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 import { home } from "../../apis/main";
 import DefailImg from "../../assets/images/defaltImg.svg";
-import loading from "../../assets/images/loading.svg";
+import loadingImg from "../../assets/images/loadingImg.svg";
 import useTeamStore from "../../store/TeamStore";
 import BookmarkIcon from "../map/BookMarkIcon";
 
@@ -79,7 +79,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
             {spot.imageUrl ? (
               <SlideImage src={spot.imageUrl} alt={spot.name} />
             ) : (
-              <DefaultImage src={loading} alt={spot.name} />
+              <DefaultImage src={loadingImg} alt={spot.name} />
             )}
             <SlideInfo>
               <span>
@@ -133,6 +133,7 @@ const DefaultImage = styled.img`
   height: 100%;
   object-fit: cover;
   border-radius: 0.9vw;
+  background-color: #ffffff;
 `;
 const StyledMark = styled.div<{ pick: string }>`
   z-index: 5;
