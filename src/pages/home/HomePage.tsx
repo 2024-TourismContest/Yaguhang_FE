@@ -9,7 +9,7 @@ import heroData from "../../dummy-data/dummy-hero-data.json";
 import HeroCarousel from "./HeroCarousel";
 import { TitleSection } from "./TitleSection";
 
-type Category = "숙소" | "맛집" | "쇼핑" | "문화";
+type Category = "숙소" | "맛집" | "쇼핑" | "문화" | "선수PICK";
 interface SpotBasicPreviewDto {
   contentId: number;
   name: string;
@@ -19,7 +19,6 @@ interface SpotBasicPreviewDto {
 
 interface PlaceData {
   spotPreviewDtos: SpotBasicPreviewDto[];
-  // 필요시 다른 필드 추가
 }
 const HomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category>("숙소");

@@ -4,7 +4,7 @@ const token = import.meta.env.VITE_REACT_TOKEN;
 
 export const defaultApi: AxiosInstance = axios.create({
   baseURL: API_URL,
-  timeout: 5000,
+  timeout: 10000,
   headers: {
     accept: "application/json",
   },

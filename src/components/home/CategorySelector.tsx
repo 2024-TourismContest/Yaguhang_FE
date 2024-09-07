@@ -1,16 +1,18 @@
 import styled from "styled-components";
+import ball from "../../assets/icons/ball.svg";
 import festival from "../../assets/icons/festival.svg";
 import place from "../../assets/icons/place.svg";
-import shopping from "../../assets/icons/shopping.svg";
 import restaurant from "../../assets/icons/restaurant.svg";
+import shopping from "../../assets/icons/shopping.svg";
 
-type Category = "숙소" | "맛집" | "쇼핑" | "문화";
+type Category = "숙소" | "맛집" | "쇼핑" | "문화" | "선수PICK";
 
 const categoryIcons: Record<Category, string> = {
   숙소: place,
   맛집: restaurant,
   쇼핑: shopping,
   문화: festival,
+  선수PICK: ball,
 };
 
 interface CategorySelectorProps {
@@ -26,19 +28,20 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
 }) => {
   return (
     <CategoryButtons color={color}>
-      {(["숙소", "맛집", "쇼핑", "문화"] as Category[]).map((cat) => (
-        <CategoryButton
-          key={cat}
-          active={category === cat}
-          onClick={() => setCategory(cat)}
-          color={color}
-        >
-          {cat}
-          <IconWrapper active={category === cat}>
-            <img src={categoryIcons[cat]} alt={`${cat} icon`} />
-          </IconWrapper>
-        </CategoryButton>
-      ))}
+      {(["선수PICK", "숙소", "맛집", "쇼핑", "문화"] as Category[]).map(
+        (cat) => (
+          <CategoryButton
+            key={cat}
+            active={category === cat}
+            onClick={() => setCategory(cat)}
+            color={color}>
+            {cat}
+            <IconWrapper active={category === cat}>
+              <img src={categoryIcons[cat]} alt={`${cat} icon`} />
+            </IconWrapper>
+          </CategoryButton>
+        )
+      )}
     </CategoryButtons>
   );
 };

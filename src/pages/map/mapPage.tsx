@@ -10,8 +10,8 @@ import { SelectedPosition } from "../../components/map/SelectedPosition";
 import Category from "../../components/stadium/Category";
 import useTeamStore from "../../store/TeamStore";
 import { teamLogos } from "../../types/teamLogos";
+type Category = "숙소" | "맛집" | "쇼핑" | "문화" | "선수PICK";
 
-type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 export interface Position {
   contentId: number;
   title: string;
@@ -28,7 +28,7 @@ const MapPage = () => {
     urlTeam: string;
   }>();
   const isValidCategory = (category: string): category is Category => {
-    return ["숙소", "맛집", "쇼핑", "문화"].includes(category);
+    return ["숙소", "맛집", "쇼핑", "문화", "선수PICK"].includes(category);
   };
   const [selectedCategory, setSelectedCategory] = useState<Category>(
     category && isValidCategory(category) ? category : "숙소"
