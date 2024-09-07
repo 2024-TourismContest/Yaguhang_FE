@@ -6,10 +6,10 @@ import Card from "../../components/home/Card";
 import { CategorySelector } from "../../components/home/CategorySelector";
 import ImageSlider from "../../components/home/imageSlider";
 import heroData from "../../dummy-data/dummy-hero-data.json";
+import useTeamStore from "../../store/TeamStore";
 import HeroCarousel from "./HeroCarousel";
 import { TitleSection } from "./TitleSection";
 
-type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 interface SpotBasicPreviewDto {
   contentId: number;
   name: string;
@@ -19,25 +19,27 @@ interface SpotBasicPreviewDto {
 
 interface PlaceData {
   spotPreviewDtos: SpotBasicPreviewDto[];
-  // 필요시 다른 필드 추가
 }
 const HomePage = () => {
-  const [selectedCategory, setSelectedCategory] = useState<Category>("숙소");
+  const stadium = useTeamStore((state) => state.selectedGame?.stadium);
+  const [selectedCategory, setSelectedCategory] = useState<string>("숙소");
   const [placeData, setPlaceData] = useState<PlaceData | null>(null);
   const navigate = useNavigate();
-  const stadium = "사직";
 
   useEffect(() => {
     const fetchPlaceData = async () => {
       try {
-        const response = await home.place(stadium, selectedCategory);
+        const response = await home.place(
+          stadium ? stadium : "사직",
+          selectedCategory
+        );
         setPlaceData(response.data);
       } catch (err) {
         console.error("카테고리별추천 에러:", err);
       }
     };
     fetchPlaceData();
-  }, [selectedCategory]);
+  }, [selectedCategory, stadium]);
 
   const handleButtonClick = (page: string) => {
     navigate(`/${page}`);
@@ -56,7 +58,8 @@ const HomePage = () => {
       <CategorySelector
         category={selectedCategory}
         setCategory={setSelectedCategory}
-        color="white"
+        color="black"
+        categoryList={["숙소", "맛집", "쇼핑", "문화"]}
       />
       <ImageSlider
         category={selectedCategory}

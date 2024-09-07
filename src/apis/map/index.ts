@@ -30,3 +30,20 @@ export const getStadiumCoordinate = async (stadiumId: number) => {
     throw error;
   }
 };
+export const getplayerPick = async (
+  stadiumId: number,
+  level: number,
+  nowX: number,
+  nowY: number
+) => {
+  try {
+    const response = await defaultApi.get(
+      `/api/spot/map/${stadiumId}/${level}/${nowX}/${nowY}`
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error scrapping schedule:", error);
+    throw error;
+  }
+};

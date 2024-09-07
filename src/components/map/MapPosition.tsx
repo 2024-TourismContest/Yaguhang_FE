@@ -1,15 +1,22 @@
 import { styled } from "styled-components";
-import usePositionsStore from "../../store/MapPositionsStore";
 import loadingImg from "../../assets/images/loadingImg.svg";
+import usePositionsStore from "../../store/MapPositionsStore";
 
-export const MapPosition = () => {
+export const MapPosition = ({
+  onClickContent,
+}: {
+  onClickContent: (contentId: number) => void;
+}) => {
   const positions = usePositionsStore((state) => state.positions);
-
   return (
     <Container>
       <ItemList>
         {positions.map((position, index) => (
-          <ItemWrapper key={index}>
+          <ItemWrapper
+            key={index}
+            onClick={() => {
+              onClickContent(position.contentId);
+            }}>
             <Img
               src={position.image ? position.image : loadingImg}
               alt={position.title}
@@ -29,6 +36,7 @@ export const MapPosition = () => {
 export const Container = styled.div`
   width: 100vw;
   display: flex;
+  font-family: Arial;
 `;
 export const ItemList = styled.div`
   width: 65vw;
@@ -50,12 +58,15 @@ export const ItemWrapper = styled.div`
 export const Img = styled.img`
   width: 100%;
   height: 60%;
+  object-fit: fill;
   border-radius: 1.0417vw;
-  background-color: #d9d9d9;
+  background-color: #ffffff;
 `;
 export const H3 = styled.h3`
   color: white;
-  font-size: 1.3em;
+  font-size: 1.2em;
+  width: 100%;
+  text-overflow: ellipsis;
 `;
 export const H4 = styled.h4`
   color: white;

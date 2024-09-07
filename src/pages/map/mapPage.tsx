@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { getStadiumCoordinate } from "../../apis/map";
 import { teamToStadiumMap } from "../../assets/data/data";
 import { CategorySelector } from "../../components/home/CategorySelector";
-import MapTest from "../../components/map/map";
+import Map from "../../components/map/map";
 import { MapPosition } from "../../components/map/MapPosition";
 import { SelectedPosition } from "../../components/map/SelectedPosition";
 import Category from "../../components/stadium/Category";
 import useTeamStore from "../../store/TeamStore";
 import { teamLogos } from "../../types/teamLogos";
+type Category = "숙소" | "맛집" | "쇼핑" | "문화" | "선수PICK";
 
-type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 export interface Position {
   contentId: number;
   title: string;
@@ -28,9 +28,9 @@ const MapPage = () => {
     urlTeam: string;
   }>();
   const isValidCategory = (category: string): category is Category => {
-    return ["숙소", "맛집", "쇼핑", "문화"].includes(category);
+    return ["숙소", "맛집", "쇼핑", "문화", "선수PICK"].includes(category);
   };
-  const [selectedCategory, setSelectedCategory] = useState<Category>(
+  const [selectedCategory, setSelectedCategory] = useState<string>(
     category && isValidCategory(category) ? category : "숙소"
   );
 
@@ -72,6 +72,11 @@ const MapPage = () => {
     fetchStadiumData();
   }, [selectedTeam]);
 
+  const navigate = useNavigate();
+  const onClickContent = (contentId: number) => {
+    navigate(`/details/${category}/${contentId}?stadiumId=${stadiumNumber}`);
+    window.scrollTo(0, 0);
+  };
   return (
     <>
       <div style={{ width: "100vw", height: "14vh" }}></div>
@@ -79,8 +84,9 @@ const MapPage = () => {
         category={selectedCategory}
         setCategory={setSelectedCategory}
         color="white"
+        categoryList={["선수PICK", "숙소", "맛집", "쇼핑", "문화"]}
       />
-      <MapTest
+      <Map
         selectedTeamId={teamToStadiumMap[selectedTeam] || 1}
         mapX={mapCoordinates ? mapCoordinates.mapX : 126.9786567}
         mapY={mapCoordinates ? mapCoordinates.mapY : 37.566826}
@@ -88,9 +94,9 @@ const MapPage = () => {
         boolean={latestTeamRef.current === selectedTeam}
       />
       <Category filterSchedules={fetchStadiumData} teamLogos={teamLogos} />
-      <SelectedPosition />
+      <SelectedPosition onClickContent={onClickContent} />
       <Hr />
-      <MapPosition />
+      <MapPosition onClickContent={onClickContent} />
     </>
   );
 };
