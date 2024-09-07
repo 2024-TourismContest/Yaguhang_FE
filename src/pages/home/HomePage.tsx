@@ -58,7 +58,7 @@ const HomePage = () => {
       <CategorySelector
         category={selectedCategory}
         setCategory={setSelectedCategory}
-        color="white"
+        color="black"
         categoryList={["숙소", "맛집", "쇼핑", "문화"]}
       />
       <ImageSlider
