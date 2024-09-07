@@ -93,7 +93,7 @@ const Card: React.FC = () => {
 
   //카드 클릭시 경기 날짜, 경기장 저장
   const handleCardClick = (schedule: Schedule) => {
-    setSelectedGame({ date: schedule.date, stadium: schedule.stadium });
+    setSelectedGame({ id: schedule.id, date: schedule.date, stadium: schedule.stadium });
     console.log("선택된 게임:", {
       date: schedule.date,
       stadium: schedule.stadium,
