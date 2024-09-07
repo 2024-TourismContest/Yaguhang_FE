@@ -37,21 +37,22 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
       toast("로그인이 필요합니다");
       return;
     }
-    const stadiumId = 5;
 
-    try {
-      await home.bookmark(contentId, stadiumId);
-      setMarkedSpots((prev) => ({
-        ...prev,
-        [contentId]: !prev[contentId],
-      }));
-      toast.success(
-        !markedSpots[contentId]
-          ? "스크랩에 추가되었습니다."
-          : "스크랩에서 제거되었습니다."
-      );
-    } catch (error) {
-      console.error("북마크 상태 변경 오류:", error);
+    if (stadiumId) {
+      try {
+        await home.bookmark(contentId, stadiumId);
+        setMarkedSpots((prev) => ({
+          ...prev,
+          [contentId]: !prev[contentId],
+        }));
+        toast.success(
+          !markedSpots[contentId]
+            ? "스크랩에 추가되었습니다."
+            : "스크랩에서 제거되었습니다."
+        );
+      } catch (error) {
+        console.error("북마크 상태 변경 오류:", error);
+      }
     }
   };
 

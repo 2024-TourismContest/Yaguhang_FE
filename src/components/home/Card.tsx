@@ -43,7 +43,16 @@ const Card: React.FC = () => {
       setCurrentPage(0); // 팀이 변경될 때 페이지를 초기화
     };
     loadSchedules();
-  }, [selectedTeam]); // selectedTeam이 변경될 때마다 경기일정 필터링
+  }, [selectedTeam]);
+  // selectedTeam이 변경될 때마다 경기일정 필터링
+  useEffect(() => {
+    if (schedules.length > 0) {
+      setSelectedGame({
+        date: schedules[0].date,
+        stadium: schedules[0].stadium,
+      });
+    }
+  }, [schedules]);
 
   const schedulesPerPage = 5;
   const indexOfLastSchedule = (currentPage + 1) * schedulesPerPage;

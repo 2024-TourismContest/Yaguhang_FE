@@ -6,6 +6,7 @@ import Card from "../../components/home/Card";
 import { CategorySelector } from "../../components/home/CategorySelector";
 import ImageSlider from "../../components/home/imageSlider";
 import heroData from "../../dummy-data/dummy-hero-data.json";
+import useTeamStore from "../../store/TeamStore";
 import HeroCarousel from "./HeroCarousel";
 import { TitleSection } from "./TitleSection";
 
@@ -20,22 +21,25 @@ interface PlaceData {
   spotPreviewDtos: SpotBasicPreviewDto[];
 }
 const HomePage = () => {
+  const stadium = useTeamStore((state) => state.selectedGame?.stadium);
   const [selectedCategory, setSelectedCategory] = useState<string>("숙소");
   const [placeData, setPlaceData] = useState<PlaceData | null>(null);
   const navigate = useNavigate();
-  const stadium = "사직";
 
   useEffect(() => {
     const fetchPlaceData = async () => {
       try {
-        const response = await home.place(stadium, selectedCategory);
+        const response = await home.place(
+          stadium ? stadium : "사직",
+          selectedCategory
+        );
         setPlaceData(response.data);
       } catch (err) {
         console.error("카테고리별추천 에러:", err);
       }
     };
     fetchPlaceData();
-  }, [selectedCategory]);
+  }, [selectedCategory, stadium]);
 
   const handleButtonClick = (page: string) => {
     navigate(`/${page}`);
