@@ -30,7 +30,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
   const navigate = useNavigate();
 
   const onClickMark = async (contentId: number) => {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
 
     if (!token) {
       navigate("/login");

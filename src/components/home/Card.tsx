@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import styled from "styled-components";
+import { fetchSchedules, scrapSchedule } from "../../apis/main";
 import ball from "../../assets/icons/ball.svg";
 import checkedball from "../../assets/icons/checkedball.svg";
 import left from "../../assets/icons/left.png";
 import right from "../../assets/icons/right.png";
-import Category from "./Category";
-import * as S from "../../styles/common/TitleSection";
-import { toast } from "react-toastify";
-import { fetchSchedules } from "../../apis/main";
-import { scrapSchedule } from "../../apis/main";
 import useTeamStore from "../../store/TeamStore";
+import * as S from "../../styles/common/TitleSection";
 import { teamLogos } from "../../types/teamLogos";
-import { useNavigate } from "react-router-dom";
+import Category from "./Category";
 
 export interface Schedule {
   id: number;
@@ -67,7 +66,7 @@ const Card: React.FC = () => {
   };
 
   const handleScrapSchedule = async (gameId: number) => {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
 
     if (!token) {
       navigate("/login");
@@ -142,8 +141,7 @@ const Card: React.FC = () => {
                   ? "rgba(255, 255, 255, 0.1)"
                   : "transparent",
               transition: "all 0.3s ease-in-out",
-            }}
-          >
+            }}>
             <BeforeElement
               $isScraped={schedule.isScraped}
               onClick={() => handleScrapSchedule(schedule.id)}
@@ -158,8 +156,7 @@ const Card: React.FC = () => {
                   justifyContent: "center",
                   alignItems: "center",
                   marginTop: "2.5vh",
-                }}
-              >
+                }}>
                 <img
                   src={schedule.homeTeamLogo}
                   alt={`${schedule.home}`}
@@ -178,8 +175,7 @@ const Card: React.FC = () => {
                   justifyContent: "space-around",
                   marginTop: "10px",
                   fontSize: "0.8rem",
-                }}
-              >
+                }}>
                 <span style={{ whiteSpace: "pre-line" }}>{schedule.home}</span>
                 <span style={{ whiteSpace: "pre-line" }}>{schedule.away}</span>
               </div>
@@ -196,8 +192,7 @@ const Card: React.FC = () => {
         ))}
         <NextButton
           onClick={nextPage}
-          disabled={indexOfLastSchedule >= schedules.length}
-        >
+          disabled={indexOfLastSchedule >= schedules.length}>
           <img src={right} alt="다음" />
         </NextButton>
       </CardContainer>
