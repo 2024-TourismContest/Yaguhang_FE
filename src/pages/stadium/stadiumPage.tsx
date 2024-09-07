@@ -35,6 +35,7 @@ const StadiumPage = () => {
   const fetchSchedules = async () => {};
   const selectedTeam = useTeamStore((state) => state.selectedTeam);
   const setSelectedTeam = useTeamStore((state) => state.setSelectedTeam);
+  const setStadiumId = useTeamStore((state) => state.setStadiumId);
 
   useEffect(() => {
     setSelectedTeam("LG");
@@ -71,6 +72,7 @@ const StadiumPage = () => {
 
   // 각 카테고리에 대해 데이터 로드
   useEffect(() => {
+    setStadiumId(stadiumNumber);
     fetchPlaceData("숙소");
     fetchPlaceData("맛집");
     fetchPlaceData("쇼핑");
@@ -104,8 +106,7 @@ const StadiumPage = () => {
         onMoreClick={() => handleMoreClick("숙소")}
       />
       <ImageSlider
-        category="숙소
-      "
+        category="숙소"
         spots={placeData["숙소"]?.spotPreviewDtos || []}
       />
       <Hr />

@@ -11,6 +11,7 @@ import { fetchSchedules } from "../../apis/main";
 import { scrapSchedule } from "../../apis/main";
 import useTeamStore from "../../store/TeamStore";
 import { teamLogos } from "../../types/teamLogos";
+import { useNavigate } from "react-router-dom";
 
 export interface Schedule {
   id: number;
@@ -34,6 +35,7 @@ const Card: React.FC = () => {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const { selectedTeam, setSelectedGame, selectedGame } = useTeamStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadSchedules = async () => {
@@ -65,6 +67,13 @@ const Card: React.FC = () => {
   };
 
   const handleScrapSchedule = async (gameId: number) => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+      navigate("/login");
+      toast("로그인이 필요합니다");
+      return;
+    }
     try {
       const isScraped = await scrapSchedule(gameId);
       setSchedules((prevSchedules) =>
