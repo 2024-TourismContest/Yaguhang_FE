@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { login } from "../../apis/login";
+import { auth } from "../../apis/auth";
 import { useNavigate } from "react-router-dom"; 
 
 const LoginForm = () => {
@@ -13,7 +13,7 @@ const LoginForm = () => {
     event.preventDefault();
 
     try {
-      const response = await login.login(email, password);
+      const response = await auth.login(email, password);
       console.log(response);
       navigate("/");
     } catch (err) {

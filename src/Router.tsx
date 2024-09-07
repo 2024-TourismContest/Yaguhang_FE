@@ -18,9 +18,9 @@ export default function Router({ isAuthenticated }: RouterProps) {
         </>
       ) : (
         <>
-          <Route path="/users/login" element={<LoginPage />} />
-          <Route path="/users/signup" element={<SignupPage />} />
-          <Route path="*" element={<Navigate replace to="/users/login" />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="signup" element={<SignupPage />} />
+          <Route path="*" element={<Navigate replace to="/login" />} />
         </>
       )}
     </Routes>

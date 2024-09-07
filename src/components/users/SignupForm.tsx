@@ -1,12 +1,27 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import InputWithLabel from "../input/InputWithLabel"; // Import the InputWithLabel component
+import InputWithLabel from "../input/InputWithLabel";
+import { accounts } from "../../apis/auth";
+import pencilIcon from "../../assets/icons/pencil.svg";
+
+const ProfileSection = () => (
+  <ProfileSectionContainer>
+    <ProfileImgContainer>
+      <ProfileImg />
+      <UploadBtn>
+        <img src={pencilIcon} alt="Upload profile" />
+      </UploadBtn>
+    </ProfileImgContainer>
+    <ProfileText>프로필 이미지</ProfileText>
+  </ProfileSectionContainer>
+);
 
 const SignupForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -14,88 +29,150 @@ const SignupForm = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
+    const formData = {
+      email,
+      password,
+      nickname,
+      phoneNumber,
+    };
+
     try {
-      // Example async operation; replace with actual signup logic
-      // const response = await signup.signup(email, password);
-      // console.log(response);
-      navigate("/users/login");
+      await accounts.signup(formData);
+      navigate("/login");
     } catch (err) {
-      setError("로그인에 실패했습니다.");
+      setError("회원가입에 실패했습니다.");
     }
   };
 
   return (
     <FormContainer>
       <Title>회원가입</Title>
-      <ProfileSection>
-        <ProfileImg />
-        <ProfileText>프로필 이미지</ProfileText>
-      </ProfileSection>
-      <form onSubmit={handleSubmit}>
-        <InputWithLabel
-          label="Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <InputWithLabel
-          label="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <InputWithLabel
-          label="Nickname"
-          type="text"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-        />
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        <SubmitBtn type="submit">SIGN UP</SubmitBtn>
-      </form>
+      <FormWrapper>
+        <ProfileSection />
+        <Form onSubmit={handleSubmit}>
+          <InputWithLabel
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <InputWithLabel
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <InputWithLabel
+            label="Nickname"
+            type="text"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+          />
+          <InputWithLabel
+            label="Phone"
+            type="tel"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+          />
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+        </Form>
+      </FormWrapper>
+      <SubmitBtn type="submit">SIGN UP</SubmitBtn>
     </FormContainer>
   );
 };
 
 const FormContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* 세로 방향으로 정렬 */
   justify-content: center;
   align-items: center;
   background-color: #000;
-  width: 100%; /* 전체 너비 사용 */
+  width: 100%;
   padding: 2rem;
   box-sizing: border-box;
 `;
+
+const FormWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 수평 중앙 정렬 */
+  width: 100%;
+  max-width: 1000px;
+  gap: 2em;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 2em;
+  }
+`;
+
+
 const Title = styled.h1`
   color: #fff;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 1.875rem;
   font-weight: 600;
   text-align: center;
   margin-bottom: 2.75rem;
 `;
 
-const ProfileSection = styled.div`
+const ProfileSectionContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-right: 2rem;
+
+  @media (max-width: 768px) {
+    margin-right: 0;
+  }
+`;
+
+const ProfileImgContainer = styled.div`
+  position: relative;
+  width: 100px;
+  height: 100px;
 `;
 
 const ProfileImg = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   background-color: #fff;
-  margin-bottom: 1rem;
+`;
+
+const UploadBtn = styled.button`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #888;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  img {
+    width: 16px;
+    height: 16px;
+  }
 `;
 
 const ProfileText = styled.span`
   color: #fff;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 0.875rem;
   text-align: center;
+  margin-top: 0.5rem;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
 `;
 
 const SubmitBtn = styled.button`
@@ -104,11 +181,11 @@ const SubmitBtn = styled.button`
   background: #fff;
   border: none;
   color: #000;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 1.6875em;
   font-weight: 400;
   cursor: pointer;
-  margin-top: 1.5em;
+  margin-top: 1em;
   @media (max-width: 768px) {
     padding: 0.5em 2em;
     font-size: 1.5rem;
@@ -117,7 +194,7 @@ const SubmitBtn = styled.button`
 
 const ErrorMessage = styled.p`
   color: #ff6262;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 0.875rem;
   margin-top: 1em;
 `;

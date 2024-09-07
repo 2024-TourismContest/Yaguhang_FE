@@ -6,7 +6,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const onClickSignup = async (event: React.FormEvent) => {
-      navigate("/users/signup");
+      navigate("/signup");
   };
   return (
     <PageContainer>
