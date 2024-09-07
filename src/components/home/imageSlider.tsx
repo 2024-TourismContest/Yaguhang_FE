@@ -1,12 +1,14 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { BsBookmarkStar } from "react-icons/bs";
-import { LuDot } from "react-icons/lu";
-import defaultImg from "../../assets/icons/logo_gray.svg";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import styled from "styled-components";
 import { home } from "../../apis/main";
+import DefailImg from "../../assets/images/defaltImg.svg";
+import loading from "../../assets/images/loading.svg";
+import useTeamStore from "../../store/TeamStore";
+import BookmarkIcon from "../map/BookMarkIcon";
 
-interface SpotBasicPreviewDto {
+export interface SpotBasicPreviewDto {
   contentId: number;
   name: string;
   address: string;
@@ -17,39 +19,52 @@ interface SpotBasicPreviewDto {
 
 interface ImageSliderProps {
   spots: SpotBasicPreviewDto[];
+  category: string;
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
+const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
   const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
     {}
   );
+  const stadiumId = useTeamStore((state) => state.stadiumId); // stadiumId 가져오기
   const navigate = useNavigate();
 
   const onClickMark = async (contentId: number) => {
     const token = localStorage.getItem("authToken");
 
     if (!token) {
-      // 토큰이 없으면 로그인 화면으로 이동
       navigate("/login");
-      alert("로그인이 필요합니다");
+      toast("로그인이 필요합니다");
       return;
     }
-    const stadiumId = "5"; // 수정 필요
+    const stadiumId = 5;
 
     try {
-      await home.bookmark(contentId.toString(), stadiumId);
+      await home.bookmark(contentId, stadiumId);
       setMarkedSpots((prev) => ({
         ...prev,
         [contentId]: !prev[contentId],
       }));
+      toast.success(
+        !markedSpots[contentId]
+          ? "스크랩에 추가되었습니다."
+          : "스크랩에서 제거되었습니다."
+      );
     } catch (error) {
       console.error("북마크 상태 변경 오류:", error);
     }
   };
+
   const onClickContent = (contentId: number) => {
-    navigate(`/details/${contentId}`);
+    navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
+    window.scrollTo(0, 0);
   };
-  if (!spots || spots.length === 0) return <Container></Container>;
+  if (!spots || spots.length === 0)
+    return (
+      <Container>
+        <img src={DefailImg} alt="준비중입니다" style={{ width: "20%" }} />
+      </Container>
+    );
 
   return (
     <Container>
@@ -57,15 +72,14 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
         {spots.map((spot) => (
           <SlideContainer
             key={spot.contentId}
-            onClick={() => onClickContent(spot.contentId)}
-          >
+            onClick={() => onClickContent(spot.contentId)}>
             <StyledMark pick={spot.picker || "none"}>
               {spot.picker ? spot.picker : ""}
             </StyledMark>
             {spot.imageUrl ? (
               <SlideImage src={spot.imageUrl} alt={spot.name} />
             ) : (
-              <DefaultImage src={defaultImg} alt={spot.name} />
+              <DefaultImage src={loading} alt={spot.name} />
             )}
             <SlideInfo>
               <span>
@@ -80,11 +94,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots }) => {
                     : spot.address}
                 </SlideAddress>
               </span>
-              {markedSpots[spot.contentId] ? (
-                <LuDot onClick={() => onClickMark(spot.contentId)} />
-              ) : (
-                <BsBookmarkStar onClick={() => onClickMark(spot.contentId)} />
-              )}
+              <BookmarkIcon
+                isMarked={markedSpots[spot.contentId] || false}
+                onClick={() => onClickMark(spot.contentId)}
+              />
             </SlideInfo>
           </SlideContainer>
         ))}
@@ -116,7 +129,8 @@ const SlideImage = styled.img`
 `;
 
 const DefaultImage = styled.img`
-  width: 85%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 0.9vw;
 `;
@@ -180,14 +194,14 @@ const SlideAddress = styled.p`
 `;
 
 const ImageWrapper = styled.div`
-  width: clamp(540px, 49.02vw, 750px);
+  width: clamp(540px, 49.02vw, 900px);
   display: flex;
   align-items: center;
   gap: 1.2vw;
 `;
 
 const Container = styled.div`
-  max-width: 1400px;
+  max-width: 100vw;
   padding: 15px clamp(20px, 28.68vw, 200px);
   display: flex;
   flex-direction: column;

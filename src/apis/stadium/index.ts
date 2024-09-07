@@ -22,7 +22,6 @@ export const stadium = {
           radius,
         },
       });
-      console.log(response);
       return response;
     } catch (error) {
       console.error("카테고리별추천 에러", error);
@@ -34,7 +33,6 @@ export const stadium = {
       const response = await defaultApi.get(
         `/api/stadium/${stadiumId}/선수맛집`
       );
-      console.log(response);
       return response;
     } catch (error) {
       console.error("선수픽맛집", error);

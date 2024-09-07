@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import Card from "../../components/home/Card";
-import ImageSlider from "../../components/home/imageSlider";
-import HeroCarousel from "../../components/home/HeroCarousel";
-import heroData from "../../dummy-data/dummy-hero-data.json";
 import WeatherCard from "../../components/home/WeatherCard";
 import styled from "styled-components";
 import WeatherGraph from "../../components/home/WeatherGraph";
-import { CategorySelector } from "../../components/home/CategorySelector";
-import { TitleSection } from "./TitleSection";
+import { useNavigate } from "react-router-dom";
 import { home } from "../../apis/main";
 import { Button } from "../../components/button/Button";
-import { useNavigate } from "react-router-dom";
+import Card from "../../components/home/Card";
+import { CategorySelector } from "../../components/home/CategorySelector";
+import ImageSlider from "../../components/home/imageSlider";
+import heroData from "../../dummy-data/dummy-hero-data.json";
+import HeroCarousel from "../../components/home/HeroCarousel";
+import { TitleSection } from "./TitleSection";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 interface SpotBasicPreviewDto {
@@ -52,22 +52,25 @@ const HomePage = () => {
       <HomePageContainer className="home-page">
         <RoundBackground />
         <Card />
-          <Button
-            text="MY 야구공 스탬프 모아보기 "
-            onClick={() => handleButtonClick("mypage")}
-            bgColor="#FF0000"
-          />
-          <TitleSection />
-          <CategorySelector
-            category={selectedCategory}
-            setCategory={setSelectedCategory}
-            color="white"
-          />
-          <ImageSlider spots={placeData?.spotPreviewDtos || []} />
-          <Button
-            text="야구선수 PICK 보러가기"
-            onClick={() => handleButtonClick("stadium")}
-          />
+      <Button
+        text="MY 야구공 스탬프 모아보기 "
+        onClick={() => handleButtonClick("mypage")}
+        bgColor="#FF0000"
+      />
+      <TitleSection />
+      <CategorySelector
+        category={selectedCategory}
+        setCategory={setSelectedCategory}
+        color="white"
+      />
+      <ImageSlider
+        category={selectedCategory}
+        spots={placeData?.spotPreviewDtos || []}
+      />
+      <Button
+        text="야구선수 PICK 보러가기"
+        onClick={() => handleButtonClick("stadium")}
+      />
         <WeatherContainer>
           <WeatherCard gameId={38}/>
           <ScrollContainer>

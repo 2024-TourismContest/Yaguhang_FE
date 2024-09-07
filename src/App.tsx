@@ -13,7 +13,7 @@ function App() {
         hideProgressBar
         newestOnTop
       />
-      <Router isAuthenticated={true} />
+      <Router/>
     </Layout>
   );
 }
