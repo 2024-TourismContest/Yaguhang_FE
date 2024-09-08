@@ -1,24 +1,47 @@
+import React from "react";
 import styled from "styled-components";
 
-const InputWithLabel = ({ label, value, onChange, type = "text" }) => {
+interface InputWithLabelProps {
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  type?: string;
+  error?: string;
+}
+
+const InputWithLabel: React.FC<InputWithLabelProps> = ({
+  label,
+  value,
+  onChange,
+  type = "text",
+  error,
+}) => {
   return (
-    <InputContainer>
-      <Label>{label}</Label>
-      <Input type={type} value={value} onChange={onChange} />
-    </InputContainer>
+    <InputWrapper>
+      <InputContainer>
+        <Label>{label}</Label>
+        <Input type={type} value={value} onChange={onChange} />
+      </InputContainer>
+      {error && <ErrorText>{error}</ErrorText>}
+    </InputWrapper>
   );
 };
+
+const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+`;
 
 const InputContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 1em 1.5em;
+  padding: 1.2em 1.5em;
   border-radius: 0.933rem;
   background-color: #000;
   border: 0.3px solid #fff;
   gap: 20px;
-  margin-bottom: 10px;
 `;
 
 const Label = styled.div`
@@ -26,7 +49,7 @@ const Label = styled.div`
   font-size: 16.66px;
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  width: 100px; /* 라벨 너비 고정 */
+  width: 150px; /* 라벨 너비 고정 */
 `;
 
 const Input = styled.input`
@@ -43,6 +66,13 @@ const Input = styled.input`
     outline: none;
     border: none;
   }
+`;
+
+const ErrorText = styled.span`
+  color: #ff4d4f;
+  font-size: 14px;
+  margin-top: 0.5em;
+  display: block;
 `;
 
 export default InputWithLabel;
