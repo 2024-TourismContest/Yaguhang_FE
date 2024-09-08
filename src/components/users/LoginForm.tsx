@@ -24,7 +24,7 @@ const LoginForm = () => {
       const queryParams = new URLSearchParams(window.location.search);
       const token = queryParams.get('token');
       if (token) {
-        localStorage.setItem('accessToken', token);
+        localStorage.setItem('token', token);
         setIsAuthenticated(true);
         navigate('/'); // 토큰이 저장된 후 홈으로 리디렉션
       } else {
