@@ -26,9 +26,10 @@ const PageContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding-top: 10vh;
-  height: 100vh;
+  height: 100%;
   min-width: 500px;
   background-color: #000;
+  padding-bottom: 200px;
 
   @media (max-width: 768px) {
     padding-top: 20vh;

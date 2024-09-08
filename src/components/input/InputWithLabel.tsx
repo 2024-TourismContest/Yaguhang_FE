@@ -3,7 +3,6 @@ import styled from "styled-components";
 import eyeIcon from "../../assets/icons/eye.png";
 import eyeOffIcon from "../../assets/icons/eye-off.png";
 import checkIcon from "../../assets/icons/check.png";
-import xIcon from "../../assets/icons/x.png";
 
 interface InputWithLabelProps {
   label: string;
@@ -23,9 +22,7 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
   onChange,
   type = "text",
   error,
-  showPassword,
   onTogglePassword,
-  showConfirmPassword,
   passwordMatch,
 }) => {
   return (
@@ -114,7 +111,7 @@ const TogglePasswordButton = styled.button`
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  
+
   img {
     width: 1rem;
     height: auto;
