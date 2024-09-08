@@ -1,8 +1,5 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import styled from "styled-components";
-import { home } from "../../apis/main";
 import DefailImg from "../../assets/images/defaltImg.svg";
 import loadingImg from "../../assets/images/loadingImg.svg";
 import useTeamStore from "../../store/TeamStore";
@@ -23,38 +20,8 @@ interface ImageSliderProps {
 }
 
 const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
-  const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
-    {}
-  );
-  const stadiumId = useTeamStore((state) => state.stadiumId); // stadiumId 가져오기
+  const stadiumId = useTeamStore((state) => state.stadiumId);
   const navigate = useNavigate();
-
-  const onClickMark = async (contentId: number) => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      navigate("/login");
-      toast("로그인이 필요합니다");
-      return;
-    }
-
-    if (stadiumId) {
-      try {
-        await home.bookmark(contentId, stadiumId);
-        setMarkedSpots((prev) => ({
-          ...prev,
-          [contentId]: !prev[contentId],
-        }));
-        toast.success(
-          !markedSpots[contentId]
-            ? "스크랩에 추가되었습니다."
-            : "스크랩에서 제거되었습니다."
-        );
-      } catch (error) {
-        console.error("북마크 상태 변경 오류:", error);
-      }
-    }
-  };
 
   const onClickContent = (contentId: number) => {
     navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
@@ -96,8 +63,8 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
                 </SlideAddress>
               </span>
               <BookmarkIcon
-                isMarked={markedSpots[spot.contentId] || false}
-                onClick={() => onClickMark(spot.contentId)}
+                stadiumId={stadiumId ? stadiumId : 5}
+                contentId={spot.contentId}
               />
             </SlideInfo>
           </SlideContainer>
@@ -170,16 +137,7 @@ const SlideInfo = styled.div`
   padding: 10px 10px;
   box-sizing: border-box;
   border-radius: 0 0 10px 10px;
-
-  svg {
-    position: absolute;
-    right: 10px;
-    width: 25x;
-    height: 25px;
-    @media screen and (max-width: 1128px) {
-      top: 0px;
-    }
-  }
+  justify-content: space-between;
 `;
 
 const SlideName = styled.h3`
