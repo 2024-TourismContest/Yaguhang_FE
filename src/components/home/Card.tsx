@@ -1,28 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import styled from "styled-components";
+import { fetchSchedules, scrapSchedule } from "../../apis/main";
 import ball from "../../assets/icons/ball.svg";
 import checkedball from "../../assets/icons/checkedball.svg";
 import left from "../../assets/icons/left.png";
 import right from "../../assets/icons/right.png";
-import Category from "./Category";
-import * as S from "../../styles/common/TitleSection";
-import { toast } from "react-toastify";
-import { fetchSchedules } from "../../apis/main";
-import { scrapSchedule } from "../../apis/main";
 import useTeamStore from "../../store/TeamStore";
-
-export const teamLogos: Record<string, string> = {
-  LG: "https://yaguhang.kro.kr:8443/teamLogos/LGTwins.png",
-  KT: "https://yaguhang.kro.kr:8443/teamLogos/KtWizs.png",
-  SSG: "https://yaguhang.kro.kr:8443/teamLogos/SSGLanders.png",
-  NC: "https://yaguhang.kro.kr:8443/teamLogos/NCDinos.png",
-  두산: "https://yaguhang.kro.kr:8443/teamLogos/Doosan.png",
-  KIA: "https://yaguhang.kro.kr:8443/teamLogos/KIA.png",
-  롯데: "https://yaguhang.kro.kr:8443/teamLogos/Lotte.png",
-  삼성: "https://yaguhang.kro.kr:8443/teamLogos/Samsung.png",
-  한화: "https://yaguhang.kro.kr:8443/teamLogos/Hanwha.png",
-  키움: "https://yaguhang.kro.kr:8443/teamLogos/Kiwoom.png",
-};
+import * as S from "../../styles/common/TitleSection";
+import { teamLogos } from "../../types/teamLogos";
+import Category from "./Category";
 
 export interface Schedule {
   id: number;
@@ -41,6 +29,197 @@ export interface Schedule {
 interface StyledCardProps {
   $isScraped: boolean;
 }
+
+const Card: React.FC = () => {
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const { selectedTeam, setSelectedGame, selectedGame } = useTeamStore();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loadSchedules = async () => {
+      const schedules = await fetchSchedules(selectedTeam);
+      setSchedules(schedules);
+      setCurrentPage(0); // 팀이 변경될 때 페이지를 초기화
+    };
+    loadSchedules();
+  }, [selectedTeam]);
+  // selectedTeam이 변경될 때마다 경기일정 필터링
+  useEffect(() => {
+    if (schedules.length > 0) {
+      setSelectedGame({
+        id: schedules[0].id,
+        date: schedules[0].date,
+        stadium: schedules[0].stadium,
+      });
+    }
+  }, [schedules]);
+
+  const schedulesPerPage = 5;
+  const indexOfLastSchedule = (currentPage + 1) * schedulesPerPage;
+  const indexOfFirstSchedule = indexOfLastSchedule - schedulesPerPage;
+  const currentSchedules = schedules.slice(
+    indexOfFirstSchedule,
+    indexOfLastSchedule
+  );
+
+  const nextPage = () => {
+    if (indexOfLastSchedule < schedules.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleScrapSchedule = async (gameId: number) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      toast("로그인이 필요합니다");
+      return;
+    }
+    try {
+      const isScraped = await scrapSchedule(gameId);
+      setSchedules((prevSchedules) =>
+        prevSchedules.map((schedule) =>
+          schedule.id === gameId
+            ? { ...schedule, isScraped: !schedule.isScraped }
+            : schedule
+        )
+      );
+      toast.success(
+        isScraped ? "스크랩에 추가되었습니다." : "스크랩에서 제거되었습니다."
+      );
+    } catch (error) {
+      toast.error("스크랩 중 오류가 발생했습니다.");
+    }
+  };
+
+  //카드 클릭시 경기 날짜, 경기장 저장
+  const handleCardClick = (schedule: Schedule) => {
+    setSelectedGame({
+      id: schedule.id,
+      date: schedule.date,
+      stadium: schedule.stadium,
+    });
+    console.log("선택된 게임:", {
+      id: schedule.id,
+      date: schedule.date,
+      stadium: schedule.stadium,
+    });
+  };
+
+  return (
+    <>
+      <Category filterSchedules={fetchSchedules} teamLogos={teamLogos} />{" "}
+      <S.Wrapper gap="100px">
+        <S.TitleWrapper>
+          <S.Title style={{ color: "#ffffff" }}>오늘의 경기 일정</S.Title>
+          <S.H4>
+            열정과 감동을 선사하는 스포츠! 그 현장을 직접 경험해보세요!
+          </S.H4>
+        </S.TitleWrapper>
+      </S.Wrapper>
+      <CardContainer>
+        <PrevButton onClick={prevPage} disabled={currentPage === 0}>
+          <img src={left} alt="이전" />
+        </PrevButton>
+        {currentSchedules.map((schedule) => (
+          <StyledCard
+            key={schedule.id}
+            $isScraped={schedule.isScraped}
+            onClick={() => handleCardClick(schedule)}
+            style={{
+              border:
+                selectedGame?.date === schedule.date &&
+                selectedGame?.stadium === schedule.stadium
+                  ? "5px solid #ffffff"
+                  : "1px solid #ffffff",
+              boxShadow:
+                selectedGame?.date === schedule.date &&
+                selectedGame?.stadium === schedule.stadium
+                  ? "0 0 20px rgba(255, 255, 255, 0.7)"
+                  : "none",
+              transform:
+                selectedGame?.date === schedule.date &&
+                selectedGame?.stadium === schedule.stadium
+                  ? "scale(1.05)"
+                  : "scale(1)",
+              backgroundColor:
+                selectedGame?.date === schedule.date &&
+                selectedGame?.stadium === schedule.stadium
+                  ? "rgba(255, 255, 255, 0.1)"
+                  : "transparent",
+              transition: "all 0.3s ease-in-out",
+            }}
+          >
+            <BeforeElement
+              $isScraped={schedule.isScraped}
+              onClick={() => handleScrapSchedule(schedule.id)}
+            />
+            <div style={{ marginTop: "2rem" }}>
+              <div>
+                {schedule.stadium} | {schedule.time}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: "2.5vh",
+                }}
+              >
+                <img
+                  src={schedule.homeTeamLogo}
+                  alt={`${schedule.home}`}
+                  style={{ width: "3rem", height: "2.5rem" }}
+                />
+                <span style={{ margin: "0 1rem" }}>VS</span>
+                <img
+                  src={schedule.awayTeamLogo}
+                  alt={`${schedule.away}`}
+                  style={{ width: "3rem", height: "2.5rem" }}
+                />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  marginTop: "10px",
+                  fontSize: "0.8rem",
+                }}
+              >
+                <span style={{ whiteSpace: "pre-line" }}>{schedule.home}</span>
+                <span style={{ whiteSpace: "pre-line" }}>{schedule.away}</span>
+              </div>
+              <Divider />
+              <DateAndWeatherContainer>
+                <DateContainer>{schedule.date}</DateContainer>
+                <WeatherIcon
+                  src={schedule.weatherUrl}
+                  alt={`${schedule.weather}`}
+                />
+              </DateAndWeatherContainer>
+            </div>
+          </StyledCard>
+        ))}
+        <NextButton
+          onClick={nextPage}
+          disabled={indexOfLastSchedule >= schedules.length}
+        >
+          <img src={right} alt="다음" />
+        </NextButton>
+      </CardContainer>
+    </>
+  );
+};
+
+export default Card;
 
 const CardContainer = styled.div`
   display: flex;
@@ -123,7 +302,6 @@ const PaginationButton = styled.button`
     height: 2rem;
   }
 `;
-
 const PrevButton = styled(PaginationButton)`
   left: 12vw;
 `;
@@ -131,135 +309,3 @@ const PrevButton = styled(PaginationButton)`
 const NextButton = styled(PaginationButton)`
   right: 12vw;
 `;
-
-const Card: React.FC = () => {
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [currentPage, setCurrentPage] = useState(0);
-  const { selectedTeam } = useTeamStore();
-
-  useEffect(() => {
-    const loadSchedules = async () => {
-      const schedules = await fetchSchedules(selectedTeam);
-      setSchedules(schedules);
-      setCurrentPage(0); // 팀이 변경될 때 페이지를 초기화
-    };
-    loadSchedules();
-  }, [selectedTeam]); // selectedTeam이 변경될 때마다 경기일정 필터링
-
-  const schedulesPerPage = 5;
-  const indexOfLastSchedule = (currentPage + 1) * schedulesPerPage;
-  const indexOfFirstSchedule = indexOfLastSchedule - schedulesPerPage;
-  const currentSchedules = schedules.slice(
-    indexOfFirstSchedule,
-    indexOfLastSchedule
-  );
-
-  const nextPage = () => {
-    if (indexOfLastSchedule < schedules.length) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handleScrapSchedule = async (gameId: number) => {
-    try {
-      const isScraped = await scrapSchedule(gameId);
-      setSchedules((prevSchedules) =>
-        prevSchedules.map((schedule) =>
-          schedule.id === gameId
-            ? { ...schedule, isScraped: !schedule.isScraped }
-            : schedule
-        )
-      );
-      toast.success(
-        isScraped ? "스크랩에 추가되었습니다." : "스크랩에서 제거되었습니다."
-      );
-    } catch (error) {
-      toast.error("스크랩 중 오류가 발생했습니다.");
-    }
-  };
-
-  return (
-    <>
-      <Category filterSchedules={fetchSchedules} teamLogos={teamLogos} />{" "}
-      <S.Wrapper gap="100px">
-        <S.TitleWrapper>
-          <S.Title style={{ color: "#ffffff" }}>오늘의 경기 일정</S.Title>
-          <S.H4>
-            열정과 감동을 선사하는 스포츠! 그 현장을 직접 경험해보세요!
-          </S.H4>
-        </S.TitleWrapper>
-      </S.Wrapper>
-      <CardContainer>
-        <PrevButton onClick={prevPage} disabled={currentPage === 0}>
-          <img src={left} alt="이전" />
-        </PrevButton>
-        {currentSchedules.map((schedule) => (
-          <StyledCard key={schedule.id} $isScraped={schedule.isScraped}>
-            <BeforeElement
-              $isScraped={schedule.isScraped}
-              onClick={() => handleScrapSchedule(schedule.id)}
-            />
-            <div style={{ marginTop: "2rem" }}>
-              <div>
-                {schedule.stadium} | {schedule.time}
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginTop: "2.5vh",
-                }}
-              >
-                <img
-                  src={schedule.homeTeamLogo}
-                  alt={`${schedule.home}`}
-                  style={{ width: "3rem", height: "2.5rem" }}
-                />
-                <span style={{ margin: "0 1rem" }}>VS</span>
-                <img
-                  src={schedule.awayTeamLogo}
-                  alt={`${schedule.away}`}
-                  style={{ width: "3rem", height: "2.5rem" }}
-                />
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-around",
-                  marginTop: "10px",
-                  fontSize: "0.8rem",
-                }}
-              >
-                <span style={{ whiteSpace: "pre-line" }}>{schedule.home}</span>
-                <span style={{ whiteSpace: "pre-line" }}>{schedule.away}</span>
-              </div>
-              <Divider />
-              <DateAndWeatherContainer>
-                <DateContainer>{schedule.date}</DateContainer>
-                <WeatherIcon
-                  src={schedule.weatherUrl}
-                  alt={`${schedule.weather}`}
-                />
-              </DateAndWeatherContainer>
-            </div>
-          </StyledCard>
-        ))}
-        <NextButton
-          onClick={nextPage}
-          disabled={indexOfLastSchedule >= schedules.length}
-        >
-          <img src={right} alt="다음" />
-        </NextButton>
-      </CardContainer>
-    </>
-  );
-};
-
-export default Card;

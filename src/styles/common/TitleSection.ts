@@ -4,7 +4,6 @@ interface WrapperProps {
   gap?: string;
 }
 export const Wrapper = styled.div<WrapperProps>`
-  width: 100vw;
   display: flex;
   justify-content: flex-start;
   gap: ${({ gap }) => gap || "30px"};

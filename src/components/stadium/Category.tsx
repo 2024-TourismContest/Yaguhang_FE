@@ -1,7 +1,5 @@
-//전체 선택 제외버전
 import styled from "styled-components";
 import { useTeamStore } from "../../store/TeamStore";
-import { useEffect } from "react";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -88,12 +86,6 @@ interface CategoryProps {
 const Category: React.FC<CategoryProps> = ({ filterSchedules, teamLogos }) => {
   const { selectedTeam, setSelectedTeam } = useTeamStore();
 
-  useEffect(() => {
-    // 컴포넌트가 처음 마운트될 때 LG를 선택된 팀으로 설정
-    setSelectedTeam("LG");
-    filterSchedules("LG");
-  }, []);
-
   const handleButtonClick = (team: string) => {
     setSelectedTeam(team);
     filterSchedules(team);
@@ -111,8 +103,7 @@ const Category: React.FC<CategoryProps> = ({ filterSchedules, teamLogos }) => {
             key={team}
             onClick={() => handleButtonClick(team)}
             selected={selectedTeam === team}
-            teamName={team}
-          >
+            teamName={team}>
             <img src={teamLogos[team]} alt={`${team} 로고`} />
             <div className="team-name">{team}</div>
           </Button>

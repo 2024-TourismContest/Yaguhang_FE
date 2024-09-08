@@ -16,7 +16,6 @@ interface HeroData {
   }[];
 }
 
-// 캐러셀
 const HeroCarousel: React.FC<HeroData> = ({ teams }) => {
   const settings = {
     dots: true,
@@ -26,13 +25,19 @@ const HeroCarousel: React.FC<HeroData> = ({ teams }) => {
     slidesToScroll: 1,
     autoplay: true,
     vertical: true,
-    autoplaySpeed: 3000,
-    arrows: false, 
-    pauseOnHover: false
+    autoplaySpeed: 2800,
+    arrows: false,
+    pauseOnHover: false,
   };
+  // 모바일
+  const mobileSettings = {
+    ...settings,
+    vertical: false,
+  };
+  const isMobile = window.innerWidth <= 768;
 
   return (
-    <StyledSlider {...settings}>
+    <StyledSlider {...(isMobile ? mobileSettings : settings)}>
       {teams.map((team) => (
         <HeroCarouselItem
           key={team.id}
@@ -70,7 +75,6 @@ const HeroCarouselItem: React.FC<HeroSectionProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  // 버튼
   const handleClickBtn = () => {
     navigate(`/${teamName}`);
   };
@@ -92,20 +96,18 @@ const HeroCarouselItem: React.FC<HeroSectionProps> = ({
   return (
     <HeroContainer heroImage={heroImage}>
       <RowWrapper>
-        <div>
-          <HeroTextContainer>
-            <HeroTitle>{renderStyledText(heroTitle)}</HeroTitle>
-            <HeroText>{heroText}</HeroText>
-          </HeroTextContainer>
+        <ContentWrapper>
+          <HeroTitle>{renderStyledText(heroTitle)}</HeroTitle>
+          <HeroText>{heroText}</HeroText>
           <Button onClick={handleClickBtn}>{`관광지 보러가기 >`}</Button>
-        </div>
+        </ContentWrapper>
         <TeamLogo src={teamLogo} alt={altText} />
       </RowWrapper>
     </HeroContainer>
   );
 };
+
 const StyledSlider = styled(Slider)`
-  margin-bottom: 10vh;
   .slick-list {
     overflow: hidden;
   }
@@ -117,6 +119,7 @@ const StyledSlider = styled(Slider)`
     display: flex !important;
     justify-content: center;
     align-items: center;
+    z-index: 10;
   }
 
   .slick-dots li {
@@ -141,7 +144,7 @@ const StyledSlider = styled(Slider)`
     display: block;
     width: 9px;
     height: 9px;
-    content: '';
+    content: "";
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.5);
   }
@@ -152,32 +155,35 @@ const StyledSlider = styled(Slider)`
 `;
 
 const HeroContainer = styled.div<{ heroImage: string }>`
+  width: 100vw;
+  height: calc(100vw * 9 / 16);
   position: relative;
-  height: 56.8125rem;
   background: url(${(props) => props.heroImage}) no-repeat center center;
   background-size: cover;
-  
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
     background: linear-gradient(
-      to bottom, 
-      rgba(0, 0, 0, 0.857) 0%, 
-      rgba(0, 0, 0, 0.5) 20%,
-      rgba(0, 0, 0, 0.3) 50%, 
+      to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0) 20%,
+      rgba(0, 0, 0, 0) 50%,
       rgba(0, 0, 0, 0.7) 80%,
       rgb(0, 0, 0) 100%
     );
-    z-index: 1;
   }
-  
+
   & > * {
     position: relative;
     z-index: 2;
+  }
+
+  @media (max-width: 768px) {
+    height: 97vh;
   }
 `;
 
@@ -185,87 +191,105 @@ const RowWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding-left: 11vw;
-  padding-right: 17.8283vw;
   align-items: center;
+  padding: 0 16%;
+  height: 100%;
+
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+    gap: 100px;
+    padding: 0 2%;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
-const HeroTextContainer = styled.div`
-  padding-top: 30.7071vw;
-  display: flex;
-  flex-direction: column;
-  gap: 0.84vh;
-  padding-bottom: 3vw;
+const ContentWrapper = styled.div`
+  min-width: fit-content;
+  margin-right: 10%;
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 10vh;
+    margin-right: 0;
+  }
 `;
 
 const HeroTitle = styled.h1`
   white-space: pre-line;
+  font-size: 2.5rem;
+  text-align: left;
+  margin-top: 300px;
+  margin-bottom: 50px;
+
+  @media (max-width: 768px) {
+    text-align: center;
+    margin-top: 0;
+  }
 `;
 
 const StyledLargeText = styled.span`
   color: #fff;
   font-family: Inter;
-  font-size: 3.40744rem;
-  font-style: normal;
+  font-size: 2.5rem;
   font-weight: 600;
-  line-height: normal;
+  @media (max-width: 768px) {
+    /* font-size: 1.8rem; */
+  }
 `;
 
 const StyledNormalText = styled.span`
   color: #fff;
   font-family: Inter;
-  font-size: 2.47713rem;
-  font-style: normal;
+  font-size: 1.8rem;
   font-weight: 400;
-  line-height: normal;
+
+  @media (max-width: 768px) {
+    /* font-size: 1.4rem; */
+  }
 `;
 
 const HeroText = styled.p`
   color: #fff;
   font-family: Inter;
   font-size: 1.125rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+  white-space: pre-line;
+  line-height: 120%;
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    text-align: center;
+  }
 `;
 
 const TeamLogo = styled.img`
-  width: 17.5rem;
+  max-width: 260px;
+  min-width: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+
+  @media (max-width: 768px) {
+    width: 200px;
+  }
 `;
 
 const Button = styled.button`
   width: fit-content;
-  padding: 0.94rem 1.74em;
+  padding: 0.5rem 1rem;
   justify-content: center;
   align-items: center;
-  border-radius: 0.57963rem;
+  border-radius: 0.5rem;
   border: 1px #d9d9d9 solid;
   background: #ca0000;
-
   color: #fff;
   font-family: Inter;
-  font-size: 1.3125rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  cursor: pointer;
+  font-size: 1rem;
+
+  margin-top: 200px;
+  @media (max-width: 768px) {
+    margin-top: 100px;
+  }
 `;
-
-// const DotsWrapper = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// `;
-
-// const Dot = styled.div`
-//   width: 10px;
-//   height: 10px;
-//   background-color: white;
-//   border-radius: 50%;
-// `;
 
 export default HeroCarousel;
