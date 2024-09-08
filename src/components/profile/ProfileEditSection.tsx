@@ -1,9 +1,10 @@
+// ProfileEditSection.tsx
 import { useRef } from "react";
 import styled from "styled-components";
 import pencilIcon from "../../assets/icons/pencil.svg";
 import defaultProfile from "../../assets/images/defaultProfile.webp";
 
-const ProfileEditSection = ({ profileImage, onImageChange }) => {
+const ProfileEditSection = ({ profileImage, onImageChange }: { profileImage: string | null; onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleClick = () => {
@@ -16,12 +17,12 @@ const ProfileEditSection = ({ profileImage, onImageChange }) => {
     <Container>
       <ProfileImgContainer>
         {profileImage ? (
-          <ProfileImg src={profileImage} alt="Profile" />
+          <ProfileImg src={profileImage} alt="프로필 이미지" />
         ) : (
-          <ProfileImg src={defaultProfile} alt="Profile" />
+          <ProfileImg src={defaultProfile} alt="프로필 이미지" />
         )}
         <UploadBtn onClick={handleClick}>
-          <img src={pencilIcon} alt="Upload profile" />
+          <img src={pencilIcon} alt="프로필 업로드" />
         </UploadBtn>
         <HiddenFileInput
           ref={fileInputRef}
@@ -52,6 +53,11 @@ const ProfileImgContainer = styled.div`
   position: relative;
   width: 100px;
   height: 100px;
+
+  @media (max-width: 768px) {
+    width: 80px;
+    height: 80px;
+  }
 `;
 
 const ProfileImg = styled.img`

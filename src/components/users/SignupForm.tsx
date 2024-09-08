@@ -2,11 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import InputWithLabel from "../input/InputWithLabel";
-import { accounts } from "../../apis/auth";
+import { auth } from "../../apis/auth";
 import ProfileEditSection from "../profile/ProfileEditSection";
-import eyeIcon from "../../assets/icons/eye.png";
-import eyeOffIcon from "../../assets/icons/eye-off.png";
-import checkIcon from "../../assets/icons/check.png";
 
 const SignupForm = () => {
   const [email, setEmail] = useState("");
@@ -73,7 +70,7 @@ const SignupForm = () => {
     }
 
     try {
-      await accounts.signup({
+      const res = await auth.signup({
         email,
         password,
         nickname,
@@ -81,6 +78,8 @@ const SignupForm = () => {
         profileImage,
       });
       const confirm = window.confirm("회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동하시겠습니까?");
+      console.log("회원가입 성공:", res);
+
       if (confirm) {
         navigate("/login");
       }
@@ -165,47 +164,29 @@ const SignupForm = () => {
             }
             error={errors.email}
           />
-          <PasswordContainer>
-            <InputWithLabel
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) =>
-                handleInputChange("password", e.target.value, validatePassword)
-              }
-              error={errors.password}
-            />
-            <TogglePasswordButton
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              <img
-                src={showPassword ? eyeOffIcon : eyeIcon}
-                alt="toggle password visibility"
-              />
-            </TogglePasswordButton>
-          </PasswordContainer>
-          <PasswordContainer>
-            <InputWithLabel
-              label="Confirm PW"
-              type={showConfirmPassword ? "text" : "password"}
-              value={confirmPassword}
-              onChange={(e) =>
-                handleInputChange("confirmPassword", e.target.value)
-              }
-              error={errors.confirmPassword}
-            />
-            <TogglePasswordButton
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            >
-              <img
-                src={showConfirmPassword ? eyeOffIcon : eyeIcon}
-                alt="toggle password visibility"
-              />
-            </TogglePasswordButton>
-            {isPasswordMatch && <CheckIcon src={checkIcon} alt="check" />}
-          </PasswordContainer>
+          <InputWithLabel
+            label="Password"
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) =>
+              handleInputChange("password", e.target.value, validatePassword)
+            }
+            error={errors.password}
+            showPassword={showPassword}
+            onTogglePassword={() => setShowPassword(!showPassword)}
+          />
+          <InputWithLabel
+            label="Confirm PW"
+            type={showConfirmPassword ? "text" : "password"}
+            value={confirmPassword}
+            onChange={(e) =>
+              handleInputChange("confirmPassword", e.target.value)
+            }
+            error={errors.confirmPassword}
+            showConfirmPassword={showConfirmPassword}
+            passwordMatch={isPasswordMatch}
+            onTogglePassword={() => setShowConfirmPassword(!showConfirmPassword)}
+          />
           <InputWithLabel
             label="Nickname"
             type="text"
@@ -245,7 +226,7 @@ const FormWrapper = styled.div`
   max-width: 1000px;
   gap: 1.5em;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     flex-direction: column;
     gap: 1.5em;
   }
@@ -267,34 +248,6 @@ const Form = styled.form`
   max-width: 500px;
 `;
 
-const PasswordContainer = styled.div`
-  position: relative;
-`;
-
-const TogglePasswordButton = styled.button`
-  position: absolute;
-  top: 50%;
-  right: 1rem;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-
-  img {
-    width: 1rem;
-    height: auto;
-  }
-`;
-
-const CheckIcon = styled.img`
-  position: absolute;
-  top: 50%;
-  right: 1rem;
-  transform: translateY(-50%);
-  width: 1rem;
-  height: auto;
-`;
-
 const SubmitBtn = styled.button`
   padding: 0.75em 2.5em;
   border-radius: 1.5625em;
@@ -302,14 +255,13 @@ const SubmitBtn = styled.button`
   border: none;
   color: #000;
   font-family: "Inter", sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.6875em;
+  font-weight: 400;
   cursor: pointer;
-  transition: background 0.3s, color 0.3s;
+  margin-top: 1em;
 
   &:hover {
-    background: #000;
-    color: #fff;
+    background-color: #f0f0f0;
   }
 `;
 

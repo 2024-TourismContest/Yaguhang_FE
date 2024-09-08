@@ -22,9 +22,6 @@ export const auth = {
       throw error;
     }
   },
-};
-
-export const accounts = {
   signup: async (data: {
     email: string;
     password: string;
@@ -32,7 +29,7 @@ export const accounts = {
     phoneNumber: string;
   }) => {
     try {
-      const response = await axios.post("/api/auth/signup", data);
+      const response = await defaultApi.post("/api/auth/signup", data);
       return response.data; // Assuming the response data contains necessary information, adjust if needed
     } catch (error) {
       console.error("Signup error:", error);
