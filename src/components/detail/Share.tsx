@@ -23,7 +23,7 @@ const Share: React.FC<ShareProps> = ({ name, description, address }) => {
     const initKakao = () => {
       if (typeof window !== "undefined" && window.Kakao) {
         if (!window.Kakao.isInitialized()) {
-          window.Kakao.init("2daf5f63ac084bc1f5cdbc583e87c9c3");
+          window.Kakao.init(import.meta.env.VITE_KAKAO_API_KEY);
           setIsKakaoReady(true); // SDK 초기화 완료
         } else {
           setIsKakaoReady(true); // 이미 초기화된 경우
