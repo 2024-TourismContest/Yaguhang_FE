@@ -1,8 +1,4 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { styled } from "styled-components";
-import { home } from "../../apis/main";
 import { teamToStadiumMap } from "../../assets/data/data";
 import usePositionStore from "../../store/MapPositionStore";
 import useTeamStore from "../../store/TeamStore";
@@ -14,38 +10,10 @@ export const SelectedPosition = ({
   onClickContent: (contentId: number) => void;
 }) => {
   const position = usePositionStore((state) => state.position); // 단일 position 객체 가져오기
-  const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
-    {}
-  );
-  const navigate = useNavigate();
+
   const { selectedTeam } = useTeamStore();
-  const stadiumNumber = teamToStadiumMap[selectedTeam];
+  const stadiumId = teamToStadiumMap[selectedTeam];
 
-  const onClickMark = async (contentId: number) => {
-    const token = localStorage.getItem("authToken");
-
-    if (!token) {
-      navigate("/login");
-      alert("로그인이 필요합니다");
-      return;
-    }
-    const stadiumId = stadiumNumber;
-
-    try {
-      await home.bookmark(contentId, stadiumId);
-      setMarkedSpots((prev) => ({
-        ...prev,
-        [contentId]: !prev[contentId],
-      }));
-      toast.success(
-        !markedSpots[contentId]
-          ? "스크랩에 추가되었습니다."
-          : "스크랩에서 제거되었습니다."
-      );
-    } catch (error) {
-      console.error("북마크 상태 변경 오류:", error);
-    }
-  };
   if (!position) {
     return <div></div>; // position이 없을 때의 처리
   }
@@ -73,8 +41,8 @@ export const SelectedPosition = ({
             <li>
               스크랩
               <BookmarkIcon
-                isMarked={markedSpots[position.contentId] || false}
-                onClick={() => onClickMark(position.contentId)}
+                stadiumId={stadiumId ? stadiumId : 5}
+                contentId={position.contentId}
               />
             </li>
           </Ul>
