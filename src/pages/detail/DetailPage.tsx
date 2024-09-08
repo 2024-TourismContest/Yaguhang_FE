@@ -127,9 +127,7 @@ const DetailPage = () => {
   }, [category, contentId]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      // const sections = document.querySelectorAll("section");
-    };
+    const handleScroll = () => {};
 
     window.addEventListener("scroll", handleScroll);
 
@@ -193,6 +191,7 @@ const DetailPage = () => {
       <Container>
         <DetailGrid
           id="details"
+          name={detailData?.name}
           category={category}
           detailData={detailData ?? undefined}
           getDisplayValue={getDisplayValue}
