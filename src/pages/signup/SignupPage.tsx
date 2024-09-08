@@ -4,9 +4,6 @@ import SignupForm from "../../components/users/SignupForm";
 const SignUpPage = () => {
   return (
     <PageContainer>
-      <Title>
-        {"오늘은 어떤 즐거운 일들이 \n전국 각지에서 일어나고 있을까요?"}
-      </Title>
       <RowContainer>
         <WelcomeSection>
           <TextLarge as="h2">{"HELLO,\nTraveller!"}</TextLarge>
@@ -25,18 +22,17 @@ const PageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 300px;
-  height: 100%;
+  height: 100vh;
   min-width: 500px;
   background-color: #000;
-  padding-bottom: 20vh;
 
   @media (max-width: 768px) {
-    padding-top: 30vh;
+    padding-top: 150px;
     justify-content: center;
     align-items: center;
     height: auto;
     min-width: 0;
+    padding-bottom: 200px;
   }
 `;
 
