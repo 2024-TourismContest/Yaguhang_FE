@@ -9,6 +9,7 @@ export const Wrapper = styled.div<WrapperProps>`
   gap: ${({ gap }) => gap || "30px"};
   padding-left: 14.68vw;
   padding-top: clamp(80px, 3vw, 200px);
+  margin-top: 100px;
 `;
 export const TitleWrapper = styled.div`
   margin-bottom: 10px;

@@ -54,9 +54,6 @@ const CategoryButtons = styled.div<{ color: string }>`
   gap: 5%;
 
   color: ${(props) => props.color || "#ffffff"};
-  @media screen and (max-width: 800px) {
-    width: 75vw;
-  }
 `;
 
 const CategoryButton = styled.button<{ active: boolean; color?: string }>`

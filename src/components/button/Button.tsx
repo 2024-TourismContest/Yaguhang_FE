@@ -23,14 +23,14 @@ export const StyledButton = styled.button<{ bgColor?: string }>`
   padding: 2px;
   border: 1.02px solid #cccccc;
   box-sizing: border-box;
-  width: clamp(150px, 22vw, 237.2px);
+  width: clamp(210px, 22vw, 237.2px);
   height: clamp(50px, 3.05vw, 100px);
   min-height: 50px;
-  border-radius: 3.17vw;
+  border-radius: clamp(50px, 3.17vw, 237.2px);
   background-color: ${(props) => props.bgColor || "#1A278E"};
-  margin: 5vh auto;
+  margin: 3vh auto;
   display: block;
 `;
 export const Wrapper = styled.div`
-  width: 100vw;
+  width: 100%;
 `;
