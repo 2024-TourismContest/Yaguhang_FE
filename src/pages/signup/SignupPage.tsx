@@ -25,14 +25,14 @@ const PageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 10vh;
+  padding-top: 300px;
   height: 100%;
   min-width: 500px;
   background-color: #000;
-  padding-bottom: 200px;
+  padding-bottom: 20vh;
 
   @media (max-width: 768px) {
-    padding-top: 20vh;
+    padding-top: 30vh;
     justify-content: center;
     align-items: center;
     height: auto;
@@ -41,7 +41,7 @@ const PageContainer = styled.div`
 `;
 
 const RowContainer = styled.div`
-  margin-top: 100px;
+  margin-top: 10vh;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -80,7 +80,8 @@ const WelcomeSection = styled.div`
   margin-left: 50px;
 
   @media (max-width: 768px) {
-    margin-top: 40px;
+    margin-top: 50px;
+    margin-bottom: 100px;
     gap: 30px;
     margin-left: 0;
   }
