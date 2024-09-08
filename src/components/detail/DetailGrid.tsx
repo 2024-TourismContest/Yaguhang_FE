@@ -1,10 +1,10 @@
-import { toast } from "react-toastify";
 import styled from "styled-components";
-import { FiShare } from "react-icons/fi";
 import { SpotDetailDto } from "../../pages/detail/DetailPage";
 import { BsBookmarkFill, BsBookmarkStar } from "react-icons/bs";
+import Share from "./Share";
 
 interface DetailGridProps {
+  name: string | undefined;
   category: string | undefined;
   detailData?: SpotDetailDto;
   images?: string[];
@@ -15,6 +15,7 @@ interface DetailGridProps {
 }
 
 const DetailGrid: React.FC<DetailGridProps> = ({
+  name,
   category,
   detailData,
   getDisplayValue,
@@ -22,20 +23,6 @@ const DetailGrid: React.FC<DetailGridProps> = ({
   bookmarkStates,
   handleBookmarkToggle,
 }) => {
-  const handleShare = (detailData: SpotDetailDto) => {
-    if (navigator.share) {
-      navigator
-        .share({
-          title: detailData?.name,
-          text: detailData?.description,
-          url: window.location.href,
-        })
-        .catch((error) => console.error("공유하기 에러:", error));
-    } else {
-      toast("공유하기 기능을 지원하지 않는 브라우저입니다.");
-    }
-  };
-
   return (
     <div id={id}>
       <Header>
@@ -52,9 +39,10 @@ const DetailGrid: React.FC<DetailGridProps> = ({
               <BsBookmarkStar style={{ fontSize: "2rem" }} />
             )}
           </BookmarkIcon>
-          <ShareIcon onClick={() => detailData && handleShare(detailData)}>
-            <FiShare />
-          </ShareIcon>
+          <Share
+            name={detailData?.name}
+            description={detailData?.description}
+          />
         </IconContainer>
       </Header>
       <Section>
@@ -181,13 +169,8 @@ const IconContainer = styled.div`
   gap: 1rem;
 `;
 
-const ShareIcon = styled.div`
-  font-size: 1.5rem; /* 24px */
-  cursor: pointer;
-`;
-
 const BookmarkIcon = styled.div`
-  font-size: 1.5rem; /* 24px */
+  font-size: 1.5rem;
   cursor: pointer;
 `;
 
