@@ -48,6 +48,7 @@ const Card: React.FC = () => {
   useEffect(() => {
     if (schedules.length > 0) {
       setSelectedGame({
+        id: schedules[0].id,
         date: schedules[0].date,
         stadium: schedules[0].stadium,
       });
@@ -101,7 +102,11 @@ const Card: React.FC = () => {
 
   //카드 클릭시 경기 날짜, 경기장 저장
   const handleCardClick = (schedule: Schedule) => {
-    setSelectedGame({ id: schedule.id, date: schedule.date, stadium: schedule.stadium });
+    setSelectedGame({
+      id: schedule.id,
+      date: schedule.date,
+      stadium: schedule.stadium,
+    });
     console.log("선택된 게임:", {
       id: schedule.id,
       date: schedule.date,
@@ -151,7 +156,8 @@ const Card: React.FC = () => {
                   ? "rgba(255, 255, 255, 0.1)"
                   : "transparent",
               transition: "all 0.3s ease-in-out",
-            }}>
+            }}
+          >
             <BeforeElement
               $isScraped={schedule.isScraped}
               onClick={() => handleScrapSchedule(schedule.id)}
@@ -166,7 +172,8 @@ const Card: React.FC = () => {
                   justifyContent: "center",
                   alignItems: "center",
                   marginTop: "2.5vh",
-                }}>
+                }}
+              >
                 <img
                   src={schedule.homeTeamLogo}
                   alt={`${schedule.home}`}
@@ -185,7 +192,8 @@ const Card: React.FC = () => {
                   justifyContent: "space-around",
                   marginTop: "10px",
                   fontSize: "0.8rem",
-                }}>
+                }}
+              >
                 <span style={{ whiteSpace: "pre-line" }}>{schedule.home}</span>
                 <span style={{ whiteSpace: "pre-line" }}>{schedule.away}</span>
               </div>
@@ -202,7 +210,8 @@ const Card: React.FC = () => {
         ))}
         <NextButton
           onClick={nextPage}
-          disabled={indexOfLastSchedule >= schedules.length}>
+          disabled={indexOfLastSchedule >= schedules.length}
+        >
           <img src={right} alt="다음" />
         </NextButton>
       </CardContainer>
