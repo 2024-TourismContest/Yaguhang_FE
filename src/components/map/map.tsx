@@ -4,7 +4,6 @@ import { getSpotsByStadium } from "../../apis/map";
 import usePositionStore from "../../store/MapPositionsStore";
 import useMap from "./useMap";
 
-type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 declare global {
   interface Window {
     kakao: any;
@@ -14,7 +13,7 @@ interface MapTestProps {
   selectedTeamId: number;
   mapX: number;
   mapY: number;
-  category: Category;
+  category: string;
   boolean: boolean;
 }
 export interface Position {
@@ -26,6 +25,7 @@ export interface Position {
   image: string;
   reviewCount: string;
   isScrapped: boolean;
+  stadiumName: string;
 }
 
 const Map: React.FC<MapTestProps> = ({

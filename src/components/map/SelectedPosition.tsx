@@ -1,15 +1,18 @@
-import { styled } from "styled-components";
-import loadingImg from "../../assets/images/loadingImg.svg";
-import usePositionStore from "../../store/MapPositionStore";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { home } from "../../apis/main";
-import BookmarkIcon from "./BookMarkIcon";
-import { teamToStadiumMap } from "../../assets/data/data";
-import useTeamStore from "../../store/TeamStore";
 import { toast } from "react-toastify";
+import { styled } from "styled-components";
+import { home } from "../../apis/main";
+import { teamToStadiumMap } from "../../assets/data/data";
+import usePositionStore from "../../store/MapPositionStore";
+import useTeamStore from "../../store/TeamStore";
+import BookmarkIcon from "./BookMarkIcon";
 
-export const SelectedPosition = () => {
+export const SelectedPosition = ({
+  onClickContent,
+}: {
+  onClickContent: (contentId: number) => void;
+}) => {
   const position = usePositionStore((state) => state.position); // 단일 position 객체 가져오기
   const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
     {}
@@ -48,13 +51,13 @@ export const SelectedPosition = () => {
   }
 
   return (
-    <Wrapper>
-      <P>부산광역시</P>
+    <Wrapper onClick={() => onClickContent(position.contentId)}>
+      <P>{position.stadiumName}</P>
       <Container>
         <ItemWrapper>
           <section>
             <Img
-              src={position.image ? position.image : loadingImg}
+              src={position.image ? position.image : "./defaultImg"}
               alt={position.title}
             />
             <Box>
@@ -121,6 +124,8 @@ export const ItemWrapper = styled.div`
 `;
 export const Img = styled.img`
   width: 35%;
+  height: 100%;
+  aspect-ratio: 16/9;
   border-radius: 1.0417vw;
   background-color: #d9d9d9;
 `;

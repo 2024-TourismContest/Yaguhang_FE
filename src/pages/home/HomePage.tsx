@@ -13,7 +13,6 @@ import HeroCarousel from "../../components/home/HeroCarousel";
 import { TitleSection } from "./TitleSection";
 import useTeamStore from "../../store/TeamStore";
 
-type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 interface SpotBasicPreviewDto {
   contentId: number;
   name: string;
@@ -25,24 +24,27 @@ interface PlaceData {
   spotPreviewDtos: SpotBasicPreviewDto[];
 }
 
-const HomePage: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<Category>("숙소");
+const HomePage = () => {
+  const stadium = useTeamStore((state) => state.selectedGame?.stadium);
+  const [selectedCategory, setSelectedCategory] = useState<string>("숙소");
   const [placeData, setPlaceData] = useState<PlaceData | null>(null);
   const navigate = useNavigate();
   const { selectedGame } = useTeamStore();
-  const selectedTeam = useTeamStore((state) => state.selectedTeam);
 
   useEffect(() => {
     const fetchPlaceData = async () => {
       try {
-        const response = await home.place("사직", selectedCategory);
+        const response = await home.place(
+          stadium ? stadium : "사직",
+          selectedCategory
+        );
         setPlaceData(response.data);
       } catch (err) {
         console.error("카테고리별추천 에러:", err);
       }
     };
     fetchPlaceData();
-  }, [selectedCategory, selectedTeam]);
+  }, [selectedCategory, stadium]);
 
   const handleButtonClick = (page: string) => {
     navigate(`/${page}`);
@@ -55,20 +57,16 @@ const HomePage: React.FC = () => {
         <RoundBackground />
         <Card />
         <Button
-          text="MY 야구공 스탬프 모아보기"
+          text="MY 야구공 스탬프 모아보기 "
           onClick={() => handleButtonClick("mypage")}
           bgColor="#FF0000"
         />
-        <TitleSection
-          subtitle={`${selectedTeam} 팬들에게 추천하는`}
-          title="사직의 핫플레이스"
-          description="열정 넘치는 스포츠와 함께 즐길 추천 콘텐츠로 더욱 여행이 풍족하도록!"
-          icon="marker"
-        />
+        <TitleSection />
         <CategorySelector
           category={selectedCategory}
           setCategory={setSelectedCategory}
-          color="white"
+          color="black"
+          categoryList={["숙소", "맛집", "쇼핑", "문화"]}
         />
         <ImageSlider
           category={selectedCategory}
@@ -78,7 +76,6 @@ const HomePage: React.FC = () => {
           text="야구선수 PICK 보러가기"
           onClick={() => handleButtonClick("stadium")}
         />
-
         {selectedGame?.id && (
           <>
             <TitleSection
@@ -119,8 +116,7 @@ const RoundBackground = styled.div`
     width: 300vw;
     height: 1200px;
     transform: translate(-50%, -20%);
-  z-index: -1;
-
+    z-index: -1;
   }
 `;
 

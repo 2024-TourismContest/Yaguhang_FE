@@ -92,7 +92,7 @@ const StadiumPage = () => {
         title="맛잘알 프로야구선수들의 맛집은?"
         h4Text="오늘 승리하고 뒷풀이는 여기?!"
         imageSrc={ball}
-        onMoreClick={() => handleMoreClick("선수pick")}
+        onMoreClick={() => handleMoreClick("선수PICK")}
       />
       <ImageSlider
         category="선수PICK"
