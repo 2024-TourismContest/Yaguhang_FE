@@ -29,9 +29,15 @@ const HeroCarousel: React.FC<HeroData> = ({ teams }) => {
     arrows: false,
     pauseOnHover: false,
   };
+  // 모바일
+  const mobileSettings = {
+    ...settings,
+    vertical: false,
+  };
+  const isMobile = window.innerWidth <= 768;
 
   return (
-    <StyledSlider {...settings}>
+    <StyledSlider {...(isMobile ? mobileSettings : settings)}>
       {teams.map((team) => (
         <HeroCarouselItem
           key={team.id}
@@ -90,13 +96,11 @@ const HeroCarouselItem: React.FC<HeroSectionProps> = ({
   return (
     <HeroContainer heroImage={heroImage}>
       <RowWrapper>
-        <TextWrapper>
-          <HeroTextContainer>
-            <HeroTitle>{renderStyledText(heroTitle)}</HeroTitle>
-            <HeroText>{heroText}</HeroText>
-          </HeroTextContainer>
+        <ContentWrapper>
+          <HeroTitle>{renderStyledText(heroTitle)}</HeroTitle>
+          <HeroText>{heroText}</HeroText>
           <Button onClick={handleClickBtn}>{`관광지 보러가기 >`}</Button>
-        </TextWrapper>
+        </ContentWrapper>
         <TeamLogo src={teamLogo} alt={altText} />
       </RowWrapper>
     </HeroContainer>
@@ -188,18 +192,19 @@ const RowWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 10%;
+  padding: 0 16%;
   height: 100%;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    flex-direction: column-reverse;
+    gap: 100px;
     padding: 0 2%;
     align-items: center;
     justify-content: center;
   }
 `;
 
-const TextWrapper = styled.div`
+const ContentWrapper = styled.div`
   min-width: fit-content;
   margin-right: 10%;
   @media (max-width: 768px) {
@@ -208,24 +213,6 @@ const TextWrapper = styled.div`
     align-items: center;
     padding-bottom: 10vh;
     margin-right: 0;
-    gap: 50px;
-  }
-`;
-
-const HeroTextContainer = styled.div`
-  padding-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: 1rem;
-  padding-bottom: 1rem;
-
-  @media (max-width: 768px) {
-    padding-top: 1rem;
-    gap: 0.5rem;
-    padding-bottom: 1rem;
-    align-items: center;
-    gap: 50px;
   }
 `;
 
@@ -233,9 +220,12 @@ const HeroTitle = styled.h1`
   white-space: pre-line;
   font-size: 2.5rem;
   text-align: left;
+  margin-top: 300px;
+  margin-bottom: 50px;
 
   @media (max-width: 768px) {
     text-align: center;
+    margin-top: 0;
   }
 `;
 
@@ -295,6 +285,11 @@ const Button = styled.button`
   color: #fff;
   font-family: Inter;
   font-size: 1rem;
+
+  margin-top: 200px;
+  @media (max-width: 768px) {
+    margin-top: 100px;
+  }
 `;
 
 export default HeroCarousel;
