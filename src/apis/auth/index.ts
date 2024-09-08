@@ -22,15 +22,17 @@ export const auth = {
       throw error;
     }
   },
+
   signup: async (data: {
     email: string;
     password: string;
     nickname: string;
     phoneNumber: string;
+    profileImage?: string;
   }) => {
     try {
       const response = await defaultApi.post("/api/auth/signup", data);
-      return response.data; // Assuming the response data contains necessary information, adjust if needed
+      return response.data;
     } catch (error) {
       console.error("Signup error:", error);
       throw error;

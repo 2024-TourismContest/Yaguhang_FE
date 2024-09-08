@@ -23,48 +23,43 @@ const SignupForm = () => {
 
   const navigate = useNavigate();
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  const validateEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const validatePassword = (password: string) => {
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    return passwordRegex.test(password);
-  };
+  const validatePassword = (password: string) =>
+    /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
 
-  const formatPhoneNumber = (phone: string) => {
-    return phone
-      .replace(/[^0-9]/g, "")
-      .replace(/(\d{3})(\d{3,4})(\d{4})/, "$1-$2-$3");
+  const formatPhoneNumber = (phone: string) =>
+    phone.replace(/[^0-9]/g, "").replace(/(\d{3})(\d{3,4})(\d{4})/, "$1-$2-$3");
+
+  const validateForm = () => {
+    const newErrors = {
+      email:
+        email && !validateEmail(email)
+          ? "유효한 이메일 주소를 입력해주세요."
+          : "",
+      password:
+        password && !validatePassword(password)
+          ? "비밀번호는 영문과 숫자를 포함하여 8자 이상이어야 합니다."
+          : "",
+      confirmPassword:
+        confirmPassword && confirmPassword !== password
+          ? "비밀번호가 일치하지 않습니다."
+          : "",
+      phoneNumber:
+        phoneNumber && !/^\d{3}-\d{3,4}-\d{4}$/.test(phoneNumber)
+          ? "올바른 휴대폰 번호를 입력해주세요."
+          : "",
+    };
+
+    setErrors(newErrors);
+    return !Object.values(newErrors).some((error) => error !== "");
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    let hasError = false;
-    const newErrors: { [key: string]: string } = {};
-
-    if (!email || !validateEmail(email)) {
-      newErrors.email = "유효한 이메일 주소를 입력해주세요.";
-      hasError = true;
-    }
-    if (!password || !validatePassword(password)) {
-      newErrors.password =
-        "비밀번호는 영문과 숫자를 포함하여 8자 이상이어야 합니다.";
-      hasError = true;
-    }
-    if (!confirmPassword || password !== confirmPassword) {
-      newErrors.confirmPassword = "비밀번호가 일치하지 않습니다.";
-      hasError = true;
-    }
-    if (!phoneNumber || !/^\d{3}-\d{3,4}-\d{4}$/.test(phoneNumber)) {
-      newErrors.phoneNumber = "올바른 휴대폰 번호를 입력해주세요.";
-      hasError = true;
-    }
-
-    if (hasError) {
-      setErrors(newErrors);
+    if (!validateForm()) {
       alert("입력한 정보가 유효하지 않습니다. 오류를 확인해주세요.");
       return;
     }
@@ -74,15 +69,19 @@ const SignupForm = () => {
         email,
         password,
         nickname,
-        phoneNumber,
-        profileImage,
+        phoneNumber: phoneNumber || "",
+        profileImage: profileImage || "",
       });
-      const confirm = window.confirm("회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동하시겠습니까?");
-      console.log("회원가입 성공:", res);
 
-      if (confirm) {
+      if (
+        window.confirm(
+          "회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동하시겠습니까?"
+        )
+      ) {
         navigate("/login");
       }
+
+      console.log("회원가입 성공:", res);
     } catch (err) {
       console.error("회원가입 실패:", err);
       alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
@@ -90,46 +89,51 @@ const SignupForm = () => {
   };
 
   const handleInputChange = (
-    field: string,
+    field: "email" | "password" | "confirmPassword" | "phoneNumber",
     value: string,
     validateFn?: (value: string) => boolean
   ) => {
-    let error = "";
-
-    if (validateFn && value && !validateFn(value)) {
-      switch (field) {
-        case "email":
-          error = "유효한 이메일 주소를 입력해주세요.";
-          break;
-        case "password":
-          error = "비밀번호는 영문과 숫자를 포함하여 8자 이상이어야 합니다.";
-          break;
-        case "confirmPassword":
-          error = "비밀번호가 일치하지 않습니다.";
-          break;
-        case "phoneNumber":
-          error = "올바른 휴대폰 번호를 입력해주세요.";
-          break;
-      }
-    }
+    const formattedValue =
+      field === "phoneNumber" ? formatPhoneNumber(value) : value;
+    const error =
+      !formattedValue || !validateFn
+        ? "" // 내용이 비어있거나 validateFn이 없는 경우 에러 메시지 초기화
+        : !validateFn(formattedValue)
+        ? getErrorMessage(field) // 유효성 검사 실패
+        : "";
 
     setErrors((prev) => ({ ...prev, [field]: error }));
 
     switch (field) {
       case "email":
-        setEmail(value);
+        setEmail(formattedValue);
         break;
       case "password":
-        setPassword(value);
+        setPassword(formattedValue);
         break;
       case "confirmPassword":
-        setConfirmPassword(value);
+        setConfirmPassword(formattedValue);
         break;
       case "phoneNumber":
-        setPhoneNumber(formatPhoneNumber(value));
+        setPhoneNumber(formattedValue);
         break;
       default:
         break;
+    }
+  };
+
+  const getErrorMessage = (field: string) => {
+    switch (field) {
+      case "email":
+        return "유효한 이메일 주소를 입력해주세요.";
+      case "password":
+        return "비밀번호는 영문과 숫자를 포함하여 8자 이상이어야 합니다.";
+      case "confirmPassword":
+        return "비밀번호가 일치하지 않습니다.";
+      case "phoneNumber":
+        return "올바른 휴대폰 번호를 입력해주세요.";
+      default:
+        return "";
     }
   };
 
@@ -137,14 +141,12 @@ const SignupForm = () => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result as string);
-      };
+      reader.onloadend = () => setProfileImage(reader.result as string);
       reader.readAsDataURL(file);
     }
   };
 
-  const isPasswordMatch = password && confirmPassword && password === confirmPassword;
+  const isPasswordMatch = password === confirmPassword;
 
   return (
     <FormContainer>
@@ -173,7 +175,7 @@ const SignupForm = () => {
             }
             error={errors.password}
             showPassword={showPassword}
-            onTogglePassword={() => setShowPassword(!showPassword)}
+            onTogglePassword={() => setShowPassword((prev) => !prev)}
           />
           <InputWithLabel
             label="Confirm PW"
@@ -185,7 +187,7 @@ const SignupForm = () => {
             error={errors.confirmPassword}
             showConfirmPassword={showConfirmPassword}
             passwordMatch={isPasswordMatch}
-            onTogglePassword={() => setShowConfirmPassword(!showConfirmPassword)}
+            onTogglePassword={() => setShowConfirmPassword((prev) => !prev)}
           />
           <InputWithLabel
             label="Nickname"
@@ -200,9 +202,9 @@ const SignupForm = () => {
             onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
             error={errors.phoneNumber}
           />
-          <SubmitBtn type="submit">SIGN UP</SubmitBtn>
         </Form>
       </FormWrapper>
+      <SubmitBtn type="submit">SIGN UP</SubmitBtn>
     </FormContainer>
   );
 };
@@ -224,11 +226,12 @@ const FormWrapper = styled.div`
   justify-content: center;
   width: 100%;
   max-width: 1000px;
-  gap: 1.5em;
+  gap: 5em;
 
+  margin-top: 20px;
   @media (max-width: 1024px) {
     flex-direction: column;
-    gap: 1.5em;
+    gap: 5em;
   }
 `;
 
@@ -239,6 +242,9 @@ const Title = styled.h1`
   font-weight: 600;
   text-align: center;
   margin-bottom: 2.75rem;
+  padding-bottom: 1.5rem;
+  width: 80%;
+  border-bottom: 1px solid #fff;
 `;
 
 const Form = styled.form`

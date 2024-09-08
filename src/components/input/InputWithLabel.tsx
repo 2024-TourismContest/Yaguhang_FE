@@ -3,6 +3,7 @@ import styled from "styled-components";
 import eyeIcon from "../../assets/icons/eye.png";
 import eyeOffIcon from "../../assets/icons/eye-off.png";
 import checkIcon from "../../assets/icons/check.png";
+import xIcon from "../../assets/icons/x.png";
 
 interface InputWithLabelProps {
   label: string;
@@ -29,18 +30,18 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
 }) => {
   return (
     <InputWrapper>
-      <InputContainer>
+      <InputContainer hasError={!!error}>
         <Label>{label}</Label>
         <InputWrapperWithIcon>
           <Input
             type={type}
             value={value}
             onChange={onChange}
-            className={showPassword || showConfirmPassword ? "with-icon" : ""}
+            hasError={!!error}
           />
           {passwordMatch && <CheckIcon src={checkIcon} alt="check" />}
           {onTogglePassword && (
-            <TogglePasswordButton onClick={onTogglePassword}>
+            <TogglePasswordButton type="button" onClick={onTogglePassword}>
               <img
                 src={type === "password" ? eyeIcon : eyeOffIcon}
                 alt="toggle password visibility"
@@ -60,16 +61,16 @@ const InputWrapper = styled.div`
   margin-bottom: 10px;
 `;
 
-const InputContainer = styled.div`
+const InputContainer = styled.div<{ hasError: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
   padding: 1.2em 1.5em;
   border-radius: 0.933rem;
   background-color: #000;
-  border: 0.3px solid #fff;
+  border: 0.3px solid ${({ hasError }) => (hasError ? "#ff4d4f" : "#fff")};
   gap: 10px;
+  position: relative;
 `;
 
 const InputWrapperWithIcon = styled.div`
@@ -77,7 +78,7 @@ const InputWrapperWithIcon = styled.div`
   flex-direction: row;
   align-items: center;
   position: relative;
-  width: 100%;
+  flex: 1;
 `;
 
 const Label = styled.div`
@@ -85,11 +86,11 @@ const Label = styled.div`
   font-size: 16.66px;
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  width: 150px; /* 라벨 너비 고정 */
+  width: 110px; /* 라벨 너비 고정 */
 `;
 
-const Input = styled.input`
-  width: 100%;
+const Input = styled.input<{ hasError: boolean }>`
+  flex: 1;
   border: none;
   background-color: #000;
   color: white;
@@ -97,14 +98,11 @@ const Input = styled.input`
   font-size: 16.66px;
   font-weight: 400;
   text-align: left;
+  padding-right: 2rem; /* 아이콘의 너비만큼 여백 추가 */
+  border: none;
 
   &:focus {
     outline: none;
-    border: none;
-  }
-
-  &.with-icon {
-    padding-right: 3rem; /* 아이콘의 너비만큼 여백 추가 */
   }
 `;
 
@@ -112,7 +110,11 @@ const TogglePasswordButton = styled.button`
   background: transparent;
   border: none;
   cursor: pointer;
-
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  
   img {
     width: 1rem;
     height: auto;
@@ -120,7 +122,10 @@ const TogglePasswordButton = styled.button`
 `;
 
 const CheckIcon = styled.img`
-  margin-right: 0.3rem;
+  position: absolute;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
   width: 1rem;
   height: auto;
 `;

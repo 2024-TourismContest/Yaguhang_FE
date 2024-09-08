@@ -1,10 +1,15 @@
-// ProfileEditSection.tsx
 import { useRef } from "react";
 import styled from "styled-components";
 import pencilIcon from "../../assets/icons/pencil.svg";
-import defaultProfile from "../../assets/images/defaultProfile.webp";
+import defaultProfile from "../../assets/images/defult-profile.jpg";
 
-const ProfileEditSection = ({ profileImage, onImageChange }: { profileImage: string | null; onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void }) => {
+const ProfileEditSection = ({
+  profileImage,
+  onImageChange,
+}: {
+  profileImage: string | null;
+  onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleClick = () => {
@@ -16,11 +21,10 @@ const ProfileEditSection = ({ profileImage, onImageChange }: { profileImage: str
   return (
     <Container>
       <ProfileImgContainer>
-        {profileImage ? (
-          <ProfileImg src={profileImage} alt="프로필 이미지" />
-        ) : (
-          <ProfileImg src={defaultProfile} alt="프로필 이미지" />
-        )}
+        <ProfileImg
+          src={profileImage || defaultProfile}
+          alt="프로필 이미지"
+        />
         <UploadBtn onClick={handleClick}>
           <img src={pencilIcon} alt="프로필 업로드" />
         </UploadBtn>
@@ -43,7 +47,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   margin-right: 2rem;
-
+  gap: 10px;
   @media (max-width: 768px) {
     margin-right: 0;
   }
@@ -51,12 +55,12 @@ const Container = styled.div`
 
 const ProfileImgContainer = styled.div`
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
 
   @media (max-width: 768px) {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
   }
 `;
 
@@ -70,10 +74,10 @@ const ProfileImg = styled.img`
 
 const UploadBtn = styled.button`
   position: absolute;
-  bottom: 0;
+  top: 0;
   right: 0;
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background-color: #888;
   border: none;
@@ -81,9 +85,14 @@ const UploadBtn = styled.button`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); // 그림자 추가
   img {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background-color: #777; // 호버 상태 추가
   }
 `;
 
@@ -97,4 +106,7 @@ const ProfileText = styled.span`
   font-size: 0.875rem;
   text-align: center;
   margin-top: 0.5rem;
+  padding: 1rem;
+  border-bottom: 0.3px solid #fff;
+
 `;
