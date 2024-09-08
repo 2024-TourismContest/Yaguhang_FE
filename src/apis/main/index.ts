@@ -1,4 +1,5 @@
 import { defaultApi } from "../core/index";
+
 import { Schedule } from "../../components/home/Card";
 
 const getAuthToken = () => localStorage.getItem("token") || "";
@@ -34,7 +35,31 @@ export const home = {
       throw error;
     }
   },
-};
+
+  weatherGraphAPI: async (gameId: number, page = 1, size = 24) => {
+    try {
+      const response = await defaultApi.get('/api/main/weatherOfGame', {
+        params: { gameId, page, size },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching weatherGraph data:', error);
+      throw error;
+    }
+},
+  weatherCardAPI: async (gameId: number) => {
+    try {
+      const response = await defaultApi.get('/api/main/weatherCardOfGame', {
+        params: { gameId },
+      });
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching weatherCard data:', error);
+      throw error;
+    }
+  },
+  }
 
 export const fetchSchedules = async (team: string): Promise<Schedule[]> => {
   const token = getAuthToken();

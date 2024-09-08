@@ -6,8 +6,8 @@ interface TeamStore {
   setSelectedTeam: (team: string) => void;
   schedules: Schedule[];
   setSchedules: (schedules: Schedule[]) => void;
-  selectedGame: { date: string; stadium: string } | null;
-  setSelectedGame: (game: { date: string; stadium: string } | null) => void;
+  selectedGame: { id: number; date: string; stadium: string } | null;
+  setSelectedGame: (game: { id: number; date: string; stadium: string } | null) => void;
   stadiumId: number | null;
   setStadiumId: (id: number) => void;
 }
@@ -34,7 +34,7 @@ export const useTeamStore = create<TeamStore>((set) => ({
   schedules: [], // 현재 표시할 스케줄 목록을 저장하는 상태.
   setSchedules: (schedules: Schedule[]) => set({ schedules }), // 스케줄 목록을 변경하는 함수.
   selectedGame: null,
-  setSelectedGame: (game) => set({ selectedGame: game }),
+  setSelectedGame: (game) => set({ selectedGame: game }), // 선택된 게임을 저장하는 함수.
   stadiumId: null, // 현재 선택된 경기장의 ID를 저장하는 상태.
   setStadiumId: (id: number) => set({ stadiumId: id }), // 경기장 ID를 변경하는 함수.
 }));
