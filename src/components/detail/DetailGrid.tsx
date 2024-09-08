@@ -15,7 +15,6 @@ interface DetailGridProps {
 }
 
 const DetailGrid: React.FC<DetailGridProps> = ({
-  name,
   category,
   detailData,
   getDisplayValue,

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { FiShare } from "react-icons/fi";
 import { FaRegCopy, FaCheck } from "react-icons/fa";
 import { IoIosCloseCircleOutline } from "react-icons/io";
-import 네이버밴드 from "../../assets/icons/네이버밴드.png";
-import 페이스북 from "../../assets/icons/페이스북.png";
-import 카카오톡 from "../../assets/icons/카카오톡.png";
+import 네이버밴드 from "../../assets/icons/네이버밴드.png";
+import 페이스북 from "../../assets/icons/페이스북.png";
+import 카카오톡 from "../../assets/icons/카카오톡.png";
 import styled from "styled-components";
 
 interface ShareProps {
@@ -60,7 +60,7 @@ const Share: React.FC<ShareProps> = ({ name, description, address }) => {
     window.open(bandUrl, "_blank");
   };
 
-  const shareOnKakao = (url: string, text: string) => {
+  const shareOnKakao = (_url: string, text: string) => {
     if (isKakaoReady && window.Kakao) {
       window.Kakao.Link.sendDefault({
         objectType: "feed",
@@ -69,7 +69,7 @@ const Share: React.FC<ShareProps> = ({ name, description, address }) => {
           description: text || "설명",
           imageUrl: "https://yaguhang.kro.kr:8443/teamLogos/main.svg",
           link: {
-            // mobileWebUrl: "https://yaguhang.kro.kr:8443",
+            mobileWebUrl: "https://yaguhang.kro.kr:8443",
             webUrl: "https://yaguhang.kro.kr:8443",
           },
         },
