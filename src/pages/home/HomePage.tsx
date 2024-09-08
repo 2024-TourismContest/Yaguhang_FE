@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import WeatherCard from "../../components/home/WeatherCard";
 import styled from "styled-components";
 import WeatherGraph from "../../components/home/WeatherGraph";
@@ -30,6 +30,7 @@ const HomePage = () => {
   const [placeData, setPlaceData] = useState<PlaceData | null>(null);
   const navigate = useNavigate();
   const { selectedGame } = useTeamStore();
+  const selectedTeam = useTeamStore((state) => state.selectedTeam);
 
   useEffect(() => {
     const fetchPlaceData = async () => {
@@ -61,7 +62,12 @@ const HomePage = () => {
           onClick={() => handleButtonClick("mypage")}
           bgColor="#FF0000"
         />
-        <TitleSection />
+        <TitleSection
+          subtitle={`${selectedTeam} 팬들에게 추천하는`}
+          title="사직의 핫플레이스"
+          description="열정 넘치는 스포츠와 함께 즐길 추천 콘텐츠로 더욱 여행이 풍족하도록!"
+          icon="marker"
+        />
         <CategorySelector
           category={selectedCategory}
           setCategory={setSelectedCategory}
