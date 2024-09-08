@@ -207,6 +207,7 @@ const RowWrapper = styled.div`
 const ContentWrapper = styled.div`
   min-width: fit-content;
   margin-right: 10%;
+  margin-top: 30%;
   @media (max-width: 768px) {
     display: flex;
     flex-direction: column;
@@ -215,53 +216,42 @@ const ContentWrapper = styled.div`
     margin-right: 0;
   }
 `;
-
 const HeroTitle = styled.h1`
   white-space: pre-line;
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem);
   text-align: left;
-  margin-top: 300px;
-  margin-bottom: 50px;
+  margin-bottom: clamp(1rem, 2vw, 3rem);
 
   @media (max-width: 768px) {
     text-align: center;
-    margin-top: 0;
   }
 `;
 
 const StyledLargeText = styled.span`
   color: #fff;
   font-family: Inter;
-  font-size: 2.5rem;
+  font-size: clamp(1.8rem, 2vw + 1rem, 2.5rem);
   font-weight: 600;
-  @media (max-width: 768px) {
-    /* font-size: 1.8rem; */
-  }
 `;
 
 const StyledNormalText = styled.span`
   color: #fff;
   font-family: Inter;
-  font-size: 1.8rem;
+  font-size: clamp(1.4rem, 1.5vw + 1rem, 1.8rem);
   font-weight: 400;
-
-  @media (max-width: 768px) {
-    /* font-size: 1.4rem; */
-  }
 `;
 
 const HeroText = styled.p`
   color: #fff;
   font-family: Inter;
-  font-size: 1.125rem;
+  font-size: clamp(1rem, 1.2vw + 0.8rem, 1.125rem);
   white-space: pre-line;
   line-height: 120%;
+  
   @media (max-width: 768px) {
-    font-size: 1rem;
     text-align: center;
   }
 `;
-
 const TeamLogo = styled.img`
   max-width: 260px;
   min-width: 160px;
@@ -286,7 +276,7 @@ const Button = styled.button`
   font-family: Inter;
   font-size: 1rem;
 
-  margin-top: 200px;
+  margin-top: 10%;
   @media (max-width: 768px) {
     margin-top: 100px;
   }
