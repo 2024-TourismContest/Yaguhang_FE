@@ -95,6 +95,7 @@ const Card: React.FC = () => {
   const handleCardClick = (schedule: Schedule) => {
     setSelectedGame({ id: schedule.id, date: schedule.date, stadium: schedule.stadium });
     console.log("선택된 게임:", {
+      id: schedule.id,
       date: schedule.date,
       stadium: schedule.stadium,
     });

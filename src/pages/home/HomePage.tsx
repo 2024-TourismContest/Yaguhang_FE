@@ -23,7 +23,6 @@ interface SpotBasicPreviewDto {
 
 interface PlaceData {
   spotPreviewDtos: SpotBasicPreviewDto[];
-  // Add other fields if necessary
 }
 
 const HomePage: React.FC = () => {
@@ -102,6 +101,7 @@ const HomePageContainer = styled.div`
   min-height: 100vh;
   overflow: hidden;
   justify-content: center;
+  z-index: 1;
 `;
 
 const RoundBackground = styled.div`
@@ -109,16 +109,18 @@ const RoundBackground = styled.div`
   top: 0;
   left: 50%;
   width: 2700px;
-  height: 1300px;
+  height: 1500px;
   background-color: #000000;
-  border-radius: 100%;
+  border-radius: 46%;
   transform: translate(-50%, -30%);
-  z-index: 0;
+  z-index: -1;
 
   @media (max-width: 768px) {
     width: 300vw;
     height: 1200px;
     transform: translate(-50%, -20%);
+  z-index: -1;
+
   }
 `;
 
