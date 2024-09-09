@@ -25,6 +25,11 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ gameId }) => {
     const fetchWeatherData = async () => {
       try {
         const data: WeatherData = await home.weatherCardAPI(gameId);
+        // 모든 주요 데이터가 없으면 에러 처리
+        if (!data || Object.values(data).every((value) => value === null || value === undefined)) {
+          setError(true);
+          return;
+        }
         setWeatherData(data);
         setError(false);
       } catch (err) {
@@ -36,24 +41,27 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ gameId }) => {
     fetchWeatherData();
   }, [gameId]);
 
+  // 데이터가 없는 경우 해당 컴포넌트 표시하지 않기
+  if (error || !weatherData) {
+    return (
+      <WeatherSummaryContainer>
+        <ErrorMessage>{`날씨 정보를\n 조회할 수 없습니다.`}</ErrorMessage>
+      </WeatherSummaryContainer>
+    );
+  }
+
   return (
     <WeatherSummaryContainer>
-      {error ? (
-        <ErrorMessage>{`날씨 정보를\n 조회할 수 없습니다.`}</ErrorMessage>
-      ) : (
-        <>
-          <WeatherIcon src={weatherData?.skyUrl} alt="Weather Icon" />
-          <div>
-            <RegionText>{weatherData?.stadium}</RegionText>
-            <TemperatureText>{`${weatherData?.temp}°`}</TemperatureText>
-            <WeatherDetailContainer>
-              <WeatherDetail>{`최고: ${weatherData?.maxTemp}°  최저: ${weatherData?.minTemp}°`}</WeatherDetail>
-              <WeatherDetail>{`강수량: ${weatherData?.rainFall}mm`}</WeatherDetail>
-              <WeatherDetail>{`습도: ${weatherData?.humidity}%`}</WeatherDetail>
-            </WeatherDetailContainer>
-          </div>
-        </>
-      )}
+      {weatherData.skyUrl && <WeatherIcon src={weatherData.skyUrl} alt="Weather Icon" />}
+      {weatherData.stadium && <RegionText>{weatherData.stadium}</RegionText>}
+      {weatherData.temp !== null && <TemperatureText>{`${weatherData.temp}°`}</TemperatureText>}
+      <WeatherDetailContainer>
+        {weatherData.maxTemp !== null && weatherData.minTemp !== null && (
+          <WeatherDetail>{`최고: ${weatherData.maxTemp}°  최저: ${weatherData.minTemp}°`}</WeatherDetail>
+        )}
+        {weatherData.rainFall !== null && <WeatherDetail>{`강수량: ${weatherData.rainFall}mm`}</WeatherDetail>}
+        {weatherData.humidity !== null && <WeatherDetail>{`습도: ${weatherData.humidity}%`}</WeatherDetail>}
+      </WeatherDetailContainer>
     </WeatherSummaryContainer>
   );
 };
@@ -118,7 +126,6 @@ const ErrorMessage = styled.p`
   font-size: 16px;
   text-align: center;
   white-space: pre-line;
-
 `;
 
 export default WeatherCard;

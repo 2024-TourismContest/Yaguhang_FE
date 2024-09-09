@@ -131,7 +131,8 @@ const ChartContainer = styled.div`
 const WeatherImagesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  width: 95%;
+  justify-content: space-between;
   padding: 10px 20px;
 `;
 
