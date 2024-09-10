@@ -18,7 +18,7 @@ export default function Router() {
       <Route path="/category/:category/:selectedTeam" element={<MapPage />} />
       <Route path="*" element={<Navigate replace to="/" />} />
       <Route path="/details/:category/:contentId" element={<DetailPage />} />
-      <Route path="/recommentPage" element={<RecommendPage />} />
+      <Route path="/region" element={<RecommendPage />} />
     </Routes>
   );
 }

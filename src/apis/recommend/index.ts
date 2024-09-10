@@ -1,10 +1,11 @@
 import { recommendRequestType } from "../../types/recommendType";
 import { defaultApi } from "../core/index";
 const getAuthToken = () => localStorage.getItem("token") || "";
-export const recommend = (params: recommendRequestType) => {
+export const recommend = async (params: recommendRequestType) => {
   const { pagdIndex, pageSize, order, filter } = params;
+
   try {
-    const response = defaultApi.get("/api/recommend", {
+    const response = await defaultApi.get("/api/recommend", {
       params: {
         pagdIndex,
         pageSize,
@@ -14,7 +15,7 @@ export const recommend = (params: recommendRequestType) => {
     });
     return response;
   } catch (error) {
-    console.error("추천행리스트가져오기에러", error);
+    console.error("추천 리스트 가져오기 에러", error);
     throw error;
   }
 };
