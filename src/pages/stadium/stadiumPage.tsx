@@ -21,6 +21,7 @@ interface SpotBasicPreviewDto {
   name: string;
   address: string;
   imageUrl: string;
+  isScraped: boolean;
 }
 interface PlaceData {
   spotPreviewDtos: SpotBasicPreviewDto[];

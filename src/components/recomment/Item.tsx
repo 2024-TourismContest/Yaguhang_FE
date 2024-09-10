@@ -19,7 +19,6 @@ export const Item = ({ item }: { item: RecommendPreviewDto }) => {
             <li onClick={onClickContent}>{item.title}</li>
             <li>{item.stadiumName}</li>
             <li>여행 날짜 | {item.createdAt}</li>
-            <li>여행 날짜 | {item.isLiked}</li>
           </Description>
           <IconWrapper>
             <li>

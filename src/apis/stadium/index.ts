@@ -24,7 +24,6 @@ export const stadium = {
       });
       return response;
     } catch (error) {
-      console.error("카테고리별추천 에러", error);
       throw error;
     }
   },

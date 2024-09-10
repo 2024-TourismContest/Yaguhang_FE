@@ -10,7 +10,6 @@ export const SelectedPosition = ({
   onClickContent: (contentId: number) => void;
 }) => {
   const position = usePositionStore((state) => state.position); // 단일 position 객체 가져오기
-
   const { selectedTeam } = useTeamStore();
   const stadiumId = teamToStadiumMap[selectedTeam];
 
@@ -41,6 +40,7 @@ export const SelectedPosition = ({
             <li>
               스크랩
               <BookmarkIcon
+                isMarked={position.isScrapped}
                 stadiumId={stadiumId ? stadiumId : 5}
                 contentId={position.contentId}
               />

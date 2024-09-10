@@ -9,13 +9,12 @@ import { home } from "../../apis/main";
 interface BookmarkIconProps {
   stadiumId: number;
   contentId: number;
+  isMarked: boolean;
 }
 
 const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
-  ({ stadiumId, contentId }) => {
-    const [markedSpots, setMarkedSpots] = useState<{ [key: number]: boolean }>(
-      {}
-    );
+  ({ stadiumId, contentId, isMarked }) => {
+    const [markedSpots, setMarkedSpots] = useState<boolean>(isMarked);
     const navigate = useNavigate();
 
     const onClickMark = async (
@@ -32,18 +31,12 @@ const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
 
       if (stadiumId) {
         try {
-          const isBookmarked = markedSpots[contentId] || false;
-
-          // 먼저 서버에 요청을 보낸 뒤 성공 시 상태를 업데이트
-          await home.bookmark(contentId, stadiumId);
-
-          setMarkedSpots((prev) => ({
-            ...prev,
-            [contentId]: !isBookmarked,
-          }));
+          const res = await home.bookmark(contentId, stadiumId);
+          console.log(res);
+          setMarkedSpots((prev) => !prev);
 
           toast.success(
-            !isBookmarked
+            !markedSpots
               ? "스크랩에 추가되었습니다."
               : "스크랩에서 제거되었습니다."
           );
@@ -56,7 +49,7 @@ const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
 
     return (
       <Button onClick={(e) => onClickMark(contentId, e)}>
-        {markedSpots[contentId] ? <LuDot /> : <BsBookmarkStar />}
+        {markedSpots ? <LuDot /> : <BsBookmarkStar />}
       </Button>
     );
   }
