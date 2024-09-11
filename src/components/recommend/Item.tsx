@@ -3,7 +3,13 @@ import { styled } from "styled-components";
 import { RecommendPreviewDto } from "../../types/recommendType";
 import Share from "../detail/Share";
 import { RecommendLikeButton } from "./recommendLikeButton";
-export const Item = ({ item }: { item: RecommendPreviewDto }) => {
+export const Item = ({
+  item,
+  isLast,
+}: {
+  item: RecommendPreviewDto;
+  isLast: boolean;
+}) => {
   console.log(item);
   const navigate = useNavigate();
   const onClickContent = () => {
@@ -42,6 +48,7 @@ export const Item = ({ item }: { item: RecommendPreviewDto }) => {
           ))}
         </SubImgWrapper>
       </Span>
+      {!isLast&& <Hr />}
     </Section>
   );
 };
@@ -54,7 +61,7 @@ const MainImg = styled.img`
     height: 90%;
   }
   @media (max-width: 900px) {
-    height: 70%;
+    width: 32vw;
   }
 `;
 const SubImg = styled.img`
@@ -119,15 +126,14 @@ const Section = styled.section`
   padding-bottom: 3vh;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid #c8c3c3;
+  margin-bottom: 1vh;
   @media (max-width: 1030px) {
     flex-direction: row;
     height: 30vw;
   }
   @media (max-width: 900px) {
     flex-direction: column;
-    height: 70vw;
-    /* margin: 4vh 0; */
+    height: 75vw;
   }
 `;
 const Span = styled.span`
@@ -155,4 +161,9 @@ const DotWrapper = styled.div`
   @media (max-width: 900px) {
     display: none;
   }
+`;
+export const Hr = styled.hr`
+  margin-top: 10%;
+  width: 80%;
+  border-bottom: 1px solid #c8c3c3;
 `;

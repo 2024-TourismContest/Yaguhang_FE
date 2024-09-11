@@ -107,7 +107,6 @@ const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 15px;
   font-size: 14px;
   div {
     background-color: #ffffff;
@@ -124,6 +123,10 @@ const Button = styled.button`
   }
   p {
     color: white;
+  }
+  @media (max-width: 1024px) {
+    width: 50px;
+    height: 50px;
   }
 `;
 const Title = styled.div`

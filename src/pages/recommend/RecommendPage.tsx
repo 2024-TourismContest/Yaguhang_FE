@@ -63,8 +63,12 @@ export const RecommendPage = () => {
         handleOptionChange={handleOptionChange}
       />
       <ItemWrapper>
-        {recommendList.map((item) => (
-          <Item key={item} item={item} /> // 각 항목을 Item 컴포넌트로 전달
+        {recommendList.map((item, index) => (
+          <Item
+            key={item}
+            item={item}
+            isLast={recommendList.length - 1 == index}
+          /> // 각 항목을 Item 컴포넌트로 전달
         ))}
       </ItemWrapper>
       <Pagenation
@@ -94,6 +98,7 @@ const Section = styled.section`
   justify-content: center;
   align-items: center;
   gap: 15px;
+  margin-bottom: 15px;
 `;
 const TopSection = styled.section`
   width: 100%;

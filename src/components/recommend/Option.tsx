@@ -27,13 +27,14 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   justify-content: end;
-  padding-right: 30%;
+  padding-right: 15%;
+  box-sizing: border-box;
   @media (max-width: 1024px) {
     padding-right: 10%;
   }
 `;
 const Select = styled.select`
-  width: 75px;
+  width: 82px;
   border: 1px solid white;
   border-radius: 2em;
   padding: 3px 5px;
