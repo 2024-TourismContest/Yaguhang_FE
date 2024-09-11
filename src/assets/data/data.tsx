@@ -68,6 +68,10 @@ export const clubImg: Record<number, { name: string; teamLogos: string }> = {
     name: "잠실",
     teamLogos: "https://yaguhang.kro.kr:8443/teamLogos/Doosan.png",
   },
+  0: {
+    name: "전체",
+    teamLogos: "",
+  },
 };
 
 export const teamToStadiumMap: Record<string, number> = Object.entries(
