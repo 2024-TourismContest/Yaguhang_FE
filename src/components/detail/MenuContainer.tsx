@@ -33,7 +33,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({
         handleScrollToSection={handleScrollToSection}
       />
       <MenuItem
-        label="사진 정보"
+        label="사진정보"
         sectionId="images"
         handleScrollToSection={handleScrollToSection}
       />
@@ -79,6 +79,13 @@ const StyledMenuItem = styled.div`
   transition: border-bottom 0.3s ease;
 
   &:hover {
-    border-bottom: 1px solid #fff; /* 호버 시 밑줄 표시 */
+    border-bottom: 1px solid #fff;
+  }
+
+  @media (max-width: 780px) {
+    font-size: 0.8em;
+    width: 70px;
+    max-height: 50px;
+    margin: 20px;
   }
 `;

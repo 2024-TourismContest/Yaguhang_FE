@@ -1,5 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { IoImageOutline } from "react-icons/io5";
+import { FaRegHeart } from "react-icons/fa";
 
 interface ReviewProps {
   contentId: number;
@@ -75,7 +77,7 @@ const Review: React.FC<ReviewProps> = ({ id }) => {
         <Header>
           <Title>야구행 리뷰</Title>
           <SortOptions>
-            <span>최신순</span> | <span>오래된 순</span>
+            <span>최신순</span> | <span>인기순</span>
           </SortOptions>
         </Header>
         <ReviewInputContainer>
@@ -96,7 +98,9 @@ const Review: React.FC<ReviewProps> = ({ id }) => {
             onChange={(e) => setNewReview(e.target.value)}
           />
           <SubmitContainer>
-            <CameraIcon>📷</CameraIcon>
+            <CameraIcon>
+              <IoImageOutline />
+            </CameraIcon>
             <SubmitButton onClick={handleReviewSubmit}>등록</SubmitButton>
           </SubmitContainer>
         </ReviewInputContainer>
@@ -111,9 +115,13 @@ const Review: React.FC<ReviewProps> = ({ id }) => {
                   </ReviewTitle>
                   <ReviewRating>⭐ {review.rating} (5.0)</ReviewRating>
                   <ReviewContent>{review.content}</ReviewContent>
+                  <LikesContainer>
+                    <FaRegHeart />
+                    {review.likes}
+                  </LikesContainer>
                 </ReviewText>
               </LeftContent>
-              <LikesContainer>+{review.likes}</LikesContainer>
+              <ImageContainer></ImageContainer>
             </ReviewItem>
           ))}
         </ReviewList>
@@ -125,8 +133,8 @@ const Review: React.FC<ReviewProps> = ({ id }) => {
 export default Review;
 
 const ReviewContainer = styled.div`
-  margin-top: 2rem;
-  padding: 1rem;
+  margin-top: 1.5rem;
+  padding: 0.5rem;
   color: white;
   border-radius: 8px;
 `;
@@ -140,13 +148,13 @@ const Header = styled.div`
 
 const Title = styled.h2`
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 `;
 
 const SortOptions = styled.div`
   display: flex;
-  gap: 1rem;
-  font-size: 0.875rem;
+  gap: 0.5rem;
+  font-size: 0.75rem;
 
   span {
     cursor: pointer;
@@ -161,34 +169,30 @@ const ReviewInputContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #000;
-  padding: 1rem;
+  padding: 0.75rem;
   border-radius: 8px;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   border: 1px solid #fff;
 `;
 
 const RatingContainer = styled.div`
   display: flex;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 `;
 
 const Star = styled.span<{ filled: boolean }>`
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   color: ${(props) => (props.filled ? "#FFD700" : "#555")};
   cursor: pointer;
 `;
 
 const ReviewInput = styled.textarea`
   width: 100%;
-  height: 80px;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
   border: none;
-  border-radius: 12px;
   background-color: #000;
   color: white;
-  resize: none;
-  font-size: 1rem;
+  font-size: 0.875rem;
+  outline: none;
 `;
 
 const SubmitContainer = styled.div`
@@ -198,30 +202,31 @@ const SubmitContainer = styled.div`
 `;
 
 const CameraIcon = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   cursor: pointer;
-  margin-right: 1rem;
+  margin-right: 0.75rem;
+  font-size: 2rem;
 `;
 
 const SubmitButton = styled.button`
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 1rem;
   border: none;
   border-radius: 12px;
   background-color: #fff;
   color: black;
   font-weight: bold;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.875rem;
 `;
 
 const ReviewList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 `;
 
 const ReviewItem = styled.div`
-  padding: 1.5rem;
+  padding: 1rem;
   background-color: #2c2c2c;
   border-radius: 12px;
   display: flex;
@@ -235,9 +240,9 @@ const LeftContent = styled.div`
 `;
 
 const ProfileIcon = styled.div`
-  font-size: 2rem;
+  font-size: 1.5rem;
   color: #fff;
-  margin-right: 1rem;
+  margin-right: 0.75rem;
 `;
 
 const ReviewText = styled.div`
@@ -247,33 +252,47 @@ const ReviewText = styled.div`
 
 const ReviewTitle = styled.h3`
   margin: 0;
-  font-size: 1.125rem;
+  font-size: 1rem;
   display: flex;
   align-items: center;
 `;
 
 const RightArrow = styled.span`
   margin-left: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 `;
 
 const ReviewRating = styled.div`
   margin: 0.5rem 0;
-  font-size: 1rem;
+  font-size: 0.875rem;
 `;
 
 const ReviewContent = styled.p`
   margin: 0;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: #ccc;
 `;
 
 const LikesContainer = styled.div`
-  background-color: #444;
   border-radius: 12px;
-  padding: 1rem;
+  padding: 0.5rem;
   color: white;
+  width: 35px;
+  margin-top: 10px;
+  border: 1px solid #fff;
   text-align: center;
-  min-width: 50px;
-  font-size: 1rem;
+  font-size: 1.2rem;
+`;
+
+const ImageContainer = styled.div`
+  border-radius: 12px;
+  padding: 0.5rem;
+  color: white;
+  width: 100px;
+  height: 90px;
+  margin-top: 10px;
+  border: 1px solid #fff;
+  text-align: center;
+  space-between: around;
+  font-size: 0.875rem;
 `;
