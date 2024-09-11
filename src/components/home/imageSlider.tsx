@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import DefaultImg from "../../assets/images/defaultImg.svg";
 import loadingImg from "../../assets/images/loadingImg.svg";
-import useTeamStore from "../../store/TeamStore";
+// import useTeamStore from "../../store/TeamStore";
 import BookmarkIcon from "../map/BookMarkIcon";
 
 export interface SpotBasicPreviewDto {
@@ -17,13 +17,20 @@ export interface SpotBasicPreviewDto {
 interface ImageSliderProps {
   spots: SpotBasicPreviewDto[];
   category: string;
+  onImageClick: (contentId: number, stadiumId: number) => void;
+  stadiumId: number;
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
-  const stadiumId = useTeamStore((state) => state.stadiumId);
+const ImageSlider: React.FC<ImageSliderProps> = ({
+  spots,
+  category,
+  stadiumId,
+  onImageClick,
+}) => {
+  // const stadiumId = useTeamStore((state) => state.stadiumId);
   const navigate = useNavigate();
 
-  const onClickContent = (contentId: number) => {
+  const handleImageClick = (contentId: number) => {
     navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
     window.scrollTo(0, 0);
   };
@@ -40,7 +47,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
         {spots.map((spot) => (
           <SlideContainer
             key={spot.contentId}
-            onClick={() => onClickContent(spot.contentId)}
+            onClick={() => handleImageClick(spot.contentId)}
           >
             <StyledMark pick={spot.picker || "none"}>
               {spot.picker ? spot.picker : ""}
