@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import DefailImg from "../../assets/images/defaltImg.svg";
+import DefaultImg from "../../assets/images/defaultImg.svg";
 import loadingImg from "../../assets/images/loadingImg.svg";
 import useTeamStore from "../../store/TeamStore";
 import BookmarkIcon from "../map/BookMarkIcon";
@@ -30,7 +30,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
   if (!spots || spots.length === 0)
     return (
       <Container>
-        <img src={DefailImg} alt="준비중입니다" style={{ width: "20%" }} />
+        <img src={DefaultImg} alt="준비중입니다" style={{ width: "20%" }} />
       </Container>
     );
 
@@ -40,7 +40,8 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ spots, category }) => {
         {spots.map((spot) => (
           <SlideContainer
             key={spot.contentId}
-            onClick={() => onClickContent(spot.contentId)}>
+            onClick={() => onClickContent(spot.contentId)}
+          >
             <StyledMark pick={spot.picker || "none"}>
               {spot.picker ? spot.picker : ""}
             </StyledMark>
