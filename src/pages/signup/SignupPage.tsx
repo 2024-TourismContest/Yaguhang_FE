@@ -6,7 +6,7 @@ const SignUpPage = () => {
     <PageContainer>
       <RowContainer>
         <WelcomeSection>
-          <TextLarge as="h2">{"HELLO,\nTraveller!"}</TextLarge>
+          <Title>{"HELLO,\nTraveller!"}</Title>
           <LineHorizontal />
           <TextMini>{"야구와 함께하는 여행은\n 처음이신가요?"}</TextMini>
         </WelcomeSection>
@@ -94,20 +94,6 @@ const Title = styled.h1`
 
   @media (max-width: 768px) {
     font-size: 1.25rem;
-  }
-`;
-
-const TextLarge = styled.h2`
-  color: #fff;
-  text-align: center;
-  font-family: Inter, sans-serif;
-  font-size: 2.58rem;
-  font-weight: 500;
-  line-height: normal;
-  white-space: pre-line;
-
-  @media (max-width: 768px) {
-    font-size: 2rem;
   }
 `;
 
