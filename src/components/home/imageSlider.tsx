@@ -25,7 +25,6 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   spots,
   category,
   stadiumId,
-  onImageClick,
 }) => {
   // const stadiumId = useTeamStore((state) => state.stadiumId);
   const navigate = useNavigate();
