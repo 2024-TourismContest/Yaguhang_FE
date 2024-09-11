@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { recommend } from "../../apis/recommend";
-import { Filter } from "../../components/recomment/filter";
-import { Item } from "../../components/recomment/Item";
-import { Option } from "../../components/recomment/Option";
-import { SearchInput } from "../../components/recomment/SearchInput";
+import { Filter } from "../../components/recommend/filter";
+import { Item } from "../../components/recommend/Item";
+import { Option } from "../../components/recommend/Option";
+import { SearchInput } from "../../components/recommend/SearchInput";
 
 export const RecommendPage = () => {
   const [recommendList, setRecommendList] = useState([]); // 상태 추가
