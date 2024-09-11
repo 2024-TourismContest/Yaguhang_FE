@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import left from "../../assets/icons/left.png";
 import right from "../../assets/icons/right.png";
+import loadingImg from "../../assets/images/loadingImg.svg";
 
 export interface MoreImageProps {
   images: string[];
@@ -10,8 +11,28 @@ export interface MoreImageProps {
 
 const MoreImage: React.FC<MoreImageProps> = ({ images, id }) => {
   const [currentPage, setCurrentPage] = useState(0);
+  const [imagesPerPage, setImagesPerPage] = useState(4); // 기본값 4개
 
-  const imagesPerPage = 4;
+  // 화면 크기에 따라 이미지 개수를 동적으로 조정하는 함수
+  const handleResize = () => {
+    if (window.innerWidth <= 768) {
+      setImagesPerPage(2); // 모바일 사이즈에서는 2개의 이미지
+    } else {
+      setImagesPerPage(4); // 기본 사이즈에서는 4개의 이미지
+    }
+  };
+
+  useEffect(() => {
+    // 초기 화면 크기에 따라 이미지 개수 설정
+    handleResize();
+
+    // 화면 크기 변경시 이미지 개수 변경
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const indexOfLastImage = (currentPage + 1) * imagesPerPage;
   const indexOfFirstImage = indexOfLastImage - imagesPerPage;
   const currentImages = images.slice(indexOfFirstImage, indexOfLastImage);
@@ -36,9 +57,13 @@ const MoreImage: React.FC<MoreImageProps> = ({ images, id }) => {
           <img src={left} alt="이전" />
         </PrevButton>
         <ImageContainer>
-          {currentImages.map((image, index) => (
-            <ImageItem key={index} src={image} alt={`Image ${index + 1}`} />
-          ))}
+          {currentImages.length > 0 ? (
+            currentImages.map((image, index) => (
+              <ImageItem key={index} src={image} alt={`Image ${index + 1}`} />
+            ))
+          ) : (
+            <ImageItem src={loadingImg} alt="로딩 이미지" />
+          )}
         </ImageContainer>
         <NextButton
           onClick={nextPage}
@@ -57,13 +82,28 @@ const Section = styled.div`
   position: relative;
   flex: 1 1 45%;
   padding: 0rem 7rem 4rem 7rem;
-  flex-direction: row;
   text-align: center;
   margin-top: 8vh;
 
   h1 {
     color: #ffffff;
     font-size: 1.6rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 2rem;
+    margin-top: 5vh;
+
+    h1 {
+      font-size: 1.2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 1rem;
+    h1 {
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -72,6 +112,11 @@ const ImageContainer = styled.div`
   justify-content: center;
   gap: 1rem;
   margin-top: 2rem;
+
+  @media (max-width: 768px) {
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
 `;
 
 const ImageItem = styled.img`
@@ -79,6 +124,21 @@ const ImageItem = styled.img`
   height: 23vh;
   object-fit: cover;
   border-radius: 25px;
+
+  @media (max-width: 1024px) {
+    width: 180px;
+    height: 20vh;
+  }
+
+  @media (max-width: 768px) {
+    width: 150px;
+    height: 18vh;
+  }
+
+  @media (max-width: 480px) {
+    width: 80px;
+    height: 70px;
+  }
 `;
 
 const PaginationButton = styled.button`
@@ -96,12 +156,34 @@ const PaginationButton = styled.button`
     width: 2rem;
     height: 2rem;
   }
+
+  @media (max-width: 768px) {
+    img {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    img {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
 `;
 
 const PrevButton = styled(PaginationButton)`
   left: 2rem;
+
+  @media (max-width: 768px) {
+    left: 1rem;
+  }
 `;
 
 const NextButton = styled(PaginationButton)`
   right: 2rem;
+
+  @media (max-width: 768px) {
+    right: 1rem;
+  }
 `;

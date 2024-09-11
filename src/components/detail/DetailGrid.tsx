@@ -40,6 +40,7 @@ const DetailGrid: React.FC<DetailGridProps> = ({
           </BookmarkIcon>
           <Share
             name={detailData?.name}
+            address={detailData?.address}
             description={detailData?.description}
           />
         </IconContainer>
@@ -153,13 +154,27 @@ const Header = styled.div`
   max-width: 1100px;
   flex: 1 1 45%;
   padding: 2rem 0 1rem 7rem;
+
+  @media (max-width: 768px) {
+    height: 50px;
+    padding: 1rem;
+  }
 `;
 
 const Title = styled.h1`
-  font-size: 1.5625rem; /* 25px */
+  font-size: 1.5625rem;
   font-weight: bold;
   margin-right: 2rem;
   flex-grow: 1;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin-right: 0;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 const IconContainer = styled.div`
@@ -175,13 +190,25 @@ const BookmarkIcon = styled.div`
 
 const GridContainer = styled.div`
   display: grid;
-  margin-top: 7vh;
+  margin-top: 6vh;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, auto);
   gap: 1.25rem;
   justify-items: center;
   align-items: center;
   padding-bottom: 6vh;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;\
+  }
 `;
 
 const Box = styled.div`
@@ -192,36 +219,87 @@ const Box = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  color: #fff;
 
   h2 {
+    font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 2vh;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: auto;
+      font-size: 0.8rem;
+    }
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 2vh;
+    color: #ccc;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: auto;
+      font-size: 0.7rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 80%;
+    height: auto;
+    font-size: 0.5rem;
   }
 `;
 
 const Address = styled.h3`
-  margin-bottom: 2vh; /* 10px */
-  font-size: 1.25rem; /* 20px */
+  margin-bottom: 2vh;
+  font-size: 1.25rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    margin-bottom: 1vh;
+  }
 `;
 
 const Description = styled.p`
-  margin-bottom: 1.25rem; /* 20px */
-  font-size: 1.125rem; /* 18px */
+  margin-bottom: 1.25rem;
+  font-size: 1.25rem;
+  color: #ccc;
+
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+    margin-bottom: 1rem;
+  }
 `;
 
 const Section = styled.div`
   flex: 1 1 45%;
   padding: 0rem 7rem 4rem 7rem;
   flex-direction: row;
+
+  @media (max-width: 768px) {
+    padding: 0 2rem;
+  }
 `;
 
 const Line = styled.div`
-  width: 1250px;
+  width: 100%;
+  max-width: 1250px;
   height: 1px;
   background-color: #c8c3c3;
+
+  @media (max-width: 768px) {
+    width: 90%;
+  }
 `;
 
 const DotLine = styled.div`
-  width: 1250px;
+  width: 100%;
+  max-width: 1250px;
   border-top: 1px dotted gray;
+
+  @media (max-width: 768px) {
+    width: 90%;
+  }
 `;

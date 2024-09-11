@@ -69,8 +69,8 @@ const Share: React.FC<ShareProps> = ({ name, description, address }) => {
           description: text || "설명",
           imageUrl: "https://yaguhang.kro.kr:8443/teamLogos/main.svg",
           link: {
-            mobileWebUrl: "https://yaguhang.kro.kr:8443",
-            webUrl: "https://yaguhang.kro.kr:8443",
+            mobileWebUrl: window.location.href,
+            webUrl: window.location.href,
           },
         },
       });

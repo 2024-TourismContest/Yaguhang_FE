@@ -46,6 +46,7 @@ export interface SpotPreviewDto {
 const DetailPage = () => {
   const { category, contentId } = useParams();
   const [detailData, setDetailData] = useState<SpotDetailDto | null>(null);
+  const [stadiumId, setStadiumId] = useState<number | null>(null); // stadiumId 상태
   const [similarSpots, setSimilarSpots] = useState<SpotPreviewDto[]>([]);
   const [bookmarkStates, setBookmarkStates] = useState<{
     [key: number]: boolean;
@@ -53,10 +54,14 @@ const DetailPage = () => {
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const stadiumId = queryParams.get("stadiumId");
   const navigate = useNavigate();
 
   useEffect(() => {
+    const stadiumIdParam = queryParams.get("stadiumId");
+    if (stadiumIdParam) {
+      setStadiumId(Number(stadiumIdParam)); // URL에서 stadiumId 가져오기
+    }
+
     const fetchDetailData = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -64,7 +69,7 @@ const DetailPage = () => {
           `https://yaguhang.kro.kr:8443/api/spot/detail`,
           {
             params: {
-              stadiumId,
+              stadiumId: stadiumIdParam, // URL에서 가져온 stadiumId 사용
               category,
               contentId,
             },
@@ -76,15 +81,15 @@ const DetailPage = () => {
         const data = response.data;
         setDetailData(data);
 
+        // 북마크 상태 업데이트
         if (data) {
-          // detailData의 isScraped 값을 초기 bookmarkStates에 반영
           setBookmarkStates((prev) => ({
             ...prev,
             [data.contentId]: data.isScraped,
           }));
 
           if (data.stadiumId) {
-            fetchSimilarSpots(data.stadiumId);
+            fetchSimilarSpots(data.stadiumId); // stadiumId를 이용해 비슷한 관광지 로드
           }
         }
       } catch (error) {
@@ -124,17 +129,7 @@ const DetailPage = () => {
     };
 
     fetchDetailData();
-  }, [category, contentId]);
-
-  useEffect(() => {
-    const handleScroll = () => {};
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  }, [category, contentId, location.search]);
 
   const handleBookmarkToggle = async (contentId: number) => {
     const token = localStorage.getItem("token");
@@ -146,8 +141,7 @@ const DetailPage = () => {
     }
 
     try {
-      console.log("Bookmarking contentId:", contentId, "stadiumId:", stadiumId);
-      await home.bookmark(contentId, Number(stadiumId));
+      await home.bookmark(contentId, Number(stadiumId)); // stadiumId가 URL에서 추출된 상태를 사용
 
       setBookmarkStates((prev) => ({
         ...prev,
@@ -164,6 +158,7 @@ const DetailPage = () => {
       toast.error("북마크 중 오류가 발생했습니다.");
     }
   };
+
   const getDisplayValue = (value?: string) => {
     return value ? value : "정보 준비중";
   };

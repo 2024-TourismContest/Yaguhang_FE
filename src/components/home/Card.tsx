@@ -33,8 +33,20 @@ interface StyledCardProps {
 const Card: React.FC = () => {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const [schedulesPerPage, setSchedulesPerPage] = useState(5); // 한 페이지에 보여줄 카드 개수
   const { selectedTeam, setSelectedGame, selectedGame } = useTeamStore();
   const navigate = useNavigate();
+
+  // 화면 크기에 따라 카드 개수를 설정하는 함수
+  const updateSchedulesPerPage = () => {
+    if (window.innerWidth <= 768) {
+      setSchedulesPerPage(2); // 모바일 화면에서는 카드 2개
+    } else if (window.innerWidth <= 1024) {
+      setSchedulesPerPage(3); // 태블릿 화면에서는 카드 3개
+    } else {
+      setSchedulesPerPage(5); // 데스크탑에서는 카드 5개
+    }
+  };
 
   useEffect(() => {
     const loadSchedules = async () => {
@@ -44,7 +56,7 @@ const Card: React.FC = () => {
     };
     loadSchedules();
   }, [selectedTeam]);
-  // selectedTeam이 변경될 때마다 경기일정 필터링
+
   useEffect(() => {
     if (schedules.length > 0) {
       setSelectedGame({
@@ -55,7 +67,13 @@ const Card: React.FC = () => {
     }
   }, [schedules]);
 
-  const schedulesPerPage = 5;
+  useEffect(() => {
+    // 페이지 크기 변화 감지 및 한 페이지에 보여줄 카드 개수 조정
+    updateSchedulesPerPage();
+    window.addEventListener("resize", updateSchedulesPerPage);
+    return () => window.removeEventListener("resize", updateSchedulesPerPage);
+  }, []);
+
   const indexOfLastSchedule = (currentPage + 1) * schedulesPerPage;
   const indexOfFirstSchedule = indexOfLastSchedule - schedulesPerPage;
   const currentSchedules = schedules.slice(
@@ -100,7 +118,6 @@ const Card: React.FC = () => {
     }
   };
 
-  //카드 클릭시 경기 날짜, 경기장 저장
   const handleCardClick = (schedule: Schedule) => {
     setSelectedGame({
       id: schedule.id,
@@ -116,7 +133,7 @@ const Card: React.FC = () => {
 
   return (
     <>
-      <Category filterSchedules={fetchSchedules} teamLogos={teamLogos} />{" "}
+      <Category filterSchedules={fetchSchedules} teamLogos={teamLogos} />
       <S.Wrapper gap="100px">
         <S.TitleWrapper>
           <S.Title style={{ color: "#ffffff" }}>오늘의 경기 일정</S.Title>
@@ -153,8 +170,8 @@ const Card: React.FC = () => {
               backgroundColor:
                 selectedGame?.date === schedule.date &&
                 selectedGame?.stadium === schedule.stadium
-                  ? "rgba(255, 255, 255, 0.1)"
-                  : "transparent",
+                  ? "rgba(255, 255, 255, 0.3)"
+                  : "rgba(255, 255, 255, 0.1)",
               transition: "all 0.3s ease-in-out",
             }}
           >
@@ -236,7 +253,6 @@ const StyledCard = styled.div<StyledCardProps>`
   max-width: 11rem;
   height: 14vw;
   max-height: 14rem;
-  background-color: #4a4a4a;
   border-radius: 1.25rem;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
   color: white;
@@ -244,6 +260,16 @@ const StyledCard = styled.div<StyledCardProps>`
   padding: 1rem;
   margin: 0.8rem;
   border: 1px solid #ffffff;
+
+  @media (max-width: 1024px) {
+    width: 18vw;
+    height: 22vw;
+  }
+
+  @media (max-width: 768px) {
+    width: 28svw;
+    height: 40svw;
+  }
 `;
 
 const BeforeElement = styled.div<StyledCardProps>`
@@ -271,19 +297,38 @@ const Divider = styled.div`
 
 const DateContainer = styled.div`
   color: #fff;
-  font-weight: 600;
-  margin-right: 2.5rem;
+  font-weight: 500;
+  margin-right: 1.7rem;
+  @media (max-width: 1024px) {
+  }
+
+  @media (max-width: 1024px) {
+    font-size: 0.9srem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const WeatherIcon = styled.img`
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 1.8rem;
+  height: 1.8rem;
 `;
 
 const DateAndWeatherContainer = styled.div`
   display: flex;
-  align-items: center;
   margin-top: -1vh;
+  width: 150px;
+  height: 40px;
+  @media (max-width: 1024px) {
+    margin-left: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    margin-top: -1rem;
+    margin-left: 0.5rem;
+  }
 `;
 
 const PaginationButton = styled.button`
@@ -304,8 +349,23 @@ const PaginationButton = styled.button`
 `;
 const PrevButton = styled(PaginationButton)`
   left: 12vw;
+  @media (max-width: 1024px) {
+    left: 10svw;
+  }
+
+  @media (max-width: 768px) {
+    left: 1vw;
+  }
 `;
 
 const NextButton = styled(PaginationButton)`
   right: 12vw;
+
+  @media (max-width: 1024px) {
+    right: 10svw;
+  }
+
+  @media (max-width: 768px) {
+    right: 1vw;
+  }
 `;
