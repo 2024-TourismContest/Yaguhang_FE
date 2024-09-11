@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
+import { Heart } from "../../assets/icons/heart";
 import { RecommendPreviewDto } from "../../types/recommendType";
 import Share from "../detail/Share";
 import { RecommendLikeButton } from "./recommendLikeButton";
@@ -17,39 +18,45 @@ export const Item = ({
     navigate("/");
   };
   return (
-    <Section>
-      <MainImg src={item.profileImage} alt="mainImg" />
-      <Span>
-        <Wrapper>
-          <Description>
-            <li onClick={onClickContent}>{item.title}</li>
-            <li>{item.stadiumName}</li>
-            <li>여행 날짜 | {item.createdAt}</li>
-          </Description>
-          <IconWrapper>
-            <li>
-              <RecommendLikeButton
-                contentId={item.recommendId}
-                isMarked={item.isLiked}
-              />
-            </li>
-            <li>
-              <Share name={item?.title} description={item?.title} />
-            </li>
-          </IconWrapper>
-        </Wrapper>
-        <SubImgWrapper>
-          <DotWrapper>
-            <Dot></Dot>
-            <Dot></Dot>
-          </DotWrapper>
-          {item.images.map((image, index) => (
-            <SubImg key={index} src={image} alt={`image-${index}`} />
-          ))}
-        </SubImgWrapper>
-      </Span>
-      {!isLast&& <Hr />}
-    </Section>
+    <>
+      <Section>
+        <MainImg src={item.profileImage} alt="mainImg" />
+        <Span>
+          <Wrapper>
+            <Description>
+              <li onClick={onClickContent}>{item.title}</li>
+              <li>{item.stadiumName}</li>
+              <li>여행 날짜 | {item.createdAt}</li>
+              <li>
+                <Heart />
+                {item.likes}
+              </li>
+            </Description>
+            <IconWrapper>
+              <li>
+                <RecommendLikeButton
+                  contentId={item.recommendId}
+                  isMarked={item.isLiked}
+                />
+              </li>
+              <li>
+                <Share name={item?.title} description={item?.title} />
+              </li>
+            </IconWrapper>
+          </Wrapper>
+          <SubImgWrapper>
+            <DotWrapper>
+              <Dot></Dot>
+              <Dot></Dot>
+            </DotWrapper>
+            {item.images.map((image, index) => (
+              <SubImg key={index} src={image} alt={`image-${index}`} />
+            ))}
+          </SubImgWrapper>
+        </Span>
+      </Section>
+      {!isLast && <Hr />}
+    </>
   );
 };
 
@@ -88,6 +95,14 @@ const Description = styled.ul`
   @media (max-width: 900px) {
     justify-content: center;
     align-items: center;
+  }
+  li {
+    display: flex;
+    align-items: center;
+  }
+  svg {
+    width: 30px;
+    height: 30px;
   }
 `;
 const Wrapper = styled.div`
@@ -132,6 +147,7 @@ const Section = styled.section`
     height: 30vw;
   }
   @media (max-width: 900px) {
+    padding-bottom: 1vh;
     flex-direction: column;
     height: 75vw;
   }
@@ -163,7 +179,8 @@ const DotWrapper = styled.div`
   }
 `;
 export const Hr = styled.hr`
-  margin-top: 10%;
   width: 80%;
   border-bottom: 1px solid #c8c3c3;
+  @media (max-width: 900px) {
+  }
 `;

@@ -25,6 +25,7 @@ export const SearchInput = ({
         value={searchWord}
         onChange={onChangeInput}
         onKeyDown={onKeyDownInput}
+        placeholder="다른 여행자들의 여행코스를 검색해보아요"
       />
       <Button onClick={getRecommendList}>
         <SearchIcon />

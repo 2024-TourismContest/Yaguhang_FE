@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { recommend } from "../../apis/recommend";
+import { Button } from "../../components/button/Button";
 import { Filter } from "../../components/recommend/filter";
 import { Item } from "../../components/recommend/Item";
 import { Option } from "../../components/recommend/Option";
@@ -8,6 +10,7 @@ import Pagenation from "../../components/recommend/pagenation";
 import { SearchInput } from "../../components/recommend/SearchInput";
 
 export const RecommendPage = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
   const [lastPage, setLastPage] = useState(1);
   const [recommendList, setRecommendList] = useState([]); // 상태 추가
@@ -43,7 +46,9 @@ export const RecommendPage = () => {
       setRecommendList(response.data.recommendPreviewDtos); // 데이터 저장
     } catch (error) {}
   };
-
+  const handleButtonClick = (page: string) => {
+    navigate(`/${page}`);
+  };
   return (
     <AppContainer>
       <TopSection />
@@ -76,6 +81,11 @@ export const RecommendPage = () => {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
+      <Button
+        bgColor="black"
+        text="나의 추천행 코스 만들기"
+        onClick={() => handleButtonClick("/")} //추천행 만들기 페이지로
+      />
     </AppContainer>
   );
 };
@@ -92,7 +102,7 @@ const ItemWrapper = styled.div`
   gap: 4vh;
 `;
 const Section = styled.section`
-  margin-top: 15px;
+  margin-top: 70px;
   display: flex;
   width: 100vw;
   justify-content: center;
