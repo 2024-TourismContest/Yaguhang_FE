@@ -1,17 +1,18 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { clubImg, teamToStadiumImg } from "../../assets/data/data";
+import XCircle from "../../assets/icons/XCircle";
 
 export const Filter = ({
-  hadleSpotChange,
+  handleSpotChange,
   selectedSpot,
 }: {
-  hadleSpotChange: (spot: string) => void;
+  handleSpotChange: (spot: string) => void;
   selectedSpot: string;
 }) => {
   const [isOpened, setIsOpened] = useState(false);
   const onClickLogo = (name: string) => {
-    hadleSpotChange(name);
+    handleSpotChange(name);
     setIsOpened(false);
   };
   const handleButton = () => {
@@ -24,7 +25,7 @@ export const Filter = ({
       <Button onClick={handleButton}>
         {teamLogo ? (
           <div>
-            <img src={teamLogo} alt={selectedSpot} width={50} height={50} />
+            <img src={teamLogo} alt={selectedSpot} width={60} height={60} />
           </div>
         ) : (
           <p>
@@ -33,11 +34,21 @@ export const Filter = ({
         )}
       </Button>
       <Dialog open={isOpened}>
+        <Title>
+          <p>구장선택</p>
+          <button onClick={handleButton}>
+            <XCircle />
+          </button>
+        </Title>
         <Ul>
           {Object.entries(clubImg).map(([key, { name, teamLogos }]) => (
             <li key={key} onClick={() => onClickLogo(name)}>
               <Round>
-                <img src={teamLogos} alt={name} width={50} height={50} />
+                {teamLogos ? (
+                  <img src={teamLogos} alt={name} width={50} height={50} />
+                ) : (
+                  <p>---</p>
+                )}
               </Round>
               <span>{name}</span>
             </li>
@@ -50,23 +61,31 @@ export const Filter = ({
 
 const Dialog = styled.dialog`
   z-index: 10;
-  background-color: black;
-  height: 350px;
+  background-color: #2e2e2e;
+  height: 380px;
+  aspect-ratio: 2/3;
+  border-radius: 2rem;
+  inset-inline-start: -400px;
+  @media (max-width: 1024px) {
+    inset-inline-start: -0px;
+  }
 `;
 const Round = styled.div`
   border-radius: 50%;
   height: 100%;
+  aspect-ratio: 1/1;
   background-color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: black;
   img {
-    height: 70%;
+    width: 90%;
     aspect-ratio: 1/1;
   }
 `;
 const Ul = styled.ul`
-  height: 100%;
+  height: 90%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
@@ -79,8 +98,8 @@ const Ul = styled.ul`
   }
 `;
 const Button = styled.button`
-  width: 65px;
-  height: 65px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
   padding: 10%;
   border: 1px solid white;
@@ -88,6 +107,8 @@ const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 15px;
+  font-size: 14px;
   div {
     background-color: #ffffff;
     width: 90%;
@@ -103,5 +124,19 @@ const Button = styled.button`
   }
   p {
     color: white;
+  }
+`;
+const Title = styled.div`
+  display: flex;
+  border-bottom: 1px solid white;
+  justify-content: space-around;
+  gap: 50%;
+  color: white;
+  margin-bottom: 10px;
+
+  button {
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
   }
 `;
