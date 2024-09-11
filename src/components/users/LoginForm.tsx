@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { auth } from "../../apis/auth";
 import { useNavigate } from "react-router-dom";
 const redirect_uri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
-import { login } from "../../apis/login";
 import useAuthStore from "../../store/authStore";
 
 const LoginForm = () => {
@@ -40,7 +40,7 @@ const LoginForm = () => {
     event.preventDefault();
   
     try {
-      const response = await login.login(email, password);
+      const response = await auth.login(email, password);
       console.log(response);
       navigate('/');
     } catch (err) {
