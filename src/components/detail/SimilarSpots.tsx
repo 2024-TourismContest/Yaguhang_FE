@@ -18,6 +18,7 @@ interface SimilarSpotsProps {
   handleBookmarkToggle: (contentId: number) => void;
   onClickContent: (contentId: number) => void;
   id?: string;
+  name: string;
 }
 
 const SimilarSpots: React.FC<SimilarSpotsProps> = ({
@@ -26,11 +27,12 @@ const SimilarSpots: React.FC<SimilarSpotsProps> = ({
   handleBookmarkToggle,
   onClickContent,
   id,
+  name,
 }) => {
   return (
     <div id={id}>
       <Section>
-        <h1>비슷한 관광지</h1>
+        <h1>{`"${name}" 와 비슷한 관광지✨`}</h1>
         <SimilarSpotsContainer>
           {similarSpots.map((spot) => (
             <CardContainer

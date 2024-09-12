@@ -5,11 +5,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import HeaderImg from "../../components/detail/HeaderImg";
 import DetailGrid from "../../components/detail/DetailGrid";
-import Review from "../../components/detail/Review";
+
 import MoreImage from "../../components/detail/MoreImage";
 import SimilarSpots from "../../components/detail/SimilarSpots";
 import MenuContainer from "../../components/detail/MenuContainer";
 import { home } from "../../apis/main";
+import Review from "../../components/Review/Review";
 
 export interface SpotDetailDto {
   contentId: number;
@@ -44,7 +45,19 @@ export interface SpotPreviewDto {
 }
 
 const DetailPage = () => {
-  const { category, contentId } = useParams();
+  const { category, contentId } = useParams<{
+    category: string;
+    contentId: string;
+  }>();
+
+  // contentId가 유효한지 검사 후 number로 변환
+  const numericContentId = contentId ? parseInt(contentId, 10) : null;
+
+  // contentId가 유효하지 않으면 에러 메시지 출력
+  if (!numericContentId) {
+    console.log("유효하지 않은 contentId입니다");
+  }
+
   const [detailData, setDetailData] = useState<SpotDetailDto | null>(null);
   const [stadiumId, setStadiumId] = useState<number | null>(null); // stadiumId 상태
   const [similarSpots, setSimilarSpots] = useState<SpotPreviewDto[]>([]);
@@ -59,7 +72,7 @@ const DetailPage = () => {
   useEffect(() => {
     const stadiumIdParam = queryParams.get("stadiumId");
     if (stadiumIdParam) {
-      setStadiumId(Number(stadiumIdParam)); // URL에서 stadiumId 가져오기
+      setStadiumId(Number(stadiumIdParam));
     }
 
     const fetchDetailData = async () => {
@@ -196,6 +209,7 @@ const DetailPage = () => {
         <MoreImage id="images" images={detailData?.images || []} />
         <DotLine />
         <SimilarSpots
+          name={detailData?.name}
           id="similarSpots"
           similarSpots={similarSpots}
           bookmarkStates={bookmarkStates}
@@ -203,7 +217,9 @@ const DetailPage = () => {
           onClickContent={onClickContent}
         />
         <DotLine />
-        <Review id="reviews" contentId={Number(contentId)} />
+        {numericContentId && stadiumId && (
+          <Review contentId={numericContentId} stadiumId={stadiumId} />
+        )}
       </Container>
     </>
   );
