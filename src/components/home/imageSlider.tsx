@@ -10,7 +10,7 @@ export interface SpotBasicPreviewDto {
   name: string;
   address: string;
   imageUrl: string;
-  isScraped?: boolean;
+  isScraped: boolean;
   picker?: string;
 }
 
@@ -72,6 +72,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
               <BookmarkIcon
                 stadiumId={stadiumId ? stadiumId : 5}
                 contentId={spot.contentId}
+                isMarked={spot.isScraped}
               />
             </SlideInfo>
           </SlideContainer>
