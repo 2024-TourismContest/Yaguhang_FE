@@ -5,6 +5,7 @@ import LoginPage from "./pages/login/LoginPage";
 import MapPage from "./pages/map/mapPage";
 import SignupPage from "./pages/signup/SignupPage";
 import StadiumPage from "./pages/stadium/stadiumPage";
+import MyPage from "./pages/\bmyPage/MyPage";
 
 export default function Router() {
   return (
@@ -16,6 +17,7 @@ export default function Router() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/category/:category/:selectedTeam" element={<MapPage />}/>
           <Route path="/details/:category/:contentId" element={<DetailPage />}/>
+          <Route path="/mypage" element={<MyPage />}/>
     </Routes>
   );
 }
