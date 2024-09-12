@@ -1,7 +1,13 @@
 import LoginForm from "../../components/users/LoginForm";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom"; 
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
+  const onClickSignup = async () => {
+      navigate("/signup");
+  };
   return (
     <PageContainer>
       <Title>
@@ -12,7 +18,7 @@ const LoginPage = () => {
           <TextLarge>{"HELLO,\nTraveller!"}</TextLarge>
           <LineHorizontal />
           <TextMini>{"야구와 함께하는 여행은\n 처음이신가요?"}</TextMini>
-          <SubmitBtn>SIGN UP</SubmitBtn>
+          <SubmitBtn onClick={onClickSignup}>SIGN UP</SubmitBtn>
         </LeftContainer>
         <LineVertical />
         <LoginForm />

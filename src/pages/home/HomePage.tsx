@@ -29,6 +29,7 @@ const HomePage = () => {
   const stadium = useTeamStore((state) => state.selectedGame?.stadium);
   const [selectedCategory, setSelectedCategory] = useState<string>("숙소");
   const [placeData, setPlaceData] = useState<PlaceData | null>(null);
+  const [stadiumId, setStadiumId] = useState<number | null>(null);
   const navigate = useNavigate();
   const { selectedGame } = useTeamStore();
   const selectedTeam = useTeamStore((state) => state.selectedTeam);
@@ -41,13 +42,25 @@ const HomePage = () => {
           selectedCategory
         );
         setPlaceData(response.data);
-      } catch (err) {}
+        setStadiumId(response.data.stadiumId); // stadiumId를 API 응답에서 가져옴
+      } catch (err) {
+        console.error("카테고리별추천 에러:", err);
+      }
     };
     fetchPlaceData();
   }, [selectedCategory, stadium]);
 
   const handleButtonClick = (page: string) => {
     navigate(`/${page}`);
+  };
+
+  const handleImageClick = (contentId: number, stadiumId: number) => {
+    if (stadiumId) {
+      // stadiumId가 존재하면 URL에 포함하여 navigate
+      navigate(
+        `/details/${selectedCategory}/${contentId}?stadiumId=${stadiumId}`
+      );
+    }
   };
 
   return (
@@ -76,6 +89,8 @@ const HomePage = () => {
         <ImageSlider
           category={selectedCategory}
           spots={placeData?.spotPreviewDtos || []}
+          stadiumId={stadiumId!}
+          onImageClick={handleImageClick}
         />
         <Button
           text="야구선수 PICK 보러가기"

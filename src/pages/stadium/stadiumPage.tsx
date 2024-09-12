@@ -36,7 +36,8 @@ const StadiumPage = () => {
   const fetchSchedules = async () => {};
   const selectedTeam = useTeamStore((state) => state.selectedTeam);
   const setSelectedTeam = useTeamStore((state) => state.setSelectedTeam);
-  const setStadiumId = useTeamStore((state) => state.setStadiumId);
+  const teamToStadiumId = teamToStadiumMap[selectedTeam];
+  const [stadiumId, setStadiumId] = useState<number>(0);
 
   useEffect(() => {
     setSelectedTeam("LG");
@@ -73,7 +74,8 @@ const StadiumPage = () => {
 
   // 각 카테고리에 대해 데이터 로드
   useEffect(() => {
-    setStadiumId(stadiumNumber);
+    console.log("Selected stadiumId:", teamToStadiumId); // stadiumId 값 확인
+    setStadiumId(teamToStadiumId);
     fetchPlaceData("숙소");
     fetchPlaceData("맛집");
     fetchPlaceData("쇼핑");
@@ -83,6 +85,14 @@ const StadiumPage = () => {
 
   const handleMoreClick = (category: string) => {
     navigate(`/category/${category}/${selectedTeam}`);
+  };
+
+  const handleImageClick = (
+    contentId: number,
+    stadiumId: number,
+    category: string
+  ) => {
+    navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
   };
 
   return (
@@ -98,6 +108,10 @@ const StadiumPage = () => {
       <ImageSlider
         category="선수PICK"
         spots={playerPickData?.spotPreviewDtos.slice(0, 4) || []}
+        stadiumId={stadiumId}
+        onImageClick={(contentId, stadiumId) =>
+          handleImageClick(contentId, stadiumId, "선수PICK")
+        }
       />
       <Hr />
       <TitleSection
@@ -109,6 +123,10 @@ const StadiumPage = () => {
       <ImageSlider
         category="숙소"
         spots={placeData["숙소"]?.spotPreviewDtos || []}
+        stadiumId={stadiumId}
+        onImageClick={(contentId, stadiumId) =>
+          handleImageClick(contentId, stadiumId, "숙소")
+        }
       />
       <Hr />
       <TitleSection
@@ -120,6 +138,10 @@ const StadiumPage = () => {
       <ImageSlider
         category="맛집"
         spots={placeData["맛집"]?.spotPreviewDtos || []}
+        stadiumId={stadiumId}
+        onImageClick={(contentId, stadiumId) =>
+          handleImageClick(contentId, stadiumId, "맛집")
+        }
       />
       <Hr />
       <TitleSection
@@ -131,6 +153,10 @@ const StadiumPage = () => {
       <ImageSlider
         category="쇼핑"
         spots={placeData["쇼핑"]?.spotPreviewDtos || []}
+        stadiumId={stadiumId}
+        onImageClick={(contentId, stadiumId) =>
+          handleImageClick(contentId, stadiumId, "쇼핑")
+        }
       />
       <Hr />
       <TitleSection
@@ -142,6 +168,10 @@ const StadiumPage = () => {
       <ImageSlider
         category="문화"
         spots={placeData["문화"]?.spotPreviewDtos || []}
+        stadiumId={stadiumId}
+        onImageClick={(contentId, stadiumId) =>
+          handleImageClick(contentId, stadiumId, "문화")
+        }
       />
       <Hr />
     </>
