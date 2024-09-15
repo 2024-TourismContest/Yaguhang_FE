@@ -29,7 +29,6 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
     }
   };
 
-  // 카메라 아이콘 클릭 시 파일 입력창 열기
   const handleCameraClick = () => {
     fileInputRef.current?.click();
   };
@@ -42,7 +41,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
     }
 
     try {
-      // 이미지 업로드 (apis에서 분리된 함수 사용)
+      // 이미지 업로드
       const uploadedImageUrls = await Promise.all(
         images.map((image) => uploadToAws(image))
       );
@@ -54,7 +53,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         images: uploadedImageUrls,
       };
 
-      // 리뷰 작성 (apis에서 분리된 함수 사용)
+      // 리뷰 작성
       await postReview(contentId, reviewData);
 
       toast.success("리뷰가 성공적으로 작성되었습니다!");
@@ -93,7 +92,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
             type="file"
             multiple
             accept="image/*"
-            ref={fileInputRef} // ref 추가
+            ref={fileInputRef}
             onChange={handleImageUpload}
           />
         </CameraIcon>

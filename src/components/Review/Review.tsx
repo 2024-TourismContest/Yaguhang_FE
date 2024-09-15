@@ -7,7 +7,7 @@ import { IoBaseballOutline } from "react-icons/io5";
 
 interface ReviewProps {
   contentId: number;
-  stadiumId: number; // stadiumId 추가
+  stadiumId: number;
   id?: string;
 }
 
@@ -16,15 +16,16 @@ const Review: React.FC<ReviewProps> = ({ contentId, stadiumId, id }) => {
   const [loading, setLoading] = useState<boolean>(true); // 로딩 상태
   const [sort, setSort] = useState<string>("new"); // 정렬 기준 상태
 
+  //리뷰 정렬
   const loadReviews = async () => {
     try {
-      setLoading(true); // 로딩 상태 활성화
+      setLoading(true);
       const newReviews = await fetchReviews(contentId, sort);
       setReviews(newReviews);
     } catch (error) {
       console.error("리뷰 데이터를 불러오는 중 오류 발생:", error);
     } finally {
-      setLoading(false); // 로딩 상태 비활성화
+      setLoading(false);
     }
   };
 
@@ -56,7 +57,7 @@ const Review: React.FC<ReviewProps> = ({ contentId, stadiumId, id }) => {
 
         <ReviewForm
           contentId={contentId}
-          stadiumId={stadiumId} // stadiumId 전달
+          stadiumId={stadiumId}
           onSubmitSuccess={handleReviewSuccess}
         />
 
