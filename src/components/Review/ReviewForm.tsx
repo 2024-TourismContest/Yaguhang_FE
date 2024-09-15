@@ -62,7 +62,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       setImages([]);
       onSubmitSuccess();
     } catch (error) {
-      toast.error("리뷰 작성에 실패했습니다.");
+      toast.error("로그인이 필요합니다.");
       console.error("리뷰 작성 오류:", error);
     }
   };
