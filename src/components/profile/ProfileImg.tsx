@@ -1,13 +1,13 @@
 import { useRef } from "react";
 import styled from "styled-components";
 import pencilIcon from "../../assets/icons/pencil.svg";
-import defaultProfile from "../../assets/images/defult-profile.jpg";
+import defaultProfile from "../../assets/images/default-profile.jpg";
 
 interface ProfileImgProps {
   profileImage: string | null;
-  stadiumImage?: string | null; // 구장 이미지 추가
+  stadiumImage?: string | null;
   onImageChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  isEditing: boolean; // 편집 모드 여부
+  isEditing: boolean;
 }
 
 const ProfileImg = ({
@@ -26,12 +26,9 @@ const ProfileImg = ({
 
   return (
     <ProfileImgContainer>
+      <ProfileImage src={profileImage || defaultProfile} alt="프로필 이미지" />
       {isEditing ? (
         <>
-          <ProfileImage
-            src={profileImage || defaultProfile}
-            alt="프로필 이미지"
-          />
           <UploadBtn onClick={handleClick}>
             <img src={pencilIcon} alt="프로필 업로드" />
           </UploadBtn>
@@ -43,8 +40,12 @@ const ProfileImg = ({
           />
         </>
       ) : (
-        // 편집 모드가 아닐 때, 프로필 이미지 대신 구장 이미지 표시
-        <ProfileImage src={stadiumImage || defaultProfile} alt="구장 이미지" />
+        <StadiumImageContainer>
+          <StadiumImage
+            src={stadiumImage || defaultProfile}
+            alt="구장 이미지"
+          />
+        </StadiumImageContainer>
       )}
     </ProfileImgContainer>
   );
@@ -93,6 +94,28 @@ const UploadBtn = styled.button`
   &:hover {
     background-color: #777;
   }
+`;
+
+const StadiumImageContainer = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #fff;
+
+  @media (max-width: 768px) {
+    width: 50px;
+    height: 50px;
+  }
+`;
+
+const StadiumImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 const HiddenFileInput = styled.input`
