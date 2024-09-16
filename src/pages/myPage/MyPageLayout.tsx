@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Outlet, Link } from "react-router-dom";
 import MenuItem from "../../components/layout/MenuItem";
-import ProfileEditSection from "../../components/profile/ProfileImg";
+import ProfileEditSection from "../../components/common/ProfileImg";
 
 const profileUrl =
   "https://png.pngtree.com/thumb_back/fh260/background/20210409/pngtree-rules-of-biotex-cat-image_600076.jpg";
@@ -70,8 +70,6 @@ const ContentContainer = styled.div`
   max-width: 1200px;
   width: 100%;
   padding: 1rem;
-  background: #fff;
-  border-radius: 4px;
 `;
 
 const ProfileContainer = styled.div`
