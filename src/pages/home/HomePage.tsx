@@ -10,7 +10,7 @@ import { CategorySelector } from "../../components/home/CategorySelector";
 import ImageSlider from "../../components/home/imageSlider";
 import heroData from "../../dummy-data/dummy-hero-data.json";
 import HeroCarousel from "../../components/home/HeroCarousel";
-import { TitleSection } from "../../components/layout/TitleSection";
+import { TitleSection } from "./TitleSection";
 import useTeamStore from "../../store/TeamStore";
 
 interface SpotBasicPreviewDto {
