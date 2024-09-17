@@ -1,186 +1,121 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { styled } from "styled-components";
-import { Heart } from "../../assets/icons/heart";
+import DialogOpenButton from "../../assets/icons/DialogOpenButton";
 import { RecommendPreviewDto } from "../../types/recommendType";
-import Share from "../detail/Share";
+import RecommendDetail from "./RecommendDetail";
 import { RecommendLikeButton } from "./recommendLikeButton";
+
 export const Item = ({
   item,
   isLast,
+  isMine,
 }: {
   item: RecommendPreviewDto;
   isLast: boolean;
+  isMine?: boolean;
 }) => {
-  console.log(item);
-  const navigate = useNavigate();
-  const onClickContent = () => {
-    //상세 페이지로 이동
-    navigate("/");
-  };
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <>
       <Section>
-        <MainImg src={item.profileImage} alt="mainImg" />
-        <Span>
-          <Wrapper>
-            <Description>
-              <li onClick={onClickContent}>{item.title}</li>
-              <li>{item.stadiumName}</li>
-              <li>여행 날짜 | {item.createdAt}</li>
-              <li>
-                <Heart />
-                {item.likes}
-              </li>
-            </Description>
-            <IconWrapper>
-              <li>
-                <RecommendLikeButton
-                  contentId={item.recommendId}
-                  isMarked={item.isLiked}
-                />
-              </li>
-              <li>
-                <Share name={item?.title} description={item?.title} />
-              </li>
-            </IconWrapper>
-          </Wrapper>
-          <SubImgWrapper>
-            <DotWrapper>
-              <Dot></Dot>
-              <Dot></Dot>
-            </DotWrapper>
-            {item.images.map((image, index) => (
-              <SubImg key={index} src={image} alt={`image-${index}`} />
-            ))}
-          </SubImgWrapper>
-        </Span>
+        <Title>
+          <li>
+            <h2>{item.title}</h2>
+            <Info>
+              <p>{item.stadiumName} 야구장</p>
+            </Info>
+          </li>
+          <Li>
+            <RecommendLikeButton
+              contentId={item.recommendId}
+              isMarked={item.isLiked}
+            />
+            {item.likes}
+          </Li>
+        </Title>
+        <Title>
+          <Li>
+            {!isMine && (
+              <>
+                <ProfileImg src={item.profileImage} alt="프로필" />
+                <h5>{item.authorName}</h5>
+              </>
+            )}
+          </Li>
+          <li>
+            <Button onClick={() => setIsOpen((prev) => !prev)} isOpen={isOpen}>
+              <DialogOpenButton />
+            </Button>
+          </li>
+        </Title>
       </Section>
+      {isOpen && <RecommendDetail recommendId={item.recommendId} />}
       {!isLast && <Hr />}
     </>
   );
 };
 
-const MainImg = styled.img`
-  height: 85%;
-  aspect-ratio: 3/4;
-  border-radius: 10%;
-  @media (max-width: 1200px) {
-    height: 90%;
-  }
-  @media (max-width: 900px) {
-    width: 32vw;
-  }
-`;
-const SubImg = styled.img`
-  width: 9vw;
+const ProfileImg = styled.img`
+  height: 60px;
   aspect-ratio: 1/1;
-  display: flex;
-  border-radius: 10%;
-  @media (max-width: 1270px) {
-    width: 8vw;
-  }
-  @media (max-width: 900px) {
-    display: none;
+  border-radius: 50%;
+  margin-top: 10px;
+  @media (max-width: 500px) {
+    height: 40px;
   }
 `;
-const SubImgWrapper = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-const Description = styled.ul`
-  padding: 6px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  @media (max-width: 900px) {
-    justify-content: center;
-    align-items: center;
-  }
-  li {
-    display: flex;
-    align-items: center;
-  }
-  svg {
-    width: 30px;
-    height: 30px;
-  }
-`;
-const Wrapper = styled.div`
-  display: flex;
-  @media (max-width: 900px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-  }
 
-  li {
-    width: 30vw;
+const Title = styled.ul`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+
+  h2 {
+    font-size: 1.8em;
+    font-weight: 500;
+    margin-bottom: 15px;
     @media (max-width: 900px) {
-      text-align: center;
-      width: 100%;
+      font-size: 1.3em;
     }
   }
 `;
-const IconWrapper = styled.ul`
+const Info = styled.div`
   display: flex;
-  gap: 5px;
-  li {
-    width: 30px;
-    height: 30px;
-  }
-  svg {
-    width: 30px;
-    height: 30px;
-  }
+  gap: 4px;
+  margin-top: 15px;
 `;
 const Section = styled.section`
-  display: flex;
   color: white;
-  width: 80vw;
-  height: 21vw;
-  padding-bottom: 3vh;
-  justify-content: center;
+  width: 70vw;
+  padding: 3 / tvh;
+  margin-bottom: 0;
+`;
+const Li = styled.li`
+  display: flex;
   align-items: center;
-  margin-bottom: 1vh;
-  @media (max-width: 1030px) {
-    flex-direction: row;
-    height: 30vw;
-  }
-  @media (max-width: 900px) {
-    padding-bottom: 1vh;
-    flex-direction: column;
-    height: 75vw;
+  h5 {
+    margin-left: 10px;
   }
 `;
-const Span = styled.span`
-  padding: 1% 2%;
-  height: 75%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  @media (max-width: 900px) {
-    width: 75%;
-  }
-`;
-const Dot = styled.div`
-  background-color: white;
-  width: 0.7vw;
-  aspect-ratio: 1/1;
-  border-radius: 50%;
-`;
-const DotWrapper = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  /* margin-right: 10px; */
-  @media (max-width: 900px) {
-    display: none;
-  }
-`;
+
 export const Hr = styled.hr`
-  width: 80%;
+  width: 70vw;
   border-bottom: 1px solid #c8c3c3;
   @media (max-width: 900px) {
+  }
+`;
+export const Button = styled.button<{ isOpen: boolean }>`
+  background-color: transparent;
+  border: none;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+
+  svg {
+    transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")};
+    transition: transform 0.3s ease-in-out;
+    width: 42px;
+    height: 42px;
   }
 `;

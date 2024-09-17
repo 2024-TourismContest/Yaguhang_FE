@@ -5,7 +5,12 @@ export interface recommendRequestType {
   order: string;
   filter: string;
 }
-
+export interface RecommendResponse {
+  hasNextPage: boolean;
+  pagesize: number;
+  totalPage: number;
+  recommendPreviewDtos: RecommendPreviewDto[];
+}
 export type RecommendPreviewDto = {
   recommendId: number;
   stadiumName: string;
@@ -18,9 +23,24 @@ export type RecommendPreviewDto = {
   isMine: boolean;
   isLiked: boolean;
 };
+export interface SpotGeneralPreviewDto {
+  contentId: number;
+  name: string;
+  address: string;
+  imageUrl: string;
+  isScraped: boolean;
+}
 
-export type RecommendResponse = {
-  hasNextPage: boolean;
-  pageSize: number;
-  recommendPreviewDtos: RecommendPreviewDto[];
-};
+export interface RecommendDetailResponse {
+  recommendId: number;
+  authorName: string;
+  profileImage: string;
+  title: string;
+  createdAt: string;
+  likes: number;
+  isMine: boolean;
+  isLiked: boolean;
+  spotGeneralPreviewDtos: SpotGeneralPreviewDto[];
+}
+
+

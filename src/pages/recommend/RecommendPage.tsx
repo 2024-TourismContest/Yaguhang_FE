@@ -8,12 +8,13 @@ import { Item } from "../../components/recommend/Item";
 import { Option } from "../../components/recommend/Option";
 import Pagenation from "../../components/recommend/pagenation";
 import { SearchInput } from "../../components/recommend/SearchInput";
+import { RecommendPreviewDto } from "../../types/recommendType";
 
 export const RecommendPage = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
   const [lastPage, setLastPage] = useState(1);
-  const [recommendList, setRecommendList] = useState([]); // 상태 추가
+  const [recommendList, setRecommendList] = useState<RecommendPreviewDto[]>(); // 상태 추가
   const [searchWord, setSearchWord] = useState<string>("");
   4;
   const [selectedOption, setOption] = useState<string>("인기순");
@@ -34,7 +35,6 @@ export const RecommendPage = () => {
 
   //데이터 fetching
   const getRecommendList = async () => {
-    console.log("실행됨");
     try {
       const response = await recommend({
         pagdIndex: 1,
@@ -42,8 +42,9 @@ export const RecommendPage = () => {
         order: selectedOption,
         filter: selectedSpot,
       });
-      setLastPage(response.data.totalPage);
-      setRecommendList(response.data.recommendPreviewDtos); // 데이터 저장
+      console.log(response);
+      setLastPage(response.totalPage);
+      setRecommendList(response.recommendPreviewDtos); // 데이터 저장
     } catch (error) {}
   };
   const handleButtonClick = (page: string) => {
@@ -52,6 +53,14 @@ export const RecommendPage = () => {
   return (
     <AppContainer>
       <TopSection />
+      <Button
+        bgColor="#a7cfec"
+        color="black"
+        text="나의 추천행 코스 만들기 >"
+        fontWeight="bold"
+        onClick={() => handleButtonClick("/")}
+        //추천행 만들기 페이지로
+      />
       <Section>
         <Filter
           selectedSpot={selectedSpot}
@@ -68,9 +77,9 @@ export const RecommendPage = () => {
         handleOptionChange={handleOptionChange}
       />
       <ItemWrapper>
-        {recommendList.map((item, index) => (
+        {recommendList?.map((item, index) => (
           <Item
-            key={item}
+            key={item.recommendId}
             item={item}
             isLast={recommendList.length - 1 == index}
           /> // 각 항목을 Item 컴포넌트로 전달
@@ -80,11 +89,6 @@ export const RecommendPage = () => {
         lastPage={lastPage}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-      />
-      <Button
-        bgColor="black"
-        text="나의 추천행 코스 만들기"
-        onClick={() => handleButtonClick("/")} //추천행 만들기 페이지로
       />
     </AppContainer>
   );
@@ -99,7 +103,7 @@ const AppContainer = styled.div`
 `;
 const ItemWrapper = styled.div`
   display: grid;
-  gap: 4vh;
+  gap: 2.5vh;
 `;
 const Section = styled.section`
   margin-top: 70px;
