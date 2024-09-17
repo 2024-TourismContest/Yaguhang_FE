@@ -3,6 +3,7 @@ import DetailPage from "./pages/detail/DetailPage";
 import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/login/LoginPage";
 import MapPage from "./pages/map/mapPage";
+import { RecommendPage } from "./pages/recommend/RecommendPage";
 import SignupPage from "./pages/signup/SignupPage";
 import StadiumPage from "./pages/stadium/stadiumPage";
 import MyPageLayout from "./pages/myPage/MyPageLayout";
@@ -31,6 +32,7 @@ export default function Router() {
         <Route path="review" element={<MyReview />} />
         <Route path="account" element={<MyAccount />} />
       </Route>
+      <Route path="/region" element={<RecommendPage />} />
     </Routes>
   );
 }

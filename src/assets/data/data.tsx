@@ -27,9 +27,63 @@ export const club: Record<number, { name: string; team: string }> = {
   10: { name: "잠실", team: "두산" },
 };
 
+export const clubImg: Record<number, { name: string; teamLogos: string }> = {
+  1: {
+    name: "잠실",
+    teamLogos: "https://yaguhang.kro.kr:8443/teamLogos/LGTwins.png",
+  },
+  2: {
+    name: "수원",
+    teamLogos: "https://yaguhang.kro.kr:8443/teamLogos/KtWizs.png",
+  },
+  3: {
+    name: "창원",
+    teamLogos: "https://yaguhang.kro.kr:8443/teamLogos/NCDinos.png",
+  },
+  4: {
+    name: "광주",
+    teamLogos: "https://yaguhang.kro.kr:8443/teamLogos/KIA.png",
+  },
+  5: {
+    name: "사직",
+    teamLogos: "https://yaguhang.kro.kr:8443/teamLogos/Lotte.png",
+  },
+  6: {
+    name: "대구",
+    teamLogos: "https://yaguhang.kro.kr:8443/teamLogos/Samsung.png",
+  },
+  7: {
+    name: "대전",
+    teamLogos: "https://yaguhang.kro.kr:8443/teamLogos/Hanwha.png",
+  },
+  8: {
+    name: "고척",
+    teamLogos: "https://yaguhang.kro.kr:8443/teamLogos/Kiwoom.png",
+  },
+  9: {
+    name: "문학",
+    teamLogos: "https://yaguhang.kro.kr:8443/teamLogos/SSGLanders.png",
+  },
+  10: {
+    name: "잠실",
+    teamLogos: "https://yaguhang.kro.kr:8443/teamLogos/Doosan.png",
+  },
+  0: {
+    name: "전체",
+    teamLogos: "",
+  },
+};
+
 export const teamToStadiumMap: Record<string, number> = Object.entries(
   club
 ).reduce((acc, [number, { team }]) => {
   acc[team] = Number(number);
   return acc;
 }, {} as Record<string, number>);
+
+export const teamToStadiumImg: Record<string, string> = Object.entries(
+  clubImg
+).reduce((acc, [, { name, teamLogos }]) => {
+  acc[name] = teamLogos;
+  return acc;
+}, {} as Record<string, string>);

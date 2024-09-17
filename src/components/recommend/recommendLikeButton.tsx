@@ -1,19 +1,15 @@
+import React from "react";
+
 import { memo, useState } from "react";
 import { BsBookmarkStar } from "react-icons/bs";
 import { LuDot } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { styled } from "styled-components";
-import { home } from "../../apis/main";
+import { recommendBookmark } from "../../apis/recommend";
 
-interface BookmarkIconProps {
-  stadiumId: number;
-  contentId: number;
-  isMarked: boolean;
-}
-
-const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
-  ({ stadiumId, contentId, isMarked }) => {
+export const RecommendLikeButton = memo(
+  ({ contentId, isMarked }: { contentId: number; isMarked: boolean }) => {
     const [markedSpots, setMarkedSpots] = useState<boolean>(isMarked);
     const navigate = useNavigate();
 
@@ -28,22 +24,17 @@ const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
         toast("로그인이 필요합니다");
         return;
       }
-
-      if (stadiumId) {
-        try {
-          const res = await home.bookmark(contentId, stadiumId);
-          console.log(res);
-          setMarkedSpots((prev) => !prev);
-
-          toast.success(
-            !markedSpots
-              ? "스크랩에 추가되었습니다."
-              : "스크랩에서 제거되었습니다."
-          );
-        } catch (error) {
-          console.error("북마크 상태 변경 오류:", error);
-          toast.error("북마크 상태 변경에 실패했습니다.");
-        }
+      try {
+        const response = await recommendBookmark(contentId);
+        console.log(response);
+        setMarkedSpots((prev) => !prev);
+        toast.success(
+          !markedSpots
+            ? "스크랩에 추가되었습니다."
+            : "스크랩에서 제거되었습니다."
+        );
+      } catch (error) {
+        console.error("추천행 좋아요", error);
       }
     };
 
@@ -55,20 +46,18 @@ const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
   }
 );
 
-export default BookmarkIcon;
-
 const Button = styled.button`
   background-color: transparent;
   border: none;
-  width: 15%;
+  width: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
-
+  z-index: 50;
   svg {
-    width: 100%;
-    height: 100%;
+    width: 30px;
+    height: 30px;
     color: white;
   }
 `;
