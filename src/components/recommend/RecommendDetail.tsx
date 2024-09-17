@@ -6,10 +6,13 @@ import {
   RecommendDetailResponse,
   SpotGeneralPreviewDto,
 } from "../../types/recommendType";
+import BookmarkIcon from "../map/BookMarkIcon";
 export default function RecommendDetail({
   recommendId,
+  stadiumId,
 }: {
   recommendId: number;
+  stadiumId: number;
 }) {
   const [res, setRes] = useState<SpotGeneralPreviewDto[]>();
   const getRecommendList = async () => {
@@ -42,11 +45,11 @@ export default function RecommendDetail({
               <li>{item.address}</li>
             </Ul>
           </Div>
-          {/* <BookmarkIcon
-                stadiumId={item.stadiumId ? item.stadiumId : 5}
-                contentId={item.contentId}
-                isMarked={item.isScraped}
-              /> */}
+          <BookmarkIcon
+            stadiumId={stadiumId ? stadiumId : 5}
+            contentId={item.contentId}
+            isMarked={item.isScraped}
+          />
         </Span>
       ))}
     </Section>
@@ -58,10 +61,13 @@ const Span = styled.span`
   display: flex;
   border: 1px solid white;
   border-radius: 0.4em;
-  padding: 1.2% 4%;
+  padding: 1.2% 2%;
   height: 7vh;
   justify-content: space-between;
   align-items: center;
+  button {
+    width: 40px;
+  }
 `;
 const Div = styled.div`
   display: flex;

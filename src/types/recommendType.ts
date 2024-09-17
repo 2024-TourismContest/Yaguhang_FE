@@ -22,6 +22,7 @@ export type RecommendPreviewDto = {
   likes: number;
   isMine: boolean;
   isLiked: boolean;
+  stadiumId: number;
 };
 export interface SpotGeneralPreviewDto {
   contentId: number;
@@ -42,5 +43,3 @@ export interface RecommendDetailResponse {
   isLiked: boolean;
   spotGeneralPreviewDtos: SpotGeneralPreviewDto[];
 }
-
-
