@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import InputWithLabel from "../input/InputWithLabel";
 import { auth } from "../../apis/auth";
-import ProfileImg from "../common/ProfileImg";
+import ProfileImg from "../common/ProfileComponent";
 
 type Validators = {
   [key: string]: (value: string) => string;

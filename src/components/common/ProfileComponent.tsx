@@ -3,19 +3,19 @@ import styled from "styled-components";
 import pencilIcon from "../../assets/icons/pencil.svg";
 import defaultProfile from "../../assets/images/default-profile.jpg";
 
-interface ProfileImgProps {
+interface ProfileComponentProps {
   profileImage: string | null;
   stadiumImage?: string | null;
   onImageChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   isEditing: boolean;
 }
 
-const ProfileImg = ({
+const ProfileComponent = ({
   profileImage,
   stadiumImage,
   onImageChange,
   isEditing,
-}: ProfileImgProps) => {
+}: ProfileComponentProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleClick = () => {
@@ -25,7 +25,7 @@ const ProfileImg = ({
   };
 
   return (
-    <ProfileImgContainer>
+    <ProfileContainer>
       <ProfileImage src={profileImage || defaultProfile} alt="프로필 이미지" />
       {isEditing ? (
         <>
@@ -47,13 +47,13 @@ const ProfileImg = ({
           />
         </StadiumImageContainer>
       )}
-    </ProfileImgContainer>
+    </ProfileContainer>
   );
 };
 
-export default ProfileImg;
+export default ProfileComponent;
 
-const ProfileImgContainer = styled.div`
+const ProfileContainer = styled.div`
   position: relative;
   width: 150px;
   height: 150px;
