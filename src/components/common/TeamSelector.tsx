@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 
 interface TeamSelectorProps {
@@ -6,6 +7,7 @@ interface TeamSelectorProps {
   selectedTeam: string;
   setSelectedTeam: (team: string) => void;
   showAllButton?: boolean;
+  isEnabled?: boolean;
 }
 
 const TeamSelector: React.FC<TeamSelectorProps> = ({
@@ -14,19 +16,22 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
   selectedTeam,
   setSelectedTeam,
   showAllButton = true,
+  isEnabled = true
 }) => {
   const handleButtonClick = (team: string) => {
+    if (!isEnabled) return; // 비활성화 상태일 때 클릭 무시
     setSelectedTeam(team);
     filterSchedules(team);
   };
 
   return (
-    <ButtonContainer>
+    <ButtonContainer isEnabled={isEnabled}>
       {showAllButton && (
         <TextButton
           onClick={() => handleButtonClick("전체")}
           selected={selectedTeam === "전체"}
           teamName="전체"
+          isEnabled={isEnabled}
         >
           전체
         </TextButton>
@@ -38,6 +43,7 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
             onClick={() => handleButtonClick(team)}
             selected={selectedTeam === team}
             teamName={team}
+            isEnabled={isEnabled}
           >
             <img src={teamLogos[team]} alt={`${team} 로고`} />
             <div className="team-name">{team}</div>
@@ -50,14 +56,17 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
 
 export default TeamSelector;
 
-const ButtonContainer = styled.div`
+const ButtonContainer = styled.div<{ isEnabled: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 1rem;
-  padding: 1rem;
   border-radius: 50px;
   width: 100%;
+  border: ${({ isEnabled }) =>
+    isEnabled
+      ? "4px solid #fff"
+      : "1px solid #fff"};
 `;
 
 const IconButton = styled.div`
@@ -68,14 +77,17 @@ const IconButton = styled.div`
   align-items: center;
   overflow-x: auto;
   height: auto;
-  border: 1px solid #fff;
   border-radius: 50px;
   &::-webkit-scrollbar {
     display: none;
   }
 `;
 
-const Button = styled.button<{ selected?: boolean; teamName: string }>`
+const Button = styled.button<{
+  selected?: boolean;
+  teamName: string;
+  isEnabled?: boolean;
+}>`
   position: relative;
   display: flex;
   justify-content: center;
@@ -85,16 +97,17 @@ const Button = styled.button<{ selected?: boolean; teamName: string }>`
   background-color: ${(props) => (props.selected ? "#fff" : "#000")};
   border: none;
   border-radius: 50%;
-  cursor: pointer;
   transition: background-color 0.3s;
   overflow: hidden;
   margin: 0.5rem;
-  &:hover .team-name {
-    opacity: 1;
+  &:hover {
+    background-color: ${(props) =>
+      props.isEnabled ? (props.selected ? "#fff" : "#333") : "#000"};
   }
 
-  &:hover {
-    background-color: ${(props) => (props.selected ? "#fff" : "#333")};
+  &:hover .team-name {
+    opacity: ${(props) =>
+      props.isEnabled ? 1 : 0};
   }
 
   img {
