@@ -5,15 +5,17 @@ import defaultProfile from "../../assets/images/default-profile.jpg";
 
 interface ProfileComponentProps {
   profileImage: string | null;
-  stadiumImage?: string | null;
+  TeamLogo?: string | null;
   onImageChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onTeamClick?: React.MouseEventHandler<HTMLDivElement>;
   isEditing: boolean;
 }
 
 const ProfileComponent = ({
   profileImage,
-  stadiumImage,
+  TeamLogo,
   onImageChange,
+  onTeamClick,
   isEditing,
 }: ProfileComponentProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -40,12 +42,9 @@ const ProfileComponent = ({
           />
         </>
       ) : (
-        <StadiumImageContainer>
-          <StadiumImage
-            src={stadiumImage || defaultProfile}
-            alt="구장 이미지"
-          />
-        </StadiumImageContainer>
+        <TeamLogoContainer onClick={onTeamClick}>
+          <TeamLogoImg src={TeamLogo || defaultProfile} alt="구장 이미지" />
+        </TeamLogoContainer>
       )}
     </ProfileContainer>
   );
@@ -95,15 +94,23 @@ const UploadBtn = styled.button`
   }
 `;
 
-const StadiumImageContainer = styled.div`
+const TeamLogoContainer = styled.div`
   position: absolute;
-  top: 0;
+  top: -10px;
   right: 0;
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  overflow: hidden;
   background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0px solid transparent; 
+  transition: border 0.2s ease-in-out;
+
+  &:hover {
+    border: 4px solid #fff;
+  }
 
   @media (max-width: 768px) {
     width: 50px;
@@ -111,11 +118,11 @@ const StadiumImageContainer = styled.div`
   }
 `;
 
-const StadiumImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
+const TeamLogoImg = styled.img`
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+      `;
 
 const HiddenFileInput = styled.input`
   display: none;

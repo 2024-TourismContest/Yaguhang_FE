@@ -1,59 +1,113 @@
-import React from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
+import Modal from "../../components/common/Modal";
+import useStore from "../../store/preferTeamStore";
 
 interface TeamSelectorProps {
-  filterSchedules: (team: string) => void;
   teamLogos: Record<string, string>;
   selectedTeam: string;
   setSelectedTeam: (team: string) => void;
   showAllButton?: boolean;
   isEnabled?: boolean;
+  setIsEnabled?: (enabled: boolean) => void;
 }
 
 const TeamSelector: React.FC<TeamSelectorProps> = ({
-  filterSchedules,
   teamLogos,
   selectedTeam,
   setSelectedTeam,
   showAllButton = true,
-  isEnabled = true
+  isEnabled = true,
+  setIsEnabled,
 }) => {
-  const handleButtonClick = (team: string) => {
-    if (!isEnabled) return; // 비활성화 상태일 때 클릭 무시
-    setSelectedTeam(team);
-    filterSchedules(team);
-  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pendingTeam, setPendingTeam] = useState<string | null>(null);
+  const { setPreferTeam } = useStore();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  //컴포넌트 외부 클릭 시 수정 불가
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setPendingTeam(null);
+        setIsModalOpen(false);
+        if (setIsEnabled) {
+          setIsEnabled(false);
+        }
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setIsEnabled]);
+
+  const handleButtonClick = useCallback(
+    (team: string) => {
+      if (!isEnabled) return;
+      if (pendingTeam === team) return;
+      setPendingTeam(team);
+      setIsModalOpen(true);
+    },
+    [isEnabled, pendingTeam]
+  );
+
+  //모달 확인 시
+  const confirmTeamSelection = useCallback(() => {
+    if (pendingTeam) {
+      setSelectedTeam(pendingTeam);
+      setPreferTeam(pendingTeam);
+    }
+    setIsModalOpen(false);
+    if (setIsEnabled) {
+      setIsEnabled(false);
+    }
+  }, [pendingTeam, setSelectedTeam, setPreferTeam]);
 
   return (
-    <ButtonContainer isEnabled={isEnabled}>
-      {showAllButton && (
-        <TextButton
-          onClick={() => handleButtonClick("전체")}
-          selected={selectedTeam === "전체"}
-          teamName="전체"
-          isEnabled={isEnabled}
-        >
-          전체
-        </TextButton>
-      )}
-      <IconButton>
-        {Object.keys(teamLogos).map((team) => (
-          <Button
-            key={team}
-            onClick={() => handleButtonClick(team)}
-            selected={selectedTeam === team}
-            teamName={team}
+    <div ref={containerRef}>
+      <ButtonContainer isEnabled={isEnabled}>
+        {showAllButton && (
+          <TextButton
+            onClick={() => handleButtonClick("전체")}
+            selected={selectedTeam === "전체"}
+            teamName="전체"
             isEnabled={isEnabled}
           >
-            <img src={teamLogos[team]} alt={`${team} 로고`} />
-            <div className="team-name">{team}</div>
-          </Button>
-        ))}
-      </IconButton>
-    </ButtonContainer>
+            전체
+          </TextButton>
+        )}
+        <IconButton>
+          {Object.keys(teamLogos).map((team) => (
+            <Button
+              key={team}
+              onClick={() => handleButtonClick(team)}
+              selected={selectedTeam === team}
+              teamName={team}
+              isEnabled={isEnabled}
+            >
+              <img src={teamLogos[team]} alt={`${team} 로고`} />
+              <div className="team-name">{team}</div>
+            </Button>
+          ))}
+        </IconButton>
+      </ButtonContainer>
+
+      {isModalOpen && (
+        <Modal
+          title={"선호 팀 변경"}
+          content={`"${pendingTeam}" 팀으로 변경하시겠습니까?`}
+          onConfirm={confirmTeamSelection}
+          onCancel={() => setIsModalOpen(false)}
+        />
+      )}
+    </div>
   );
 };
-
 export default TeamSelector;
 
 const ButtonContainer = styled.div<{ isEnabled: boolean }>`
@@ -64,9 +118,9 @@ const ButtonContainer = styled.div<{ isEnabled: boolean }>`
   border-radius: 50px;
   width: 100%;
   border: ${({ isEnabled }) =>
-    isEnabled
-      ? "4px solid #fff"
-      : "1px solid #fff"};
+    isEnabled ? "4px solid #fff" : "1px solid #fff"};
+  background: ${({ isEnabled }) => (isEnabled ? "#ffffff30" : "none")};
+  transition: border 0.2s ease-out;
 `;
 
 const IconButton = styled.div`
@@ -94,20 +148,19 @@ const Button = styled.button<{
   align-items: center;
   width: 4rem;
   height: 4rem;
-  background-color: ${(props) => (props.selected ? "#fff" : "#000")};
+  background: ${(props) => (props.selected ? "#fff" : "none")};
   border: none;
   border-radius: 50%;
-  transition: background-color 0.3s;
+  transition: background 0.3s;
   overflow: hidden;
   margin: 0.5rem;
   &:hover {
-    background-color: ${(props) =>
-      props.isEnabled ? (props.selected ? "#fff" : "#333") : "#000"};
+    background: ${(props) =>
+      props.isEnabled ? (props.selected ? "#fff" : "#ffffff30") : "none"};
   }
 
   &:hover .team-name {
-    opacity: ${(props) =>
-      props.isEnabled ? 1 : 0};
+    opacity: ${(props) => (props.isEnabled ? 1 : 0)};
   }
 
   img {

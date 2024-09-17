@@ -2,25 +2,27 @@ import styled from "styled-components";
 import SectionTitle from "../../components/common/SectionTitle";
 import { teamLogos } from "../../types/teamLogos";
 import TeamSelector from "../../components/common/TeamSelector";
-import { useState } from "react";
 import { myDummyReviews } from "../../assets/data/dummyReviews";
 import ReviewItem from "../../components/detail/Review/ReviewItem";
-
+import useStore from "../../store/preferTeamStore";
 const MyPageMain = () => {
-  const [preferTeam, setPreferTeam] = useState("롯데");
+  const {
+    preferTeam,
+    setPreferTeam,
+    isTeamSelectorActive,
+    setTeamSelectorActive,
+  } = useStore();
 
-  const filterSchedules = (team: string) => {
-    // 스케줄 필터링 로직
-  };
   return (
     <MainPageContainer>
       <SectionTitle title={"관심 있는 구장"} />
       <TeamSelector
         selectedTeam={preferTeam}
         setSelectedTeam={setPreferTeam}
-        filterSchedules={filterSchedules}
         teamLogos={teamLogos}
         showAllButton={false}
+        isEnabled={isTeamSelectorActive}
+        setIsEnabled={setTeamSelectorActive}
       />
       <SectionTitle
         title={"MY 야구공 스탬프"}
@@ -57,4 +59,5 @@ const ReviewList = styled.div`
   flex-direction: column;
   gap: 1rem;
 `;
+
 export default MyPageMain;

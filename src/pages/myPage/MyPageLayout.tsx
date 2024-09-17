@@ -1,19 +1,42 @@
-import { useState } from "react";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Outlet, Link } from "react-router-dom";
 import MenuItem from "../../components/layout/MenuItem";
 import ProfileComponent from "../../components/common/ProfileComponent";
+import Modal from "../../components/common/Modal";
+import useStore from "../../store/preferTeamStore";
+import { useState } from "react";
+import { teamLogos } from "../../types/teamLogos";
 
 const profileUrl =
   "https://png.pngtree.com/thumb_back/fh260/background/20210409/pngtree-rules-of-biotex-cat-image_600076.jpg";
-const stadiumImage =
+const teamLogo =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-GUJG_GuAQK0D-FnKn5TCuOsx0nB3WLz24A&s";
 
 export default function MyPageLayout() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { preferTeam, setTeamSelectorActive } = useStore();
   const [isEditing, setIsEditing] = useState(false);
   const [nickName, setNickName] = useState("홍차추출액어쩌고");
   const [profileImage, setProfileImage] = useState(profileUrl);
+  const navigate = useNavigate();
 
+  const handleTeamClick = () => {
+    if (window.location.pathname !== "/mypage") {
+      setIsModalOpen(true);
+    } else {
+      setTeamSelectorActive(true);
+    }
+  };
+
+  const handleModalConfirm = () => {
+    setIsModalOpen(false);
+    navigate("/mypage");
+    setTeamSelectorActive(true);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalOpen(false);
+  };
   const toggleEditMode = () => {
     if (isEditing && nickName.trim() === "") {
       alert("닉네임이 비어있어요!");
@@ -47,8 +70,9 @@ export default function MyPageLayout() {
           <ProfileComponent
             profileImage={profileImage}
             isEditing={isEditing}
-            stadiumImage={stadiumImage}
+            TeamLogo={teamLogos[preferTeam]}
             onImageChange={handleImageChange}
+            onTeamClick={handleTeamClick}
           />
           {isEditing ? (
             <NickNameInput
@@ -72,6 +96,14 @@ export default function MyPageLayout() {
       <ContentContainer>
         <Outlet />
       </ContentContainer>
+      {isModalOpen && (
+        <Modal
+          title="구장 선택 변경"
+          content="구장 선택기를 변경하려면 페이지를 이동해야 합니다. 이동하시겠습니까?"
+          onConfirm={handleModalConfirm}
+          onCancel={handleModalCancel}
+        />
+      )}
     </PageContainer>
   );
 }
@@ -171,6 +203,8 @@ const EditBtn = styled.button`
   letter-spacing: 0.0625rem;
 
   &:hover {
-    font-weight: 600;
+    font-weight: 800;
+  transition: 0.2s ease;
+
   }
 `;
