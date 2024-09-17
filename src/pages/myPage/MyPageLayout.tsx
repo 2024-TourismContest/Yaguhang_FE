@@ -3,14 +3,12 @@ import styled from "styled-components";
 import MenuItem from "../../components/layout/MenuItem";
 import ProfileComponent from "../../components/common/ProfileComponent";
 import Modal from "../../components/common/Modal";
-import useStore from "../../store/preferTeamStore";
+import useStore from "../../store/PreferTeamStore";
 import { useState } from "react";
 import { teamLogos } from "../../types/teamLogos";
 
 const profileUrl =
   "https://png.pngtree.com/thumb_back/fh260/background/20210409/pngtree-rules-of-biotex-cat-image_600076.jpg";
-const teamLogo =
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-GUJG_GuAQK0D-FnKn5TCuOsx0nB3WLz24A&s";
 
 export default function MyPageLayout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,6 +35,7 @@ export default function MyPageLayout() {
   const handleModalCancel = () => {
     setIsModalOpen(false);
   };
+
   const toggleEditMode = () => {
     if (isEditing && nickName.trim() === "") {
       alert("닉네임이 비어있어요!");
@@ -110,19 +109,31 @@ export default function MyPageLayout() {
 
 const PageContainer = styled.div`
   display: flex;
-  background: #000;
-  padding-top: 20vh;
+  flex-direction: column;
+  background-color: #000;
+  padding: 2rem 1rem;
   min-height: 100vh;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 1300px;
+  margin: 0 auto; // 가운데 정렬
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    padding-top: 20vh;
+  }
 `;
 
 const MenuContainer = styled.div`
-  width: 250px;
+  width: fit-content;
+  min-width: 250px;
   padding: 1rem;
-  margin-right: 2rem;
+  margin-bottom: 2rem;
+  @media (min-width: 768px) {
+    width: 250px;
+    margin-right: 2rem;
+    margin-bottom: 0;
+  }
 `;
 
 const Title = styled.h2`
@@ -133,15 +144,17 @@ const Title = styled.h2`
     text-decoration: none;
     color: #fff;
     font-weight: bold;
-    font-size: 3rem;
+    font-size: 2rem;
   }
 `;
 
 const ContentContainer = styled.div`
   flex: 1;
-  max-width: 1200px;
-  width: 100%;
   padding: 1rem;
+  width: 100%; // 부모 컨테이너의 너비에 따라 자동 조정
+  @media (min-width: 768px) {
+    margin-top: 0;
+  }
 `;
 
 const ProfileContainer = styled.div`
@@ -204,7 +217,6 @@ const EditBtn = styled.button`
 
   &:hover {
     font-weight: 800;
-  transition: 0.2s ease;
-
+    transition: 0.2s ease;
   }
 `;
