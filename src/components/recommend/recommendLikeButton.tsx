@@ -10,9 +10,11 @@ import { Heart } from "../../assets/icons/heart";
 export const RecommendLikeButton = ({
   contentId,
   isMarked,
+  likes,
 }: {
   contentId: number;
   isMarked: boolean;
+  likes: (cnt: number) => void;
 }) => {
   const [markedSpots, setMarkedSpots] = useState<boolean>(isMarked);
   const navigate = useNavigate();
@@ -30,11 +32,8 @@ export const RecommendLikeButton = ({
     }
     try {
       const response = await recommendBookmark(contentId);
-      console.log(response);
       setMarkedSpots((prev) => !prev);
-      toast.success(
-        !markedSpots ? "스크랩에 추가되었습니다." : "스크랩에서 제거되었습니다."
-      );
+      likes(response.likeCount);
     } catch (error) {
       console.error("추천행 좋아요", error);
     }

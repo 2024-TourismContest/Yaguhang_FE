@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { clubImg, teamToStadiumImg } from "../../assets/data/data";
 import XCircle from "../../assets/icons/XCircle";
+import all from "../../assets/images/filterAll.svg";
 
 export const Filter = ({
   handleSpotChange,
@@ -43,13 +44,15 @@ export const Filter = ({
         <Ul>
           {Object.entries(clubImg).map(([key, { name, teamLogos }]) => (
             <li key={key} onClick={() => onClickLogo(name)}>
-              <Round>
-                {teamLogos ? (
+              {teamLogos ? (
+                <Round>
                   <img src={teamLogos} alt={name} width={50} height={50} />
-                ) : (
-                  <p>---</p>
-                )}
-              </Round>
+                </Round>
+              ) : (
+                <DefaultRound>
+                  <img src={all} alt={name} width={50} height={50} />
+                </DefaultRound>
+              )}
               <span>{name}</span>
             </li>
           ))}
@@ -75,6 +78,20 @@ const Round = styled.div`
   height: 100%;
   aspect-ratio: 1/1;
   background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  img {
+    width: 100%;
+    aspect-ratio: 1/1;
+  }
+`;
+const DefaultRound = styled.div`
+  border-radius: 50%;
+  height: 100%;
+  aspect-ratio: 1/1;
+
   display: flex;
   justify-content: center;
   align-items: center;

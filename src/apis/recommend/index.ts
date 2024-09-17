@@ -57,7 +57,7 @@ export const recommendBookmark = async (recommendId: number): Promise<any> => {
         },
       }
     );
-    return response;
+    return response.data;
   } catch (error) {
     console.error("추천행 좋아요", error);
     throw error;

@@ -15,6 +15,10 @@ export const Item = ({
   isMine?: boolean;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [likeCnt, setLikeCnt] = useState(item.likes);
+  const likes = (cnt: number) => {
+    setLikeCnt(cnt);
+  };
   return (
     <>
       <Section>
@@ -29,8 +33,9 @@ export const Item = ({
             <RecommendLikeButton
               contentId={item.recommendId}
               isMarked={item.isLiked}
+              likes={(cnt: number) => likes(cnt)}
             />
-            {item.likes}
+            {likeCnt}
           </Li>
         </Title>
         <Title>
