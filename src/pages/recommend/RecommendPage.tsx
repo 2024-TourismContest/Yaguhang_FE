@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { recommend } from "../../apis/recommend";
+import { recommend, recommendSearch } from "../../apis/recommend";
 import { Button } from "../../components/button/Button";
 import { Filter } from "../../components/recommend/filter";
 import { Item } from "../../components/recommend/Item";
@@ -28,25 +28,34 @@ export const RecommendPage = () => {
   const handleOptionChange = (option: string) => {
     setOption(option);
   };
-  useEffect(() => {
-    getRecommendList();
-    console.log("실행");
-  }, [selectedSpot, selectedOption]);
 
-  //데이터 fetching
   const getRecommendList = async () => {
     try {
-      const response = await recommend({
-        pagdIndex: 1,
-        pageSize: 10,
-        order: selectedOption,
-        filter: selectedSpot,
-      });
-      console.log(response);
+      const response = searchWord
+        ? await recommendSearch({
+            pagdIndex: 1,
+            pageSize: 10,
+            order: selectedOption,
+            filter: selectedSpot,
+            keyWord: searchWord,
+          })
+        : await recommend({
+            pagdIndex: 1,
+            pageSize: 10,
+            order: selectedOption,
+            filter: selectedSpot,
+          });
+
       setLastPage(response.totalPage);
-      setRecommendList(response.recommendPreviewDtos); // 데이터 저장
-    } catch (error) {}
+      setRecommendList(response.recommendPreviewDtos);
+    } catch (error) {
+      console.error("추천 리스트 가져오기 에러", error);
+    }
   };
+
+  useEffect(() => {
+    getRecommendList();
+  }, [selectedSpot, selectedOption]);
   const handleButtonClick = (page: string) => {
     navigate(`/${page}`);
   };
