@@ -3,6 +3,8 @@ import SectionTitle from "../../components/common/SectionTitle";
 import { teamLogos } from "../../types/teamLogos";
 import TeamSelector from "../../components/common/TeamSelector";
 import { useState } from "react";
+import { myDummyReviews } from "../../assets/data/dummyReviews";
+import ReviewItem from "../../components/detail/Review/ReviewItem";
 
 const MyPageMain = () => {
   const [preferTeam, setPreferTeam] = useState("롯데");
@@ -29,6 +31,11 @@ const MyPageMain = () => {
       <Line />
       <SectionTitle title={"MY 북마크"} subtitle={"나의 여행 계획 모아보기"} />
       <SectionTitle title={"MY 야구행 리뷰"} />
+      <ReviewList>
+        {myDummyReviews.map((review) => (
+          <ReviewItem key={review.reviewId} {...review} />
+        ))}
+      </ReviewList>
     </MainPageContainer>
   );
 };
@@ -45,4 +52,9 @@ const Line = styled.div`
   background-color: #686868;
 `;
 
+const ReviewList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
 export default MyPageMain;
