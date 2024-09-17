@@ -85,7 +85,6 @@ const UploadBtn = styled.button`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   img {
     width: 20px;
     height: 20px;
