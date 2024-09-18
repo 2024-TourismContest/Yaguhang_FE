@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import Modal from "../../components/common/Modal";
-import useStore from "../../store/preferTeamStore";
+import useStore from "../../store/PreferTeamStore";
 
 interface TeamSelectorProps {
   teamLogos: Record<string, string>;
@@ -20,13 +20,12 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
   isEnabled = true,
   setIsEnabled,
 }) => {
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingTeam, setPendingTeam] = useState<string | null>(null);
   const { setPreferTeam } = useStore();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  //컴포넌트 외부 클릭 시 수정 불가
+  // 컴포넌트 외부 클릭 시 수정 불가
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -56,7 +55,7 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
     [isEnabled, pendingTeam]
   );
 
-  //모달 확인 시
+  // 모달 확인 시
   const confirmTeamSelection = useCallback(() => {
     if (pendingTeam) {
       setSelectedTeam(pendingTeam);
@@ -108,6 +107,7 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
     </div>
   );
 };
+
 export default TeamSelector;
 
 const ButtonContainer = styled.div<{ isEnabled: boolean }>`
@@ -132,6 +132,7 @@ const IconButton = styled.div`
   overflow-x: auto;
   height: auto;
   border-radius: 50px;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -154,7 +155,7 @@ const Button = styled.button<{
   transition: background 0.3s;
   overflow: hidden;
   margin: 0.5rem;
-  &:hover {
+  s &:hover {
     background: ${(props) =>
       props.isEnabled ? (props.selected ? "#fff" : "#ffffff30") : "none"};
   }
@@ -182,13 +183,50 @@ const Button = styled.button<{
     opacity: 0;
     transition: opacity 0.3s;
   }
+
+  @media (max-width: 768px) {
+    width: 3rem;
+    height: 3rem;
+
+    img {
+      width: 3rem;
+      height: 2.5rem;
+    }
+
+    .team-name {
+      font-size: 0.7rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    width: 2.5rem;
+    height: 2.5rem;
+
+    img {
+      width: 2.5rem;
+      height: 2rem;
+    }
+
+    .team-name {
+      font-size: 0.6rem;
+    }
+  }
 `;
 
 const TextButton = styled(Button)`
   border: 1px solid #fff;
   font-size: 1rem;
   color: ${(props) => (props.selected ? "#000" : "#fff")};
+
   &:hover {
     color: ${(props) => (props.selected ? "#000" : "#ddd")};
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
   }
 `;

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import StarFull from "../../../assets/icons/star-fill.png";
-import StarHalf from "../../../assets/icons/star-half.png";
-import StarEmpty from "../../../assets/icons/star-unfill.png";
-import HeartFull from "../../../assets/icons/heart-fill.png";
-import HeartEmpty from "../../../assets/icons/heart-unfill.png";
-import RightArrow from "../../../assets/icons/arrow_right.svg";
-import defaultImg from "../../../assets/images/default-profile.jpg";
+import StarFull from "../../assets/icons/star-fill.png";
+import StarHalf from "../../assets/icons/star-half.png";
+import StarEmpty from "../../assets/icons/star-unfill.png";
+import HeartFull from "../../assets/icons/heart-fill.png";
+import HeartEmpty from "../../assets/icons/heart-unfill.png";
+import RightArrow from "../../assets/icons/arrow_right.svg";
+import defaultImg from "../../assets/images/default-profile.svg";
 
 interface ReviewItemProps {
   reviewId: number;
@@ -111,7 +111,6 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
 };
 
 export default ReviewItem;
-
 const ReviewItemContainer = styled.div`
   padding: 1.5rem;
   background-color: #2c2c2c;
@@ -120,10 +119,21 @@ const ReviewItemContainer = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   gap: 1.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
 `;
 
 const LeftContent = styled.div`
   display: flex;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const ProfileImg = styled.img`
@@ -131,12 +141,21 @@ const ProfileImg = styled.img`
   height: 40px;
   border-radius: 50%;
   margin-right: 0.75rem;
+
+  @media (max-width: 768px) {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const ContentsContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 0.75rem;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
 `;
 
 const ReviewInfo = styled.div`
@@ -146,6 +165,10 @@ const ReviewInfo = styled.div`
   color: #fff;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
+
+  @media (max-width: 768px) {
+    gap: 0.25rem;
+  }
 `;
 
 const StadiumNameContainer = styled.div`
@@ -159,22 +182,38 @@ const StadiumName = styled.p`
   font-family: Inter;
   font-size: 1.25rem;
   font-weight: 600;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const ArrowIcon = styled.img`
   width: 1rem;
   margin-left: 1.75rem;
+
+  @media (max-width: 768px) {
+    margin-left: 0.75rem;
+  }
 `;
 
 const AuthorName = styled.p`
   font-weight: 500;
   color: #fff;
   font-size: 1.15rem;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const DateText = styled.p`
   color: #aaa;
   font-size: 0.875rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+  }
 `;
 
 const RatingLikesContainer = styled.div`
@@ -189,6 +228,10 @@ const Rating = styled.div`
   color: white;
   margin-right: 1rem;
   gap: 0.25rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
+  }
 `;
 
 const Likes = styled.div`
@@ -198,6 +241,10 @@ const Likes = styled.div`
   cursor: pointer;
   font-size: 1rem;
   gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
+  }
 `;
 
 const ReviewText = styled.p`
@@ -211,6 +258,10 @@ const ReviewText = styled.p`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -220,6 +271,11 @@ const ImageContainer = styled.div`
   border-radius: 12px;
   border: 1px solid #fff;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    min-width: 100px;
+    height: 100px;
+  }
 `;
 
 const ReviewImage = styled.img`
@@ -230,6 +286,10 @@ const ReviewImage = styled.img`
   height: 100%;
   object-fit: cover;
   border-radius: 12px;
+
+  @media (max-width: 768px) {
+    border-radius: 8px;
+  }
 `;
 
 const ImageCount = styled.div`
@@ -244,14 +304,28 @@ const ImageCount = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+  }
 `;
 
 const StarImg = styled.img`
   width: 20px;
   height: 20px;
+
+  @media (max-width: 768px) {
+    width: 16px;
+    height: 16px;
+  }
 `;
 
 const HeartImg = styled.img`
   width: 20px;
   height: 20px;
+
+  @media (max-width: 768px) {
+    width: 16px;
+    height: 16px;
+  }
 `;

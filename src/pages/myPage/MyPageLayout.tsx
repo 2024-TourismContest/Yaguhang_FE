@@ -7,8 +7,7 @@ import useStore from "../../store/PreferTeamStore";
 import { useState } from "react";
 import { teamLogos } from "../../types/teamLogos";
 
-const profileUrl =
-  "https://png.pngtree.com/thumb_back/fh260/background/20210409/pngtree-rules-of-biotex-cat-image_600076.jpg";
+const profileUrl = null;
 
 export default function MyPageLayout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,8 +96,8 @@ export default function MyPageLayout() {
       </ContentContainer>
       {isModalOpen && (
         <Modal
-          title="구장 선택 변경"
-          content="구장 선택기를 변경하려면 페이지를 이동해야 합니다. 이동하시겠습니까?"
+          title="관심 팀 변경"
+          content="관심 팀을 변경하시겠어요?"
           onConfirm={handleModalConfirm}
           onCancel={handleModalCancel}
         />
@@ -109,30 +108,30 @@ export default function MyPageLayout() {
 
 const PageContainer = styled.div`
   display: flex;
-  flex-direction: column;
   background-color: #000;
-  padding: 2rem 1rem;
+  margin: 2rem 1rem;
   min-height: 100vh;
-  max-width: 1300px;
-  margin: 0 auto; // 가운데 정렬
+  max-width: 1500px;
+  margin: 0 auto;
   align-items: flex-start;
   justify-content: flex-start;
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-    padding-top: 20vh;
+  padding: 20vh 10vw;
+  @media (max-width: 1024px) {
+    padding: 10vh 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
 const MenuContainer = styled.div`
-  width: fit-content;
   min-width: 250px;
-  padding: 1rem;
+  max-width: 350px;
+  padding-right: 5vw;
   margin-bottom: 2rem;
-  @media (min-width: 768px) {
-    width: 250px;
-    margin-right: 2rem;
-    margin-bottom: 0;
+  @media (max-width: 1024px) {
+    padding-right: 0;
+    width: 100%;
   }
 `;
 
@@ -150,9 +149,9 @@ const Title = styled.h2`
 
 const ContentContainer = styled.div`
   flex: 1;
-  padding: 1rem;
-  width: 100%; // 부모 컨테이너의 너비에 따라 자동 조정
-  @media (min-width: 768px) {
+  width: 100%;
+  @media (max-width: 1024px) {
+    width: 80%;
     margin-top: 0;
   }
 `;

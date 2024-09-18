@@ -24,9 +24,12 @@ const CardList: React.FC<CardListProps> = ({
 
   useEffect(() => {
     const updateCardsPerPage = () => {
-      if (window.innerWidth <= 768) {
+      const width = window.innerWidth;
+      if (width <= 600) {
+        setCardsPerPage(1);
+      } else if (width <= 1250) {
         setCardsPerPage(2);
-      } else if (window.innerWidth <= 1024) {
+      } else if (width <= 1500) {
         setCardsPerPage(3);
       } else {
         setCardsPerPage(maxCardsPerPage);
@@ -39,20 +42,16 @@ const CardList: React.FC<CardListProps> = ({
     return () => {
       window.removeEventListener("resize", updateCardsPerPage);
     };
-  }, [cardsPerPage]);
+  }, [maxCardsPerPage]);
 
-  useEffect(() => {
-    if (currentPage > Math.floor(schedules.length / cardsPerPage)) {
-      setCurrentPage(0);
-    }
-  }, [cardsPerPage, schedules.length]);
-
-  const indexOfLastCard = (currentPage + 1) * cardsPerPage;
-  const indexOfFirstCard = indexOfLastCard - cardsPerPage;
-  const currentCards = schedules.slice(indexOfFirstCard, indexOfLastCard);
+  const totalPages = Math.ceil(schedules.length / cardsPerPage);
+  const currentCards = schedules.slice(
+    currentPage * cardsPerPage,
+    (currentPage + 1) * cardsPerPage
+  );
 
   const nextPage = () => {
-    if (indexOfLastCard < schedules.length) {
+    if (currentPage < totalPages - 1) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -64,9 +63,9 @@ const CardList: React.FC<CardListProps> = ({
   };
 
   return (
-    <Container>
+    <CarouselContainer>
       <NavButton onClick={prevPage} disabled={currentPage === 0}>
-        <img src={left} alt="이전" />
+        <img src={left} alt="Prev" />
       </NavButton>
       <CardContainer>
         {currentCards.map((schedule) => (
@@ -79,19 +78,16 @@ const CardList: React.FC<CardListProps> = ({
           />
         ))}
       </CardContainer>
-      <NavButton
-        onClick={nextPage}
-        disabled={indexOfLastCard >= schedules.length}
-      >
-        <img src={right} alt="다음" />
+      <NavButton onClick={nextPage} disabled={currentPage === totalPages - 1}>
+        <img src={right} alt="Next" />
       </NavButton>
-    </Container>
+    </CarouselContainer>
   );
 };
 
 export default CardList;
 
-const Container = styled.div`
+const CarouselContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
@@ -99,17 +95,22 @@ const Container = styled.div`
 
 const CardContainer = styled.div`
   display: flex;
+
   align-items: center;
   justify-content: flex-start;
+  gap: 1rem;
   width: 100%;
+  padding: 0 1rem;
 `;
 
 const NavButton = styled.button`
-  padding: 0;
-  background-color: transparent;
+  background: transparent;
   border: none;
-  font-size: 2rem;
   cursor: pointer;
+  img {
+    width: 24px;
+    height: 24px;
+  }
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;

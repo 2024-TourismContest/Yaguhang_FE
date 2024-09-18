@@ -2,8 +2,12 @@ import styled from "styled-components";
 import SectionTitle from "../../components/common/SectionTitle";
 import { teamLogos } from "../../types/teamLogos";
 import TeamSelector from "../../components/common/TeamSelector";
-import { myDummyReviews, dummyScrap } from "../../assets/data/dummyData";
-import ReviewItem from "../../components/detail/Review/ReviewItem";
+import {
+  myDummyReviews,
+  dummyScrap,
+  dummyScrapSpot,
+} from "../../assets/data/dummyData";
+import ReviewItem from "../../components/Review/ReviewItem";
 import useStore from "../../store/PreferTeamStore";
 import GameCardList from "../../components/common/GameCardList";
 import BookMarkList from "../../components/myPage/BookMarkList";
@@ -75,7 +79,7 @@ const MyPageMain = () => {
       <SectionTitle title={"MY 추천행"} subtitle={"나의 여행 계획 모아보기"} />
       <Line />
       <SectionTitle title={"MY 북마크"} subtitle={"나의 여행 계획 모아보기"} />
-      <BookMarkList />
+      {/* <BookMarkList data={dummyScrapSpot} /> */}
       <SectionTitle title={"MY 야구행 리뷰"} />
       <ReviewList>
         {myDummyReviews.map((review) => (
@@ -90,6 +94,7 @@ const MainPageContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  width: 100%;
 `;
 
 const Line = styled.div`

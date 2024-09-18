@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import styled from "styled-components";
 import pencilIcon from "../../assets/icons/pencil.svg";
-import defaultProfile from "../../assets/images/default-profile.jpg";
+import defaultProfile from "../../assets/images/default-profile.svg";
 
 interface ProfileComponentProps {
   profileImage: string | null;
@@ -105,7 +105,7 @@ const TeamLogoContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 0px solid transparent; 
+  border: 0px solid transparent;
   transition: border 0.2s ease-in-out;
 
   &:hover {
@@ -122,7 +122,7 @@ const TeamLogoImg = styled.img`
   width: 90%;
   height: 90%;
   object-fit: contain;
-      `;
+`;
 
 const HiddenFileInput = styled.input`
   display: none;

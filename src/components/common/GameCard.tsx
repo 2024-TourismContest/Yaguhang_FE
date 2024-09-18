@@ -71,32 +71,44 @@ const GameCard: React.FC<GameCardProps> = ({
 export default GameCard;
 
 const StyledCard = styled.div<{ $isSelected: boolean }>`
+  flex-grow: 1;
+  flex-basis: calc(100% / 3 - 2rem);
+  max-width: 250px;
   min-width: 170px;
   height: auto;
   padding: 1rem;
   border-radius: 1.25rem;
   text-align: center;
   color: white;
-  margin: 0.5rem;
+  /* margin: 0.5rem; */
   border: 1px solid #fff;
   transition: all 0.3s ease;
   background-color: ${({ $isSelected }) =>
     $isSelected ? "rgba(255, 255, 255, 0.3)" : "rgba(255, 255, 255, 0.1)"};
-  box-shadow: ${({ $isSelected }) =>
-    $isSelected ? "0 0 20px rgba(255, 255, 255, 0.7)" : "none"};
   transform: ${({ $isSelected }) => ($isSelected ? "scale(1.05)" : "scale(1)")};
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    flex-basis: calc(100% / 2 - 1rem); /*2개 */
+  }
+
+  @media (max-width: 480px) {
+    flex-basis: 100%; /* 1개 */
+  }
 `;
 
-const BeforeElement = styled.div<{ $isScraped: boolean }>`
+interface BeforeElementProps {
+  $isScraped: boolean;
+}
+
+const BeforeElement = styled.div<BeforeElementProps>`
   position: absolute;
   top: -2rem;
   left: 50%;
   transform: translateX(-50%);
   width: 60px;
   height: 60px;
-  background-image: url(${({ $isScraped }) =>
-    $isScraped ? checkedball : ball});
+  background-image: url(${($isScraped) => ($isScraped ? checkedball : ball)});
   background-size: cover;
   cursor: pointer;
 `;
