@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { recommend } from "../../apis/recommend";
+import { recommend, recommendSearch } from "../../apis/recommend";
+import title from "../../assets/images/recommendTitle.svg";
 import { Button } from "../../components/button/Button";
 import { Filter } from "../../components/recommend/filter";
 import { Item } from "../../components/recommend/Item";
 import { Option } from "../../components/recommend/Option";
 import Pagenation from "../../components/recommend/pagenation";
 import { SearchInput } from "../../components/recommend/SearchInput";
+import { RecommendPreviewDto } from "../../types/recommendType";
 
 export const RecommendPage = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
   const [lastPage, setLastPage] = useState(1);
-  const [recommendList, setRecommendList] = useState([]); // 상태 추가
+  const [recommendList, setRecommendList] = useState<RecommendPreviewDto[]>(); // 상태 추가
   const [searchWord, setSearchWord] = useState<string>("");
   4;
   const [selectedOption, setOption] = useState<string>("인기순");
@@ -27,31 +29,51 @@ export const RecommendPage = () => {
   const handleOptionChange = (option: string) => {
     setOption(option);
   };
+
+  const getRecommendList = async () => {
+    try {
+      const response = searchWord
+        ? await recommendSearch({
+            pagdIndex: 1,
+            pageSize: 10,
+            order: selectedOption,
+            filter: selectedSpot,
+            keyWord: searchWord,
+          })
+        : await recommend({
+            pagdIndex: 1,
+            pageSize: 10,
+            order: selectedOption,
+            filter: selectedSpot,
+          });
+
+      setLastPage(response.totalPage);
+      setRecommendList(response.recommendPreviewDtos);
+    } catch (error) {
+      console.error("추천 리스트 가져오기 에러", error);
+    }
+  };
+
   useEffect(() => {
     getRecommendList();
-    console.log("실행");
   }, [selectedSpot, selectedOption]);
-
-  //데이터 fetching
-  const getRecommendList = async () => {
-    console.log("실행됨");
-    try {
-      const response = await recommend({
-        pagdIndex: 1,
-        pageSize: 10,
-        order: selectedOption,
-        filter: selectedSpot,
-      });
-      setLastPage(response.data.totalPage);
-      setRecommendList(response.data.recommendPreviewDtos); // 데이터 저장
-    } catch (error) {}
-  };
   const handleButtonClick = (page: string) => {
     navigate(`/${page}`);
   };
   return (
     <AppContainer>
-      <TopSection />
+      <TopSection>
+        <img src={title} alt="title" />
+        <Button
+          bgColor="#a7cfec"
+          color="black"
+          text="나의 추천행 코스 만들기 >"
+          fontWeight="bold"
+          onClick={() => handleButtonClick("/")}
+          //추천행 만들기 페이지로
+        />
+      </TopSection>
+
       <Section>
         <Filter
           selectedSpot={selectedSpot}
@@ -67,24 +89,23 @@ export const RecommendPage = () => {
         selectedOption={selectedOption}
         handleOptionChange={handleOptionChange}
       />
-      <ItemWrapper>
-        {recommendList.map((item, index) => (
-          <Item
-            key={item}
-            item={item}
-            isLast={recommendList.length - 1 == index}
-          /> // 각 항목을 Item 컴포넌트로 전달
-        ))}
-      </ItemWrapper>
+      {lastPage != 0 ? (
+        <ItemWrapper>
+          {recommendList?.map((item, index) => (
+            <Item
+              key={item.recommendId}
+              item={item}
+              isLast={recommendList.length - 1 == index}
+            />
+          ))}
+        </ItemWrapper>
+      ) : (
+        <Notice>검색 결과가 없습니다.</Notice>
+      )}
       <Pagenation
         lastPage={lastPage}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-      />
-      <Button
-        bgColor="black"
-        text="나의 추천행 코스 만들기"
-        onClick={() => handleButtonClick("/")} //추천행 만들기 페이지로
       />
     </AppContainer>
   );
@@ -99,7 +120,7 @@ const AppContainer = styled.div`
 `;
 const ItemWrapper = styled.div`
   display: grid;
-  gap: 4vh;
+  gap: 2.5vh;
 `;
 const Section = styled.section`
   margin-top: 70px;
@@ -112,10 +133,31 @@ const Section = styled.section`
 `;
 const TopSection = styled.section`
   width: 100%;
-  height: 30vh;
-  background-color: #a7cfec;
-  @media (max-width: 1024px) {
-    height: 10vh;
-    margin-bottom: 1vh;
+  height: 45vh;
+  background-color: #dce6f1;
+  position: relative;
+  img {
+    position: absolute;
+    top: 30%;
+    left: 30%;
   }
+  button {
+    position: absolute;
+    bottom: 5%;
+    left: 32%;
+  }
+  @media (max-width: 500px) {
+    margin-bottom: 1vh;
+    img,
+    button {
+      width: 50%;
+      font-size: x-small;
+    }
+    button {
+      left: 30%;
+    }
+  }
+`;
+const Notice = styled.h5`
+  color: white;
 `;
