@@ -1,12 +1,25 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { recommendDetail } from "../../apis/recommend";
+import ball from "../../assets/icons/ball.svg";
+import festival from "../../assets/icons/festival.svg";
+import place from "../../assets/icons/place.svg";
+import restaurant from "../../assets/icons/restaurant_white.svg";
+import shopping from "../../assets/icons/Shopping_white.svg";
 import DefaultImg from "../../assets/images/DefaultCircle.svg";
 import {
   RecommendDetailResponse,
   SpotGeneralPreviewDto,
 } from "../../types/recommendType";
 import BookmarkIcon from "../map/BookMarkIcon";
+
+const categoryIcons: Record<string, string> = {
+  숙소: place,
+  RESTAURANT: restaurant,
+  쇼핑: shopping,
+  문화: festival,
+  선수PICK: ball,
+};
 export default function RecommendDetail({
   recommendId,
   stadiumId,
@@ -35,13 +48,20 @@ export default function RecommendDetail({
       {res.map((item) => (
         <Span key={item.contentId}>
           <Div>
-            <img
+            <Img
               src={item.imageUrl ? item.imageUrl : DefaultImg}
               alt={item.name}
             />
             <Ul>
-              <li>{item.name}</li>
-              <Li>{item.name}</Li> {/* 실제 데이터를 넣어야 함 */}
+              <img
+                src={
+                  categoryIcons[item.category]
+                    ? categoryIcons[item.category]
+                    : DefaultImg
+                }
+                alt={`${item.category} icon`}
+              />
+              <Li>{item.name}</Li>
               <li>{item.address}</li>
             </Ul>
           </Div>
@@ -72,19 +92,23 @@ const Span = styled.span`
 const Div = styled.div`
   display: flex;
   height: 100%;
-  img {
-    height: 100%;
-    aspect-ratio: 1/1;
-    border-radius: 50%;
-    margin-right: 10px;
-    object-fit: cover;
-  }
+`;
+const Img = styled.img`
+  height: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
 `;
 const Ul = styled.ul`
   display: flex;
   flex-direction: column;
+  align-items: start;
   gap: 5px;
   font-weight: 300;
+  img {
+    height: 30px;
+  }
 `;
 const Li = styled.li`
   font-weight: bold;
