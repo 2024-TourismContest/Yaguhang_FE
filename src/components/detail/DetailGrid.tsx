@@ -61,9 +61,20 @@ const DetailGrid: React.FC<DetailGridProps> = ({
               <h2>체크아웃</h2>
               <p>{getDisplayValue(detailData?.checkOut)}</p>
             </Box>
+
             <Box>
               <h2>홈페이지</h2>
-              <p>{getDisplayValue(detailData?.homepage)}</p>
+              {detailData?.homepage ? (
+                <StyledLink
+                  href={detailData.homepage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {getDisplayValue(detailData.homepage)}
+                </StyledLink>
+              ) : (
+                <p>{getDisplayValue(detailData?.homepage)}</p>
+              )}
             </Box>
             <Box>
               <h2>크기</h2>
@@ -301,5 +312,15 @@ const DotLine = styled.div`
 
   @media (max-width: 768px) {
     width: 90%;
+  }
+`;
+const StyledLink = styled.a`
+  color: #ccc; /* 기본 링크 색상 */
+  text-decoration: none;
+  text-decoration: underline;
+
+  &:hover {
+    color: #1a278e; /* 호버 시 글자색 변경 */
+    text-decoration: underline; /* 호버 시 밑줄 추가 (선택 사항) */
   }
 `;

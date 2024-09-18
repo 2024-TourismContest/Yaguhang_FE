@@ -7,7 +7,7 @@ import BookmarkIcon from "./BookMarkIcon";
 export const SelectedPosition = ({
   onClickContent,
 }: {
-  onClickContent: (contentId: number) => void;
+  onClickContent: (contentId: number, stadiumId: number) => void;
 }) => {
   const position = usePositionStore((state) => state.position); // 단일 position 객체 가져오기
   const { selectedTeam } = useTeamStore();
@@ -16,9 +16,13 @@ export const SelectedPosition = ({
   if (!position) {
     return <div></div>; // position이 없을 때의 처리
   }
+  // stadiumId가 포함되어 있는지 확인
+  // console.log("SelectedPosition stadiumId:", position.stadiumId);
 
   return (
-    <Wrapper onClick={() => onClickContent(position.contentId)}>
+    <Wrapper
+      onClick={() => onClickContent(position.contentId, position.stadiumId)}
+    >
       <P>{position.stadiumName}</P>
       <Container>
         <ItemWrapper>
