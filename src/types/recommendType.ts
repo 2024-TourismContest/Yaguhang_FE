@@ -23,6 +23,8 @@ export type RecommendPreviewDto = {
   isMine: boolean;
   isLiked: boolean;
   stadiumId: number;
+  likeTeam: string;
+  likeTeamUrl: string;
 };
 export interface SpotGeneralPreviewDto {
   contentId: number;
@@ -30,7 +32,7 @@ export interface SpotGeneralPreviewDto {
   address: string;
   imageUrl: string;
   isScraped: boolean;
-  category:string
+  category: string;
 }
 
 export interface RecommendDetailResponse {

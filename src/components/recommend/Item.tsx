@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { IoPersonCircleOutline } from "react-icons/io5";
 import { styled } from "styled-components";
 import DialogOpenButton from "../../assets/icons/DialogOpenButton";
 import { RecommendPreviewDto } from "../../types/recommendType";
 import RecommendDetail from "./RecommendDetail";
 import { RecommendLikeButton } from "./recommendLikeButton";
-
 export const Item = ({
   item,
   isLast,
@@ -42,7 +42,14 @@ export const Item = ({
           <Li>
             {!isMine && (
               <>
-                <ProfileImg src={item.profileImage} alt="프로필" />
+                <ImgWrapper>
+                  {item.profileImage ? (
+                    <ProfileImg src={item.profileImage} alt="프로필" />
+                  ) : (
+                    <IoPersonCircleOutline />
+                  )}
+                  <Fan src={item.likeTeamUrl} />
+                </ImgWrapper>
                 <h5>{item.authorName}</h5>
               </>
             )}
@@ -133,4 +140,23 @@ export const Button = styled.button<{ isOpen: boolean }>`
     width: 42px;
     height: 42px;
   }
+`;
+const ImgWrapper = styled.div`
+  height: 60px;
+  aspect-ratio: 1/1;
+  margin-top: 10px;
+  position: relative;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+`;
+const Fan = styled.img`
+  height: 30px;
+  width: 30px;
+  aspect-ratio: 1/1;
+  position: absolute;
+  bottom: 3%;
+  right: 1%;
 `;

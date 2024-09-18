@@ -129,24 +129,24 @@ const Section = styled.section`
 `;
 const TopSection = styled.section`
   width: 100%;
-  height: 38vh;
+  height: 45vh;
   background-color: #dce6f1;
   position: relative;
   img {
     position: absolute;
-    top: 25%;
+    top: 30%;
     left: 30%;
   }
   button {
     position: absolute;
-    top: 50%;
+    bottom: 5%;
     left: 32%;
   }
-  @media (max-width: 700px) {
+  @media (max-width: 500px) {
     margin-bottom: 1vh;
     img,
     button {
-      width: 40%;
+      width: 50%;
       font-size: x-small;
     }
     button {

@@ -95,9 +95,11 @@ const Span = styled.span`
   border: 1px solid white;
   border-radius: 0.4em;
   padding: 1.2% 2%;
-  height: 7vh;
+  height: 12vh;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
   button {
     width: 40px;
   }
@@ -109,6 +111,7 @@ const Div = styled.div`
   display: flex;
   height: 100%;
   align-items: center;
+  width: 100%;
 `;
 const Img = styled.img`
   height: 100%;
@@ -126,6 +129,7 @@ const Ul = styled.ul`
   align-items: start;
   gap: 5px;
   font-weight: 300;
+  width: 100%;
   img {
     height: 40%;
     max-height: 30px;
