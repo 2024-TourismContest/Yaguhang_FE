@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { recommendDetail } from "../../apis/recommend";
 import ball from "../../assets/icons/ball.svg";
@@ -27,6 +28,14 @@ export default function RecommendDetail({
   recommendId: number;
   stadiumId: number;
 }) {
+  const navigate = useNavigate();
+  const onClickContent = (
+    category: string,
+    contentId: number,
+    stadiumId: number
+  ) => {
+    navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
+  };
   const [res, setRes] = useState<SpotGeneralPreviewDto[]>();
   const getRecommendList = async () => {
     try {
@@ -46,7 +55,11 @@ export default function RecommendDetail({
   return (
     <Section>
       {res.map((item) => (
-        <Span key={item.contentId}>
+        <Span
+          key={item.contentId}
+          onClick={() =>
+            onClickContent(item.category, item.contentId, stadiumId)
+          }>
           <Div>
             <Img
               src={item.imageUrl ? item.imageUrl : DefaultImg}
