@@ -36,8 +36,6 @@ const MapPage = () => {
   );
 
   const { selectedTeam, setSelectedTeam } = useTeamStore();
-  const [stadiumId, setStadiumId] = useState<number>(0);
-  // const teamToStadiumId = teamToStadiumMap[selectedTeam];
 
   const [mapCoordinates, setMapCoordinates] = useState<{
     mapX: number;
@@ -59,8 +57,6 @@ const MapPage = () => {
             mapX: response.mapX,
             mapY: response.mapY,
           });
-          // console.log("map-Stadium ID:", response.stadiumId);
-          setStadiumId(response.stadiumId);
         }
       }
     } catch (error) {
