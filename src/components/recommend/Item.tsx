@@ -101,6 +101,9 @@ const Section = styled.section`
   padding: 1%;
   margin-bottom: 0;
   box-sizing: border-box;
+  @media (max-width: 900px) {
+    width: 85vw;
+  }
 `;
 const Li = styled.li`
   display: flex;
@@ -114,6 +117,7 @@ export const Hr = styled.hr`
   width: 70vw;
   border-bottom: 1px solid #c8c3c3;
   @media (max-width: 900px) {
+    width: 85vw;
   }
 `;
 export const Button = styled.button<{ isOpen: boolean }>`

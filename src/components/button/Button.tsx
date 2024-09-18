@@ -36,7 +36,7 @@ export const StyledButton = styled.button<{
   border: 1.02px solid #cccccc;
   box-sizing: border-box;
   width: clamp(210px, 22vw, 237.2px);
-  height: clamp(50px, 3.05vw, 100px);
+  height: clamp(50px, 3.05vw, 63px);
   min-height: 50px;
   border-radius: clamp(50px, 3.17vw, 237.2px);
   background-color: ${(props) => props.bgColor || "#1A278E"};

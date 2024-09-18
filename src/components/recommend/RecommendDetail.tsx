@@ -14,11 +14,11 @@ import {
 import BookmarkIcon from "../map/BookMarkIcon";
 
 const categoryIcons: Record<string, string> = {
-  숙소: place,
+  ACCOMMODATION: place,
   RESTAURANT: restaurant,
-  쇼핑: shopping,
-  문화: festival,
-  선수PICK: ball,
+  SHOPPING: shopping,
+  CULTURE_FACILITY: festival,
+  ATHLETE_PICK: ball,
 };
 export default function RecommendDetail({
   recommendId,
@@ -88,10 +88,14 @@ const Span = styled.span`
   button {
     width: 40px;
   }
+  @media (max-width: 900px) {
+    height: 15vh;
+  }
 `;
 const Div = styled.div`
   display: flex;
   height: 100%;
+  align-items: center;
 `;
 const Img = styled.img`
   height: 100%;
@@ -99,6 +103,9 @@ const Img = styled.img`
   border-radius: 50%;
   margin-right: 10px;
   object-fit: cover;
+  @media (max-width: 900px) {
+    height: 50%;
+  }
 `;
 const Ul = styled.ul`
   display: flex;
@@ -107,7 +114,11 @@ const Ul = styled.ul`
   gap: 5px;
   font-weight: 300;
   img {
-    height: 30px;
+    height: 40%;
+    max-height: 30px;
+  }
+  li {
+    width: 95%;
   }
 `;
 const Li = styled.li`
@@ -116,5 +127,9 @@ const Li = styled.li`
 const Section = styled.section`
   display: flex;
   flex-direction: column;
+  width: 70vw;
   gap: 15px;
+  @media (max-width: 900px) {
+    width: 85vw;
+  }
 `;

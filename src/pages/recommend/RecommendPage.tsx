@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { recommend, recommendSearch } from "../../apis/recommend";
+import title from "../../assets/images/recommendTitle.svg";
 import { Button } from "../../components/button/Button";
 import { Filter } from "../../components/recommend/filter";
 import { Item } from "../../components/recommend/Item";
@@ -61,15 +62,18 @@ export const RecommendPage = () => {
   };
   return (
     <AppContainer>
-      <TopSection />
-      <Button
-        bgColor="#a7cfec"
-        color="black"
-        text="나의 추천행 코스 만들기 >"
-        fontWeight="bold"
-        onClick={() => handleButtonClick("/")}
-        //추천행 만들기 페이지로
-      />
+      <TopSection>
+        <img src={title} alt="title" />
+        <Button
+          bgColor="#a7cfec"
+          color="black"
+          text="나의 추천행 코스 만들기 >"
+          fontWeight="bold"
+          onClick={() => handleButtonClick("/")}
+          //추천행 만들기 페이지로
+        />
+      </TopSection>
+
       <Section>
         <Filter
           selectedSpot={selectedSpot}
@@ -125,10 +129,28 @@ const Section = styled.section`
 `;
 const TopSection = styled.section`
   width: 100%;
-  height: 30vh;
-  background-color: #a7cfec;
-  @media (max-width: 1024px) {
-    height: 10vh;
+  height: 38vh;
+  background-color: #dce6f1;
+  position: relative;
+  img {
+    position: absolute;
+    top: 25%;
+    left: 30%;
+  }
+  button {
+    position: absolute;
+    top: 50%;
+    left: 32%;
+  }
+  @media (max-width: 700px) {
     margin-bottom: 1vh;
+    img,
+    button {
+      width: 40%;
+      font-size: x-small;
+    }
+    button {
+      left: 30%;
+    }
   }
 `;
