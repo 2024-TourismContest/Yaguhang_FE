@@ -175,7 +175,6 @@ const SharePopup = styled.div`
   width: 300px;
   padding: 1rem;
   background-color: #2e2e2e;
-  border: 1px solid #dfdfdf;
   border-radius: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   color: white;
@@ -232,7 +231,7 @@ const ShareLink = styled.p`
 `;
 const CopyButton = styled.button`
   border: 1px solid #dfdfdf;
-  padding: 0.5rem 1rem;
+  padding: 0.3rem 1rem;
   color: white;
   cursor: pointer;
   background-color: #2e2e2e;
