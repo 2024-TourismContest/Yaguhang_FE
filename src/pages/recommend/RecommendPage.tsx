@@ -89,15 +89,19 @@ export const RecommendPage = () => {
         selectedOption={selectedOption}
         handleOptionChange={handleOptionChange}
       />
-      <ItemWrapper>
-        {recommendList?.map((item, index) => (
-          <Item
-            key={item.recommendId}
-            item={item}
-            isLast={recommendList.length - 1 == index}
-          /> // 각 항목을 Item 컴포넌트로 전달
-        ))}
-      </ItemWrapper>
+      {lastPage != 0 ? (
+        <ItemWrapper>
+          {recommendList?.map((item, index) => (
+            <Item
+              key={item.recommendId}
+              item={item}
+              isLast={recommendList.length - 1 == index}
+            />
+          ))}
+        </ItemWrapper>
+      ) : (
+        <Notice>검색 결과가 없습니다.</Notice>
+      )}
       <Pagenation
         lastPage={lastPage}
         currentPage={currentPage}
@@ -153,4 +157,7 @@ const TopSection = styled.section`
       left: 30%;
     }
   }
+`;
+const Notice = styled.h5`
+  color: white;
 `;
