@@ -46,7 +46,7 @@ const Pagenation = ({
     setCurrentPage(0);
     setPageList(0);
   }, [lastPage, setCurrentPage]);
-
+  if (!lastPage) return;
   return (
     <Wrapper>
       <Page value="first" onClick={handleClick} disabled={currentPage === 0}>
@@ -88,6 +88,8 @@ const Wrapper = styled.div`
   display: flex;
   margin: 10px;
   justify-content: center;
+  position: fixed;
+  bottom: 10px;
 `;
 
 const Page = styled.button<{ isSelected?: boolean }>`
