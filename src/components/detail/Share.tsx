@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 import { FiShare } from "react-icons/fi";
 import { FaRegCopy, FaCheck } from "react-icons/fa";
 import { IoIosCloseCircleOutline } from "react-icons/io";
-import 네이버밴드 from "../../assets/icons/네이버밴드.png";
-import 페이스북 from "../../assets/icons/페이스북.png";
-import 카카오톡 from "../../assets/icons/카카오톡.png";
 import styled from "styled-components";
 
 interface ShareProps {
@@ -97,7 +94,12 @@ const Share: React.FC<ShareProps> = ({ name, description, address }) => {
             </PopupHeader>
             <SNSIcons>
               <SNSButton onClick={() => shareOnFacebook(window.location.href)}>
-                <img src={페이스북} alt="페이스북" width="40" height="40" />
+                <img
+                  src="https://yaguhang.kro.kr:8443/logos/facebook.png"
+                  alt="페이스북"
+                  width="40"
+                  height="40"
+                />
               </SNSButton>
               <SNSButton
                 onClick={() =>
@@ -107,7 +109,12 @@ const Share: React.FC<ShareProps> = ({ name, description, address }) => {
                   )
                 }
               >
-                <img src={카카오톡} alt="카카오톡" width="40" height="40" />
+                <img
+                  src="https://yaguhang.kro.kr:8443/logos/kakaotalk.png"
+                  alt="카카오톡"
+                  width="40"
+                  height="40"
+                />
               </SNSButton>
               <SNSButton
                 onClick={() =>
@@ -118,7 +125,7 @@ const Share: React.FC<ShareProps> = ({ name, description, address }) => {
                 }
               >
                 <img
-                  src={네이버밴드}
+                  src="https://yaguhang.kro.kr:8443/logos/naverband.png"
                   alt="네이버 밴드"
                   onClick={() =>
                     shareOnBand(
@@ -168,7 +175,6 @@ const SharePopup = styled.div`
   width: 300px;
   padding: 1rem;
   background-color: #2e2e2e;
-  border: 1px solid #dfdfdf;
   border-radius: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   color: white;
@@ -225,7 +231,7 @@ const ShareLink = styled.p`
 `;
 const CopyButton = styled.button`
   border: 1px solid #dfdfdf;
-  padding: 0.5rem 1rem;
+  padding: 0.3rem 1rem;
   color: white;
   cursor: pointer;
   background-color: #2e2e2e;

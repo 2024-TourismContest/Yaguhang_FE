@@ -19,6 +19,7 @@ export interface Position {
   mapX: number;
   mapY: number;
   image: string;
+  stadiumId: number;
 }
 
 const MapPage = () => {
@@ -73,8 +74,8 @@ const MapPage = () => {
   }, [selectedTeam]);
 
   const navigate = useNavigate();
-  const onClickContent = (contentId: number) => {
-    navigate(`/details/${category}/${contentId}?stadiumId=${stadiumNumber}`);
+  const onClickContent = (contentId: number, stadiumId: number | string) => {
+    navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
     window.scrollTo(0, 0);
   };
   return (
