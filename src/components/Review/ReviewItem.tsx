@@ -113,7 +113,8 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
 export default ReviewItem;
 const ReviewItemContainer = styled.div`
   padding: 1.5rem;
-  background-color: #2c2c2c;
+  background-color: #ffffff10;
+  border: 1px solid #fff;
   border-radius: 12px;
   display: flex;
   justify-content: space-between;
@@ -269,7 +270,6 @@ const ImageContainer = styled.div`
   min-width: 130px;
   height: 130px;
   border-radius: 12px;
-  border: 1px solid #fff;
   overflow: hidden;
 
   @media (max-width: 768px) {
