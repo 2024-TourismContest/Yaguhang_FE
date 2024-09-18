@@ -5,7 +5,7 @@ import usePositionsStore from "../../store/MapPositionsStore";
 export const MapPosition = ({
   onClickContent,
 }: {
-  onClickContent: (contentId: number) => void;
+  onClickContent: (contentId: number, stadiumId: number) => void;
 }) => {
   const positions = usePositionsStore((state) => state.positions);
   return (
@@ -15,8 +15,10 @@ export const MapPosition = ({
           <ItemWrapper
             key={index}
             onClick={() => {
-              onClickContent(position.contentId);
-            }}>
+              // console.log("Position stadiumId:", position.stadiumId);
+              onClickContent(position.contentId, position.stadiumId);
+            }}
+          >
             <Img
               src={position.image ? position.image : loadingImg}
               alt={position.title}

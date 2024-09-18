@@ -19,6 +19,7 @@ export interface Position {
   mapX: number;
   mapY: number;
   image: string;
+  stadiumId: number;
 }
 
 const MapPage = () => {
@@ -35,6 +36,8 @@ const MapPage = () => {
   );
 
   const { selectedTeam, setSelectedTeam } = useTeamStore();
+  const [stadiumId, setStadiumId] = useState<number>(0);
+  // const teamToStadiumId = teamToStadiumMap[selectedTeam];
 
   const [mapCoordinates, setMapCoordinates] = useState<{
     mapX: number;
@@ -56,6 +59,8 @@ const MapPage = () => {
             mapX: response.mapX,
             mapY: response.mapY,
           });
+          // console.log("map-Stadium ID:", response.stadiumId);
+          setStadiumId(response.stadiumId);
         }
       }
     } catch (error) {
@@ -73,8 +78,8 @@ const MapPage = () => {
   }, [selectedTeam]);
 
   const navigate = useNavigate();
-  const onClickContent = (contentId: number) => {
-    navigate(`/details/${category}/${contentId}?stadiumId=${stadiumNumber}`);
+  const onClickContent = (contentId: number, stadiumId: number | string) => {
+    navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
     window.scrollTo(0, 0);
   };
   return (

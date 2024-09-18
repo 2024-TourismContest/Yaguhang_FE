@@ -17,6 +17,7 @@ interface MapTestProps {
   boolean: boolean;
 }
 export interface Position {
+  stadiumId: number;
   contentId: number;
   title: string;
   address: string;
