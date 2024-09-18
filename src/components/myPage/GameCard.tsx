@@ -80,7 +80,6 @@ const StyledCard = styled.div<{ $isSelected: boolean }>`
   border-radius: 1.25rem;
   text-align: center;
   color: white;
-  /* margin: 0.5rem; */
   border: 1px solid #fff;
   transition: all 0.3s ease;
   background-color: ${({ $isSelected }) =>

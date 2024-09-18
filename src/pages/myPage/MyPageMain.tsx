@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import SectionTitle from "../../components/common/SectionTitle";
 import { teamLogos } from "../../types/teamLogos";
-import TeamSelector from "../../components/common/TeamSelector";
+import TeamSelector from "../../components/myPage/TeamSelector";
 import {
   myDummyReviews,
   dummyScrap,
@@ -9,7 +9,7 @@ import {
 } from "../../assets/data/dummyData";
 import ReviewItem from "../../components/Review/ReviewItem";
 import useStore from "../../store/PreferTeamStore";
-import GameCardList from "../../components/common/GameCardList";
+import GameCardList from "../../components/myPage/GameCardList";
 import BookMarkList from "../../components/myPage/BookMarkList";
 import { toast } from "react-toastify";
 import { scrapSchedule } from "../../apis/main";
@@ -79,7 +79,7 @@ const MyPageMain = () => {
       <SectionTitle title={"MY 추천행"} subtitle={"나의 여행 계획 모아보기"} />
       <Line />
       <SectionTitle title={"MY 북마크"} subtitle={"나의 여행 계획 모아보기"} />
-      {/* <BookMarkList data={dummyScrapSpot} /> */}
+      <BookMarkList data={dummyScrapSpot} />
       <SectionTitle title={"MY 야구행 리뷰"} />
       <ReviewList>
         {myDummyReviews.map((review) => (

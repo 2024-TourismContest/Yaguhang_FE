@@ -28,7 +28,7 @@ const Container = styled.div`
 const Title = styled.h1<{ color: "white" | "black" }>`
   color: ${(props) => (props.color === "white" ? "#fff" : "#000")};
   font-family: Inter;
-  font-size: 2.5rem;
+  font-size: 2.3rem;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
@@ -45,7 +45,7 @@ const Title = styled.h1<{ color: "white" | "black" }>`
 const SubTitle = styled.h2`
   color: #bfbfbf;
   font-family: Inter;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
