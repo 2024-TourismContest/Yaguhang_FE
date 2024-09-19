@@ -28,11 +28,12 @@ export const home = {
     }
   },
 
-  weatherGraphAPI: async (gameId: number, page = 1, size = 24) => {
+  weatherGraphAPI: async (gameId: number, page = 0, size = 24) => {
     try {
       const response = await defaultApi.get("/api/main/weatherOfGame", {
         params: { gameId, page, size },
       });
+      console.log("weatherGraphAPI:", response);
       return response.data;
     } catch (error) {
       console.error("Error fetching weatherGraph data:", error);
