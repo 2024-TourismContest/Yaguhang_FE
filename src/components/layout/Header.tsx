@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import logo from "../../assets/images/logo.svg";
 import { Link, useLocation } from "react-router-dom";
@@ -7,18 +8,32 @@ export default function Header() {
   const location = useLocation();
   const currentPath = location.pathname;
   const { isAuthenticated, setIsAuthenticated } = authStore();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleAuthButtonClick = () => {
     if (isAuthenticated) {
-      setIsAuthenticated(false); // 로그아웃 처리
+      setIsAuthenticated(false);
       localStorage.removeItem("token");
     } else {
-      window.location.href = "/login"; // 로그인 페이지로 이동
+      window.location.href = "/login";
     }
   };
 
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <NavbarContainer>
+    <NavbarContainer isMenuOpen={isMenuOpen}>
       <LogoContainer>
         <Link to="/" className="logo">
           <LogoIcon src={logo} alt="Logo" />
@@ -51,11 +66,54 @@ export default function Header() {
           {isAuthenticated ? "로그아웃" : "로그인"}
         </StyledLoginButton>
       </LoginButtonContainer>
+      <HamburgerMenu onClick={toggleMenu}>
+        <span></span>
+        <span></span>
+        <span></span>
+      </HamburgerMenu>
+      {isMenuOpen && (
+        <MobileMenu>
+          <NavItemMobile>
+            <StyledNavLinkMobile to="/" isActive={currentPath === "/"}>
+              홈
+            </StyledNavLinkMobile>
+          </NavItemMobile>
+          <NavItemMobile>
+            <StyledNavLinkMobile
+              to="/stadium"
+              isActive={currentPath === "/stadium"}
+            >
+              구장행
+            </StyledNavLinkMobile>
+          </NavItemMobile>
+          <NavItemMobile>
+            <StyledNavLinkMobile
+              to="/region"
+              isActive={currentPath === "/region"}
+            >
+              추천행
+            </StyledNavLinkMobile>
+          </NavItemMobile>
+          <NavItemMobile>
+            <StyledNavLinkMobile
+              to="/mypage"
+              isActive={currentPath === "/mypage"}
+            >
+              마이페이지
+            </StyledNavLinkMobile>
+          </NavItemMobile>
+          <LoginButtonContainerMobile>
+            <StyledLoginButton onClick={handleAuthButtonClick}>
+              {isAuthenticated ? "로그아웃" : "로그인"}
+            </StyledLoginButton>
+          </LoginButtonContainerMobile>
+        </MobileMenu>
+      )}
     </NavbarContainer>
   );
 }
 
-const NavbarContainer = styled.nav`
+const NavbarContainer = styled.nav<{ isMenuOpen: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -67,13 +125,8 @@ const NavbarContainer = styled.nav`
   padding: 0 5%;
   box-sizing: border-box;
   z-index: 1000;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.9) 0%,   // 상단 색상 (어두운 검정)
-    rgba(0, 0, 0, 0.7) 50%,   // 중간 색상
-    rgba(0, 0, 0, 0.5) 75%,   // 하단 색상
-    rgba(0, 0, 0, 0) 100%     // 끝 색상 (투명)
-  );
+  background: ${({ isMenuOpen }) => (isMenuOpen ? "#333" : "transparent")};
+  transition: background 0.3s;
 `;
 
 const LogoContainer = styled.div`
@@ -90,7 +143,7 @@ const NavList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-  gap: 3rem; // 충분한 간격
+  gap: 3rem;
 
   @media (max-width: 768px) {
     display: none;
@@ -109,39 +162,99 @@ const StyledNavLink = styled(Link)<{ isActive: boolean }>`
   font-size: 1rem;
   font-weight: 400;
   line-height: normal;
-  padding: 0.75rem 1.5rem; // 넓은 위아래 패딩
+  padding: 0.75rem 1.5rem;
   position: relative;
+
   ${({ isActive }) =>
     isActive &&
     `
-      &::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: -5px;
-        width: 100%;
-        height: 2px;
-        background-color: #fff;
-      }
-    `}
+    &::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: #fff;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+  `}
 `;
 
 const LoginButtonContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const StyledLoginButton = styled.button`
   padding: 0.5rem 1.5rem;
-  border-radius: 0; // 박스 없애기
+  border-radius: 0;
   background: transparent;
   border: none;
   color: #fff;
   text-align: center;
   font-family: Inter, sans-serif;
-  font-size: 0.875rem; // 로그인 버튼 글자 크기
+  font-size: 0.875rem;
   font-weight: 400;
   cursor: pointer;
   white-space: nowrap;
+`;
+
+const HamburgerMenu = styled.div`
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  z-index: 1100;
+
+  span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background: #fff;
+    transition: 0.3s;
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
+  }
+`;
+
+const MobileMenu = styled.div`
+  position: fixed;
+  top: 80px;
+  right: 0;
+  width: 100%;
+  background: #333;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+  z-index: 1000;
+`;
+
+const NavItemMobile = styled.div``;
+
+const StyledNavLinkMobile = styled(Link)<{ isActive: boolean }>`
+  text-decoration: none;
+  color: #fff;
+  text-align: center;
+  font-family: Inter, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0.75rem 1.5rem;
+  display: block;
+  background: ${({ isActive }) => (isActive ? "#444" : "transparent")};
+  border-radius: 4px;
+`;
+
+const LoginButtonContainerMobile = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
