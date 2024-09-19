@@ -8,7 +8,6 @@ import HeartFull from "../../assets/icons/heart-fill.png";
 import HeartEmpty from "../../assets/icons/heart-unfill.png";
 import RightArrow from "../../assets/icons/arrow_right.svg";
 import defaultImg from "../../assets/images/default-profile.svg";
-import { profile } from "console";
 
 interface ReviewItemProps {
   reviewId: number;
