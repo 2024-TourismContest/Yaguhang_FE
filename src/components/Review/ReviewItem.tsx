@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import StarFull from "../../assets/icons/star-fill.png";
 import StarHalf from "../../assets/icons/star-half.png";
@@ -7,6 +8,7 @@ import HeartFull from "../../assets/icons/heart-fill.png";
 import HeartEmpty from "../../assets/icons/heart-unfill.png";
 import RightArrow from "../../assets/icons/arrow_right.svg";
 import defaultImg from "../../assets/images/default-profile.svg";
+import { profile } from "console";
 
 interface ReviewItemProps {
   reviewId: number;
@@ -21,6 +23,7 @@ interface ReviewItemProps {
   isMine: boolean;
   isLiked: boolean;
   images?: string[];
+  stadiumId: number;
 }
 
 const ReviewItem: React.FC<ReviewItemProps> = ({
@@ -33,13 +36,21 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
   likeCount,
   isLiked: initialIsLiked,
   images = [],
+  spotId,
+  stadiumId,
 }) => {
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likes, setLikes] = useState(likeCount);
+  const navigate = useNavigate();
 
   const toggleLike = () => {
     setIsLiked(!isLiked);
     setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
+  };
+
+  const handleClick = () => {
+    const url = `https://yaguhang.kro.kr:7443/details/선수PICK/${spotId}?stadiumId=${stadiumId}`;
+    navigate(url);
   };
 
   const renderStars = (star: number) => {
@@ -69,10 +80,13 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
   const formattedRating = (Math.round(star * 2) / 2).toFixed(1);
 
   return (
-    <ReviewItemContainer>
+    <ReviewItemContainer onClick={handleClick}>
       <LeftContent>
         {profileImage && (
-          <ProfileImg src={profileImage || defaultImg} alt="프로필 이미지" />
+          <ProfileImg
+            src={profileImage ? profileImage : defaultImg}
+            alt="프로필 이미지"
+          />
         )}
         <ContentsContainer>
           <ReviewInfo>
@@ -97,6 +111,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
                 {likes}
               </Likes>
             </RatingLikesContainer>
+            ㄴ
           </ReviewInfo>
           <ReviewText>{content}</ReviewText>
         </ContentsContainer>
