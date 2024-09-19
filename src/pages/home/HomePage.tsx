@@ -32,35 +32,35 @@ const HomePage = () => {
   const [placeData, setPlaceData] = useState<PlaceData | null>(null);
   const [stadiumId, setStadiumId] = useState<number | null>(null);
   const navigate = useNavigate();
-  const { selectedGame, setSelectedGame, selectedTeam, setSelectedTeam } =
+  const { selectedGame, selectedTeam, setSelectedTeam } =
     useTeamStore();
   const [showFanTeamModal, setShowFanTeamModal] = useState(false);
-  const [isInitialCheckDone, setIsInitialCheckDone] = useState(false); // 로그인 직후 체크 여부 상태
+  const [isInitialCheckDone, setIsInitialCheckDone] = useState(false);
 
   useEffect(() => {
-    // 로그인 직후 체크 실행
+    // 로그인 직후에만 체크 실행
     const checkFanTeamStatus = async () => {
       try {
         const status = await home.checkFanTeam();
         if (status === "Check") {
-          const showModalOnHome = localStorage.getItem(
-            "showFanTeamModalOnHome"
-          );
+          const showModalOnHome = localStorage.getItem("showFanTeamModalOnHome");
           if (showModalOnHome) {
             localStorage.removeItem("showFanTeamModalOnHome");
             setShowFanTeamModal(true);
           }
-        } else if (typeof status === "string") {
+        } else if (typeof status === "string" && status !== "No Check") {
           // 팀명으로 응답이 온 경우 스토어에 팀명 저장
           setSelectedTeam(status);
+          console.log('status:',status)
         }
+        // "No Check"인 경우는 아무 것도 하지 않고 그냥 넘어감
       } catch (error) {
         console.error("Error checking fan team:", error);
       }
     };
 
     // 로그인 후 초기 체크 실행
-    if (isInitialCheckDone === false) {
+    if (!isInitialCheckDone) {
       checkFanTeamStatus();
       setIsInitialCheckDone(true);
     }
@@ -165,6 +165,7 @@ const HomePage = () => {
             content="팬 구단이 등록되어 있지 않습니다. 팀을 등록하시겠습니까?"
             onConfirm={handleConfirm}
             onCancel={handleCancel}
+            showDoNotShowAgain={true}
             onDoNotShowAgain={handleDoNotShowAgain}
           />
         )}
