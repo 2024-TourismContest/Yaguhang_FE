@@ -6,13 +6,13 @@ import MapPage from "./pages/map/mapPage";
 import { RecommendPage } from "./pages/recommend/RecommendPage";
 import SignupPage from "./pages/signup/SignupPage";
 import StadiumPage from "./pages/stadium/stadiumPage";
-import MyPageLayout from "./pages/myPage/MyPageLayout";
-import MyStamp from "./pages/\bmyPage/MyStamp";
-import MyReview from "./pages/\bmyPage/MyReview";
-import MyBookMark from "./pages/\bmyPage/MyBookMark";
-import MyRecommend from "./pages/\bmyPage/MyRecommend";
-import MyPageMain from "./pages/\bmyPage/MyPageMain";
-import MyAccount from "./pages/\bmyPage/MyAccount";
+import MyPageLayout from "./pages/myPage/MyPageLayout";
+import MyStamp from "./pages/myPage/MyStamp";
+import MyReview from "./pages/myPage/MyReview";
+import MyBookMark from "./pages/myPage/MyBookMark";
+import MyRecommend from "./pages/myPage/MyRecommend";
+import MyPageMain from "./pages/myPage/MyPageMain";
+import MyAccount from "./pages/myPage/MyAccount";
 
 export default function Router() {
   return (
