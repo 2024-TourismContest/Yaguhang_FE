@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import StarFull from "../../assets/icons/star-fill.png";
 import StarHalf from "../../assets/icons/star-half.png";
@@ -10,74 +11,88 @@ import defaultImg from "../../assets/images/default-profile.svg";
 
 interface ReviewItemProps {
   reviewId: number;
+  spotId: number;
+  spotName?: string;
   authorName?: string;
   profileImage?: string;
   createdAt?: string;
-  stadiumName?: string;
   content: string;
-  rating: number;
-  likes: number;
+  star: number;
+  likeCount: number;
   isMine: boolean;
   isLiked: boolean;
   images?: string[];
+  stadiumId: number;
 }
 
 const ReviewItem: React.FC<ReviewItemProps> = ({
   authorName,
   profileImage,
   createdAt,
-  stadiumName,
+  spotName,
   content,
-  rating,
-  likes,
+  star,
+  likeCount,
   isLiked: initialIsLiked,
   images = [],
+  spotId,
+  stadiumId,
 }) => {
   const [isLiked, setIsLiked] = useState(initialIsLiked);
-  const [likeCount, setLikeCount] = useState(likes);
+  const [likes, setLikes] = useState(likeCount);
+  const navigate = useNavigate();
 
   const toggleLike = () => {
     setIsLiked(!isLiked);
-    setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
+    setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
   };
 
-  const renderStars = (rating: number) => {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  const handleClick = () => {
+    const url = `https://yaguhang.kro.kr:7443/details/선수PICK/${spotId}?stadiumId=${stadiumId}`;
+    navigate(url);
+  };
+
+  const renderStars = (star: number) => {
+    const validRating = Math.max(0, Math.min(star, 5));
+
+    const fullStars = Math.floor(validRating);
+    const hasHalfStar = validRating % 1 !== 0;
+    const emptyStars = Math.max(0, 5 - fullStars - (hasHalfStar ? 1 : 0));
 
     return (
       <>
         {Array(fullStars)
           .fill(null)
-          .map((_, reviewId) => (
-            <StarImg key={`full-${reviewId}`} src={StarFull} alt="Full Star" />
+          .map((_, index) => (
+            <StarImg key={`full-${index}`} src={StarFull} alt="Full Star" />
           ))}
         {hasHalfStar && <StarImg src={StarHalf} alt="Half Star" />}
         {Array(emptyStars)
           .fill(null)
-          .map((_, reviewId) => (
-            <StarImg key={`empty-${reviewId}`} src={StarEmpty} alt="Empty Star" />
+          .map((_, index) => (
+            <StarImg key={`empty-${index}`} src={StarEmpty} alt="Empty Star" />
           ))}
       </>
     );
   };
 
-  // Ensure the rating is a multiple of 0.5
-  const formattedRating = (Math.round(rating * 2) / 2).toFixed(1);
+  const formattedRating = (Math.round(star * 2) / 2).toFixed(1);
 
   return (
-    <ReviewItemContainer>
+    <ReviewItemContainer onClick={handleClick}>
       <LeftContent>
         {profileImage && (
-          <ProfileImg src={profileImage || defaultImg} alt="프로필 이미지" />
+          <ProfileImg
+            src={profileImage ? profileImage : defaultImg}
+            alt="프로필 이미지"
+          />
         )}
         <ContentsContainer>
           <ReviewInfo>
             <StadiumNameContainer>
-              {stadiumName && (
+              {spotName && (
                 <>
-                  <StadiumName>{stadiumName}</StadiumName>
+                  <StadiumName>{spotName}</StadiumName>
                   <ArrowIcon src={RightArrow} alt="Right Arrow" />
                 </>
               )}
@@ -88,11 +103,11 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
             )}
             <RatingLikesContainer>
               <Rating>
-                {renderStars(rating)} <span>({formattedRating})</span>
+                {renderStars(star)} <span>({formattedRating})</span>
               </Rating>
               <Likes onClick={toggleLike}>
                 <HeartImg src={isLiked ? HeartFull : HeartEmpty} alt="Like" />
-                {likeCount}
+                {likes}
               </Likes>
             </RatingLikesContainer>
           </ReviewInfo>

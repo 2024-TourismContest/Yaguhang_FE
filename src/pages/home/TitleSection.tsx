@@ -5,7 +5,7 @@ interface TitleSectionProps {
   subtitle?: string;
   title: string;
   description: string;
-  icon?: 'marker';
+  icon?: "marker";
 }
 
 export const TitleSection: React.FC<TitleSectionProps> = ({
@@ -22,8 +22,8 @@ export const TitleSection: React.FC<TitleSectionProps> = ({
             <S.Fan>{subtitle}</S.Fan>
             <S.Title>{title}</S.Title>
           </div>
-          {icon === 'marker' && <S.MarkerImg src={marker} />}
-        </S.Span>a
+          {icon === "marker" && <S.MarkerImg src={marker} />}
+        </S.Span>
         <S.H4>{description}</S.H4>
       </S.TitleWrapper>
     </S.Wrapper>

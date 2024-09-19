@@ -19,6 +19,9 @@ const CardList: React.FC<CardListProps> = ({
   onSelect,
   selectedGame,
 }) => {
+  // Ensure schedules is an array
+  const validSchedules = Array.isArray(schedules) ? schedules : [];
+
   const [currentPage, setCurrentPage] = useState(0);
   const [cardsPerPage, setCardsPerPage] = useState(maxCardsPerPage);
 
@@ -44,8 +47,8 @@ const CardList: React.FC<CardListProps> = ({
     };
   }, [maxCardsPerPage]);
 
-  const totalPages = Math.ceil(schedules.length / cardsPerPage);
-  const currentCards = schedules.slice(
+  const totalPages = Math.ceil(validSchedules.length / cardsPerPage);
+  const currentCards = validSchedules.slice(
     currentPage * cardsPerPage,
     (currentPage + 1) * cardsPerPage
   );
@@ -68,7 +71,7 @@ const CardList: React.FC<CardListProps> = ({
         <img src={left} alt="Prev" />
       </NavButton>
       <CardContainer>
-        {currentCards.map((schedule) => (
+        {currentCards?.map((schedule) => (
           <GameCard
             key={schedule.id}
             schedule={schedule}

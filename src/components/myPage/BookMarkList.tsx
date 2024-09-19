@@ -23,9 +23,10 @@ interface BookMarkListProps {
 }
 
 const BookMarkList: React.FC<BookMarkListProps> = ({ data }) => {
+  const validData = Array.isArray(data) ? data : [];
   return (
     <Container>
-      {data.slice(0, 3).map((stadium) => (
+      {validData.slice(0, 3).map((stadium) => (
         <Row key={stadium.scrapStadium.stadiumId}>
           <BookMarkContainer
             img={stadium.scrapStadium.image}
