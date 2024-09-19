@@ -23,7 +23,6 @@ interface ReviewItemProps {
 }
 
 const ReviewItem: React.FC<ReviewItemProps> = ({
-  reviewId,
   authorName,
   profileImage,
   createdAt,
@@ -51,14 +50,14 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
       <>
         {Array(fullStars)
           .fill(null)
-          .map((_, index) => (
-            <StarImg key={`full-${index}`} src={StarFull} alt="Full Star" />
+          .map((_, reviewId) => (
+            <StarImg key={`full-${reviewId}`} src={StarFull} alt="Full Star" />
           ))}
         {hasHalfStar && <StarImg src={StarHalf} alt="Half Star" />}
         {Array(emptyStars)
           .fill(null)
-          .map((_, index) => (
-            <StarImg key={`empty-${index}`} src={StarEmpty} alt="Empty Star" />
+          .map((_, reviewId) => (
+            <StarImg key={`empty-${reviewId}`} src={StarEmpty} alt="Empty Star" />
           ))}
       </>
     );

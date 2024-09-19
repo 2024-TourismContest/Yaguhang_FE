@@ -6,15 +6,12 @@ import Modal from "../../components/common/Modal";
 import useStore from "../../store/PreferTeamStore";
 import { useState } from "react";
 import { teamLogos } from "../../types/teamLogos";
-
-const profileUrl = null;
-
 export default function MyPageLayout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { preferTeam, setTeamSelectorActive } = useStore();
   const [isEditing, setIsEditing] = useState(false);
   const [nickName, setNickName] = useState("홍차추출액어쩌고");
-  const [profileImage, setProfileImage] = useState(profileUrl);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleTeamClick = () => {
@@ -111,13 +108,13 @@ const PageContainer = styled.div`
   background-color: #000;
   margin: 2rem 1rem;
   min-height: 100vh;
-  max-width: 1500px;
+  max-width: 1400px;
   margin: 0 auto;
   align-items: flex-start;
   justify-content: flex-start;
-  padding: 20vh 10vw;
+  padding: 20vh 5vw;
   @media (max-width: 1024px) {
-    padding: 10vh 0;
+    padding: 10vh 10vw;
     flex-direction: column;
     align-items: center;
     justify-content: center;

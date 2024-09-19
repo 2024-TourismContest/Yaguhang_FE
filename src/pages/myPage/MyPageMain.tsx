@@ -6,6 +6,7 @@ import {
   myDummyReviews,
   dummyScrap,
   dummyScrapSpot,
+  dummyMyRecommend,
 } from "../../assets/data/dummyData";
 import ReviewItem from "../../components/Review/ReviewItem";
 import useStore from "../../store/PreferTeamStore";
@@ -14,6 +15,7 @@ import BookMarkList from "../../components/myPage/BookMarkList";
 import { toast } from "react-toastify";
 import { scrapSchedule } from "../../apis/main";
 import { useState } from "react";
+import { Item } from "../../components/recommend/Item";
 interface Schedule {
   id: number;
   home: string;
@@ -35,7 +37,7 @@ const MyPageMain = () => {
     isTeamSelectorActive,
     setTeamSelectorActive,
   } = useStore();
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [, setSchedules] = useState<Schedule[]>([]);
 
   const handleScrap = async (gameId: number) => {
     try {
@@ -77,6 +79,14 @@ const MyPageMain = () => {
       />
       <Line />
       <SectionTitle title={"MY 추천행"} subtitle={"나의 여행 계획 모아보기"} />
+      {dummyMyRecommend.map((recommend, index) => (
+        <Item
+          key={recommend.recommendId}
+          item={recommend}
+          isLast={dummyMyRecommend.length - 1 == index}
+          isMine={true}
+        />
+      ))}
       <Line />
       <SectionTitle title={"MY 북마크"} subtitle={"나의 여행 계획 모아보기"} />
       <BookMarkList data={dummyScrapSpot} />

@@ -172,7 +172,8 @@ export const dummyScrapSpot: Array<{
       },
       {
         contentId: 2901391,
-        image: "http://tong.visitkorea.or.kr/cms/resource/78/2901378_image2_1.jpg",
+        image:
+          "http://tong.visitkorea.or.kr/cms/resource/78/2901378_image2_1.jpg",
         title: "고운 돈카츠",
       },
     ],
@@ -186,7 +187,8 @@ export const dummyScrapSpot: Array<{
     scrapSpots: [
       {
         contentId: 143043,
-        image: "http://tong.visitkorea.or.kr/cms/resource/06/2807206_image2_1.jpg",
+        image:
+          "http://tong.visitkorea.or.kr/cms/resource/06/2807206_image2_1.jpg",
         title: "크라운관광호텔",
       },
       {
@@ -196,7 +198,8 @@ export const dummyScrapSpot: Array<{
       },
       {
         contentId: 620794,
-        image: "http://tong.visitkorea.or.kr/cms/resource/08/1209808_image2_1.jpg",
+        image:
+          "http://tong.visitkorea.or.kr/cms/resource/08/1209808_image2_1.jpg",
         title: "그랜드 머큐어 앰배서더 창원(구 풀만 앰배서더 창원)",
       },
       {
@@ -206,7 +209,8 @@ export const dummyScrapSpot: Array<{
       },
       {
         contentId: 142879,
-        image: "http://tong.visitkorea.or.kr/cms/resource/72/2372072_image2_1.jpg",
+        image:
+          "http://tong.visitkorea.or.kr/cms/resource/72/2372072_image2_1.jpg",
         title: "호텔인터내셔널",
       },
     ],
@@ -220,14 +224,65 @@ export const dummyScrapSpot: Array<{
     scrapSpots: [
       {
         contentId: 2944033,
-        image: "http://tong.visitkorea.or.kr/cms/resource/22/2947122_image2_1.jpg",
+        image:
+          "http://tong.visitkorea.or.kr/cms/resource/22/2947122_image2_1.jpg",
         title: "전포 삼거리",
       },
       {
         contentId: 1607138,
-        image: "http://tong.visitkorea.or.kr/cms/resource/13/3332613_image2_1.jpg",
+        image:
+          "http://tong.visitkorea.or.kr/cms/resource/13/3332613_image2_1.jpg",
         title: "부산대학교 박물관",
       },
     ],
+  },
+];
+
+export const dummyMyRecommend = [
+  {
+    recommendId: 12,
+    stadiumId: 5,
+    stadiumImage: "https://yaguhang.kro.kr:8443/stadiums/sajikStadium.webp",
+    stadiumName: "사직",
+    authorName: "테스트계정",
+    profileImage: "",
+    likeTeam: "롯데",
+    likeTeamUrl: "https://yaguhang.kro.kr:8443/teamLogos/Lotte.png",
+    title: "사직 맛도리 식당 모음집",
+    createdAt: "2024.09.18",
+    images: [
+      "http://tong.visitkorea.or.kr/cms/resource/59/2670559_image2_1.jpg",
+      "http://tong.visitkorea.or.kr/cms/resource/50/2865950_image2_1.jpg",
+      "http://tong.visitkorea.or.kr/cms/resource/11/2607511_image2_1.jpg",
+      "http://tong.visitkorea.or.kr/cms/resource/71/1866471_image2_1.jpg",
+      "http://tong.visitkorea.or.kr/cms/resource/33/2865233_image2_1.jpg",
+      "http://tong.visitkorea.or.kr/cms/resource/62/1866862_image2_1.jpg",
+    ],
+    likes: 0,
+    isMine: true,
+    isLiked: false,
+  },
+  {
+    recommendId: 13,
+    stadiumId: 6,
+    stadiumImage: "https://yaguhang.kro.kr:8443/stadiums/busanStadium.webp",
+    stadiumName: "부산",
+    authorName: "테스트계정2",
+    profileImage: "",
+    likeTeam: "부산",
+    likeTeamUrl: "https://yaguhang.kro.kr:8443/teamLogos/Busan.png",
+    title: "부산 최고의 음식점 리스트",
+    createdAt: "2024.09.19",
+    images: [
+      "http://tong.visitkorea.or.kr/cms/resource/60/2670560_image2_1.jpg",
+      "http://tong.visitkorea.or.kr/cms/resource/51/2865951_image2_1.jpg",
+      "http://tong.visitkorea.or.kr/cms/resource/12/2607512_image2_1.jpg",
+      "http://tong.visitkorea.or.kr/cms/resource/72/1866472_image2_1.jpg",
+      "http://tong.visitkorea.or.kr/cms/resource/34/2865234_image2_1.jpg",
+      "http://tong.visitkorea.or.kr/cms/resource/63/1866863_image2_1.jpg",
+    ],
+    likes: 0,
+    isMine: true,
+    isLiked: false,
   },
 ];
