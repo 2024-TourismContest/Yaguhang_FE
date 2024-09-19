@@ -7,7 +7,6 @@ import { RecommendPage } from "./pages/recommend/RecommendPage";
 import SignupPage from "./pages/signup/SignupPage";
 import StadiumPage from "./pages/stadium/stadiumPage";
 import MyPageLayout from "./pages/myPage/MyPageLayout";
-import MyStamp from "./pages/myPage/MyStamp";
 import MyReview from "./pages/myPage/MyReview";
 import MyBookMark from "./pages/myPage/MyBookMark";
 import MyRecommend from "./pages/myPage/MyRecommend";
@@ -26,7 +25,6 @@ export default function Router() {
       <Route path="/details/:category/:contentId" element={<DetailPage />} />
       <Route path="/mypage" element={<MyPageLayout />}>
         <Route index element={<MyPageMain />} />
-        <Route path="stamp" element={<MyStamp />} />
         <Route path="bookmark" element={<MyBookMark />} />
         <Route path="recommend" element={<MyRecommend />} />
         <Route path="review" element={<MyReview />} />

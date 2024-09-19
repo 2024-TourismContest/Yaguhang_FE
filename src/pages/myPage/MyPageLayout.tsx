@@ -111,7 +111,6 @@ export default function MyPageLayout() {
             {isEditing ? "수정 완료" : "프로필 수정"}
           </EditBtn>
         </ProfileContainer>
-        <MenuItem to="/mypage/stamp" label="MY 야구공 스탬프" />
         <MenuItem to="/mypage/bookmark" label="MY 북마크" />
         <MenuItem to="/mypage/recommend" label="MY 추천행" />
         <MenuItem to="/mypage/review" label="MY 야구행 리뷰" />
