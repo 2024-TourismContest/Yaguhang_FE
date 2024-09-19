@@ -110,7 +110,6 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
                 {likes}
               </Likes>
             </RatingLikesContainer>
-            ㄴ
           </ReviewInfo>
           <ReviewText>{content}</ReviewText>
         </ContentsContainer>
