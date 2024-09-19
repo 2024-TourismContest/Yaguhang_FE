@@ -23,7 +23,7 @@ export const TitleSection: React.FC<TitleSectionProps> = ({
             <S.Title>{title}</S.Title>
           </div>
           {icon === 'marker' && <S.MarkerImg src={marker} />}
-        </S.Span>
+        </S.Span>a
         <S.H4>{description}</S.H4>
       </S.TitleWrapper>
     </S.Wrapper>

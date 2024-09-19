@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import InputWithLabel from "../input/InputWithLabel";
 import { auth } from "../../apis/auth";
-import ProfileEditSection from "../profile/ProfileEditSection";
+import ProfileImg from "../common/ProfileComponent";
 
 type Validators = {
   [key: string]: (value: string) => string;
@@ -162,10 +162,14 @@ const SignupForm = () => {
     <FormContainer>
       <Title>회원가입</Title>
       <FormWrapper>
-        <ProfileEditSection
-          profileImage={profileImage}
-          onImageChange={handleImageChange}
-        />
+        <ProfileImgContainer>
+          <ProfileImg
+            profileImage={profileImage}
+            onImageChange={handleImageChange}
+            isEditing={true}
+          />
+          <ProfileText>프로필 이미지</ProfileText>
+        </ProfileImgContainer>
         <Form onSubmit={handleSubmit}>
           <InputWithLabel
             label="Email"
@@ -278,6 +282,23 @@ const SubmitBtn = styled.button`
   &:hover {
     background-color: #f0f0f0;
   }
+`;
+
+const ProfileImgContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+`;
+
+const ProfileText = styled.span`
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  font-size: 0.875rem;
+  text-align: center;
+  margin-top: 0.5rem;
+  padding: 1rem;
+  border-bottom: 0.3px solid #fff;
 `;
 
 export default SignupForm;
