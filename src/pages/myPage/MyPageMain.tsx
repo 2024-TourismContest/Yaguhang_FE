@@ -1,34 +1,18 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import SectionTitle from "../../components/common/SectionTitle";
 import { teamLogos } from "../../types/teamLogos";
 import TeamSelector from "../../components/myPage/TeamSelector";
-import {
-  myDummyReviews,
-  dummyScrap,
-  dummyScrapSpot,
-  dummyMyRecommend,
-} from "../../assets/data/dummyData";
 import ReviewItem from "../../components/Review/ReviewItem";
 import useStore from "../../store/PreferTeamStore";
 import GameCardList from "../../components/myPage/GameCardList";
 import BookMarkList from "../../components/myPage/BookMarkList";
 import { toast } from "react-toastify";
 import { scrapSchedule } from "../../apis/main";
-import { useState } from "react";
+import { mypage } from "../../apis/mypage";
 import { Item } from "../../components/recommend/Item";
-interface Schedule {
-  id: number;
-  home: string;
-  away: string;
-  stadium: string;
-  date: string;
-  time: string;
-  weather: string;
-  homeTeamLogo: string;
-  awayTeamLogo: string;
-  weatherUrl: string;
-  isScraped: boolean;
-}
+import { Review } from "../../types/myPageType";
+import { Schedule } from "../../components/home/Card";
 
 const MyPageMain = () => {
   const {
@@ -37,7 +21,11 @@ const MyPageMain = () => {
     isTeamSelectorActive,
     setTeamSelectorActive,
   } = useStore();
-  const [, setSchedules] = useState<Schedule[]>([]);
+
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [myRecommend, setMyRecommend] = useState([]);
+  const [myReviews, setMyReviews] = useState<Review[]>([]);
+  const [myScrapSpots, setMyScrapSpots] = useState([]);
 
   const handleScrap = async (gameId: number) => {
     try {
@@ -57,6 +45,29 @@ const MyPageMain = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const myRecommendData = await mypage.MyRecommend(10);
+        setMyRecommend(myRecommendData.recommendPreviewDtos);
+
+        const myReviewsData = await mypage.MyReview();
+        setMyReviews(myReviewsData.reviews);
+
+        const myScrapSpotData = await mypage.MyBookMark();
+        setMyScrapSpots(myScrapSpotData);
+
+        const myScrapSchedule = await mypage.MyScrap(1, 10);
+        setSchedules(myScrapSchedule);
+      } catch (error) {
+        console.error("Error fetching MyPage data:", error);
+        toast.error("데이터를 불러오는 중 오류가 발생했습니다.");
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <MainPageContainer>
       <SectionTitle title={"관심 있는 구장"} />
@@ -68,38 +79,43 @@ const MyPageMain = () => {
         isEnabled={isTeamSelectorActive}
         setIsEnabled={setTeamSelectorActive}
       />
+
       <SectionTitle
         title={"MY 야구공 스탬프"}
         subtitle={"관심 있는 야구 일정 모아보기"}
       />
       <GameCardList
-        schedules={dummyScrap}
+        schedules={schedules}
         onScrap={handleScrap}
         maxCardsPerPage={4}
       />
+
       <Line />
+
       <SectionTitle title={"MY 추천행"} subtitle={"나의 여행 계획 모아보기"} />
-      {dummyMyRecommend.map((recommend, index) => (
+      {myRecommend?.map((recommend, index) => (
         <Item
           key={recommend.recommendId}
           item={recommend}
-          isLast={dummyMyRecommend.length - 1 == index}
+          isLast={myRecommend.length - 1 === index}
           isMine={true}
         />
       ))}
+
       <Line />
+
       <SectionTitle title={"MY 북마크"} subtitle={"나의 여행 계획 모아보기"} />
-      <BookMarkList data={dummyScrapSpot} />
+      <BookMarkList data={myScrapSpots} />
+
       <SectionTitle title={"MY 야구행 리뷰"} />
       <ReviewList>
-        {myDummyReviews.map((review) => (
+        {myReviews?.map((review) => (
           <ReviewItem key={review.reviewId} {...review} />
         ))}
       </ReviewList>
     </MainPageContainer>
   );
 };
-
 const MainPageContainer = styled.div`
   display: flex;
   flex-direction: column;
