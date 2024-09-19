@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import Modal from "../../components/common/Modal";
 import useStore from "../../store/PreferTeamStore";
+import { mypage } from "../../apis/mypage";
 
 interface TeamSelectorProps {
   teamLogos: Record<string, string>;
@@ -25,7 +26,7 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
   const { setPreferTeam } = useStore();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // 컴포넌트 외부 클릭 시 수정 불가
+  // 외부 클릭 시 모달 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -45,10 +46,10 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
     };
   }, [setIsEnabled]);
 
+  // 버튼 클릭 시 처리
   const handleButtonClick = useCallback(
     (team: string) => {
-      if (!isEnabled) return;
-      if (pendingTeam === team) return;
+      if (!isEnabled || pendingTeam === team) return;
       setPendingTeam(team);
       setIsModalOpen(true);
     },
@@ -56,16 +57,24 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
   );
 
   // 모달 확인 시
-  const confirmTeamSelection = useCallback(() => {
+  const confirmTeamSelection = useCallback(async () => {
     if (pendingTeam) {
-      setSelectedTeam(pendingTeam);
-      setPreferTeam(pendingTeam);
+      try {
+        await mypage.RegistFan(pendingTeam); // 팬 구단 등록 API 호출
+        setSelectedTeam(pendingTeam); // 선택된 팀 상태 업데이트
+        setPreferTeam(pendingTeam); // 스토어 상태 업데이트
+      } catch (error) {
+        console.error("Error during team selection:", error);
+      } finally {
+        // 모든 상태 초기화 및 모달 닫기
+        setPendingTeam(null);
+        setIsModalOpen(false);
+        if (setIsEnabled) {
+          setIsEnabled(false);
+        }
+      }
     }
-    setIsModalOpen(false);
-    if (setIsEnabled) {
-      setIsEnabled(false);
-    }
-  }, [pendingTeam, setSelectedTeam, setPreferTeam]);
+  }, [pendingTeam, setSelectedTeam, setPreferTeam, setIsEnabled]);
 
   return (
     <div ref={containerRef}>
@@ -101,7 +110,10 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
           title={"선호 팀 변경"}
           content={`"${pendingTeam}" 팀으로 변경하시겠습니까?`}
           onConfirm={confirmTeamSelection}
-          onCancel={() => setIsModalOpen(false)}
+          onCancel={() => {
+            setPendingTeam(null);
+            setIsModalOpen(false);
+          }}
         />
       )}
     </div>
@@ -155,7 +167,8 @@ const Button = styled.button<{
   transition: background 0.3s;
   overflow: hidden;
   margin: 0.5rem;
-  s &:hover {
+
+  &:hover {
     background: ${(props) =>
       props.isEnabled ? (props.selected ? "#fff" : "#ffffff30") : "none"};
   }

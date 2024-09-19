@@ -2,6 +2,7 @@ import { useRef } from "react";
 import styled from "styled-components";
 import pencilIcon from "../../assets/icons/pencil.svg";
 import defaultProfile from "../../assets/images/default-profile.svg";
+import defaultStadium from "../../assets/images/default-stadium.svg";
 
 interface ProfileComponentProps {
   profileImage: string | null;
@@ -43,7 +44,7 @@ const ProfileComponent = ({
         </>
       ) : (
         <TeamLogoContainer onClick={onTeamClick}>
-          <TeamLogoImg src={TeamLogo || defaultProfile} alt="구장 이미지" />
+          <TeamLogoImg src={TeamLogo || defaultStadium} alt="구장 이미지" />
         </TeamLogoContainer>
       )}
     </ProfileContainer>
@@ -119,6 +120,8 @@ const TeamLogoContainer = styled.div`
 `;
 
 const TeamLogoImg = styled.img`
+  background: #b5b5b5;
+  border-radius: 50%;
   width: 90%;
   height: 90%;
   object-fit: contain;

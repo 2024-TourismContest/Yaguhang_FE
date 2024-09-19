@@ -44,6 +44,7 @@ export const mypage = {
       throw error;
     }
   },
+
   MyBookMark: async (): Promise<MyBookMarkResponse> => {
     try {
       const response = await defaultApi.get<MyBookMarkResponse>(
@@ -62,6 +63,30 @@ export const mypage = {
       return response.data;
     } catch (error) {
       console.error("Error fetching MyPageInfo data:", error);
+      throw error;
+    }
+  },
+
+  RegistFan: async (team: string) => {
+    try {
+      const response = await defaultApi.post(`/api/users/fan/${team}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error registering fan team:", error);
+      throw error;
+    }
+  },
+
+  EditProfile: async (nickname: string, profileImage: string) => {
+    console.log("사진::",profileImage)
+    try {
+      const response = await defaultApi.put("/api/users", {
+        nickname,
+        profileImge: profileImage,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error updating profile:", error);
       throw error;
     }
   },

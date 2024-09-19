@@ -88,3 +88,8 @@ export interface MyRecommendResponse {
   totalPage: number;
   recommendPreviewDtos: RecommendPreviewDto[];
 }
+// /api/users
+export interface EditProfileParams {
+  nickname: string;
+  profileImage: string;
+}

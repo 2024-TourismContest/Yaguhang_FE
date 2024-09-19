@@ -4,13 +4,15 @@ import MenuItem from "../../components/layout/MenuItem";
 import ProfileComponent from "../../components/common/ProfileComponent";
 import Modal from "../../components/common/Modal";
 import useStore from "../../store/PreferTeamStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { teamLogos } from "../../types/teamLogos";
+import { mypage } from "../../apis/mypage";
+import { uploadToAws } from "../../apis/review";
 export default function MyPageLayout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { preferTeam, setTeamSelectorActive } = useStore();
+  const { preferTeam, setPreferTeam, setTeamSelectorActive } = useStore();
   const [isEditing, setIsEditing] = useState(false);
-  const [nickName, setNickName] = useState("홍차추출액어쩌고");
+  const [nickName, setNickName] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -32,28 +34,55 @@ export default function MyPageLayout() {
     setIsModalOpen(false);
   };
 
-  const toggleEditMode = () => {
-    if (isEditing && nickName.trim() === "") {
-      alert("닉네임이 비어있어요!");
-      return;
+  const toggleEditMode = async () => {
+    if (isEditing) {
+      if (nickName.trim() === "") {
+        alert("닉네임이 비어있어요!");
+        return;
+      }
+
+      try {
+        await mypage.EditProfile(nickName, profileImage!);
+        alert("프로필 수정이 완료되었습니다.");
+      } catch (error) {
+        console.error("프로필 수정 중 오류 발생:", error);
+        alert("프로필 수정에 실패했습니다.");
+      }
     }
-    setIsEditing((prev) => !prev);
+    setIsEditing((prev) => !prev); // 수정 모드 토글
   };
 
   const handleNickNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickName(e.target.value);
   };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        // AWS S3에 이미지 업로드 후 URL 받아오기
+        const imageUrl = await uploadToAws(file);
+        setProfileImage(imageUrl); // 업로드된 이미지 URL을 상태에 저장
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const myInfo = await mypage.MyPageInfo();
+        setNickName(myInfo.nickname);
+        setProfileImage(myInfo.image);
+        setPreferTeam(myInfo.fanTeam);
+        console.log("myInfo:", myInfo);
+      } catch (error) {
+        console.error("Error fetching MyPage data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <PageContainer>
