@@ -12,7 +12,6 @@ export const Button: React.FC<ButtonProps> = ({
   text,
   bgColor,
   color,
-  fontWeight,
 }) => {
   return (
     <Wrapper>
@@ -26,7 +25,6 @@ export const Button: React.FC<ButtonProps> = ({
 export const StyledButton = styled.button<{
   bgColor?: string;
   color?: string;
-  fontWeight?: string;
 }>`
   background-color: #1a278e;
   font-size: 0.95em;
