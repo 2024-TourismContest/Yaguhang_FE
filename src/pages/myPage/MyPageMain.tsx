@@ -115,6 +115,7 @@ const MyPageMain: React.FC = () => {
       <ReviewList>
         {myReviews?.map((review) => (
           <ReviewItem
+            stadiumId={0}
             isLiked={false}
             key={review.reviewId}
             {...review}
