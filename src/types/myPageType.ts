@@ -1,4 +1,26 @@
-// Type for /api/mypage/info response
+// /api/scraps/spot 응답
+export interface Spot {
+  contentId: number;
+  image: string;
+  title: string;
+}
+
+export interface Stadium {
+  stadiumId: number;
+  image: string;
+  title: string;
+}
+
+export interface ScrapStadiumSpots {
+  scrapStadium: Stadium;
+  scrapSpots: Spot[];
+}
+
+export interface MyBookMarkResponse {
+  scrapStadiumSpots: ScrapStadiumSpots[];
+}
+
+// /api/mypage/info 응답
 export interface MyPageInfo {
   userId: number;
   nickname: string;
@@ -6,7 +28,7 @@ export interface MyPageInfo {
   fanTeam: string;
 }
 
-// Type for /api/review/myreview response
+// /api/review/myreview 응답
 export interface Review {
   spotId: number;
   reviewId: number;
@@ -21,7 +43,7 @@ export interface MyReviewResponse {
   reviews: Review[];
 }
 
-// Type for /api/scraps/schedule response
+// /api/scraps/schedule 응답
 export interface ScrappedSchedule {
   id: number;
   home: string;
@@ -42,7 +64,7 @@ export interface ScrapsScheduleResponse {
   scrappedSchedules: ScrappedSchedule[];
 }
 
-// Type for /api/recommend/myrecommend response
+// /api/recommend/myrecommend 응답
 export interface RecommendPreviewDto {
   recommendId: number;
   stadiumId: number;

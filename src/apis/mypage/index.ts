@@ -3,6 +3,7 @@ import {
   MyReviewResponse,
   ScrapsScheduleResponse,
   MyRecommendResponse,
+  MyBookMarkResponse,
 } from "../../types/myPageType";
 import { defaultApi } from "../core/index";
 
@@ -43,10 +44,11 @@ export const mypage = {
       throw error;
     }
   },
-
-  MyBookMark: async (): Promise<MyReviewResponse> => {
+  MyBookMark: async (): Promise<MyBookMarkResponse> => {
     try {
-      const response = await defaultApi.get("/api/scraps/spot");
+      const response = await defaultApi.get<MyBookMarkResponse>(
+        "/api/scraps/spot"
+      );
       return response.data;
     } catch (error) {
       console.error("Error fetching MyBookMark data:", error);

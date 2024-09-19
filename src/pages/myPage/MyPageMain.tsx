@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SectionTitle from "../../components/common/SectionTitle";
 import { teamLogos } from "../../types/teamLogos";
@@ -11,10 +11,14 @@ import { toast } from "react-toastify";
 import { scrapSchedule } from "../../apis/main";
 import { mypage } from "../../apis/mypage";
 import { Item } from "../../components/recommend/Item";
-import { Review } from "../../types/myPageType";
+import {
+  Review,
+  RecommendPreviewDto,
+  ScrapStadiumSpots,
+} from "../../types/myPageType";
 import { Schedule } from "../../components/home/Card";
 
-const MyPageMain = () => {
+const MyPageMain: React.FC = () => {
   const {
     preferTeam,
     setPreferTeam,
@@ -23,9 +27,9 @@ const MyPageMain = () => {
   } = useStore();
 
   const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [myRecommend, setMyRecommend] = useState([]);
+  const [myRecommend, setMyRecommend] = useState<RecommendPreviewDto[]>([]);
   const [myReviews, setMyReviews] = useState<Review[]>([]);
-  const [myScrapSpots, setMyScrapSpots] = useState([]);
+  const [myScrapSpots, setMyScrapSpots] = useState<ScrapStadiumSpots[]>([]);
 
   const handleScrap = async (gameId: number) => {
     try {
@@ -55,10 +59,10 @@ const MyPageMain = () => {
         setMyReviews(myReviewsData.reviews);
 
         const myScrapSpotData = await mypage.MyBookMark();
-        setMyScrapSpots(myScrapSpotData);
+        setMyScrapSpots(myScrapSpotData.scrapStadiumSpots);
 
         const myScrapSchedule = await mypage.MyScrap(1, 10);
-        setSchedules(myScrapSchedule);
+        setSchedules(myScrapSchedule.scrappedSchedules);
       } catch (error) {
         console.error("Error fetching MyPage data:", error);
         toast.error("데이터를 불러오는 중 오류가 발생했습니다.");
@@ -110,12 +114,18 @@ const MyPageMain = () => {
       <SectionTitle title={"MY 야구행 리뷰"} />
       <ReviewList>
         {myReviews?.map((review) => (
-          <ReviewItem key={review.reviewId} {...review} />
+          <ReviewItem
+            isLiked={false}
+            key={review.reviewId}
+            {...review}
+            isMine={true}
+          />
         ))}
       </ReviewList>
     </MainPageContainer>
   );
 };
+
 const MainPageContainer = styled.div`
   display: flex;
   flex-direction: column;

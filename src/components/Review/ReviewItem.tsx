@@ -10,13 +10,14 @@ import defaultImg from "../../assets/images/default-profile.svg";
 
 interface ReviewItemProps {
   reviewId: number;
+  spotId: number;
+  spotName?: string;
   authorName?: string;
   profileImage?: string;
   createdAt?: string;
-  stadiumName?: string;
   content: string;
   star: number;
-  likes: number;
+  likeCount: number;
   isMine: boolean;
   isLiked: boolean;
   images?: string[];
@@ -26,19 +27,19 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
   authorName,
   profileImage,
   createdAt,
-  stadiumName,
+  spotName,
   content,
   star,
-  likes,
+  likeCount,
   isLiked: initialIsLiked,
   images = [],
 }) => {
   const [isLiked, setIsLiked] = useState(initialIsLiked);
-  const [likeCount, setLikeCount] = useState(likes);
+  const [likes, setLikes] = useState(likeCount);
 
   const toggleLike = () => {
     setIsLiked(!isLiked);
-    setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
+    setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
   };
 
   const renderStars = (star: number) => {
@@ -76,9 +77,9 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
         <ContentsContainer>
           <ReviewInfo>
             <StadiumNameContainer>
-              {stadiumName && (
+              {spotName && (
                 <>
-                  <StadiumName>{stadiumName}</StadiumName>
+                  <StadiumName>{spotName}</StadiumName>
                   <ArrowIcon src={RightArrow} alt="Right Arrow" />
                 </>
               )}
@@ -93,7 +94,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
               </Rating>
               <Likes onClick={toggleLike}>
                 <HeartImg src={isLiked ? HeartFull : HeartEmpty} alt="Like" />
-                {likeCount}
+                {likes}
               </Likes>
             </RatingLikesContainer>
           </ReviewInfo>
