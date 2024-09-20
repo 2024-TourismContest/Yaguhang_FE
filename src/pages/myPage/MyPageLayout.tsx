@@ -2,14 +2,15 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import MenuItem from "../../components/layout/MenuItem";
 import ProfileComponent from "../../components/common/ProfileComponent";
-import Modal from "../../components/common/Modal";
+import useModalStore from "../../store/modalStore";
 import useStore from "../../store/PreferTeamStore";
 import { useEffect, useState } from "react";
 import { teamLogos } from "../../types/teamLogos";
 import { mypage } from "../../apis/mypage";
 import { uploadToAws } from "../../apis/review";
-export default function MyPageLayout() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+const MyPageLayout = () => {
+  const { openModal, closeModal} = useModalStore();
   const { preferTeam, setPreferTeam, setTeamSelectorActive } = useStore();
   const [isEditing, setIsEditing] = useState(false);
   const [nickName, setNickName] = useState("");
@@ -18,20 +19,19 @@ export default function MyPageLayout() {
 
   const handleTeamClick = () => {
     if (window.location.pathname !== "/mypage") {
-      setIsModalOpen(true);
+      openModal({
+        title: "관심 팀 변경",
+        content: "관심 팀을 변경하시겠어요?",
+        onConfirm: () => {
+          setTeamSelectorActive(true);
+          navigate("/mypage");
+          closeModal();
+        },
+        showCancel: true
+      });
     } else {
       setTeamSelectorActive(true);
     }
-  };
-
-  const handleModalConfirm = () => {
-    setIsModalOpen(false);
-    navigate("/mypage");
-    setTeamSelectorActive(true);
-  };
-
-  const handleModalCancel = () => {
-    setIsModalOpen(false);
   };
 
   const toggleEditMode = async () => {
@@ -80,7 +80,6 @@ export default function MyPageLayout() {
         console.error("Error fetching MyPage data:", error);
       }
     };
-
     fetchData();
   }, []);
 
@@ -119,17 +118,10 @@ export default function MyPageLayout() {
       <ContentContainer>
         <Outlet />
       </ContentContainer>
-      {isModalOpen && (
-        <Modal
-          title="관심 팀 변경"
-          content="관심 팀을 변경하시겠어요?"
-          onConfirm={handleModalConfirm}
-          onCancel={handleModalCancel}
-        />
-      )}
     </PageContainer>
   );
-}
+};
+export default MyPageLayout;
 
 const PageContainer = styled.div`
   display: flex;

@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import Modal from "../../components/common/Modal";
 import useStore from "../../store/PreferTeamStore";
 import { mypage } from "../../apis/mypage";
+import useModalStore from "../../store/modalStore";
 
 interface TeamSelectorProps {
   teamLogos: Record<string, string>;
@@ -21,12 +21,12 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
   isEnabled = true,
   setIsEnabled,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingTeam, setPendingTeam] = useState<string | null>(null);
   const { setPreferTeam } = useStore();
   const containerRef = useRef<HTMLDivElement>(null);
+  const { openModal, closeModal } = useModalStore();
 
-  // 외부 클릭 시 모달 닫기
+  // 외부 클릭 시 비활성화
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -34,7 +34,6 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
         !containerRef.current.contains(event.target as Node)
       ) {
         setPendingTeam(null);
-        setIsModalOpen(false);
         if (setIsEnabled) {
           setIsEnabled(false);
         }
@@ -46,35 +45,30 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
     };
   }, [setIsEnabled]);
 
-  // 버튼 클릭 시 처리
   const handleButtonClick = useCallback(
     (team: string) => {
       if (!isEnabled || pendingTeam === team) return;
       setPendingTeam(team);
-      setIsModalOpen(true);
+      openModal({
+        title: "선호 팀 변경",
+        content: `"${team}" 팀으로 변경하시겠습니까?`,
+        onConfirm: async () => {
+          if (pendingTeam) {
+            try {
+              await mypage.RegistFan(pendingTeam);
+              setSelectedTeam(pendingTeam);
+              setPreferTeam(pendingTeam);
+            } catch (error) {
+              console.error("Error during team selection:", error);
+            }
+          }
+          closeModal();
+        },
+        showCancel: true,
+      });
     },
-    [isEnabled, pendingTeam]
+    [pendingTeam, isEnabled, setSelectedTeam, setPreferTeam, openModal]
   );
-
-  // 모달 확인 시
-  const confirmTeamSelection = useCallback(async () => {
-    if (pendingTeam) {
-      try {
-        await mypage.RegistFan(pendingTeam); // 팬 구단 등록 API 호출
-        setSelectedTeam(pendingTeam); // 선택된 팀 상태 업데이트
-        setPreferTeam(pendingTeam); // 스토어 상태 업데이트
-      } catch (error) {
-        console.error("Error during team selection:", error);
-      } finally {
-        // 모든 상태 초기화 및 모달 닫기
-        setPendingTeam(null);
-        setIsModalOpen(false);
-        if (setIsEnabled) {
-          setIsEnabled(false);
-        }
-      }
-    }
-  }, [pendingTeam, setSelectedTeam, setPreferTeam, setIsEnabled]);
 
   return (
     <div ref={containerRef}>
@@ -104,18 +98,6 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
           ))}
         </IconButton>
       </ButtonContainer>
-
-      {isModalOpen && (
-        <Modal
-          title={"선호 팀 변경"}
-          content={`"${pendingTeam}" 팀으로 변경하시겠습니까?`}
-          onConfirm={confirmTeamSelection}
-          onCancel={() => {
-            setPendingTeam(null);
-            setIsModalOpen(false);
-          }}
-        />
-      )}
     </div>
   );
 };
