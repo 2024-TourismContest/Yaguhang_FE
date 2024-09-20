@@ -1,21 +1,40 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import logo from "../../assets/images/logo.svg";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import authStore from "../../store/authStore";
+import useModalStore from "../../store/modalStore";
 
-export default function Header() {
+const Header = () => {
+  const { openModal, closeModal } = useModalStore();
   const location = useLocation();
   const currentPath = location.pathname;
-  const { isAuthenticated, setIsAuthenticated } = authStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isAuthenticated, setIsAuthenticated } = authStore();
+  const navigate = useNavigate();
 
   const handleAuthButtonClick = () => {
     if (isAuthenticated) {
       setIsAuthenticated(false);
       localStorage.removeItem("token");
     } else {
-      window.location.href = "/login";
+      navigate("/login");
+    }
+  };
+
+  const handleMypageClick = () => {
+    if (!isAuthenticated) {
+      openModal({
+        title: "로그인 필요",
+        content: "마이페이지를 이용하시려면 로그인해주세요.",
+        onConfirm: () => {
+          navigate("/login");
+          closeModal();
+        },
+        showCancel: true,
+      });
+    } else {
+      navigate("/mypage");
     }
   };
 
@@ -55,10 +74,10 @@ export default function Header() {
             추천행
           </StyledNavLink>
         </NavItem>
-        <NavItem>
-          <StyledNavLink to="/mypage" isActive={currentPath === "/mypage"}>
+        <NavItem onClick={handleMypageClick}>
+          <ActiveLink isActive={currentPath === "/mypage"}>
             마이페이지
-          </StyledNavLink>
+          </ActiveLink>
         </NavItem>
       </NavList>
       <LoginButtonContainer>
@@ -111,7 +130,7 @@ export default function Header() {
       )}
     </NavbarContainer>
   );
-}
+};
 
 const NavbarContainer = styled.nav<{ isMenuOpen: boolean }>`
   position: fixed;
@@ -154,7 +173,34 @@ const NavItem = styled.li`
   margin: 0;
 `;
 
-const StyledNavLink = styled(Link)<{ isActive: boolean }>`
+const StyledNavLink = styled(Link)<{ isActive?: boolean }>`
+  text-decoration: none;
+  color: #fff;
+  text-align: center;
+  font-family: Inter, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: normal;
+  padding: 0.75rem 1.5rem;
+  position: relative;
+
+  ${({ isActive }) =>
+    isActive &&
+    `
+    &::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: #fff;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+  `}
+`;
+
+const ActiveLink = styled.span<{ isActive: boolean }>`
   text-decoration: none;
   color: #fff;
   text-align: center;
@@ -258,3 +304,5 @@ const LoginButtonContainerMobile = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
+export default Header;

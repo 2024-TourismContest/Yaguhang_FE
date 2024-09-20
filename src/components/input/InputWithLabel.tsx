@@ -15,7 +15,7 @@ interface InputWithLabelProps {
   showConfirmPassword?: boolean;
   passwordMatch?: boolean;
   readOnly?: boolean; // 읽기 전용 여부
-  width: string;
+  width?: string;
 }
 
 const InputWithLabel: React.FC<InputWithLabelProps> = ({
