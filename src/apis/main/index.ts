@@ -1,10 +1,26 @@
 import { defaultApi } from "../core/index";
-
 import { Schedule } from "../../components/home/Card";
 
 const getAuthToken = () => localStorage.getItem("token") || "";
 
 export const home = {
+  checkFanTeam: async () => {
+    try {
+      const response = await defaultApi.get(`/api/users/check/fan-team`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching fan team status:", error);
+      throw error;
+    }
+  },
+  setDoNotShowAgain: async () => {
+    try {
+      await defaultApi.get(`/api/users/click/check-fan-team`);
+    } catch (error) {
+      console.error("Error setting 'Do not show again':", error);
+      throw error;
+    }
+  },
   place: async (stadium: string, category: string) => {
     try {
       const response = await defaultApi.get(

@@ -35,7 +35,7 @@ const SignupForm = () => {
     /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
 
   const validatePhoneNumber = (phone: string): boolean =>
-    /^\d{3}-\d{3,4}-\d{4}$/.test(phone);
+    phone === "" || /^\d{3}-\d{3,4}-\d{4}$/.test(phone);
 
   const formatPhoneNumber = (phone: string): string =>
     phone.replace(/[^0-9]/g, "").replace(/(\d{3})(\d{3,4})(\d{4})/, "$1-$2-$3");
@@ -58,18 +58,12 @@ const SignupForm = () => {
   };
 
   const validateForm = (): boolean => {
-    const newErrors = Object.keys(errors).reduce((acc, field) => {
-      const key = field as keyof Validators;
-      acc[key] = validateField(
-        key,
-        key === "confirmPassword"
-          ? confirmPassword
-          : key === "phoneNumber"
-          ? phoneNumber
-          : email
-      );
-      return acc;
-    }, {} as Record<keyof Validators, string>);
+    const newErrors = {
+      email: validateField("email", email),
+      password: validateField("password", password),
+      confirmPassword: validateField("confirmPassword", confirmPassword),
+      phoneNumber: validateField("phoneNumber", phoneNumber),
+    };
 
     setErrors(newErrors);
     return !Object.values(newErrors).some((error) => error !== "");
