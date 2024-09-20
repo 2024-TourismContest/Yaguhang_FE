@@ -1,10 +1,13 @@
 import styled from "styled-components";
+import { useState } from "react";
 
 interface ModalProps {
   title: string;
   content: string;
   onConfirm: () => void;
   onCancel: () => void;
+  onDoNotShowAgain?: (doNotShowAgain: boolean) => void;
+  showDoNotShowAgain?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -12,15 +15,45 @@ const Modal: React.FC<ModalProps> = ({
   content,
   onConfirm,
   onCancel,
+  onDoNotShowAgain,
+  showDoNotShowAgain = false,
 }) => {
+  const [doNotShowAgain, setDoNotShowAgain] = useState(false);
+
+  const handleConfirm = () => {
+    if (onDoNotShowAgain) {
+      onDoNotShowAgain(doNotShowAgain);
+    }
+    onConfirm();
+  };
+
+  const handleCancel = () => {
+    if (onDoNotShowAgain) {
+      onDoNotShowAgain(doNotShowAgain);
+    }
+    onCancel();
+  };
+
   return (
     <ModalOverlay>
       <ModalContent>
         <ModalTitle>{title}</ModalTitle>
-        <ModalBody>{content}</ModalBody>
+        <ModalBody>
+          <p>{content}</p>
+          {showDoNotShowAgain && (
+            <CheckboxContainer>
+              <Checkbox
+                type="checkbox"
+                checked={doNotShowAgain}
+                onChange={() => setDoNotShowAgain(!doNotShowAgain)}
+              />
+              <CheckboxLabel>다시 보지 않기</CheckboxLabel>
+            </CheckboxContainer>
+          )}
+        </ModalBody>
         <ButtonContainer>
-          <Button onClick={onConfirm}>확인</Button>
-          <Button onClick={onCancel}>취소</Button>
+          <Button onClick={handleConfirm}>확인</Button>
+          <Button onClick={handleCancel}>취소</Button>
         </ButtonContainer>
       </ModalContent>
     </ModalOverlay>
@@ -53,8 +86,23 @@ const ModalTitle = styled.h2`
   margin-bottom: 1rem;
 `;
 
-const ModalBody = styled.p`
+const ModalBody = styled.div`
   margin-bottom: 2rem;
+`;
+
+const CheckboxContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+`;
+
+const Checkbox = styled.input`
+  margin-right: 0.5rem;
+`;
+
+const CheckboxLabel = styled.label`
+  font-size: 0.875rem; /* 14px */
 `;
 
 const ButtonContainer = styled.div`

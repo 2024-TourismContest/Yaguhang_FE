@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { auth } from "../../apis/auth";
-import { useNavigate } from "react-router-dom";
 const redirect_uri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 import useAuthStore from "../../store/authStore";
 
@@ -14,35 +14,33 @@ const LoginForm = () => {
 
   const handleKakaoLogin = () => {
     const kakaoLoginUrl = `https://yaguhang.kro.kr:8443/oauth2/authorization/kakao?redirect_uri=${redirect_uri}`;
-    console.log(kakaoLoginUrl);
     window.location.href = kakaoLoginUrl;
   };
 
-  // 카카오 로그인 후 리디렉션 URL에서 액세스 토큰을 추출 후 저장
   useEffect(() => {
     const handleTokenExtraction = () => {
       const queryParams = new URLSearchParams(window.location.search);
-      const token = queryParams.get('token');
+      const token = queryParams.get("token");
       if (token) {
-        localStorage.setItem('token', token);
+        localStorage.setItem("token", token);
         setIsAuthenticated(true);
-        navigate('/'); // 토큰이 저장된 후 홈으로 리디렉션
+        localStorage.setItem("showFanTeamModalOnHome", "true"); // 로그인 후 홈 페이지에서 모달을 표시할지 여부 저장
+        navigate("/");
       } else {
         console.log("No token found in URL.");
       }
     };
 
-    handleTokenExtraction(); // 페이지가 로드될 때 토큰 추출 함수 호출
-  }, [navigate]);
-
+    handleTokenExtraction();
+  }, [navigate, setIsAuthenticated]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-  
     try {
       const response = await auth.login(email, password);
       console.log(response);
-      navigate('/');
+      localStorage.setItem("showFanTeamModalOnHome", "true"); // 로그인 후 홈 페이지에서 모달을 표시할지 여부 저장
+      navigate("/"); // 홈 화면으로 리다이렉트
     } catch (err) {
       setError("로그인에 실패했습니다.");
     }
@@ -51,7 +49,9 @@ const LoginForm = () => {
   return (
     <FormContainer>
       <Title>로그인</Title>
-      <KaKaoButton onClick={handleKakaoLogin}>카카오톡으로 계속하기</KaKaoButton>
+      <KaKaoButton onClick={handleKakaoLogin}>
+        카카오톡으로 계속하기
+      </KaKaoButton>
       <Line />
       <InputContainer>
         <Input
@@ -153,7 +153,6 @@ const SubmitBtn = styled.button`
   cursor: pointer;
   margin-top: auto;
 `;
-
 
 const ErrorMessage = styled.p`
   color: #ff6262;
