@@ -7,13 +7,15 @@ import checkIcon from "../../assets/icons/check.png";
 interface InputWithLabelProps {
   label: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // onChange가 선택적이 됩니다.
   type?: string;
   error?: string;
   showPassword?: boolean;
   onTogglePassword?: () => void;
   showConfirmPassword?: boolean;
   passwordMatch?: boolean;
+  readOnly?: boolean; // 읽기 전용 여부
+  width: string;
 }
 
 const InputWithLabel: React.FC<InputWithLabelProps> = ({
@@ -24,10 +26,14 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
   error,
   onTogglePassword,
   passwordMatch,
+  readOnly = false,
+  width,
 }) => {
   return (
     <InputWrapper>
-      <InputContainer hasError={!!error}>
+      <InputContainer hasError={!!error} width={width}>
+        {" "}
+        {/* width prop 전달 */}
         <Label>{label}</Label>
         <InputWrapperWithIcon>
           <Input
@@ -35,9 +41,10 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
             value={value}
             onChange={onChange}
             hasError={!!error}
+            readOnly={readOnly}
           />
           {passwordMatch && <CheckIcon src={checkIcon} alt="check" />}
-          {onTogglePassword && (
+          {onTogglePassword && type === "password" && !readOnly && (
             <TogglePasswordButton type="button" onClick={onTogglePassword}>
               <img
                 src={type === "password" ? eyeIcon : eyeOffIcon}
@@ -51,14 +58,13 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
     </InputWrapper>
   );
 };
-
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
 `;
 
-const InputContainer = styled.div<{ hasError: boolean }>`
+const InputContainer = styled.div<{ hasError: boolean; width?: string }>`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -68,6 +74,8 @@ const InputContainer = styled.div<{ hasError: boolean }>`
   border: 0.3px solid ${({ hasError }) => (hasError ? "#ff4d4f" : "#fff")};
   gap: 10px;
   position: relative;
+
+  width: ${({ width }) => width || "100%"}; // customWidth를 사용하여 너비 조정
 `;
 
 const InputWrapperWithIcon = styled.div`
@@ -96,10 +104,13 @@ const Input = styled.input<{ hasError: boolean }>`
   font-weight: 400;
   text-align: left;
   padding-right: 2rem; /* 아이콘의 너비만큼 여백 추가 */
-  border: none;
 
   &:focus {
     outline: none;
+  }
+
+  &[readonly] {
+    cursor: not-allowed;
   }
 `;
 
