@@ -2,11 +2,18 @@ import styled from "styled-components";
 import User from "../../components/mycourse/User";
 import { Filter } from "../../components/recommend/filter";
 import { useState } from "react";
+import { Button } from "../../components/button/Button";
+import { useNavigate } from "react-router-dom";
 
 const MycoursePage = () => {
   const [selectedSpot, setSelectedSpot] = useState("전체");
   const handleSpotChange = (spot: string) => {
     setSelectedSpot(spot);
+  };
+  const navigate = useNavigate();
+
+  const handleButtonClick = (page: string) => {
+    navigate(`/${page}`);
   };
 
   return (
@@ -29,6 +36,16 @@ const MycoursePage = () => {
           </DotLineContainer>
           <Local>{selectedSpot}</Local>
         </CategoryContainer>
+        <Button
+          bgColor="#000"
+          border="2px solid #fff"
+          color="#fff"
+          text="나의 추천행 코스 생성하기 >"
+          fontWeight="bold"
+          hoverColor="#a7cfec"
+          hoverBorderColor="#a7cfec"
+          onClick={() => handleButtonClick("RecommendPage")}
+        />
       </Container>
     </>
   );

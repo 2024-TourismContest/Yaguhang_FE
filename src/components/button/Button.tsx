@@ -6,16 +6,33 @@ interface ButtonProps {
   bgColor?: string;
   color?: string;
   fontWeight?: string;
+  className?: string;
+  border?: string;
+  hoverBgColor?: string;
+  hoverColor?: string;
+  hoverBorderColor?: string;
 }
 export const Button: React.FC<ButtonProps> = ({
   onClick,
   text,
   bgColor,
   color,
+  border,
+  hoverBgColor,
+  hoverColor,
+  hoverBorderColor,
 }) => {
   return (
     <Wrapper>
-      <StyledButton bgColor={bgColor} color={color} onClick={onClick}>
+      <StyledButton
+        bgColor={bgColor}
+        color={color}
+        onClick={onClick}
+        border={border}
+        hoverBgColor={hoverBgColor}
+        hoverColor={hoverColor}
+        hoverBorderColor={hoverBorderColor}
+      >
         {text}
       </StyledButton>
     </Wrapper>
@@ -25,6 +42,11 @@ export const Button: React.FC<ButtonProps> = ({
 export const StyledButton = styled.button<{
   bgColor?: string;
   color?: string;
+  className?: string;
+  border?: string;
+  hoverBgColor?: string;
+  hoverColor?: string;
+  hoverBorderColor?: string;
 }>`
   background-color: #1a278e;
   font-size: 0.95em;
@@ -41,6 +63,19 @@ export const StyledButton = styled.button<{
   margin: 3vh auto;
   display: block;
   font-weight: 700;
+  border: ${(props) => props.border};
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease; // 부드러운 전환 효과
+
+  &:hover {
+    background-color: ${(props) =>
+      props.hoverBgColor || "#000000"}; // hover 시 배경 색상
+    color: ${(props) => props.hoverColor || "#ffffff"}; // hover 시 글자 색상
+    border: ${(props) =>
+      `1px solid ${
+        props.hoverBorderColor || "#000000"
+      }`}; // hover 시 border 색상 변경
+  }
 `;
 export const Wrapper = styled.div`
   width: 100%;
