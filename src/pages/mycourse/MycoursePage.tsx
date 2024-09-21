@@ -8,54 +8,109 @@ const MycoursePage = () => {
   const handleSpotChange = (spot: string) => {
     setSelectedSpot(spot);
   };
+
   return (
     <>
       <Container>
-        <Title>나의 추천행 코스 만들기</Title>
+        <Title>
+          <Emoji>⛳️</Emoji> 나의 <Highlight>추천행</Highlight> 코스 만들기
+        </Title>
         <User />
         <CategoryContainer>
-          <Filter
-            selectedSpot={selectedSpot}
-            handleSpotChange={handleSpotChange}
-          />
-          <DotLine />
-          <Local>부산</Local>
+          <FilterWrapper>
+            <Filter
+              selectedSpot={selectedSpot}
+              handleSpotChange={handleSpotChange}
+            />
+          </FilterWrapper>
+          <DotLineContainer>
+            <DotLine />
+            <Dot />
+          </DotLineContainer>
+          <Local>{selectedSpot}</Local>
         </CategoryContainer>
       </Container>
     </>
   );
 };
+
 export default MycoursePage;
 
 const Container = styled.div`
-  margin-top: 15vh;
   width: 100%;
+  max-width: 60vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   color: #fff;
+  height: 100vh;
+  margin: 0 auto;
+  margin-top: -120px;
+`;
+const Title = styled.h2`
+  font-size: 1.7rem;
+  margin-bottom: 7vh;
+  font-weight: 600;
+  letter-spacing: 1px;
+  position: relative;
 `;
 
-const Title = styled.h2`
-  font-size: 1.5rem;
-  margin-bottom: 5vh;
+const Emoji = styled.span`
+  font-size: 2.5rem;
+  position: relative;
+  top: 5px;
 `;
+
+const Highlight = styled.span`
+  color: #83c7ff;
+  text-decoration: underline;
+`;
+
 const CategoryContainer = styled.div`
   max-width: 600px;
   display: flex;
-  border: 1px solid #fff;
+  align-items: center;
+  justify-content: center;
   padding: 20px 0;
 `;
+
+const FilterWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const DotLineContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  margin: 20px;
+`;
+
 const DotLine = styled.div`
-  width: 300px;
-  border-top: 1px dotted gray;
-  margin: 20px 30px;
+  width: 400px;
+  border-top: 1px dashed gray;
+`;
+
+const Dot = styled.div`
+  position: absolute;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background-color: #ccc;
+  border-radius: 50%;
 `;
 
 const Local = styled.div`
-  width: 100px;
-  max-width: 100px;
+  width: 40px;
+  height: 20px;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid #fff;
-  padding: 20px 0;
+  padding: 10px 20px;
 `;

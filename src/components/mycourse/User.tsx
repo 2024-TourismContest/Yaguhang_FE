@@ -28,7 +28,9 @@ const User = () => {
         <UserImage src={userData.image} alt="User" />
         <FanTeamImage src={userData.fanTeam} alt="Fan Team" />
       </UserProfile>
-      <Nickname>"{userData.nickname}"님의 추천행</Nickname>
+      <Nickname>
+        <span>"{userData.nickname}"</span>님의 추천행
+      </Nickname>
     </UserDetails>
   );
 };
@@ -71,4 +73,11 @@ const Nickname = styled.h2`
   color: #fff;
   font-size: 1.2rem;
   margin-top: 15px;
+  letter-spacing: 1px;
+  color: #dfdfdf;
+
+  span {
+    font-weight: 600;
+    color: #fff;
+  }
 `;
