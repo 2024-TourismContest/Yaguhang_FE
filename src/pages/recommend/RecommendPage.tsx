@@ -69,7 +69,7 @@ export const RecommendPage = () => {
           color="black"
           text="나의 추천행 코스 만들기 >"
           fontWeight="bold"
-          onClick={() => handleButtonClick("/")}
+          onClick={() => handleButtonClick("mycourse")}
           //추천행 만들기 페이지로
         />
       </TopSection>
