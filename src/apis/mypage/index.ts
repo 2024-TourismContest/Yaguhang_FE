@@ -78,7 +78,6 @@ export const mypage = {
   },
 
   EditProfile: async (nickname: string, profileImage: string) => {
-    console.log("사진::",profileImage)
     try {
       const response = await defaultApi.put("/api/users", {
         nickname,
@@ -87,6 +86,43 @@ export const mypage = {
       return response.data;
     } catch (error) {
       console.error("Error updating profile:", error);
+      throw error;
+    }
+  },
+
+  // 카카오 로그인 여부 확인
+  CheckKakao: async (): Promise<string> => {
+    try {
+      const response = await defaultApi.get("/api/auth/provider");
+      return response.data;
+    } catch (error) {
+      console.error("Error checking kakao auth:", error);
+      throw error;
+    }
+  },
+
+  // 비밀번호 확인
+  CheckPassword: async (currentPassword: string): Promise<boolean> => {
+    try {
+      const response = await defaultApi.get(
+        `/api/auth/password-check?password=${currentPassword}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error checking password:", error);
+      throw error;
+    }
+  },
+
+  // 비밀번호 변경
+  ChangePassword: async (newPassword: string): Promise<void> => {
+    try {
+      const response = await defaultApi.put("/api/auth/password", {
+        newPassword,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error changing password:", error);
       throw error;
     }
   },

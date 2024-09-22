@@ -2,6 +2,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import SectionTitle from "../../components/common/SectionTitle";
 import InputWithLabel from "../../components/input/InputWithLabel";
+import { mypage } from "../../apis/mypage";
+import useModalStore from "../../store/modalStore";
 
 const MyAccount = () => {
   const [name, setName] = useState("사용자 이름");
@@ -19,6 +21,8 @@ const MyAccount = () => {
     newPassword: "",
     confirmPassword: "",
   });
+
+  const { openModal, closeModal } = useModalStore();
 
   const validateInfo = () => {
     const newErrors = { ...errors };
@@ -50,19 +54,51 @@ const MyAccount = () => {
     return Object.values(newErrors).every((error) => error === "");
   };
 
-  const handleSaveInfo = () => {
+  const handleSaveInfo = async () => {
     if (validateInfo()) {
-      console.log("정보 저장 요청:", { name, phoneNumber });
+      try {
+        await mypage.EditProfile(name, phoneNumber);
+        console.log("정보 저장 요청 완료:", { name, phoneNumber });
+      } catch (error) {
+        console.error("Error saving info:", error);
+      }
     }
   };
 
-  const handleSavePassword = () => {
+  const handleSavePassword = async () => {
+    const kakaoResponse = await mypage.CheckKakao();
+    if (kakaoResponse === "kakao") {
+      openModal({
+        title: "비밀번호 변경 오류",
+        content: "카카오로그인은 비밀번호를 변경할 수 없어요!",
+        onConfirm: () => {
+          closeModal();
+        },
+      });
+      resetForm();
+      return;
+    }
+
     if (validatePassword()) {
-      console.log("비밀번호 변경 요청:", { currentPassword, newPassword });
+      try {
+        // 비밀번호 확인 API 호출
+        await mypage.CheckPassword(currentPassword);
+
+        // 비밀번호 변경 API 호출
+        await mypage.ChangePassword(newPassword);
+
+        console.log("비밀번호 변경 요청 완료");
+      } catch (error) {
+        setErrors((prev) => ({
+          ...prev,
+          currentPassword: "유효하지 않은 비밀번호입니다. 다시 확인해주세요.",
+        }));
+        console.error("Error saving password:", error);
+      }
     }
   };
 
-  const handleCancel = () => {
+  const resetForm = () => {
     setName("사용자 이름");
     setPhoneNumber("010-1234-5678");
     setCurrentPassword("");
@@ -102,13 +138,12 @@ const MyAccount = () => {
           width="450px"
         />
         <ButtonContainer>
-          <CancelButton onClick={handleCancel}>취소</CancelButton>
+          <CancelButton onClick={resetForm}>취소</CancelButton>
           <SaveButton onClick={handleSaveInfo}>저장</SaveButton>
         </ButtonContainer>
       </InfoSection>
 
       <Line />
-
       <SectionTitle title={"비밀번호 변경"} />
       <PasswordChangeSection>
         <InputWithLabel
@@ -140,13 +175,15 @@ const MyAccount = () => {
           width="450px"
         />
         <ButtonContainer>
-          <CancelButton onClick={handleCancel}>취소</CancelButton>
+          <CancelButton onClick={resetForm}>취소</CancelButton>
           <SaveButton onClick={handleSavePassword}>저장</SaveButton>
         </ButtonContainer>
       </PasswordChangeSection>
     </MainPageContainer>
   );
 };
+
+export default MyAccount;
 
 const MainPageContainer = styled.div`
   display: flex;
@@ -200,5 +237,3 @@ const SaveButton = styled.button`
   cursor: pointer;
   font-size: 1.2rem;
 `;
-
-export default MyAccount;
