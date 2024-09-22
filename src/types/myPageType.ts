@@ -31,10 +31,12 @@ export interface MyPageInfo {
 
 // /api/review/myreview 응답
 export interface Review {
+  stadiumId: number;
   spotId: number;
   reviewId: number;
   star: number;
   likeCount: number;
+  isLiked: boolean;
   image: string;
   createdAt: string;
   content: string;

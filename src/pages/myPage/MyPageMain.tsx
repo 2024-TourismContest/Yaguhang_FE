@@ -5,7 +5,7 @@ import { teamLogos } from "../../types/teamLogos";
 import TeamSelector from "../../components/myPage/TeamSelector";
 import ReviewItem from "../../components/Review/ReviewItem";
 import useStore from "../../store/PreferTeamStore";
-import CardList from "../../components/myPage/GameCardList"
+import CardList from "../../components/myPage/GameCardList";
 import BookMarkList from "../../components/myPage/BookMarkList";
 import { toast } from "react-toastify";
 import { mypage } from "../../apis/mypage";
@@ -33,7 +33,7 @@ const MyPageMain: React.FC = () => {
 
         const myReviewsData = await mypage.MyReview();
         setMyReviews(myReviewsData.reviews);
-
+        console.log(myReviewsData);
         const myScrapSchedule = await mypage.MyScrap(0, 100);
         setMyScrapGames(myScrapSchedule.scrappedSchedules);
       } catch (error) {
@@ -85,18 +85,16 @@ const MyPageMain: React.FC = () => {
       <SectionTitle title={"MY 야구행 리뷰"} />
       {myReviews && myReviews.length > 0 ? (
         <ReviewList>
-          {myReviews.map((review) => (
+          {myReviews.slice(0, 2).map((review) => (
             <ReviewItem
-              stadiumId={0}
-              isLiked={false}
               key={review.reviewId}
-              {...review}
               isMine={true}
+              {...review}
             />
           ))}
         </ReviewList>
       ) : (
-        <NoDataMessage>작성한 리뷰가 없습니다.</NoDataMessage>
+        <NoDataMessage>리뷰가 없습니다.</NoDataMessage> // 리뷰가 없을 경우 메시지 추가
       )}
       <MoreLink to="/mypage/review">+ 더보기</MoreLink>
     </MainPageContainer>
