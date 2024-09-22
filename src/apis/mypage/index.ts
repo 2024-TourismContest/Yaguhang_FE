@@ -45,7 +45,11 @@ export const mypage = {
     }
   },
 
-  MyBookMark: async (page:number, size: number, filter: string): Promise<MyBookMarkResponse> => {
+  MyBookMark: async (
+    page: number,
+    size: number,
+    filter: string
+  ): Promise<MyBookMarkResponse> => {
     try {
       const response = await defaultApi.get<MyBookMarkResponse>(
         `api/scraps/spot/filter?pageIndex=${page}&pageSize=${size}&filter=${filter}`
@@ -104,8 +108,12 @@ export const mypage = {
   // 비밀번호 확인
   CheckPassword: async (currentPassword: string): Promise<boolean> => {
     try {
-      const response = await defaultApi.get(
-        `/api/auth/password-check?password=${currentPassword}`
+      const response = await defaultApi.post(
+        "/api/auth/password-check",
+        currentPassword,
+        {
+          headers: { "Content-Type": "text/plain" }, // 단순 문자열로 요청할 경우 헤더 설정
+        }
       );
       return response.data;
     } catch (error) {

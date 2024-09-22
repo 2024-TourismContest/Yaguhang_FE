@@ -82,18 +82,36 @@ const MyAccount = () => {
     if (validatePassword()) {
       try {
         // 비밀번호 확인 API 호출
-        await mypage.CheckPassword(currentPassword);
+        const isPasswordValid = await mypage.CheckPassword(currentPassword);
+        if (!Boolean(isPasswordValid)) {
+          setErrors((prev) => ({
+            ...prev,
+            currentPassword: "유효하지 않은 비밀번호입니다. 다시 확인해주세요.",
+          }));
+          return;
+        }
 
         // 비밀번호 변경 API 호출
         await mypage.ChangePassword(newPassword);
 
-        console.log("비밀번호 변경 요청 완료");
+        openModal({
+          title: "비밀번호 변경 완료",
+          content: "비밀번호가 성공적으로 변경되었습니다.",
+          onConfirm: () => {
+            closeModal();
+          },
+        });
+
+        resetForm();
       } catch (error) {
-        setErrors((prev) => ({
-          ...prev,
-          currentPassword: "유효하지 않은 비밀번호입니다. 다시 확인해주세요.",
-        }));
         console.error("Error saving password:", error);
+        openModal({
+          title: "비밀번호 변경 실패",
+          content: "비밀번호 변경 중 문제가 발생했습니다. 다시 시도해 주세요.",
+          onConfirm: () => {
+            closeModal();
+          },
+        });
       }
     }
   };
