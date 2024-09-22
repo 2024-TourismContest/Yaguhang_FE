@@ -5,17 +5,20 @@ import { useEffect, useState } from "react";
 import { Button } from "../../components/button/Button";
 import { useNavigate } from "react-router-dom";
 import CreateCourse from "../../components/mycourse/CreateCourse";
-import { fetchScrapData, createCourse } from "../../apis/recommend"; // createCourse 함수 추가
-import { toast } from "react-toastify"; // 사용자 알림을 위해 추가
+import { fetchScrapData, createCourse } from "../../apis/recommend";
+import { toast } from "react-toastify";
 
 const MycoursePage = () => {
   const [selectedSpot, setSelectedSpot] = useState("전체");
   const [scrapData, setScrapData] = useState<any[]>([]);
-  const [contentIdList, setContentIdList] = useState<number[]>([]); // contentIdList 상태 추가
+  const [contentIdList, setContentIdList] = useState<number[]>([]);
+  const [stadium, setStadium] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
 
   const navigate = useNavigate();
   const handleSpotChange = (spot: string) => {
     setSelectedSpot(spot);
+    setStadium(spot);
   };
 
   const handleButtonClick = (page: string) => {
@@ -28,12 +31,12 @@ const MycoursePage = () => {
       if (selectedSpot && selectedSpot !== "전체") {
         try {
           const data = await fetchScrapData(selectedSpot);
-          setScrapData(data.scrapAddressSpots); // API 응답의 scrapAddressSpots 배열을 상태로 설정
+          setScrapData(data.scrapAddressSpots);
         } catch (error) {
           console.error("Error fetching scrap data:", error);
         }
       } else {
-        setScrapData([]); // 선택된 스팟이 "전체"일 때 빈 배열로 초기화
+        setScrapData([]);
       }
     };
 
@@ -42,18 +45,24 @@ const MycoursePage = () => {
 
   // 추천행 코스 생성 함수
   const handleCreateCourse = async () => {
+    if (!stadium || !title) {
+      toast.error("Stadium과 Title을 입력해주세요.");
+      return;
+    }
+
     if (contentIdList.length === 0) {
-      toast.error("추천행 코스에 추가된 항목이 없습니다.");
+      toast.error("추천행 코스에 추가할 스크랩 항목을 선택해주세요.");
       return;
     }
 
     try {
-      const stadium = selectedSpot;
-      const title = "나의 추천행 코스"; // 제목은 예시로 설정
       const response = await createCourse(stadium, title, contentIdList);
       console.log("Recommend course created:", response);
-      toast.success("추천행 코스가 성공적으로 생성되었습니다.");
-      navigate("/RecommendPage"); // 생성 후 페이지 이동
+      toast.success("추천행 코스를 생성했습니다.");
+      navigate("/region");
+      setStadium("");
+      setTitle("");
+      setContentIdList([]);
     } catch (error) {
       console.error("Failed to create recommend course:", error);
       toast.error("추천행 코스 생성에 실패했습니다.");
@@ -84,7 +93,11 @@ const MycoursePage = () => {
           scrapData={scrapData}
           contentIdList={contentIdList}
           setContentIdList={setContentIdList}
-        />{" "}
+          stadium={stadium}
+          setStadium={setStadium}
+          title={title}
+          setTitle={setTitle}
+        />
         {/* contentIdList 상태 전달 */}
         <Button
           bgColor="#000"
@@ -158,7 +171,7 @@ const DotLineContainer = styled.div`
 
 const DotLine = styled.div`
   width: 400px;
-  border-top: 1px dashed #fff;
+  border-top: 1px dashed #ccc;
 `;
 
 const Dot = styled.div`
@@ -166,7 +179,7 @@ const Dot = styled.div`
   right: 0;
   width: 12px;
   height: 12px;
-  background-color: #fff;
+  background-color: #ccc;
   border-radius: 50%;
 `;
 

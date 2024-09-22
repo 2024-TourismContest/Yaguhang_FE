@@ -4,6 +4,8 @@ import { createCourse } from "../../apis/recommend";
 import { toast } from "react-toastify";
 import { BsBookmarkFill, BsBookmarkStar } from "react-icons/bs";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { GrNext } from "react-icons/gr";
+import { IoMdCheckboxOutline } from "react-icons/io";
 
 interface ScrapData {
   contentId: number;
@@ -15,13 +17,24 @@ interface ScrapData {
 
 interface CreateCourseProps {
   scrapData: ScrapData[];
+  contentIdList: number[]; // 상태 props
+  setContentIdList: React.Dispatch<React.SetStateAction<number[]>>; // 상태 변경 함수 props
+  stadium: string; // stadium 상태
+  setStadium: React.Dispatch<React.SetStateAction<string>>; // stadium 상태 업데이트 함수
+  title: string; // title 상태
+  setTitle: React.Dispatch<React.SetStateAction<string>>; // title 상태 업데이트 함수
 }
 
-const CreateCourse: React.FC<CreateCourseProps> = ({ scrapData }) => {
-  const [stadium, setStadium] = useState("");
-  const [title, setTitle] = useState("");
+const CreateCourse: React.FC<CreateCourseProps> = ({
+  scrapData,
+  contentIdList,
+  setContentIdList,
+  stadium,
+  setStadium,
+  title,
+  setTitle,
+}) => {
   const [recommendList, setRecommendList] = useState<ScrapData[]>([]);
-  const [contentIdList, setContentIdList] = useState<number[]>([]);
 
   // 북마크 아이템을 추천행 리스트에 추가하는 함수
   const handleScrapItemClick = (item: ScrapData) => {
@@ -40,46 +53,21 @@ const CreateCourse: React.FC<CreateCourseProps> = ({ scrapData }) => {
     setContentIdList(updatedList.map((item) => item.contentId));
   };
 
-  const handleCreateCourse = async () => {
-    if (!stadium || !title) {
-      toast.error("Stadium과 Title을 입력해주세요.");
-      return;
-    }
-
-    if (contentIdList.length === 0) {
-      toast.error("추천행 코스에 추가할 스크랩 항목을 선택해주세요.");
-      return;
-    }
-
-    try {
-      const response = await createCourse(stadium, title, contentIdList);
-      console.log("Recommend course created:", response);
-      toast.success("추천행 코스를 생성했습니다.");
-      setStadium("");
-      setTitle("");
-      setRecommendList([]);
-      setContentIdList([]);
-    } catch (error) {
-      console.error("Failed to create recommend course:", error);
-      toast.error("추천행 코스 생성에 실패했습니다.");
-    }
-  };
-
   return (
     <Container>
       <CourseHeader>
+        <p>추천행 제목 : </p>
         <Input
           type="text"
           placeholder="Title"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => setTitle(e.target.value)} // title 상태 변경
         />
-        <button onClick={handleCreateCourse}>코스 생성하기</button>
       </CourseHeader>
       <ListsContainer>
         <List>
           <Title>
-            <BsBookmarkFill />
+            <BsBookmarkStar />
             <span>MY 북마크 리스트</span>
           </Title>
           <ScrapList>
@@ -108,14 +96,16 @@ const CreateCourse: React.FC<CreateCourseProps> = ({ scrapData }) => {
                 </ScrapItem>
               ))
             ) : (
-              <EmptyMessage>스크랩된 데이터가 없습니다.</EmptyMessage>
+              <EmptyMessage>추천할 구장을 선택해주세요.</EmptyMessage>
             )}
           </ScrapList>
         </List>
-        <Arrow>→</Arrow>
+        <Arrow>
+          <GrNext />
+        </Arrow>
         <List>
           <Title>
-            <BsBookmarkStar />
+            <IoMdCheckboxOutline />
             <span>추천행 리스트</span>
           </Title>
           <RecommendList>
@@ -127,6 +117,10 @@ const CreateCourse: React.FC<CreateCourseProps> = ({ scrapData }) => {
                       <Image src={item.image} alt={item.title} />
                     </ImageWrapper>
                     <TextWrapper>
+                      <CategoryLogo
+                        src={item.categoryLogo}
+                        alt="Category Logo"
+                      />
                       <TitleText>{item.title}</TitleText>
                       <AddressText>{item.address}</AddressText>
                     </TextWrapper>
@@ -167,7 +161,9 @@ const Input = styled.input`
   width: 200px;
   padding: 10px;
   border: 1px solid #ccc;
+  color: #fff;
   border-radius: 5px;
+  background-color: #000;
 `;
 
 const ListsContainer = styled.div`
