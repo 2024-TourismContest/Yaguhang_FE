@@ -5,6 +5,7 @@ import leftIcon from "../../assets/icons/arrow_left.svg";
 import rightIcon from "../../assets/icons/arrow_right.svg";
 import { mypage } from "../../apis/mypage";
 import { ScrapSpot } from "../../types/myPageType";
+import { Link } from "react-router-dom";
 
 const BookMarkList: React.FC = () => {
   const [scrapSpots, setScrapSpots] = useState<ScrapSpot[]>([]);
@@ -34,22 +35,29 @@ const BookMarkList: React.FC = () => {
   };
 
   return (
-    <Container>
-      <Button onClick={() => handleScroll("left")}>
-        <img src={leftIcon} alt="Left" />
-      </Button>
-      <SpotsContainer ref={scrollRef}>
-        {scrapSpots.map((spot) => (
-          <ContentWrapper key={spot.contentId}>
-            <Img src={spot.image || defaultImg} alt={spot.title} />
-            <Title>{spot.title}</Title>
-          </ContentWrapper>
-        ))}
-      </SpotsContainer>
-      <Button onClick={() => handleScroll("right")}>
-        <img src={rightIcon} alt="Right" />
-      </Button>
-    </Container>
+    <div>
+      {scrapSpots.length < 0 ? (
+        <NoDataMessage>추천 항목이 없습니다.</NoDataMessage>
+      ) : (
+        <Container>
+          <Button onClick={() => handleScroll("left")}>
+            <img src={leftIcon} alt="Left" />
+          </Button>
+          <SpotsContainer ref={scrollRef}>
+            {scrapSpots.map((spot) => (
+              <ContentWrapper key={spot.contentId}>
+                <Img src={spot.image || defaultImg} alt={spot.title} />
+                <Title>{spot.title}</Title>
+              </ContentWrapper>
+            ))}
+          </SpotsContainer>
+          <Button onClick={() => handleScroll("right")}>
+            <img src={rightIcon} alt="Right" />
+          </Button>
+        </Container>
+      )}
+      <MoreLink to="/mypage/bookmark">+ 더보기</MoreLink>
+    </div>
   );
 };
 
@@ -122,4 +130,23 @@ const Button = styled.button`
       width: 30px;
     }
   }
+`;
+const MoreLink = styled(Link)`
+  display: block;
+  text-align: center;
+  color: #fff;
+  font-size: 1rem;
+  margin-top: 1rem;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const NoDataMessage = styled.p`
+  text-align: center;
+  color: #fff;
+  font-size: 1rem;
+  margin-top: 1rem;
 `;

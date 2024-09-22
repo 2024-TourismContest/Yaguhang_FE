@@ -13,7 +13,7 @@ export interface StadiumInfo {
 }
 
 export interface ScrapSpot {
-  contentId: number;
+  [x: string]: string;
   image: string;
   title: string;
 }

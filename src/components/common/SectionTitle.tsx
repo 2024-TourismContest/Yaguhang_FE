@@ -33,6 +33,7 @@ const Title = styled.h1<{ color: "white" | "black" }>`
   font-weight: 600;
   line-height: normal;
   transition: 0.2s ease-in-out;
+  text-align: start;
   @media (max-width: 768px) {
     font-size: 1.6rem;
   }
