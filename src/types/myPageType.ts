@@ -5,21 +5,22 @@ export interface Spot {
   title: string;
 }
 
-export interface Stadium {
-  stadiumId: number;
+export interface StadiumInfo {
+  StadiumId: number;
+  StadiumImage: string;
+  teamName: string;
+  StadiumName: string;
+}
+
+export interface ScrapSpot {
+  contentId: number;
   image: string;
   title: string;
 }
 
-export interface ScrapStadiumSpots {
-  scrapStadium: Stadium;
-  scrapSpots: Spot[];
-}
-
 export interface MyBookMarkResponse {
-  scrapStadiumSpots: ScrapStadiumSpots[];
+  scrapSpots: ScrapSpot[];
 }
-
 // /api/mypage/info 응답
 export interface MyPageInfo {
   fanTeamName: string;

@@ -1,116 +1,89 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import plus from "../../assets/icons/plus.svg";
 import defaultImg from "../../assets/images/Detailnull.svg";
+import leftIcon from "../../assets/icons/left.svg";
+import rightIcon from "../../assets/icons/right.svg";
+import { mypage } from "../../apis/mypage";
+import { ScrapSpot } from "../../types/myPageType";
 
-interface Spot {
-  contentId: number | string;
-  image: string;
-  title: string;
-}
+const BookMarkList: React.FC = () => {
+  const [scrapSpots, setScrapSpots] = useState<ScrapSpot[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-interface Stadium {
-  scrapStadium: {
-    stadiumId: number;
-    image: string;
-    title: string;
+  useEffect(() => {
+    const fetchScrapSpots = async () => {
+      try {
+        const myScrapSpotData = await mypage.MyBookMark(0, 10, "전체");
+        setScrapSpots(myScrapSpotData.scrapSpots);
+      } catch (error) {
+        console.error("Error fetching bookmark data:", error);
+      }
+    };
+
+    fetchScrapSpots();
+  }, []);
+
+  const handleScroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const scrollAmount = 4 * 240; // 4 items * (item width + gap)
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
   };
-  scrapSpots: Spot[];
-}
 
-interface BookMarkListProps {
-  data: Stadium[];
-}
-
-const BookMarkList: React.FC<BookMarkListProps> = ({ data }) => {
-  const validData = Array.isArray(data) ? data : [];
   return (
     <Container>
-      {validData.slice(0, 3).map((stadium) => (
-        <Row key={stadium.scrapStadium.stadiumId}>
-          <BookMarkContainer
-            img={stadium.scrapStadium.image}
-            title={stadium.scrapStadium.title}
-            spots={stadium.scrapSpots}
-          />
-        </Row>
-      ))}
-    </Container>
-  );
-};
-
-interface BookMarkContainerProps {
-  img: string;
-  title: string;
-  spots: Spot[];
-}
-
-const BookMarkContainer: React.FC<BookMarkContainerProps> = ({
-  img,
-  title,
-  spots,
-}) => {
-  const spotsToShow = spots.slice(0, 3);
-  const spotsCount = spots.length;
-
-  return (
-    <BookmarkContent>
-      <ContentWrapper>
-        <Img src={img} alt={title} />
-        <Title>{title}</Title>
-      </ContentWrapper>
-      <Divider>
-        <Dot />
-        <Dot />
-      </Divider>
-      <SpotsContainer>
-        {spotsToShow.map((spot) => (
+      <ButtonContainer>
+        <Button onClick={() => handleScroll("left")}>
+          <img src={leftIcon} alt="Left" />
+        </Button>
+      </ButtonContainer>
+      <SpotsContainer ref={scrollRef}>
+        {scrapSpots.map((spot) => (
           <ContentWrapper key={spot.contentId}>
             <Img src={spot.image || defaultImg} alt={spot.title} />
             <Title>{spot.title}</Title>
           </ContentWrapper>
         ))}
-        {spotsCount < 3 &&
-          Array.from({ length: 3 - spotsCount }).map((_, index) => (
-            <ContentWrapper key={`placeholder-${index}`}>
-              <AddContainer>
-                <img src={plus} alt="Add more" />
-              </AddContainer>
-            </ContentWrapper>
-          ))}
       </SpotsContainer>
-    </BookmarkContent>
+      <ButtonContainer>
+        <Button onClick={() => handleScroll("right")}>
+          <img src={rightIcon} alt="Right" />
+        </Button>
+      </ButtonContainer>
+    </Container>
   );
 };
 
+export default BookMarkList;
+
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 20px;
-  width: 100%;
-`;
-
-const BookmarkContent = styled.div`
-  display: flex;
   align-items: center;
-  padding: 10px;
   width: 100%;
+  padding: 10px;
+`;
+
+const SpotsContainer = styled.div`
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px 0;
+  scroll-snap-type: x mandatory;
+
+  &::-webkit-scrollbar {
+    display: none; /* Hide scrollbar */
+  }
 `;
 
 const ContentWrapper = styled.div`
-  width: 230px;
+  min-width: 230px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  scroll-snap-align: start;
 `;
 
 const Img = styled.img`
@@ -121,7 +94,7 @@ const Img = styled.img`
 `;
 
 const Title = styled.h2`
-  width: 100%;
+  max-width: 100%;
   padding-top: 0.5rem;
   text-align: center;
   font-size: 1rem;
@@ -131,41 +104,15 @@ const Title = styled.h2`
   overflow: hidden;
 `;
 
-const SpotsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 10px;
-  flex-wrap: wrap;
-`;
-
-const AddContainer = styled.div`
-  width: 100%;
-  height: 130px;
-  border: 1px dashed #fff;
-  border-radius: 8px;
+const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  img {
-    width: 50px;
-  }
+  margin: 0 10px;
 `;
 
-const Divider = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 0 20px;
+const Button = styled.button`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 `;
-
-const Dot = styled.div`
-  width: 6px;
-  height: 6px;
-  background-color: white;
-  border-radius: 50%;
-  margin: 4px 0;
-`;
-
-export default BookMarkList;

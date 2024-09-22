@@ -11,11 +11,7 @@ import { toast } from "react-toastify";
 import { scrapSchedule } from "../../apis/main";
 import { mypage } from "../../apis/mypage";
 import { Item } from "../../components/recommend/Item";
-import {
-  Review,
-  RecommendPreviewDto,
-  ScrapStadiumSpots,
-} from "../../types/myPageType";
+import { Review, RecommendPreviewDto } from "../../types/myPageType";
 import { Schedule } from "../../components/home/Card";
 import { Link } from "react-router-dom";
 
@@ -30,7 +26,6 @@ const MyPageMain: React.FC = () => {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [myRecommend, setMyRecommend] = useState<RecommendPreviewDto[]>([]);
   const [myReviews, setMyReviews] = useState<Review[]>([]);
-  const [myScrapSpots, setMyScrapSpots] = useState<ScrapStadiumSpots[]>([]);
 
   const handleScrap = async (gameId: number) => {
     try {
@@ -53,18 +48,14 @@ const MyPageMain: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const myScrapSchedule = await mypage.MyScrap(0, 100);
+        setSchedules(myScrapSchedule.scrappedSchedules);
+
         const myRecommendData = await mypage.MyRecommend(10);
         setMyRecommend(myRecommendData.recommendPreviewDtos);
 
         const myReviewsData = await mypage.MyReview();
         setMyReviews(myReviewsData.reviews);
-
-        const myScrapSpotData = await mypage.MyBookMark();
-        setMyScrapSpots(myScrapSpotData.scrapStadiumSpots);
-
-        const myScrapSchedule = await mypage.MyScrap(0, 50);
-        setSchedules(myScrapSchedule.scrappedSchedules);
-        console.log(myScrapSchedule)
       } catch (error) {
         console.error("Error fetching MyPage data:", error);
         toast.error("데이터를 불러오는 중 오류가 발생했습니다.");
@@ -91,13 +82,11 @@ const MyPageMain: React.FC = () => {
         subtitle={"관심 있는 야구 일정 모아보기"}
       />
       {schedules && schedules.length > 0 ? (
-        <>
-          <GameCardList
-            schedules={schedules}
-            onScrap={handleScrap}
-            maxCardsPerPage={4}
-          />
-        </>
+        <GameCardList
+          schedules={schedules}
+          onScrap={handleScrap}
+          maxCardsPerPage={4}
+        />
       ) : (
         <NoDataMessage>스크랩한 일정이 없습니다.</NoDataMessage>
       )}
@@ -121,36 +110,27 @@ const MyPageMain: React.FC = () => {
 
       <Line />
 
-      <SectionTitle title={"MY 북마크"} subtitle={"나의 여행 계획 모아보기"} />
-      {myScrapSpots && myScrapSpots.length > 0 ? (
-        <>
-          <BookMarkList data={myScrapSpots} />
-          <MoreLink to="/mypage/bookmark">+ 더보기</MoreLink>
-        </>
-      ) : (
-        <NoDataMessage>북마크한 항목이 없습니다.</NoDataMessage>
-      )}
+      <SectionTitle title={"MY 북마크"} subtitle={"나의 북마크 목록"} />
+      <BookMarkList />
       <Line />
 
       <SectionTitle title={"MY 야구행 리뷰"} />
       {myReviews && myReviews.length > 0 ? (
-        <>
-          <ReviewList>
-            {myReviews.map((review) => (
-              <ReviewItem
-                stadiumId={0}
-                isLiked={false}
-                key={review.reviewId}
-                {...review}
-                isMine={true}
-              />
-            ))}
-          </ReviewList>
-          <MoreLink to="/mypage/review">+ 더보기</MoreLink>
-        </>
+        <ReviewList>
+          {myReviews.map((review) => (
+            <ReviewItem
+              stadiumId={0}
+              isLiked={false}
+              key={review.reviewId}
+              {...review}
+              isMine={true}
+            />
+          ))}
+        </ReviewList>
       ) : (
         <NoDataMessage>작성한 리뷰가 없습니다.</NoDataMessage>
       )}
+      <MoreLink to="/mypage/review">+ 더보기</MoreLink>
     </MainPageContainer>
   );
 };

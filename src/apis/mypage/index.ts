@@ -35,9 +35,9 @@ export const mypage = {
     size: number
   ): Promise<ScrapsScheduleResponse> => {
     try {
-      const response = await defaultApi.get("/api/scraps/schedule", {
-        params: { page, size },
-      });
+      const response = await defaultApi.get(
+        `api/scraps/schedule?page=${page}&size=${size}`
+      );
       return response.data;
     } catch (error) {
       console.error("Error fetching MyScrap data:", error);
@@ -45,10 +45,10 @@ export const mypage = {
     }
   },
 
-  MyBookMark: async (): Promise<MyBookMarkResponse> => {
+  MyBookMark: async (page:number, size: number, filter: string): Promise<MyBookMarkResponse> => {
     try {
       const response = await defaultApi.get<MyBookMarkResponse>(
-        "/api/scraps/spot"
+        `api/scraps/spot/filter?pageIndex=${page}&pageSize=${size}&filter=${filter}`
       );
       return response.data;
     } catch (error) {

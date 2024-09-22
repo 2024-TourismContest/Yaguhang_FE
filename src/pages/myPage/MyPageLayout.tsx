@@ -126,9 +126,7 @@ export default MyPageLayout;
 const PageContainer = styled.div`
   display: flex;
   background-color: #000;
-  margin: 2rem 1rem;
   min-height: 100vh;
-  max-width: 1400px;
   margin: 0 auto;
   align-items: flex-start;
   justify-content: flex-start;
