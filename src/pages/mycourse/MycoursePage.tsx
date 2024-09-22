@@ -5,11 +5,13 @@ import { useEffect, useState } from "react";
 import { Button } from "../../components/button/Button";
 import { useNavigate } from "react-router-dom";
 import CreateCourse from "../../components/mycourse/CreateCourse";
-import { fetchScrapData } from "../../apis/recommend";
+import { fetchScrapData, createCourse } from "../../apis/recommend"; // createCourse 함수 추가
+import { toast } from "react-toastify"; // 사용자 알림을 위해 추가
 
 const MycoursePage = () => {
   const [selectedSpot, setSelectedSpot] = useState("전체");
   const [scrapData, setScrapData] = useState<any[]>([]);
+  const [contentIdList, setContentIdList] = useState<number[]>([]); // contentIdList 상태 추가
 
   const navigate = useNavigate();
   const handleSpotChange = (spot: string) => {
@@ -26,7 +28,7 @@ const MycoursePage = () => {
       if (selectedSpot && selectedSpot !== "전체") {
         try {
           const data = await fetchScrapData(selectedSpot);
-          setScrapData(data);
+          setScrapData(data.scrapAddressSpots); // API 응답의 scrapAddressSpots 배열을 상태로 설정
         } catch (error) {
           console.error("Error fetching scrap data:", error);
         }
@@ -37,6 +39,26 @@ const MycoursePage = () => {
 
     fetchData();
   }, [selectedSpot]);
+
+  // 추천행 코스 생성 함수
+  const handleCreateCourse = async () => {
+    if (contentIdList.length === 0) {
+      toast.error("추천행 코스에 추가된 항목이 없습니다.");
+      return;
+    }
+
+    try {
+      const stadium = selectedSpot;
+      const title = "나의 추천행 코스"; // 제목은 예시로 설정
+      const response = await createCourse(stadium, title, contentIdList);
+      console.log("Recommend course created:", response);
+      toast.success("추천행 코스가 성공적으로 생성되었습니다.");
+      navigate("/RecommendPage"); // 생성 후 페이지 이동
+    } catch (error) {
+      console.error("Failed to create recommend course:", error);
+      toast.error("추천행 코스 생성에 실패했습니다.");
+    }
+  };
 
   return (
     <>
@@ -58,7 +80,12 @@ const MycoursePage = () => {
           </DotLineContainer>
           <Local>{selectedSpot}</Local>
         </CategoryContainer>
-        <CreateCourse scrapData={scrapData} />
+        <CreateCourse
+          scrapData={scrapData}
+          contentIdList={contentIdList}
+          setContentIdList={setContentIdList}
+        />{" "}
+        {/* contentIdList 상태 전달 */}
         <Button
           bgColor="#000"
           border="2px solid #fff"
@@ -67,7 +94,7 @@ const MycoursePage = () => {
           fontWeight="bold"
           hoverColor="#a7cfec"
           hoverBorderColor="#a7cfec"
-          onClick={() => handleButtonClick("RecommendPage")}
+          onClick={handleCreateCourse} // 버튼 클릭 시 handleCreateCourse 함수 실행
         />
       </Container>
     </>

@@ -3,12 +3,14 @@ import styled from "styled-components";
 import { createCourse } from "../../apis/recommend";
 import { toast } from "react-toastify";
 import { BsBookmarkFill, BsBookmarkStar } from "react-icons/bs";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 interface ScrapData {
   contentId: number;
   image: string;
   title: string;
   address: string;
+  categoryLogo: string;
 }
 
 interface CreateCourseProps {
@@ -68,12 +70,6 @@ const CreateCourse: React.FC<CreateCourseProps> = ({ scrapData }) => {
       <CourseHeader>
         <Input
           type="text"
-          placeholder="Stadium"
-          value={stadium}
-          onChange={(e) => setStadium(e.target.value)}
-        />
-        <Input
-          type="text"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -98,6 +94,10 @@ const CreateCourse: React.FC<CreateCourseProps> = ({ scrapData }) => {
                       <Image src={item.image} alt={item.title} />
                     </ImageWrapper>
                     <TextWrapper>
+                      <CategoryLogo
+                        src={item.categoryLogo}
+                        alt="Category Logo"
+                      />
                       <TitleText>{item.title}</TitleText>
                       <AddressText>{item.address}</AddressText>
                     </TextWrapper>
@@ -121,10 +121,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({ scrapData }) => {
           <RecommendList>
             {recommendList.length > 0 ? (
               recommendList.map((item, index) => (
-                <RecommendItem
-                  key={index}
-                  onClick={() => handleRecommendItemClick(item.contentId)}
-                >
+                <RecommendItem key={index}>
                   <ItemWrapper>
                     <ImageWrapper>
                       <Image src={item.image} alt={item.title} />
@@ -134,7 +131,9 @@ const CreateCourse: React.FC<CreateCourseProps> = ({ scrapData }) => {
                       <AddressText>{item.address}</AddressText>
                     </TextWrapper>
                     <IconWrapper>
-                      <BsBookmarkStar />
+                      <FaRegTrashAlt
+                        onClick={() => handleRecommendItemClick(item.contentId)}
+                      />
                     </IconWrapper>
                   </ItemWrapper>
                 </RecommendItem>
@@ -265,6 +264,11 @@ const Image = styled.img`
 
 const TextWrapper = styled.div`
   flex-grow: 1;
+`;
+const CategoryLogo = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 `;
 
 const TitleText = styled.div`
