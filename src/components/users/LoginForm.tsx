@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { auth } from "../../apis/auth";
+import useModalStore from "../../store/modalStore";
 const redirect_uri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 import useAuthStore from "../../store/authStore";
 
@@ -11,6 +12,7 @@ const LoginForm = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
+  const { openModal, closeModal } = useModalStore();
 
   const handleKakaoLogin = () => {
     const kakaoLoginUrl = `https://yaguhang.kro.kr:8443/oauth2/authorization/kakao?redirect_uri=${redirect_uri}`;
@@ -18,29 +20,34 @@ const LoginForm = () => {
   };
 
   useEffect(() => {
-    const handleTokenExtraction = () => {
-      const queryParams = new URLSearchParams(window.location.search);
-      const token = queryParams.get("token");
-      if (token) {
-        localStorage.setItem("token", token);
-        setIsAuthenticated(true);
-        localStorage.setItem("showFanTeamModalOnHome", "true"); // 로그인 후 홈 페이지에서 모달을 표시할지 여부 저장
-        navigate("/");
-      } else {
-        console.log("No token found in URL.");
-      }
-    };
+    const queryParams = new URLSearchParams(window.location.search);
+    const token = queryParams.get("token");
+    const errorParam = queryParams.get("error");
 
-    handleTokenExtraction();
-  }, [navigate, setIsAuthenticated]);
+    if (token) {
+      localStorage.setItem("token", token);
+      setIsAuthenticated(true);
+      localStorage.setItem("showFanTeamModalOnHome", "true"); // 로그인 후 홈 페이지에서 모달을 표시할지 여부 저장
+      navigate("/");
+    } else if (errorParam) {
+      // 카카오 로그인 에러
+      navigate("/login");
+      openModal({
+        title: "로그인 오류",
+        content: "로그인 중 오류가 발생했습니다. 다시 시도해 주세요.",
+        onConfirm: () => {
+          closeModal();
+        },
+      });
+    }
+  }, [navigate, setIsAuthenticated, openModal]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const response = await auth.login(email, password);
-      console.log(response);
+      await auth.login(email, password);
       localStorage.setItem("showFanTeamModalOnHome", "true"); // 로그인 후 홈 페이지에서 모달을 표시할지 여부 저장
-      navigate("/"); // 홈 화면으로 리다이렉트
+      navigate("/");
     } catch (err) {
       setError("로그인에 실패했습니다.");
     }
