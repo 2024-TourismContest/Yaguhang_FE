@@ -22,7 +22,7 @@ export interface MyBookMarkResponse {
 
 // /api/mypage/info 응답
 export interface MyPageInfo {
-  userId: number;
+  fanTeamName: string;
   nickname: string;
   image: string;
   fanTeam: string;

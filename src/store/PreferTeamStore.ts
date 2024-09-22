@@ -9,7 +9,7 @@ interface TeamState {
 
 const useStore = create<TeamState>((set) => ({
   isTeamSelectorActive: false,
-  preferTeam: "롯데",
+  preferTeam: "",
   setTeamSelectorActive: (active) => set({ isTeamSelectorActive: active }),
   setPreferTeam: (team) => set({ preferTeam: team }),
 }));

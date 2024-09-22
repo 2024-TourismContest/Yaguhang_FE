@@ -74,7 +74,7 @@ const MyPageLayout = () => {
         const myInfo = await mypage.MyPageInfo();
         setNickName(myInfo.nickname);
         setProfileImage(myInfo.image);
-        setPreferTeam(myInfo.fanTeam);
+        setPreferTeam(myInfo.fanTeamName);
         console.log("myInfo:", myInfo);
       } catch (error) {
         console.error("Error fetching MyPage data:", error);

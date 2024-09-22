@@ -21,7 +21,6 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
   isEnabled = true,
   setIsEnabled,
 }) => {
-  const [pendingTeam, setPendingTeam] = useState<string | null>(null);
   const { setPreferTeam } = useStore();
   const containerRef = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModalStore();
@@ -33,7 +32,6 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
         containerRef.current &&
         !containerRef.current.contains(event.target as Node)
       ) {
-        setPendingTeam(null);
         if (setIsEnabled) {
           setIsEnabled(false);
         }
@@ -47,17 +45,17 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
 
   const handleButtonClick = useCallback(
     (team: string) => {
-      if (!isEnabled || pendingTeam === team) return;
-      setPendingTeam(team);
+      if (!isEnabled) return;
       openModal({
         title: "선호 팀 변경",
         content: `"${team}" 팀으로 변경하시겠습니까?`,
         onConfirm: async () => {
-          if (pendingTeam) {
+          if (team) {
             try {
-              await mypage.RegistFan(pendingTeam);
-              setSelectedTeam(pendingTeam);
-              setPreferTeam(pendingTeam);
+              const res = await mypage.RegistFan(team);
+              console.log(res);
+              setSelectedTeam(team);
+              setPreferTeam(team);
             } catch (error) {
               console.error("Error during team selection:", error);
             }
@@ -67,7 +65,7 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
         showCancel: true,
       });
     },
-    [pendingTeam, isEnabled, setSelectedTeam, setPreferTeam, openModal]
+    [ isEnabled, setSelectedTeam, setPreferTeam, openModal]
   );
 
   return (
