@@ -23,7 +23,7 @@ const MyPageMain: React.FC = () => {
   } = useStore();
   const [myRecommend, setMyRecommend] = useState<RecommendPreviewDto[]>([]);
   const [myReviews, setMyReviews] = useState<Review[]>([]);
-  const [myScrapGames, setMyScrapGames] = useState<Schedule[]>([]);
+  const [, setMyScrapGames] = useState<Schedule[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,11 +86,7 @@ const MyPageMain: React.FC = () => {
       {myReviews && myReviews.length > 0 ? (
         <ReviewList>
           {myReviews.slice(0, 2).map((review) => (
-            <ReviewItem
-              key={review.reviewId}
-              isMine={true}
-              {...review}
-            />
+            <ReviewItem key={review.reviewId} isMine={true} {...review} />
           ))}
         </ReviewList>
       ) : (

@@ -1,5 +1,5 @@
 import {
-  MyPageInfo,
+  MyInfo,
   MyReviewResponse,
   ScrapsScheduleResponse,
   MyRecommendResponse,
@@ -61,9 +61,18 @@ export const mypage = {
     }
   },
 
-  MyPageInfo: async (): Promise<MyPageInfo> => {
+  MyPageInfo: async (): Promise<MyInfo> => {
     try {
       const response = await defaultApi.get("/api/mypage/info");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching MyPageInfo data:", error);
+      throw error;
+    }
+  },
+  getMyInfo: async (): Promise<MyInfo> => {
+    try {
+      const response = await defaultApi.get("/api/users/me");
       return response.data;
     } catch (error) {
       console.error("Error fetching MyPageInfo data:", error);

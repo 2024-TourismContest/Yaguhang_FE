@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import SectionTitle from "../../components/common/SectionTitle";
 import InputWithLabel from "../../components/input/InputWithLabel";
@@ -6,8 +6,8 @@ import { mypage } from "../../apis/mypage";
 import useModalStore from "../../store/modalStore";
 
 const MyAccount = () => {
-  const [name, setName] = useState("사용자 이름");
-  const [email] = useState("user@example.com");
+  const [name, setNickname] = useState("사용자 이름");
+  const [email, setEmail] = useState("user@example.com");
   const [phoneNumber, setPhoneNumber] = useState("010-1234-5678");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -23,6 +23,19 @@ const MyAccount = () => {
   });
 
   const { openModal, closeModal } = useModalStore();
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const myInfo = await mypage.getMyInfo();
+        setNickname(myInfo.nickname);
+        setEmail(myInfo.email);
+      } catch (error) {
+        console.error("Error fetching MyPage data:", error);
+      }
+    };
+    fetchProfileData();
+  }, []);
 
   const validateInfo = () => {
     const newErrors = { ...errors };
@@ -117,7 +130,7 @@ const MyAccount = () => {
   };
 
   const resetForm = () => {
-    setName("사용자 이름");
+    setNickname("사용자 이름");
     setPhoneNumber("010-1234-5678");
     setCurrentPassword("");
     setNewPassword("");
@@ -136,7 +149,7 @@ const MyAccount = () => {
           label="Nickname"
           type="text"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setNickname(e.target.value)}
           error={errors.name}
         />
         <InputWithLabel

@@ -21,12 +21,13 @@ export interface ScrapSpot {
 export interface MyBookMarkResponse {
   scrapSpots: ScrapSpot[];
 }
-// /api/mypage/info 응답
-export interface MyPageInfo {
+//내정보
+export interface MyInfo {
   fanTeamName: string;
   nickname: string;
   image: string;
   fanTeam: string;
+  email: string;
 }
 
 // /api/review/myreview 응답
