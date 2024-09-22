@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
 import useStore from "../../store/PreferTeamStore";
 import { mypage } from "../../apis/mypage";
@@ -65,7 +65,7 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
         showCancel: true,
       });
     },
-    [ isEnabled, setSelectedTeam, setPreferTeam, openModal]
+    [isEnabled, setSelectedTeam, setPreferTeam, openModal]
   );
 
   return (
@@ -108,7 +108,6 @@ const ButtonContainer = styled.div<{ isEnabled: boolean }>`
   align-items: center;
   margin-bottom: 1rem;
   border-radius: 50px;
-  width: 100%;
   border: ${({ isEnabled }) =>
     isEnabled ? "4px solid #fff" : "1px solid #fff"};
   background: ${({ isEnabled }) => (isEnabled ? "#ffffff30" : "none")};
@@ -124,7 +123,6 @@ const IconButton = styled.div`
   overflow-x: auto;
   height: auto;
   border-radius: 50px;
-
   &::-webkit-scrollbar {
     display: none;
   }

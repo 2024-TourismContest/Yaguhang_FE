@@ -113,21 +113,19 @@ const MyAccount = () => {
   return (
     <MainPageContainer>
       <SectionTitle title={"내 정보"} />
-      <InfoSection>
+      <Section>
         <InputWithLabel
           label="Nickname"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           error={errors.name}
-          width="450px"
         />
         <InputWithLabel
           label="Email"
           type="text"
           value={email}
           readOnly={true}
-          width="450px"
         />
         <InputWithLabel
           label="Phone"
@@ -135,17 +133,16 @@ const MyAccount = () => {
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
           error={errors.phoneNumber}
-          width="450px"
         />
-        <ButtonContainer>
-          <CancelButton onClick={resetForm}>취소</CancelButton>
-          <SaveButton onClick={handleSaveInfo}>저장</SaveButton>
-        </ButtonContainer>
-      </InfoSection>
+      </Section>
+      <ButtonContainer>
+        <CancelButton onClick={resetForm}>취소</CancelButton>
+        <SaveButton onClick={handleSaveInfo}>저장</SaveButton>
+      </ButtonContainer>
 
       <Line />
       <SectionTitle title={"비밀번호 변경"} />
-      <PasswordChangeSection>
+      <Section>
         <InputWithLabel
           label="Current PW"
           type={showPassword ? "text" : "password"}
@@ -153,7 +150,6 @@ const MyAccount = () => {
           onChange={(e) => setCurrentPassword(e.target.value)}
           error={errors.currentPassword}
           onTogglePassword={handleTogglePassword}
-          width="450px"
         />
         <InputWithLabel
           label="New PW"
@@ -162,7 +158,6 @@ const MyAccount = () => {
           onChange={(e) => setNewPassword(e.target.value)}
           error={errors.newPassword}
           onTogglePassword={handleTogglePassword}
-          width="450px"
         />
         <InputWithLabel
           label="Confirm PW"
@@ -172,13 +167,12 @@ const MyAccount = () => {
           error={errors.confirmPassword}
           passwordMatch={newPassword === confirmPassword}
           onTogglePassword={handleTogglePassword}
-          width="450px"
         />
-        <ButtonContainer>
-          <CancelButton onClick={resetForm}>취소</CancelButton>
-          <SaveButton onClick={handleSavePassword}>저장</SaveButton>
-        </ButtonContainer>
-      </PasswordChangeSection>
+      </Section>
+      <ButtonContainer>
+        <CancelButton onClick={resetForm}>취소</CancelButton>
+        <SaveButton onClick={handleSavePassword}>저장</SaveButton>
+      </ButtonContainer>
     </MainPageContainer>
   );
 };
@@ -187,28 +181,26 @@ export default MyAccount;
 
 const MainPageContainer = styled.div`
   display: flex;
+  max-width: 100%;
   flex-direction: column;
   gap: 2rem;
-  width: 100%;
 `;
 
 const Line = styled.div`
   width: 100%;
   height: 1px;
   background-color: #686868;
+  margin: 2em 0;
 `;
 
-const InfoSection = styled.div`
+const Section = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1em;
-  margin-bottom: 2em;
-`;
-
-const PasswordChangeSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
+  max-width: 500px;
+  @media (max-width: 768px) {
+    width: auto;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -226,6 +218,9 @@ const CancelButton = styled.button`
   border-radius: 0.5em;
   cursor: pointer;
   font-size: 1.2rem;
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const SaveButton = styled.button`
@@ -236,4 +231,7 @@ const SaveButton = styled.button`
   border-radius: 0.5em;
   cursor: pointer;
   font-size: 1.2rem;
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;

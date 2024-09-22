@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import defaultImg from "../../assets/images/Detailnull.svg";
-import leftIcon from "../../assets/icons/left.svg";
-import rightIcon from "../../assets/icons/right.svg";
+import leftIcon from "../../assets/icons/arrow_left.svg";
+import rightIcon from "../../assets/icons/arrow_right.svg";
 import { mypage } from "../../apis/mypage";
 import { ScrapSpot } from "../../types/myPageType";
 
@@ -25,7 +25,7 @@ const BookMarkList: React.FC = () => {
 
   const handleScroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const scrollAmount = 4 * 240; // 4 items * (item width + gap)
+      const scrollAmount = scrollRef.current.clientWidth; // 부모 컨테이너의 너비로 스크롤 양 조정
       scrollRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
@@ -35,11 +35,9 @@ const BookMarkList: React.FC = () => {
 
   return (
     <Container>
-      <ButtonContainer>
-        <Button onClick={() => handleScroll("left")}>
-          <img src={leftIcon} alt="Left" />
-        </Button>
-      </ButtonContainer>
+      <Button onClick={() => handleScroll("left")}>
+        <img src={leftIcon} alt="Left" />
+      </Button>
       <SpotsContainer ref={scrollRef}>
         {scrapSpots.map((spot) => (
           <ContentWrapper key={spot.contentId}>
@@ -48,11 +46,9 @@ const BookMarkList: React.FC = () => {
           </ContentWrapper>
         ))}
       </SpotsContainer>
-      <ButtonContainer>
-        <Button onClick={() => handleScroll("right")}>
-          <img src={rightIcon} alt="Right" />
-        </Button>
-      </ButtonContainer>
+      <Button onClick={() => handleScroll("right")}>
+        <img src={rightIcon} alt="Right" />
+      </Button>
     </Container>
   );
 };
@@ -63,7 +59,6 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 10px;
 `;
 
 const SpotsContainer = styled.div`
@@ -72,6 +67,7 @@ const SpotsContainer = styled.div`
   gap: 10px;
   padding: 10px 0;
   scroll-snap-type: x mandatory;
+  transition: 0.2s ease-in-out;
 
   &::-webkit-scrollbar {
     display: none; /* Hide scrollbar */
@@ -79,11 +75,22 @@ const SpotsContainer = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  min-width: 230px;
+  min-width: calc((100% - 10px * (4 - 1)) / 4); /* 카드 너비 계산 */
   display: flex;
   flex-direction: column;
   align-items: center;
   scroll-snap-align: start;
+  @media (max-width: 1000px) {
+    flex: 1 0 calc(33.33% - 10px); /* 3개로 나누기 */
+  }
+
+  @media (max-width: 600px) {
+    flex: 1 0 calc(50% - 10px); /* 2개로 나누기 */
+  }
+
+  @media (max-width: 400px) {
+    flex: 1 0 100%; /* 1개로 나누기 */
+  }
 `;
 
 const Img = styled.img`
@@ -91,6 +98,7 @@ const Img = styled.img`
   height: 130px;
   object-fit: cover;
   border-radius: 8px;
+  transition: 0.2s ease-in-out;
 `;
 
 const Title = styled.h2`
@@ -104,15 +112,14 @@ const Title = styled.h2`
   overflow: hidden;
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 0 10px;
-`;
-
 const Button = styled.button`
   background-color: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
+  @media (max-width: 768px) {
+    img {
+      width: 30px;
+    }
+  }
 `;
