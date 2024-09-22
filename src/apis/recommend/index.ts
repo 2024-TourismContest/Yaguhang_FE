@@ -87,3 +87,51 @@ export const recommendSearch = async (
     throw error;
   }
 };
+
+// 추천행 생성 함수
+export const createCourse = async (
+  stadium: string,
+  title: string,
+  contentIdList: number[]
+): Promise<any> => {
+  const token = getAuthToken();
+  try {
+    const response = await defaultApi.post(
+      "/api/recommend",
+      {
+        Stadium: stadium,
+        title: title,
+        contentIdList: contentIdList,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error 마이 코스 생성:", error);
+    throw error;
+  }
+};
+
+export const fetchScrapData = async (stadiumName: string): Promise<any> => {
+  const token = getAuthToken();
+  try {
+    const response = await defaultApi.get("/api/recommend/myscrap", {
+      params: {
+        stadiumName,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        accept: "*/*",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("스크랩 리스트 가져오기 에러", error);
+    throw error;
+  }
+};

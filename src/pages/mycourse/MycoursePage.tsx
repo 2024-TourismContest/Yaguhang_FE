@@ -1,20 +1,42 @@
 import styled from "styled-components";
 import User from "../../components/mycourse/User";
 import { Filter } from "../../components/recommend/filter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../../components/button/Button";
 import { useNavigate } from "react-router-dom";
+import CreateCourse from "../../components/mycourse/CreateCourse";
+import { fetchScrapData } from "../../apis/recommend";
 
 const MycoursePage = () => {
   const [selectedSpot, setSelectedSpot] = useState("전체");
+  const [scrapData, setScrapData] = useState<any[]>([]);
+
+  const navigate = useNavigate();
   const handleSpotChange = (spot: string) => {
     setSelectedSpot(spot);
   };
-  const navigate = useNavigate();
 
   const handleButtonClick = (page: string) => {
     navigate(`/${page}`);
   };
+
+  // selectedSpot 변경 시 스크랩 데이터 가져오기
+  useEffect(() => {
+    const fetchData = async () => {
+      if (selectedSpot && selectedSpot !== "전체") {
+        try {
+          const data = await fetchScrapData(selectedSpot);
+          setScrapData(data);
+        } catch (error) {
+          console.error("Error fetching scrap data:", error);
+        }
+      } else {
+        setScrapData([]); // 선택된 스팟이 "전체"일 때 빈 배열로 초기화
+      }
+    };
+
+    fetchData();
+  }, [selectedSpot]);
 
   return (
     <>
@@ -36,6 +58,7 @@ const MycoursePage = () => {
           </DotLineContainer>
           <Local>{selectedSpot}</Local>
         </CategoryContainer>
+        <CreateCourse scrapData={scrapData} />
         <Button
           bgColor="#000"
           border="2px solid #fff"
@@ -63,7 +86,6 @@ const Container = styled.div`
   color: #fff;
   height: 100vh;
   margin: 0 auto;
-  margin-top: -120px;
 `;
 const Title = styled.h2`
   font-size: 1.7rem;
@@ -109,7 +131,7 @@ const DotLineContainer = styled.div`
 
 const DotLine = styled.div`
   width: 400px;
-  border-top: 1px dashed gray;
+  border-top: 1px dashed #fff;
 `;
 
 const Dot = styled.div`
@@ -117,7 +139,7 @@ const Dot = styled.div`
   right: 0;
   width: 12px;
   height: 12px;
-  background-color: #ccc;
+  background-color: #fff;
   border-radius: 50%;
 `;
 

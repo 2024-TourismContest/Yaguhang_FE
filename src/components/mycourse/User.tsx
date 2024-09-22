@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { mypage } from "../../apis/mypage"; // MyPageInfo 가져오기
-
+import { mypage } from "../../apis/mypage";
 const User = () => {
   const [userData, setUserData] = useState({
     nickname: "",
