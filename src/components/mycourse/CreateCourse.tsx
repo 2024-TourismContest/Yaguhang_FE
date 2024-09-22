@@ -1,7 +1,5 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { createCourse } from "../../apis/recommend";
-import { toast } from "react-toastify";
 import { BsBookmarkFill, BsBookmarkStar } from "react-icons/bs";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { GrNext } from "react-icons/gr";
@@ -17,20 +15,18 @@ interface ScrapData {
 
 interface CreateCourseProps {
   scrapData: ScrapData[];
-  contentIdList: number[]; // 상태 props
-  setContentIdList: React.Dispatch<React.SetStateAction<number[]>>; // 상태 변경 함수 props
-  stadium: string; // stadium 상태
-  setStadium: React.Dispatch<React.SetStateAction<string>>; // stadium 상태 업데이트 함수
-  title: string; // title 상태
-  setTitle: React.Dispatch<React.SetStateAction<string>>; // title 상태 업데이트 함수
+  contentIdList: number[];
+  setContentIdList: React.Dispatch<React.SetStateAction<number[]>>;
+  stadium: string;
+  setStadium: React.Dispatch<React.SetStateAction<string>>;
+  title: string;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const CreateCourse: React.FC<CreateCourseProps> = ({
   scrapData,
   contentIdList,
   setContentIdList,
-  stadium,
-  setStadium,
   title,
   setTitle,
 }) => {
@@ -56,12 +52,12 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
   return (
     <Container>
       <CourseHeader>
-        <p>추천행 제목 : </p>
+        <CourseTitleLabel>추천행 제목 :</CourseTitleLabel>
         <Input
           type="text"
-          placeholder="Title"
+          placeholder="제목을 입력해 주세요."
           value={title}
-          onChange={(e) => setTitle(e.target.value)} // title 상태 변경
+          onChange={(e) => setTitle(e.target.value)}
         />
       </CourseHeader>
       <ListsContainer>
@@ -71,30 +67,36 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
             <span>MY 북마크 리스트</span>
           </Title>
           <ScrapList>
-            {scrapData.length > 0 ? (
-              scrapData.map((item, index) => (
-                <ScrapItem
-                  key={index}
-                  onClick={() => handleScrapItemClick(item)}
-                >
-                  <ItemWrapper>
-                    <ImageWrapper>
-                      <Image src={item.image} alt={item.title} />
-                    </ImageWrapper>
-                    <TextWrapper>
-                      <CategoryLogo
-                        src={item.categoryLogo}
-                        alt="Category Logo"
-                      />
-                      <TitleText>{item.title}</TitleText>
-                      <AddressText>{item.address}</AddressText>
-                    </TextWrapper>
-                    <IconWrapper>
-                      <BsBookmarkFill />
-                    </IconWrapper>
-                  </ItemWrapper>
-                </ScrapItem>
-              ))
+            {scrapData && scrapData.length > 0 ? (
+              scrapData.map((item, index) => {
+                const isDisabled = recommendList.some(
+                  (recommended) => recommended.contentId === item.contentId
+                );
+                return (
+                  <ScrapItem
+                    key={index}
+                    disabled={isDisabled}
+                    onClick={() => handleScrapItemClick(item)}
+                  >
+                    <ItemWrapper>
+                      <ImageWrapper>
+                        <Image src={item.image} alt={item.title} />
+                      </ImageWrapper>
+                      <TextWrapper>
+                        <CategoryLogo
+                          src={item.categoryLogo}
+                          alt="Category Logo"
+                        />
+                        <TitleText>{item.title}</TitleText>
+                        <AddressText>{item.address}</AddressText>
+                      </TextWrapper>
+                      <IconWrapper>
+                        <BsBookmarkFill />
+                      </IconWrapper>
+                    </ItemWrapper>
+                  </ScrapItem>
+                );
+              })
             ) : (
               <EmptyMessage>추천할 구장을 선택해주세요.</EmptyMessage>
             )}
@@ -124,11 +126,11 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
                       <TitleText>{item.title}</TitleText>
                       <AddressText>{item.address}</AddressText>
                     </TextWrapper>
-                    <IconWrapper>
+                    <IconWrapper2>
                       <FaRegTrashAlt
                         onClick={() => handleRecommendItemClick(item.contentId)}
                       />
-                    </IconWrapper>
+                    </IconWrapper2>
                   </ItemWrapper>
                 </RecommendItem>
               ))
@@ -153,19 +155,44 @@ const Container = styled.div`
 
 const CourseHeader = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin: 30px;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
 `;
 
 const Input = styled.input`
-  width: 200px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  color: #fff;
+  width: 250px;
+  padding: 10px 15px;
+  border: none;
   border-radius: 5px;
-  background-color: #000;
+  background-color: #333;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border: 1px solid #fff;
+    box-shadow: 0 0 5px rgba(131, 199, 255, 0.5);
+  }
+
+  &::placeholder {
+    color: #888;
+  }
 `;
 
+const CourseTitleLabel = styled.p`
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  margin-right: 10px;
+`;
 const ListsContainer = styled.div`
   display: flex;
   align-items: flex-start;
@@ -180,8 +207,21 @@ const List = styled.div`
   background-color: #1f1f1f;
   border-radius: 10px;
   padding: 20px;
-`;
 
+  // 커스텀 스크롤바
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #1f1f1f;
+  }
+`;
 const Title = styled.div`
   display: flex;
   align-items: center;
@@ -200,15 +240,22 @@ const ScrapList = styled.ul`
   margin: 0;
 `;
 
-const ScrapItem = styled.li`
+const ScrapItem = styled.li<{ disabled: boolean }>`
   display: flex;
   align-items: center;
   padding: 15px 0;
   border-bottom: 1px solid #333;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  opacity: ${(props) =>
+    props.disabled ? 0.5 : 1}; // 비활성화 상태에 따른 불투명도
 
   &:hover {
-    background-color: #333;
+    background-color: ${(props) => (props.disabled ? "#2a2a2a" : "#444")};
+    transform: ${(props) =>
+      props.disabled
+        ? "none"
+        : "scale(1.02)"}; // 비활성화된 경우 크기 변환 없음
   }
 
   &:last-child {
@@ -299,4 +346,29 @@ const Arrow = styled.div`
   font-size: 2rem;
   color: #fff;
   margin: auto;
+`;
+const IconWrapper2 = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background-color: #2f2f2f;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+
+  svg {
+    // 아이콘의 색상을 변경하려면 svg 태그를 선택합니다.
+    color: #fff;
+    transition: color 0.3s ease;
+  }
+
+  &:hover {
+    background-color: #ff4d4f; // 배경색 변경
+    cursor: pointer;
+
+    svg {
+      color: #fff; // 아이콘 색상 변경 (필요에 따라 수정)
+    }
+  }
 `;

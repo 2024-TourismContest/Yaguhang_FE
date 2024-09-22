@@ -122,7 +122,7 @@ const Li = styled.li`
 
 export const Hr = styled.hr`
   width: 70vw;
-  border-bottom: 1px solid #c8c3c3;
+  border-bottom: 1px dashed #d9d9d9;
   @media (max-width: 900px) {
     width: 85vw;
   }
