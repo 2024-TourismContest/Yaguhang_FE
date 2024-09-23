@@ -7,11 +7,11 @@ interface TeamState {
   setPreferTeam: (team: string) => void;
 }
 
-const useStore = create<TeamState>((set) => ({
+const useTeamStore = create<TeamState>((set) => ({
   isTeamSelectorActive: false,
   preferTeam: "",
   setTeamSelectorActive: (active) => set({ isTeamSelectorActive: active }),
   setPreferTeam: (team) => set({ preferTeam: team }),
 }));
 
-export default useStore;
+export default useTeamStore;
