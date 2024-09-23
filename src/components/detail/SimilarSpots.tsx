@@ -10,13 +10,14 @@ export interface SpotPreviewDto {
   imageUrl: string;
   isScraped: boolean;
   stadiumId: number;
+  category: string;
 }
 
 interface SimilarSpotsProps {
   similarSpots: SpotPreviewDto[];
   bookmarkStates: { [key: number]: boolean };
   handleBookmarkToggle: (contentId: number) => void;
-  onClickContent: (contentId: number) => void;
+  onClickContent: (category: string, contentId: number) => void;
   id?: string;
   name?: string;
 }
@@ -37,7 +38,9 @@ const SimilarSpots: React.FC<SimilarSpotsProps> = ({
           {similarSpots.map((spot) => (
             <CardContainer
               key={spot.contentId}
-              onClick={() => onClickContent(spot.contentId)}
+              onClick={() =>
+                onClickContent(spot.category || "맛집", spot.contentId)
+              }
             >
               <BookmarkIcon
                 onClick={(e) => {
@@ -178,6 +181,11 @@ const BookmarkIcon = styled.div`
   padding-left: 50px;
   padding-bottom: 45px;
   color: #fff;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #ccc;
+  }
 
   @media (max-width: 768px) {
     width: 50px;

@@ -154,8 +154,13 @@ const Share: React.FC<ShareProps> = ({ name, description, address }) => {
 export default Share;
 
 const ShareIcon = styled.div`
-  font-size: 1.5rem; /* 24px */
+  font-size: 1.5rem;
   cursor: pointer;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #ccc;
+  }
 `;
 const Overlay = styled.div`
   position: fixed;

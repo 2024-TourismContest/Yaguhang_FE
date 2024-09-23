@@ -44,6 +44,7 @@ export interface SpotPreviewDto {
   imageUrl: string;
   isScraped: boolean;
   stadiumId: number;
+  category: string;
 }
 
 const DetailPage = () => {
@@ -176,7 +177,7 @@ const DetailPage = () => {
     return value ? value : "정보 준비중";
   };
 
-  const onClickContent = (contentId: number) => {
+  const onClickContent = (category: string, contentId: number) => {
     navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
     window.scrollTo(0, 0);
   };

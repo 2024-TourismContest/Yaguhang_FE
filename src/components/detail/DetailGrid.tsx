@@ -38,7 +38,7 @@ const DetailGrid: React.FC<DetailGridProps> = ({
             }
           >
             {bookmarkStates[detailData?.contentId!] ? (
-              <BsBookmarkFill style={{ fontSize: "2rem" }} />
+              <BsBookmarkFill style={{ fontSize: "2rem", color: "#fff" }} />
             ) : (
               <BsBookmarkStar style={{ fontSize: "2rem" }} />
             )}
@@ -214,6 +214,11 @@ const IconContainer = styled.div`
 const BookmarkIcon = styled.div`
   font-size: 1.5rem;
   cursor: pointer;
+  transition: color 0.3s ease; // 부드러운 색상 전환을 위해 추가
+
+  &:hover {
+    color: #ccc; // 호버 시 색상 변경 (원하는 색상으로 변경 가능)
+  }
 `;
 
 const GridContainer = styled.div`
