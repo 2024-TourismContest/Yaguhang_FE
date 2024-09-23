@@ -28,13 +28,14 @@ const Container = styled.div`
 const Title = styled.h1<{ color: "white" | "black" }>`
   color: ${(props) => (props.color === "white" ? "#fff" : "#000")};
   font-family: Inter;
-  font-size: 2.3rem;
+  font-size: 2rem;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
   transition: 0.2s ease-in-out;
+  text-align: start;
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 1.6rem;
   }
 
   @media (max-width: 480px) {
@@ -51,10 +52,6 @@ const SubTitle = styled.h2`
   line-height: normal;
   transition: 0.2s ease-in-out;
   @media (max-width: 768px) {
-    font-size: 1.25rem;
-  }
-
-  @media (max-width: 480px) {
     font-size: 1rem;
   }
 `;

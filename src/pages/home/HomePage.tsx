@@ -12,7 +12,7 @@ import WeatherGraph from "../../components/home/WeatherGraph";
 import heroData from "../../dummy-data/dummy-hero-data.json";
 import useTeamStore from "../../store/TeamStore";
 import { TitleSection } from "./TitleSection";
-import Modal from "../../components/common/Modal";
+import useModalStore from "../../store/modalStore";
 
 interface SpotBasicPreviewDto {
   contentId: number;
@@ -32,39 +32,47 @@ const HomePage = () => {
   const [placeData, setPlaceData] = useState<PlaceData | null>(null);
   const [stadiumId, setStadiumId] = useState<number | null>(null);
   const navigate = useNavigate();
-  const { selectedGame, selectedTeam, setSelectedTeam } =
-    useTeamStore();
-  const [showFanTeamModal, setShowFanTeamModal] = useState(false);
+  const { selectedGame, selectedTeam, setSelectedTeam } = useTeamStore();
+  const { openModal, closeModal } = useModalStore(); // Get openModal from modal store
   const [isInitialCheckDone, setIsInitialCheckDone] = useState(false);
 
   useEffect(() => {
-    // 로그인 직후에만 체크 실행
     const checkFanTeamStatus = async () => {
       try {
         const status = await home.checkFanTeam();
         if (status === "Check") {
-          const showModalOnHome = localStorage.getItem("showFanTeamModalOnHome");
+          const showModalOnHome = localStorage.getItem(
+            "showFanTeamModalOnHome"
+          );
           if (showModalOnHome) {
             localStorage.removeItem("showFanTeamModalOnHome");
-            setShowFanTeamModal(true);
+            openModal({
+              title: "팀 등록",
+              content:
+                "팬 구단이 등록되어 있지 않습니다. 팀을 등록하시겠습니까?",
+              onConfirm: () => {
+                navigate("/mypage");
+                closeModal();
+              },
+              showCancel: true,
+              showDoNotShowAgain: true,
+              onDoNotShowAgain: handleDoNotShowAgain,
+            });
           }
         } else if (typeof status === "string" && status !== "No Check") {
-          // 팀명으로 응답이 온 경우 스토어에 팀명 저장
           setSelectedTeam(status);
-          console.log('status:',status)
+          console.log("status:", status);
         }
-        // "No Check"인 경우는 아무 것도 하지 않고 그냥 넘어감
       } catch (error) {
         console.error("Error checking fan team:", error);
       }
     };
 
-    // 로그인 후 초기 체크 실행
     if (!isInitialCheckDone) {
       checkFanTeamStatus();
       setIsInitialCheckDone(true);
     }
-  }, [isInitialCheckDone, setSelectedTeam]);
+  }, [isInitialCheckDone, setSelectedTeam, openModal]); // Include openModal
 
   useEffect(() => {
     const fetchPlaceData = async () => {
@@ -74,7 +82,7 @@ const HomePage = () => {
           selectedCategory
         );
         setPlaceData(response.data);
-        setStadiumId(response.data.stadiumId); // stadiumId를 API 응답에서 가져옴
+        setStadiumId(response.data.stadiumId);
       } catch (err) {
         console.error("카테고리별추천 에러:", err);
       }
@@ -94,24 +102,14 @@ const HomePage = () => {
     }
   };
 
-  const handleConfirm = () => {
-    navigate("/mypage");
-  };
-
-  const handleCancel = () => {
-    setShowFanTeamModal(false);
-  };
-
   const handleDoNotShowAgain = async (doNotShowAgain: boolean) => {
     try {
       if (doNotShowAgain) {
         await home.setDoNotShowAgain();
-        // 로컬스토리지 대신 상태 관리로 'Do not show again' 상태 관리
       }
     } catch (error) {
       console.error("Error setting 'Do not show again':", error);
     }
-    setShowFanTeamModal(false);
   };
 
   return (
@@ -158,16 +156,6 @@ const HomePage = () => {
               <WeatherGraph gameId={selectedGame.id} />
             </WeatherContainer>
           </>
-        )}
-        {showFanTeamModal && (
-          <Modal
-            title="팀 등록"
-            content="팬 구단이 등록되어 있지 않습니다. 팀을 등록하시겠습니까?"
-            onConfirm={handleConfirm}
-            onCancel={handleCancel}
-            showDoNotShowAgain={true}
-            onDoNotShowAgain={handleDoNotShowAgain}
-          />
         )}
       </HomePageContainer>
     </>

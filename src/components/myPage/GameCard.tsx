@@ -20,8 +20,8 @@ interface GameCardProps {
   isSelected?: boolean;
   onSelect?: (schedule: any) => void;
   onScrap: (id: number) => void;
+  isScraped: boolean;
 }
-
 const GameCard: React.FC<GameCardProps> = ({
   schedule,
   isSelected = false,
@@ -37,11 +37,11 @@ const GameCard: React.FC<GameCardProps> = ({
   return (
     <StyledCard onClick={handleCardClick} $isSelected={isSelected}>
       <BeforeElement
-        $isScraped={schedule.isScraped}
         onClick={(e) => {
           e.stopPropagation(); // 클릭 전파 방지
           onScrap(schedule.id);
         }}
+        $isScraped={schedule.isScraped}
       />
       <div style={{ marginTop: "2rem" }}>
         <div>
@@ -67,40 +67,40 @@ const GameCard: React.FC<GameCardProps> = ({
     </StyledCard>
   );
 };
-
 export default GameCard;
 
 const StyledCard = styled.div<{ $isSelected: boolean }>`
-  flex-grow: 1;
-  flex-basis: calc(100% / 3 - 2rem);
-  max-width: 250px;
-  min-width: 170px;
   height: auto;
   padding: 1rem;
   border-radius: 1.25rem;
   text-align: center;
   color: white;
   border: 1px solid #fff;
-  transition: all 0.3s ease;
   background-color: ${({ $isSelected }) =>
     $isSelected ? "rgba(255, 255, 255, 0.3)" : "rgba(255, 255, 255, 0.1)"};
   transform: ${({ $isSelected }) => ($isSelected ? "scale(1.05)" : "scale(1)")};
   cursor: pointer;
-
-  @media (max-width: 768px) {
-    flex-basis: calc(100% / 2 - 1rem); /*2개 */
+  
+  min-width: calc((100% - 10px * (4 - 1)) / 4); /* 카드 너비 계산 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  scroll-snap-align: start;
+  box-sizing: border-box;
+  @media (max-width: 1300px) {
+    flex: 1 0 calc(33.33% - 10px); /* 3개로 나누기 */
   }
 
-  @media (max-width: 480px) {
-    flex-basis: 100%; /* 1개 */
+  @media (max-width: 1000px) {
+    flex: 1 0 calc(50% - 10px); /* 2개로 나누기 */
+  }
+
+  @media (max-width: 550px) {
+    flex: 1 0 100%; /* 1개로 나누기 */
   }
 `;
 
-interface BeforeElementProps {
-  $isScraped: boolean;
-}
-
-const BeforeElement = styled.div<BeforeElementProps>`
+const BeforeElement = styled.div<{ $isScraped: boolean }>`
   position: absolute;
   top: -2rem;
   left: 50%;

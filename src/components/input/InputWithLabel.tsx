@@ -3,19 +3,20 @@ import styled from "styled-components";
 import eyeIcon from "../../assets/icons/eye.png";
 import eyeOffIcon from "../../assets/icons/eye-off.png";
 import checkIcon from "../../assets/icons/check.png";
-
 interface InputWithLabelProps {
-  label: string;
+  label?: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: string;
   error?: string;
   showPassword?: boolean;
   onTogglePassword?: () => void;
   showConfirmPassword?: boolean;
   passwordMatch?: boolean;
+  readOnly?: boolean; // 읽기 전용 여부
+  width?: string;
+  placeholder?: string;
 }
-
 const InputWithLabel: React.FC<InputWithLabelProps> = ({
   label,
   value,
@@ -24,10 +25,13 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
   error,
   onTogglePassword,
   passwordMatch,
+  readOnly = false,
+  width,
+  placeholder,
 }) => {
   return (
     <InputWrapper>
-      <InputContainer hasError={!!error}>
+      <InputContainer hasError={!!error} width={width}>
         <Label>{label}</Label>
         <InputWrapperWithIcon>
           <Input
@@ -35,9 +39,11 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
             value={value}
             onChange={onChange}
             hasError={!!error}
+            readOnly={readOnly}
+            placeholder={placeholder}
           />
           {passwordMatch && <CheckIcon src={checkIcon} alt="check" />}
-          {onTogglePassword && (
+          {onTogglePassword && type === "password" && !readOnly && (
             <TogglePasswordButton type="button" onClick={onTogglePassword}>
               <img
                 src={type === "password" ? eyeIcon : eyeOffIcon}
@@ -51,14 +57,13 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
     </InputWrapper>
   );
 };
-
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
 `;
 
-const InputContainer = styled.div<{ hasError: boolean }>`
+const InputContainer = styled.div<{ hasError: boolean; width?: string }>`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -68,6 +73,8 @@ const InputContainer = styled.div<{ hasError: boolean }>`
   border: 0.3px solid ${({ hasError }) => (hasError ? "#ff4d4f" : "#fff")};
   gap: 10px;
   position: relative;
+
+  width: ${({ width }) => width || ""}; // customWidth를 사용하여 너비 조정
 `;
 
 const InputWrapperWithIcon = styled.div`
@@ -80,10 +87,15 @@ const InputWrapperWithIcon = styled.div`
 
 const Label = styled.div`
   color: white;
-  font-size: 16.66px;
+  font-size: 1rem;
   font-family: "Inter", sans-serif;
   font-weight: 400;
   width: 110px; /* 라벨 너비 고정 */
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  width: 90px; 
+
+  }
 `;
 
 const Input = styled.input<{ hasError: boolean }>`
@@ -92,14 +104,18 @@ const Input = styled.input<{ hasError: boolean }>`
   background-color: #000;
   color: white;
   font-family: "Inter", sans-serif;
-  font-size: 16.66px;
+  font-size: 1rem;
   font-weight: 400;
   text-align: left;
   padding-right: 2rem; /* 아이콘의 너비만큼 여백 추가 */
-  border: none;
-
   &:focus {
     outline: none;
+  }s
+  &[readonly] {
+    cursor: not-allowed;
+  }
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
   }
 `;
 

@@ -1,116 +1,115 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import plus from "../../assets/icons/plus.svg";
 import defaultImg from "../../assets/images/Detailnull.svg";
+import leftIcon from "../../assets/icons/arrow_left.svg";
+import rightIcon from "../../assets/icons/arrow_right.svg";
+import { mypage } from "../../apis/mypage";
+import { ScrapSpot } from "../../types/myPageType";
+import { Link, useNavigate } from "react-router-dom";
 
-interface Spot {
-  contentId: number | string;
-  image: string;
-  title: string;
-}
+const BookMarkList: React.FC = () => {
+  const [scrapSpots, setScrapSpots] = useState<ScrapSpot[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
-interface Stadium {
-  scrapStadium: {
-    stadiumId: number;
-    image: string;
-    title: string;
+  useEffect(() => {
+    const fetchScrapSpots = async () => {
+      try {
+        const myScrapSpotData = await mypage.MyBookMark(0, 10, "전체");
+        setScrapSpots(myScrapSpotData.scrapSpots);
+      } catch (error) {
+        console.error("Error fetching bookmark data:", error);
+      }
+    };
+
+    fetchScrapSpots();
+  }, []);
+
+  const handleClick = (spot: ScrapSpot) => {
+    const url = `/details/선수PICK/${spot.contentId}?stadiumId=${spot.stadiumInfo.StadiumId}`;
+    navigate(url);
   };
-  scrapSpots: Spot[];
-}
 
-interface BookMarkListProps {
-  data: Stadium[];
-}
+  // 스크롤 처리 함수
+  const handleScroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const scrollAmount = scrollRef.current.clientWidth; // 부모 컨테이너의 너비로 스크롤 양 조정
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
 
-const BookMarkList: React.FC<BookMarkListProps> = ({ data }) => {
-  const validData = Array.isArray(data) ? data : [];
   return (
-    <Container>
-      {validData.slice(0, 3).map((stadium) => (
-        <Row key={stadium.scrapStadium.stadiumId}>
-          <BookMarkContainer
-            img={stadium.scrapStadium.image}
-            title={stadium.scrapStadium.title}
-            spots={stadium.scrapSpots}
-          />
-        </Row>
-      ))}
-    </Container>
+    <div>
+      {scrapSpots.length > 0 ? (
+        <Container>
+          <Button onClick={() => handleScroll("left")}>
+            <img src={leftIcon} alt="Left" />
+          </Button>
+          <SpotsContainer ref={scrollRef}>
+            {scrapSpots.map((spot) => (
+              <ContentWrapper
+                key={spot.contentId}
+                onClick={() => handleClick(spot)}
+              >
+                <Img src={spot.image || defaultImg} alt={spot.title} />
+                <Title>{spot.title}</Title>
+              </ContentWrapper>
+            ))}
+          </SpotsContainer>
+          <Button onClick={() => handleScroll("right")}>
+            <img src={rightIcon} alt="Right" />
+          </Button>
+        </Container>
+      ) : (
+        <NoDataMessage>추천 항목이 없습니다.</NoDataMessage>
+      )}
+      <MoreLink to="/mypage/bookmark">+ 더보기</MoreLink>
+    </div>
   );
 };
 
-interface BookMarkContainerProps {
-  img: string;
-  title: string;
-  spots: Spot[];
-}
-
-const BookMarkContainer: React.FC<BookMarkContainerProps> = ({
-  img,
-  title,
-  spots,
-}) => {
-  const spotsToShow = spots.slice(0, 3);
-  const spotsCount = spots.length;
-
-  return (
-    <BookmarkContent>
-      <ContentWrapper>
-        <Img src={img} alt={title} />
-        <Title>{title}</Title>
-      </ContentWrapper>
-      <Divider>
-        <Dot />
-        <Dot />
-      </Divider>
-      <SpotsContainer>
-        {spotsToShow.map((spot) => (
-          <ContentWrapper key={spot.contentId}>
-            <Img src={spot.image || defaultImg} alt={spot.title} />
-            <Title>{spot.title}</Title>
-          </ContentWrapper>
-        ))}
-        {spotsCount < 3 &&
-          Array.from({ length: 3 - spotsCount }).map((_, index) => (
-            <ContentWrapper key={`placeholder-${index}`}>
-              <AddContainer>
-                <img src={plus} alt="Add more" />
-              </AddContainer>
-            </ContentWrapper>
-          ))}
-      </SpotsContainer>
-    </BookmarkContent>
-  );
-};
+export default BookMarkList;
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 20px;
-  width: 100%;
-`;
-
-const BookmarkContent = styled.div`
-  display: flex;
   align-items: center;
-  padding: 10px;
   width: 100%;
+`;
+
+const SpotsContainer = styled.div`
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px 0;
+  scroll-snap-type: x mandatory;
+  transition: 0.2s ease-in-out;
+
+  &::-webkit-scrollbar {
+    display: none; /* 스크롤바 숨김 */
+  }
 `;
 
 const ContentWrapper = styled.div`
-  width: 230px;
+  min-width: calc((100% - 10px * (4 - 1)) / 4); /* 카드 너비 계산 */
   display: flex;
   flex-direction: column;
   align-items: center;
+  scroll-snap-align: start;
+
+  @media (max-width: 1000px) {
+    flex: 1 0 calc(33.33% - 10px); /* 3개 */
+  }
+
+  @media (max-width: 600px) {
+    flex: 1 0 calc(50% - 10px); /* 2개 */
+  }
+
+  @media (max-width: 400px) {
+    flex: 1 0 100%; /* 1개 */
+  }
 `;
 
 const Img = styled.img`
@@ -118,10 +117,11 @@ const Img = styled.img`
   height: 130px;
   object-fit: cover;
   border-radius: 8px;
+  transition: 0.2s ease-in-out;
 `;
 
 const Title = styled.h2`
-  width: 100%;
+  max-width: 100%;
   padding-top: 0.5rem;
   text-align: center;
   font-size: 1rem;
@@ -131,41 +131,34 @@ const Title = styled.h2`
   overflow: hidden;
 `;
 
-const SpotsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 10px;
-  flex-wrap: wrap;
-`;
-
-const AddContainer = styled.div`
-  width: 100%;
-  height: 130px;
-  border: 1px dashed #fff;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  img {
-    width: 50px;
+const Button = styled.button`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  @media (max-width: 768px) {
+    img {
+      width: 30px;
+    }
   }
 `;
 
-const Divider = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 0 20px;
+const MoreLink = styled(Link)`
+  display: block;
+  text-align: center;
+  color: #fff;
+  font-size: 1rem;
+  margin-top: 1rem;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
-const Dot = styled.div`
-  width: 6px;
-  height: 6px;
-  background-color: white;
-  border-radius: 50%;
-  margin: 4px 0;
+const NoDataMessage = styled.p`
+  text-align: center;
+  color: #fff;
+  font-size: 1rem;
+  margin-top: 1rem;
 `;
-
-export default BookMarkList;

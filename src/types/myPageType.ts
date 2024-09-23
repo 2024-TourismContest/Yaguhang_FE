@@ -5,35 +5,39 @@ export interface Spot {
   title: string;
 }
 
-export interface Stadium {
-  stadiumId: number;
-  image: string;
-  title: string;
+export interface StadiumInfo {
+  StadiumId: number;
+  StadiumImage: string;
+  teamName: string;
+  StadiumName: string;
 }
 
-export interface ScrapStadiumSpots {
-  scrapStadium: Stadium;
-  scrapSpots: Spot[];
+export interface ScrapSpot extends Spot {
+  stadiumInfo: StadiumInfo;
 }
 
 export interface MyBookMarkResponse {
-  scrapStadiumSpots: ScrapStadiumSpots[];
+  scrapSpots: ScrapSpot[];
+  hasNextPage: boolean; // 다음 페이지 여부를 위한 필드
+  pagesize: number; // 페이지 크기 정보
 }
-
-// /api/mypage/info 응답
-export interface MyPageInfo {
-  userId: number;
+//내정보
+export interface MyInfo {
+  fanTeamName: string;
   nickname: string;
   image: string;
   fanTeam: string;
+  email: string;
 }
 
 // /api/review/myreview 응답
 export interface Review {
+  stadiumId: number;
   spotId: number;
   reviewId: number;
   star: number;
   likeCount: number;
+  isLiked: boolean;
   image: string;
   createdAt: string;
   content: string;
@@ -87,4 +91,9 @@ export interface MyRecommendResponse {
   pageSize: number;
   totalPage: number;
   recommendPreviewDtos: RecommendPreviewDto[];
+}
+// /api/users
+export interface EditProfileParams {
+  nickname: string;
+  profileImage: string;
 }

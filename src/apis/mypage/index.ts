@@ -1,5 +1,5 @@
 import {
-  MyPageInfo,
+  MyInfo,
   MyReviewResponse,
   ScrapsScheduleResponse,
   MyRecommendResponse,
@@ -35,19 +35,24 @@ export const mypage = {
     size: number
   ): Promise<ScrapsScheduleResponse> => {
     try {
-      const response = await defaultApi.get("/api/scraps/schedule", {
-        params: { page, size },
-      });
+      const response = await defaultApi.get(
+        `api/scraps/schedule?page=${page}&size=${size}`
+      );
       return response.data;
     } catch (error) {
       console.error("Error fetching MyScrap data:", error);
       throw error;
     }
   },
-  MyBookMark: async (): Promise<MyBookMarkResponse> => {
+
+  MyBookMark: async (
+    page: number,
+    size: number,
+    filter: string
+  ): Promise<MyBookMarkResponse> => {
     try {
       const response = await defaultApi.get<MyBookMarkResponse>(
-        "/api/scraps/spot"
+        `api/scraps/spot/filter?pageIndex=${page}&pageSize=${size}&filter=${filter}`
       );
       return response.data;
     } catch (error) {
@@ -56,12 +61,85 @@ export const mypage = {
     }
   },
 
-  MyPageInfo: async (): Promise<MyPageInfo> => {
+  MyPageInfo: async (): Promise<MyInfo> => {
     try {
       const response = await defaultApi.get("/api/mypage/info");
       return response.data;
     } catch (error) {
       console.error("Error fetching MyPageInfo data:", error);
+      throw error;
+    }
+  },
+  getMyInfo: async (): Promise<MyInfo> => {
+    try {
+      const response = await defaultApi.get("/api/users/me");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching MyPageInfo data:", error);
+      throw error;
+    }
+  },
+
+  RegistFan: async (team: string) => {
+    try {
+      const response = await defaultApi.post(`/api/users/fan/${team}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error registering fan team:", error);
+      throw error;
+    }
+  },
+
+  EditProfile: async (nickname: string, profileImage: string) => {
+    try {
+      const response = await defaultApi.put("/api/users", {
+        nickname,
+        profileImge: profileImage,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      throw error;
+    }
+  },
+
+  // 카카오 로그인 여부 확인
+  CheckKakao: async (): Promise<string> => {
+    try {
+      const response = await defaultApi.get("/api/auth/provider");
+      return response.data;
+    } catch (error) {
+      console.error("Error checking kakao auth:", error);
+      throw error;
+    }
+  },
+
+  // 비밀번호 확인
+  CheckPassword: async (currentPassword: string): Promise<boolean> => {
+    try {
+      const response = await defaultApi.post(
+        "/api/auth/password-check",
+        currentPassword,
+        {
+          headers: { "Content-Type": "text/plain" }, // 단순 문자열로 요청할 경우 헤더 설정
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error checking password:", error);
+      throw error;
+    }
+  },
+
+  // 비밀번호 변경
+  ChangePassword: async (newPassword: string): Promise<void> => {
+    try {
+      const response = await defaultApi.put("/api/auth/password", {
+        newPassword,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error changing password:", error);
       throw error;
     }
   },

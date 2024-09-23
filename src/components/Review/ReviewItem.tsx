@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toggleLikeOnServer } from "../../apis/review/index"; 
 import styled from "styled-components";
 import StarFull from "../../assets/icons/star-fill.png";
 import StarHalf from "../../assets/icons/star-half.png";
@@ -27,6 +28,7 @@ interface ReviewItemProps {
 
 const ReviewItem: React.FC<ReviewItemProps> = ({
   authorName,
+  reviewId,
   profileImage,
   createdAt,
   spotName,
@@ -42,13 +44,18 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
   const [likes, setLikes] = useState(likeCount);
   const navigate = useNavigate();
 
-  const toggleLike = () => {
-    setIsLiked(!isLiked);
-    setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
+  const toggleLike = async () => {
+    const newLikeStatus = !isLiked;
+    const updatedLikeCount = await toggleLikeOnServer(reviewId);
+
+    if (updatedLikeCount !== null) {
+      setIsLiked(newLikeStatus);
+      setLikes(updatedLikeCount);
+    }
   };
 
   const handleClick = () => {
-    const url = `https://yaguhang.kro.kr:7443/details/선수PICK/${spotId}?stadiumId=${stadiumId}`;
+    const url = `/details/선수PICK/${spotId}?stadiumId=${stadiumId}`;
     navigate(url);
   };
 
@@ -79,7 +86,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
   const formattedRating = (Math.round(star * 2) / 2).toFixed(1);
 
   return (
-    <ReviewItemContainer onClick={handleClick}>
+    <ReviewItemContainer>
       <LeftContent>
         {profileImage && (
           <ProfileImg
@@ -89,7 +96,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
         )}
         <ContentsContainer>
           <ReviewInfo>
-            <StadiumNameContainer>
+            <StadiumNameContainer onClick={handleClick}>
               {spotName && (
                 <>
                   <StadiumName>{spotName}</StadiumName>
@@ -125,6 +132,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
 };
 
 export default ReviewItem;
+
 const ReviewItemContainer = styled.div`
   padding: 1.5rem;
   background-color: #ffffff10;

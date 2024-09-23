@@ -4,10 +4,12 @@ import { useState } from "react";
 interface ModalProps {
   title: string;
   content: string;
-  onConfirm: () => void;
-  onCancel: () => void;
+  onConfirm?: () => void;
+  onCancel?: () => void;
   onDoNotShowAgain?: (doNotShowAgain: boolean) => void;
   showDoNotShowAgain?: boolean;
+  showConfirm?: boolean;
+  showCancel?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -17,6 +19,8 @@ const Modal: React.FC<ModalProps> = ({
   onCancel,
   onDoNotShowAgain,
   showDoNotShowAgain = false,
+  showConfirm = true,
+  showCancel = false,
 }) => {
   const [doNotShowAgain, setDoNotShowAgain] = useState(false);
 
@@ -24,14 +28,14 @@ const Modal: React.FC<ModalProps> = ({
     if (onDoNotShowAgain) {
       onDoNotShowAgain(doNotShowAgain);
     }
-    onConfirm();
+    if (onConfirm) onConfirm();
   };
 
   const handleCancel = () => {
     if (onDoNotShowAgain) {
       onDoNotShowAgain(doNotShowAgain);
     }
-    onCancel();
+    if (onCancel) onCancel();
   };
 
   return (
@@ -45,15 +49,15 @@ const Modal: React.FC<ModalProps> = ({
               <Checkbox
                 type="checkbox"
                 checked={doNotShowAgain}
-                onChange={() => setDoNotShowAgain(!doNotShowAgain)}
+                onChange={() => setDoNotShowAgain((prev) => !prev)}
               />
               <CheckboxLabel>다시 보지 않기</CheckboxLabel>
             </CheckboxContainer>
           )}
         </ModalBody>
         <ButtonContainer>
-          <Button onClick={handleConfirm}>확인</Button>
-          <Button onClick={handleCancel}>취소</Button>
+          {showConfirm && <Button onClick={handleConfirm}>확인</Button>}
+          {showCancel && <Button onClick={handleCancel}>취소</Button>}
         </ButtonContainer>
       </ModalContent>
     </ModalOverlay>
