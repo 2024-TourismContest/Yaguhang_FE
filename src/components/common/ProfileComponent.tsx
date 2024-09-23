@@ -27,7 +27,8 @@ const ProfileComponent = ({
     top: number;
     left: number;
   } | null>(null);
-  const { showBalloon, balloonContent, setShowBalloon } = useBalloonStore(); // 전역 상태 사용
+  const { showBalloon, setShowBalloon } = useBalloonStore(); // 전역 상태 사용
+
   const handleClick = () => {
     if (fileInputRef.current && isEditing) {
       fileInputRef.current.click();
@@ -37,19 +38,22 @@ const ProfileComponent = ({
   useEffect(() => {
     if (teamLogoRef.current && showBalloon) {
       const rect = teamLogoRef.current.getBoundingClientRect();
-      setBalloonPosition({
-        top: rect.top - 30, // 팀 로고 중앙 위쪽에 위치하도록 수정
+      setBalloonPosition({ //중앙 위쪽
+        top: rect.top - 30,
         left: rect.left + rect.width / 2,
       });
     }
+
+    // 말풍선 지속시간 설정
+    const timer = setTimeout(() => {
+      setShowBalloon(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
   }, [showBalloon]);
 
   const handleLogoHover = () => {
     setShowBalloon(true);
-  };
-
-  const handleLogoLeave = () => {
-    setShowBalloon(false);
   };
 
   return (
@@ -72,12 +76,11 @@ const ProfileComponent = ({
           ref={teamLogoRef}
           onClick={onTeamClick}
           onMouseEnter={handleLogoHover}
-          onMouseLeave={handleLogoLeave}
         >
           <TeamLogoImg src={TeamLogo || defaultStadium} alt="구장 이미지" />
           {showBalloon && (
             <Balloon
-              content={'팬 구단을 설정해요!'}
+              content={"팬 구단을 설정해요!"}
               position={{ top: -30, left: "50%" }}
             />
           )}

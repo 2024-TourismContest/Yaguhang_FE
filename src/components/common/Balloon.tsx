@@ -1,4 +1,3 @@
-import React from "react";
 import styled, { keyframes } from "styled-components";
 
 interface BalloonProps {
@@ -41,8 +40,11 @@ const BalloonContainer = styled.div`
   transform: translate(-50%, -50%);
   white-space: nowrap;
   width: fit-content;
-  font-size: 0.8rem;
   animation: ${float} 1.5s ease-in-out infinite; // 동동 뜨는 애니메이션
+
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #303030;
 `;
 
 const BalloonArrow = styled.div`

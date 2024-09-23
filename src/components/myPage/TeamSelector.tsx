@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import useStore from "../../store/PreferTeamStore";
 import { mypage } from "../../apis/mypage";
@@ -25,7 +25,8 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
   const { setPreferTeam } = useStore();
   const containerRef = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModalStore();
-  const { setShowBalloon } = useBalloonStore(); // 말풍선 상태 업데이트 함수
+  const { setShowBalloon } = useBalloonStore();
+  const [clickCount, setClickCount] = useState(0); // 클릭 횟수 상태 추가
 
   // 외부 클릭 시 비활성화
   useEffect(() => {
@@ -48,7 +49,11 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
   const handleButtonClick = useCallback(
     (team: string) => {
       if (!isEnabled) {
-        setShowBalloon(true, `비활성화된 상태입니다. "${team}" 팀 선택 불가`); // 말풍선 표시
+        setClickCount((prev) => prev + 1);
+        if (clickCount + 1 >= 2) {
+          setShowBalloon(true);
+          setClickCount(0);
+        }
         return;
       }
       openModal({
@@ -70,7 +75,7 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
         showCancel: true,
       });
     },
-    [isEnabled, setSelectedTeam, setPreferTeam, openModal]
+    [isEnabled, clickCount, setSelectedTeam, setPreferTeam, openModal]
   );
 
   return (
@@ -226,3 +231,4 @@ const TextButton = styled(Button)`
     font-size: 0.8rem;
   }
 `;
+ㄴ
