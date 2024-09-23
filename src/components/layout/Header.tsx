@@ -208,6 +208,11 @@ const NavbarContainer = styled.nav<{ isMenuOpen: boolean }>`
       ? "#333"
       : "linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0))"};
   transition: background 0.3s;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.2),
+    rgba(255, 255, 255, 0.1)
+  );
 `;
 
 const LogoContainer = styled.div`

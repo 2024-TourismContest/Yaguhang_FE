@@ -134,8 +134,8 @@ const Card: React.FC = () => {
   return (
     <>
       <Category filterSchedules={fetchSchedules} teamLogos={teamLogos} />
-      <S.Wrapper gap="100px">
-        <S.TitleWrapper>
+      <S.Wrapper>
+        <S.TitleWrapper style={{ marginTop: "-100px" }}>
           <S.Title style={{ color: "#ffffff" }}>오늘의 경기 일정</S.Title>
           <S.H4>
             열정과 감동을 선사하는 스포츠! 그 현장을 직접 경험해보세요!
@@ -245,8 +245,14 @@ const CardContainer = styled.div`
   position: relative;
   height: 50vh;
   overflow-x: auto;
+  margin-top: -50px;
 `;
-
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -30px;
+`;
 const StyledCard = styled.div<StyledCardProps>`
   position: relative;
   width: 11vw;
@@ -258,8 +264,15 @@ const StyledCard = styled.div<StyledCardProps>`
   color: white;
   text-align: center;
   padding: 1rem;
-  margin: 0.8rem;
+  margin: 0.5rem;
   border: 1px solid #ffffff;
+  transition: transform 0.3s ease, background-color 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    background-color: #4e4e4e !important;
+    transform: scale(1.05) !important;
+  }
 
   @media (max-width: 1024px) {
     width: 18vw;
@@ -267,8 +280,8 @@ const StyledCard = styled.div<StyledCardProps>`
   }
 
   @media (max-width: 768px) {
-    width: 28svw;
-    height: 40svw;
+    width: 28vw;
+    height: 40vw;
   }
 `;
 
@@ -286,6 +299,13 @@ const BeforeElement = styled.div<StyledCardProps>`
   background-size: cover;
   z-index: 99;
   cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 1);
+    transform: translateX(-50%) scale(1.1);
+  }
 `;
 
 const Divider = styled.div`
