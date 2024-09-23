@@ -74,7 +74,7 @@ const Section = styled.div`
   padding: 0rem 7rem 4rem 7rem;
   flex-direction: row;
   text-align: center;
-  margin-top: 8vh;
+  margin-top: 5vh;
 
   h1 {
     color: #ffffff;
@@ -84,14 +84,14 @@ const Section = styled.div`
   @media (max-width: 768px) {
     padding: 0 2rem;
     h1 {
-      font-size: 1.4rem;
+      font-size: 1rem;
     }
   }
 
   @media (max-width: 480px) {
     padding: 0 1rem;
     h1 {
-      font-size: 1.2rem;
+      font-size: 0.7rem;
     }
   }
 `;
@@ -115,8 +115,8 @@ const SimilarSpotsContainer = styled.div`
 `;
 
 const CardContainer = styled.div`
-  width: 230px;
-  height: 230px;
+  width: 200px;
+  height: 200px;
   background-color: #fff;
   border-radius: 50%;
   position: relative;
@@ -132,8 +132,8 @@ const CardContainer = styled.div`
   }
 
   @media (max-width: 768px) {
-    width: 180px;
-    height: 180px;
+    width: 150px;
+    height: 150px;
   }
 
   @media (max-width: 480px) {
@@ -168,8 +168,8 @@ const BookmarkIcon = styled.div`
   position: absolute;
   top: 0;
   right: 0;
-  width: 60px;
-  height: 65px;
+  width: 45px;
+  height: 55px;
   background-color: #1a278e;
   clip-path: polygon(100% 0, 100% 100%, 0 0);
   display: flex;

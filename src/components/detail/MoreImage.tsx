@@ -83,7 +83,7 @@ const Section = styled.div`
   flex: 1 1 45%;
   padding: 0rem 7rem 4rem 7rem;
   text-align: center;
-  margin-top: 8vh;
+  margin-top: 5vh;
 
   h1 {
     color: #ffffff;
@@ -92,17 +92,17 @@ const Section = styled.div`
 
   @media (max-width: 768px) {
     padding: 0 2rem;
-    margin-top: 5vh;
+    margin-top: 3vh;
 
     h1 {
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
   }
 
   @media (max-width: 480px) {
     padding: 0 1rem;
     h1 {
-      font-size: 1rem;
+      font-size: 0.7rem;
     }
   }
 `;
@@ -120,24 +120,24 @@ const ImageContainer = styled.div`
 `;
 
 const ImageItem = styled.img`
-  width: 230px;
-  height: 23vh;
+  width: 180px;
+  height: 20vh;
   object-fit: cover;
   border-radius: 25px;
 
   @media (max-width: 1024px) {
-    width: 180px;
-    height: 20vh;
-  }
-
-  @media (max-width: 768px) {
-    width: 150px;
+    width: 160px;
     height: 18vh;
   }
 
+  @media (max-width: 768px) {
+    width: 130px;
+    height: 15vh;
+  }
+
   @media (max-width: 480px) {
-    width: 80px;
-    height: 70px;
+    width: 50px;
+    height: 60px;
   }
 `;
 
