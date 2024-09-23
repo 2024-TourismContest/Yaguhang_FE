@@ -14,6 +14,7 @@ interface ModalConfig {
 interface ModalStore {
   isOpen: boolean;
   config: ModalConfig;
+  modalRef: HTMLDivElement | null;
   openModal: (config: ModalConfig) => void;
   closeModal: () => void;
 }
