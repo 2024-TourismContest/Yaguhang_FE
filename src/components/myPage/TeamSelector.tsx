@@ -231,4 +231,3 @@ const TextButton = styled(Button)`
     font-size: 0.8rem;
   }
 `;
-ㄴ

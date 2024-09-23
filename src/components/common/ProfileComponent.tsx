@@ -23,7 +23,7 @@ const ProfileComponent = ({
 }: ProfileComponentProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const teamLogoRef = useRef<HTMLDivElement | null>(null);
-  const [balloonPosition, setBalloonPosition] = useState<{
+  const [, setBalloonPosition] = useState<{
     top: number;
     left: number;
   } | null>(null);
@@ -38,7 +38,8 @@ const ProfileComponent = ({
   useEffect(() => {
     if (teamLogoRef.current && showBalloon) {
       const rect = teamLogoRef.current.getBoundingClientRect();
-      setBalloonPosition({ //중앙 위쪽
+      setBalloonPosition({
+        //중앙 위쪽
         top: rect.top - 30,
         left: rect.left + rect.width / 2,
       });
