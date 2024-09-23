@@ -3,6 +3,7 @@ import styled from "styled-components";
 import useStore from "../../store/PreferTeamStore";
 import { mypage } from "../../apis/mypage";
 import useModalStore from "../../store/modalStore";
+import useBalloonStore from "../../store/ballonStore";
 
 interface TeamSelectorProps {
   teamLogos: Record<string, string>;
@@ -24,6 +25,7 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
   const { setPreferTeam } = useStore();
   const containerRef = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModalStore();
+  const { setShowBalloon } = useBalloonStore(); // 말풍선 상태 업데이트 함수
 
   // 외부 클릭 시 비활성화
   useEffect(() => {
@@ -45,7 +47,10 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
 
   const handleButtonClick = useCallback(
     (team: string) => {
-      if (!isEnabled) return;
+      if (!isEnabled) {
+        setShowBalloon(true, `비활성화된 상태입니다. "${team}" 팀 선택 불가`); // 말풍선 표시
+        return;
+      }
       openModal({
         title: "선호 팀 변경",
         content: `"${team}" 팀으로 변경하시겠습니까?`,
