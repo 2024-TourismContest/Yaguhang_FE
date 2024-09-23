@@ -125,6 +125,8 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
   font-size: 14px;
+  transition: all 0.3s ease;
+
   div {
     background-color: #ffffff;
     width: 90%;
@@ -141,9 +143,23 @@ const Button = styled.button`
   p {
     color: white;
   }
+
+  &:hover {
+    background-color: #fff;
+    transform: scale(1.1);
+    cursor: pointer;
+
+    p {
+      color: #686868; // 호버 시 글자 색상 변경 (밝은 파란색)
+    }
+  }
+  }
   @media (max-width: 1024px) {
     width: 50px;
     height: 50px;
+  }
+  &:hover {
+    border: blue;
   }
 `;
 const Title = styled.div`
