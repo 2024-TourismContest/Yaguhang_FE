@@ -40,7 +40,7 @@ const StadiumPage = () => {
   const [stadiumId, setStadiumId] = useState<number>(0);
 
   useEffect(() => {
-    setSelectedTeam("LG");
+    if (!selectedTeam) setSelectedTeam("LG");
   }, []);
   const stadiumNumber = teamToStadiumMap[selectedTeam];
 
