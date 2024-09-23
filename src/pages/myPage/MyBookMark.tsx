@@ -5,21 +5,21 @@ import { mypage } from "../../apis/mypage";
 import { ScrapSpot } from "../../types/myPageType";
 import SectionTitle from "../../components/common/SectionTitle";
 import { Filter } from "../../components/recommend/filter";
+import { useNavigate } from "react-router-dom";
 
 const MyBookMark: React.FC = () => {
   const [scrapSpots, setScrapSpots] = useState<ScrapSpot[]>([]);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const [selectedSpot, setSelectedSpot] = useState("전체"); 
+  const [selectedSpot, setSelectedSpot] = useState("전체");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const fetchScrapSpots = async () => {
-    setLoading(true); 
+    setLoading(true);
     try {
       const myScrapSpotData = await mypage.MyBookMark(page, 100, selectedSpot);
-      console.log("selected:", selectedSpot);
-      console.log("response:", myScrapSpotData);
       if (myScrapSpotData.scrapSpots.length === 0) {
         setHasMore(false); // 더 이상 데이터가 없을 때
       } else {
@@ -46,7 +46,7 @@ const MyBookMark: React.FC = () => {
   // 선택 구단 바뀔 시 초기화
   useEffect(() => {
     setScrapSpots([]);
-    setPage(0); 
+    setPage(0);
     setHasMore(true);
   }, [selectedSpot]);
 
@@ -58,6 +58,11 @@ const MyBookMark: React.FC = () => {
         setPage((prev) => prev + 1);
       }
     }
+  };
+
+  const handleClick = (spot: ScrapSpot) => {
+    const url = `/details/선수PICK/${spot.contentId}?stadiumId=${spot.stadiumInfo.StadiumId}`;
+    navigate(url);
   };
 
   return (
@@ -78,7 +83,10 @@ const MyBookMark: React.FC = () => {
       ) : (
         <Grid>
           {scrapSpots.map((spot) => (
-            <ContentWrapper key={spot.contentId}>
+            <ContentWrapper
+              key={spot.contentId}
+              onClick={() => handleClick(spot)}
+            >
               <Img src={spot.image || defaultImg} alt={spot.title} />
               <Title>{spot.title}</Title>
             </ContentWrapper>
@@ -114,10 +122,7 @@ const Grid = styled.div`
   display: grid;
   width: 100%;
   gap: 20px;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(200px, 1fr)
-  );
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 `;
 
 const ContentWrapper = styled.div`

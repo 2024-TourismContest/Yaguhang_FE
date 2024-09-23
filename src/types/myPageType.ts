@@ -12,14 +12,14 @@ export interface StadiumInfo {
   StadiumName: string;
 }
 
-export interface ScrapSpot {
-  [x: string]: string;
-  image: string;
-  title: string;
+export interface ScrapSpot extends Spot {
+  stadiumInfo: StadiumInfo;
 }
 
 export interface MyBookMarkResponse {
   scrapSpots: ScrapSpot[];
+  hasNextPage: boolean; // 다음 페이지 여부를 위한 필드
+  pagesize: number; // 페이지 크기 정보
 }
 //내정보
 export interface MyInfo {

@@ -50,7 +50,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
 
     if (updatedLikeCount !== null) {
       setIsLiked(newLikeStatus);
-      setLikes(updatedLikeCount); // 서버 응답으로 받은 좋아요 수 업데이트
+      setLikes(updatedLikeCount);
     }
   };
 

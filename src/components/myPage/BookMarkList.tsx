@@ -5,11 +5,12 @@ import leftIcon from "../../assets/icons/arrow_left.svg";
 import rightIcon from "../../assets/icons/arrow_right.svg";
 import { mypage } from "../../apis/mypage";
 import { ScrapSpot } from "../../types/myPageType";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const BookMarkList: React.FC = () => {
   const [scrapSpots, setScrapSpots] = useState<ScrapSpot[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchScrapSpots = async () => {
@@ -24,6 +25,12 @@ const BookMarkList: React.FC = () => {
     fetchScrapSpots();
   }, []);
 
+  const handleClick = (spot: ScrapSpot) => {
+    const url = `/details/선수PICK/${spot.contentId}?stadiumId=${spot.stadiumInfo.StadiumId}`;
+    navigate(url);
+  };
+
+  // 스크롤 처리 함수
   const handleScroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const scrollAmount = scrollRef.current.clientWidth; // 부모 컨테이너의 너비로 스크롤 양 조정
@@ -36,16 +43,17 @@ const BookMarkList: React.FC = () => {
 
   return (
     <div>
-      {scrapSpots.length < 0 ? (
-        <NoDataMessage>추천 항목이 없습니다.</NoDataMessage>
-      ) : (
+      {scrapSpots.length > 0 ? (
         <Container>
           <Button onClick={() => handleScroll("left")}>
             <img src={leftIcon} alt="Left" />
           </Button>
           <SpotsContainer ref={scrollRef}>
             {scrapSpots.map((spot) => (
-              <ContentWrapper key={spot.contentId}>
+              <ContentWrapper
+                key={spot.contentId}
+                onClick={() => handleClick(spot)}
+              >
                 <Img src={spot.image || defaultImg} alt={spot.title} />
                 <Title>{spot.title}</Title>
               </ContentWrapper>
@@ -55,6 +63,8 @@ const BookMarkList: React.FC = () => {
             <img src={rightIcon} alt="Right" />
           </Button>
         </Container>
+      ) : (
+        <NoDataMessage>추천 항목이 없습니다.</NoDataMessage>
       )}
       <MoreLink to="/mypage/bookmark">+ 더보기</MoreLink>
     </div>
@@ -78,7 +88,7 @@ const SpotsContainer = styled.div`
   transition: 0.2s ease-in-out;
 
   &::-webkit-scrollbar {
-    display: none; /* Hide scrollbar */
+    display: none; /* 스크롤바 숨김 */
   }
 `;
 
@@ -88,16 +98,17 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   scroll-snap-align: start;
+
   @media (max-width: 1000px) {
-    flex: 1 0 calc(33.33% - 10px); /* 3개로 나누기 */
+    flex: 1 0 calc(33.33% - 10px); /* 3개 */
   }
 
   @media (max-width: 600px) {
-    flex: 1 0 calc(50% - 10px); /* 2개로 나누기 */
+    flex: 1 0 calc(50% - 10px); /* 2개 */
   }
 
   @media (max-width: 400px) {
-    flex: 1 0 100%; /* 1개로 나누기 */
+    flex: 1 0 100%; /* 1개 */
   }
 `;
 
@@ -131,6 +142,7 @@ const Button = styled.button`
     }
   }
 `;
+
 const MoreLink = styled(Link)`
   display: block;
   text-align: center;
