@@ -9,7 +9,8 @@ import HeroCarousel from "../../components/home/HeroCarousel";
 import ImageSlider from "../../components/home/imageSlider";
 import WeatherCard from "../../components/home/WeatherCard";
 import WeatherGraph from "../../components/home/WeatherGraph";
-import heroData from "../../dummy-data/dummy-hero-data.json";
+import { heroData } from "../../assets/data/data";
+// import heroData from "../../dummy-data/dummy-hero-data.json";
 import useTeamStore from "../../store/TeamStore";
 import { TitleSection } from "./TitleSection";
 import useModalStore from "../../store/modalStore";
@@ -33,7 +34,7 @@ const HomePage = () => {
   const [stadiumId, setStadiumId] = useState<number | null>(null);
   const navigate = useNavigate();
   const { selectedGame, selectedTeam, setSelectedTeam } = useTeamStore();
-  const { openModal, closeModal } = useModalStore(); // Get openModal from modal store
+  const { openModal, closeModal } = useModalStore();
   const [isInitialCheckDone, setIsInitialCheckDone] = useState(false);
 
   useEffect(() => {
