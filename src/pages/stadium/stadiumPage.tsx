@@ -40,7 +40,8 @@ const StadiumPage = () => {
   const [stadiumId, setStadiumId] = useState<number>(0);
 
   useEffect(() => {
-    if (!selectedTeam) setSelectedTeam("LG");
+    if (selectedTeam === "전체" || selectedTeam === "not logined")
+      setSelectedTeam("LG");
   }, []);
   const stadiumNumber = teamToStadiumMap[selectedTeam];
 

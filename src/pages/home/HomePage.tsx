@@ -128,7 +128,7 @@ const HomePage = () => {
             selectedTeam == "not logined" ? "야구" : selectedTeam
           } 팬들에게 추천하는`}
           title={`${selectedGame?.stadium || "구장"}의 핫플레이스!`}
-          description="열정 넘치는 스포츠와 함께 즐길 추천 콘텐츠로 더욱 여행이 풍족하도록!"
+          description="열정 넘치는 스포츠와 함께 즐길 콘텐츠로 더 풍족한 여행!"
           icon="marker"
         />
         <CategorySelector

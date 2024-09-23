@@ -52,7 +52,9 @@ const CategoryButtons = styled.div<{ color: string }>`
   justify-content: center;
   width: 100%;
   gap: 5%;
-
+  padding-left: 2vw;
+  padding-right: 2vw;
+  box-sizing: border-box;
   color: ${(props) => props.color || "#ffffff"};
 `;
 
@@ -91,5 +93,10 @@ const IconWrapper = styled.div<{ active: boolean; color?: string }>`
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+  @media (max-width: 800px) {
+    width: clamp(15px, 1.38vw, 20px);
+    top: -3px;
+    right: -0px;
   }
 `;
