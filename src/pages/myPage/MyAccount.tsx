@@ -6,24 +6,22 @@ import { mypage } from "../../apis/mypage";
 import useModalStore from "../../store/modalStore";
 
 const MyAccount = () => {
-  const [name, setNickname] = useState<string | null>(null); // 초기값을 null로 설정
-  const [email, setEmail] = useState<string | null>(null); // 초기값을 null로 설정
-  const [phoneNumber, setPhoneNumber] = useState<string | null>(null); // 초기값을 null로 설정
+  const [nickname, setNickname] = useState("");
+  const [email, setEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const [errors, setErrors] = useState({
-    name: "",
-    phoneNumber: "",
+    nickname: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
 
   const { openModal, closeModal } = useModalStore();
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+  const [, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -31,7 +29,6 @@ const MyAccount = () => {
         const myInfo = await mypage.getMyInfo();
         setNickname(myInfo.nickname);
         setEmail(myInfo.email);
-        setPhoneNumber(myInfo.phoneNumber || ""); 
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching MyPage data:", error);
@@ -43,12 +40,8 @@ const MyAccount = () => {
 
   const validateInfo = () => {
     const newErrors = { ...errors };
-    newErrors.name = name && name.trim() === "" ? "이름을 입력해 주세요." : "";
-
-    const phoneRegex = /^\d{3}-\d{4}-\d{4}$/;
-    newErrors.phoneNumber = !phoneRegex.test(phoneNumber || "")
-      ? "전화번호 형식이 올바르지 않습니다."
-      : "";
+    newErrors.nickname =
+      nickname && nickname.trim() === "" ? "이름을 입력해 주세요." : "";
 
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === "");
@@ -74,8 +67,7 @@ const MyAccount = () => {
   const handleSaveInfo = async () => {
     if (validateInfo()) {
       try {
-        await mypage.EditProfile(name || "", phoneNumber || "");
-        console.log("정보 저장 요청 완료:", { name, phoneNumber });
+        await mypage.EditProfile(nickname, "");
       } catch (error) {
         console.error("Error saving info:", error);
       }
@@ -132,8 +124,7 @@ const MyAccount = () => {
   };
 
   const resetForm = () => {
-    setNickname(null);
-    setPhoneNumber(null);
+    setNickname("");
     setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");
@@ -150,22 +141,15 @@ const MyAccount = () => {
         <InputWithLabel
           label="Nickname"
           type="text"
-          value={name || ""} // name이 null이면 빈 문자열로 처리
+          value={nickname || ""}
           onChange={(e) => setNickname(e.target.value)}
-          error={errors.name}
+          error={errors.nickname}
         />
         <InputWithLabel
           label="Email"
           type="text"
-          value={email || ""} // email이 null이면 빈 문자열로 처리
+          value={email || ""}
           readOnly={true}
-        />
-        <InputWithLabel
-          label="Phone"
-          type="tel"
-          value={phoneNumber || ""} // phoneNumber가 null이면 빈 문자열로 처리
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          error={errors.phoneNumber}
         />
       </Section>
       <ButtonContainer>

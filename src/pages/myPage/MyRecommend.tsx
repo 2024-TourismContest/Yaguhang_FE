@@ -3,7 +3,7 @@ import styled from "styled-components";
 import SectionTitle from "../../components/common/SectionTitle";
 import { mypage } from "../../apis/mypage";
 import { RecommendPreviewDto } from "../../types/myPageType";
-import { Item } from "../../components/recommend/Item"; // Item 컴포넌트 임포트
+import { Item } from "../../components/recommend/Item";
 import { toast } from "react-toastify";
 
 const MyRecommendPage: React.FC = () => {
@@ -12,7 +12,7 @@ const MyRecommendPage: React.FC = () => {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const recommendData = await mypage.MyRecommend(100); // 원하는 수량으로 요청
+        const recommendData = await mypage.MyRecommend(100);
         setMyRecommend(recommendData.recommendPreviewDtos);
       } catch (error) {
         console.error("추천행을 가져오는 중 오류 발생:", error);
