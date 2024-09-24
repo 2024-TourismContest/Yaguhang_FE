@@ -7,7 +7,6 @@ import { uploadToAws } from "../../apis/review";
 import useStore from "../../store/PreferTeamStore";
 
 interface ProfileSectionProps {
-  preferTeam: string;
   onTeamClick: () => void;
   onProfileUpdate: (nickname: string, image: string | null) => Promise<void>;
 }
