@@ -79,6 +79,7 @@ const HeroCarouselItem: React.FC<HeroSectionProps> = ({
   const handleClickBtn = () => {
     setSelectedTeam(teamName.split(" ")[0]);
     navigate(`/stadium`);
+    window.scrollTo(0, 0);
     console.log(teamName.split(" ")[0]);
   };
 

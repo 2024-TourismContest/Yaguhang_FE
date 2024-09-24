@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { home } from "../../apis/main";
+import { heroData } from "../../assets/data/data";
 import { Button } from "../../components/button/Button";
 import Card from "../../components/home/Card";
 import { CategorySelector } from "../../components/home/CategorySelector";
@@ -9,7 +10,6 @@ import HeroCarousel from "../../components/home/HeroCarousel";
 import ImageSlider from "../../components/home/imageSlider";
 import WeatherCard from "../../components/home/WeatherCard";
 import WeatherGraph from "../../components/home/WeatherGraph";
-import { heroData } from "../../assets/data/data";
 import useModalStore from "../../store/modalStore";
 import useTeamStore from "../../store/TeamStore";
 import { TitleSection } from "./TitleSection";
@@ -89,6 +89,7 @@ const HomePage = () => {
 
   const handleButtonClick = (page: string) => {
     navigate(`/${page}`);
+    window.scrollTo(0, 0);
   };
 
   const handleImageClick = (contentId: number, stadiumId: number) => {
@@ -96,6 +97,7 @@ const HomePage = () => {
       navigate(
         `/details/${selectedCategory}/${contentId}?stadiumId=${stadiumId}`
       );
+      window.scrollTo(0, 0);
     }
   };
 
@@ -121,7 +123,9 @@ const HomePage = () => {
           bgColor="#FF0000"
         />
         <TitleSection
-          subtitle={`${selectedTeam === "전체" ? "야구" : selectedTeam} 팬들에게 추천하는`}
+          subtitle={`${
+            selectedTeam === "전체" ? "야구" : selectedTeam
+          } 팬들에게 추천하는`}
           title={`${selectedGame?.stadium || "구장"}의 핫플레이스!`}
           description="열정 넘치는 스포츠와 함께 즐길 콘텐츠로 더 풍족한 여행!"
           icon="marker"

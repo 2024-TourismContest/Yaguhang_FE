@@ -59,6 +59,7 @@ export const RecommendPage = () => {
   }, [selectedSpot, selectedOption]);
   const handleButtonClick = (page: string) => {
     navigate(`/${page}`);
+    window.scrollTo(0, 0);
   };
   return (
     <AppContainer>
@@ -70,7 +71,6 @@ export const RecommendPage = () => {
           text="나의 추천행 코스 만들기 >"
           fontWeight="bold"
           onClick={() => handleButtonClick("mycourse")}
-          //추천행 만들기 페이지로
         />
       </TopSection>
 
