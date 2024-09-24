@@ -64,7 +64,6 @@ const FanTeamImage = styled.img`
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  border: 2px solid white;
   object-fit: cover;
 `;
 

@@ -135,8 +135,8 @@ const Card: React.FC = () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      navigate("/login");
       toast("로그인이 필요합니다");
+      navigate("/login");
       return;
     }
     try {
@@ -322,6 +322,7 @@ const CalendarContainer = styled.div`
   background: #fff;
   padding: 1rem;
   border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   .custom-calendar {
     border: none;
     border-radius: 10px;

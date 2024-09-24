@@ -210,7 +210,7 @@ const NavbarContainer = styled.nav<{ isMenuOpen: boolean }>`
   transition: background 0.3s;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.2),
+    rgba(0, 0, 0, 1),
     rgba(255, 255, 255, 0.1)
   );
 `;
