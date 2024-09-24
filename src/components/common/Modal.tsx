@@ -84,14 +84,29 @@ const ModalContent = styled.div`
   max-width: 500px;
   width: 100%;
   text-align: center;
+
+  @media (max-width: 768px) {
+    width: 60%; 
+  }
 `;
 
 const ModalTitle = styled.h2`
   margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.2rem; 
+
+  @media (max-width: 768px) {
+    font-size: 1rem; 
+  }
 `;
 
 const ModalBody = styled.div`
   margin-bottom: 2rem;
+  font-size: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem; 
+  }
 `;
 
 const CheckboxContainer = styled.div`
@@ -106,7 +121,11 @@ const Checkbox = styled.input`
 `;
 
 const CheckboxLabel = styled.label`
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem; 
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -126,6 +145,10 @@ const Button = styled.button`
 
   &:hover {
     background: #404040;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
   }
 `;
 

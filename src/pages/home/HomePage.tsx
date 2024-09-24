@@ -9,7 +9,7 @@ import HeroCarousel from "../../components/home/HeroCarousel";
 import ImageSlider from "../../components/home/imageSlider";
 import WeatherCard from "../../components/home/WeatherCard";
 import WeatherGraph from "../../components/home/WeatherGraph";
-import heroData from "../../dummy-data/dummy-hero-data.json";
+import { heroData } from "../../assets/data/data";
 import useModalStore from "../../store/modalStore";
 import useTeamStore from "../../store/TeamStore";
 import { TitleSection } from "./TitleSection";
@@ -33,18 +33,15 @@ const HomePage = () => {
   const [stadiumId, setStadiumId] = useState<number | null>(null);
   const navigate = useNavigate();
   const { selectedGame, selectedTeam, setSelectedTeam } = useTeamStore();
-  const { openModal, closeModal } = useModalStore(); // Get openModal from modal store
+  const { openModal, closeModal } = useModalStore();
   const [isInitialCheckDone, setIsInitialCheckDone] = useState(false);
-
   useEffect(() => {
     const checkFanTeamStatus = async () => {
       try {
-        const status = await home.checkFanTeam();
-        if (status === "Check") {
-          const showModalOnHome = localStorage.getItem(
-            "showFanTeamModalOnHome"
-          );
-          if (showModalOnHome) {
+        const showModalOnHome = localStorage.getItem("showFanTeamModalOnHome");
+        if (showModalOnHome) {
+          const status = await home.checkFanTeam();
+          if (status === "Check") {
             localStorage.removeItem("showFanTeamModalOnHome");
             openModal({
               title: "팀 등록",
@@ -59,9 +56,9 @@ const HomePage = () => {
               onDoNotShowAgain: handleDoNotShowAgain,
             });
           }
-        } else if (typeof status === "string" && status !== "No Check") {
-          setSelectedTeam(status);
-          console.log("status:", status);
+          if (typeof status === "string" && status !== "No Check") {
+            setSelectedTeam(status);
+          }
         }
       } catch (error) {
         console.error("Error checking fan team:", error);
@@ -72,7 +69,7 @@ const HomePage = () => {
       checkFanTeamStatus();
       setIsInitialCheckDone(true);
     }
-  }, [isInitialCheckDone, setSelectedTeam, openModal]); // Include openModal
+  }, [isInitialCheckDone, setSelectedTeam, openModal]);
 
   useEffect(() => {
     const fetchPlaceData = async () => {
@@ -124,9 +121,7 @@ const HomePage = () => {
           bgColor="#FF0000"
         />
         <TitleSection
-          subtitle={`${
-            selectedTeam == "not logined" ? "야구" : selectedTeam
-          } 팬들에게 추천하는`}
+          subtitle={`${selectedTeam === "전체" ? "야구" : selectedTeam} 팬들에게 추천하는`}
           title={`${selectedGame?.stadium || "구장"}의 핫플레이스!`}
           description="열정 넘치는 스포츠와 함께 즐길 콘텐츠로 더 풍족한 여행!"
           icon="marker"

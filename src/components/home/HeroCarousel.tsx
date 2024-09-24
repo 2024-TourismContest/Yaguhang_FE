@@ -195,13 +195,12 @@ const RowWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 16%;
+  padding: 0 16vw;
   height: 100%;
 
   @media (max-width: 768px) {
     flex-direction: column-reverse;
-    gap: 100px;
-    padding: 0 2%;
+    padding: 0 10vw;
     align-items: center;
     justify-content: center;
   }
@@ -215,44 +214,52 @@ const ContentWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-bottom: 10vh;
+    /* padding-bottom: 10vh; */
     margin-right: 0;
   }
 `;
 const HeroTitle = styled.h1`
   white-space: pre-line;
-  font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem);
+  font-size: 2.5rem;
   text-align: left;
-  margin-bottom: clamp(1rem, 2vw, 3rem);
+  margin-bottom: 2vw;
 
   @media (max-width: 768px) {
     text-align: center;
+    font-size: 1.5rem;
   }
 `;
 
 const StyledLargeText = styled.span`
   color: #fff;
   font-family: Inter;
-  font-size: clamp(1.8rem, 2vw + 1rem, 2.5rem);
+  font-size: 2.5rem;
   font-weight: 600;
+  @media (max-width: 768px) {
+    font-size: 1.6rem;
+  }
 `;
 
 const StyledNormalText = styled.span`
   color: #fff;
   font-family: Inter;
-  font-size: clamp(1.4rem, 1.5vw + 1rem, 1.8rem);
+  font-size: 1.8rem;
   font-weight: 400;
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const HeroText = styled.p`
   color: #fff;
   font-family: Inter;
-  font-size: clamp(1rem, 1.2vw + 0.8rem, 1.125rem);
+  font-size: 1.125rem;
   white-space: pre-line;
   line-height: 120%;
 
   @media (max-width: 768px) {
     text-align: center;
+    font-size: 0.9rem;
   }
 `;
 const TeamLogo = styled.img`
@@ -263,7 +270,8 @@ const TeamLogo = styled.img`
   justify-content: center;
 
   @media (max-width: 768px) {
-    width: 200px;
+    width: 160px;
+    margin-top: 10vh;
   }
 `;
 

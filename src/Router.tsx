@@ -13,6 +13,35 @@ import MyRecommend from "./pages/myPage/MyRecommend";
 import MyPageMain from "./pages/myPage/MyPageMain";
 import MyAccount from "./pages/myPage/MyAccount";
 import MycoursePage from "./pages/mycourse/MycoursePage";
+import authStore from "./store/authStore";
+import useModalStore from "./store/modalStore";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
+const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  const { isAuthenticated } = authStore();
+  const { openModal, closeModal } = useModalStore();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      openModal({
+        title: "로그인 필요",
+        content: "로그인이 필요한 페이지입니다.",
+        onConfirm: () => {
+          navigate("/login"); 
+          closeModal();
+        },
+        onCancel: () => {
+          closeModal();
+        },
+        showCancel: true,
+      });
+    }
+  }, [isAuthenticated, navigate, openModal, closeModal]);
+
+  return isAuthenticated ? children : null;
+};
 
 export default function Router() {
   return (
@@ -24,7 +53,14 @@ export default function Router() {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/category/:category/:selectedTeam" element={<MapPage />} />
       <Route path="/details/:category/:contentId" element={<DetailPage />} />
-      <Route path="/mypage" element={<MyPageLayout />}>
+      <Route
+        path="/mypage"
+        element={
+          <ProtectedRoute>
+            <MyPageLayout />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<MyPageMain />} />
         <Route path="bookmark" element={<MyBookMark />} />
         <Route path="recommend" element={<MyRecommend />} />
@@ -32,7 +68,14 @@ export default function Router() {
         <Route path="account" element={<MyAccount />} />
       </Route>
       <Route path="/region" element={<RecommendPage />} />
-      <Route path="/mycourse" element={<MycoursePage />} />
+      <Route
+        path="/mycourse"
+        element={
+          <ProtectedRoute>
+            <MycoursePage />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
