@@ -109,10 +109,10 @@ const DetailGrid: React.FC<DetailGridProps> = ({
         )}
         {category === "선수PICK" && (
           <>
-            <Box>
+            <Box2>
               <h2>운영시간</h2>
               <p>{getDisplayValue(detailData?.buisnessHours)}</p>
-            </Box>
+            </Box2>
             <Box>
               <h2>휴무일</h2>
               <p>{getDisplayValue(detailData?.closedDays)}</p>
@@ -284,7 +284,48 @@ const Box = styled.div`
     font-size: 0.5rem;
   }
 `;
+const Box2 = styled.div`
+  width: 30rem;
+  height: 6rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  margin-bottom: 10vh;
 
+  h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 2.5vh;
+    margin-top: 12vh;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: auto;
+      font-size: 0.8rem;
+    }
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 2vh;
+    color: #ccc;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: auto;
+      font-size: 0.7rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 80%;
+    height: auto;
+    font-size: 0.5rem;
+  }
+`;
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
