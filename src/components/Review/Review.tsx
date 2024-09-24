@@ -46,7 +46,7 @@ const Review: React.FC<ReviewProps> = ({ contentId, stadiumId, id }) => {
       <ReviewContainer>
         <Header>
           <Title>
-            <IoBaseballOutline style={{ fontSize: "3rem" }} />
+            <IoBaseballOutline style={{ fontSize: "2.5rem" }} />
             야구행 리뷰
           </Title>
           <SortOptions>
@@ -93,7 +93,12 @@ const Header = styled.div`
 
 const Title = styled.h2`
   margin-bottom: 20px;
-  font-size: 2rem;
+  font-size: 1.8rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    margin-bottom: 0.6vh;
+  }
 `;
 
 const SortOptions = styled.div`

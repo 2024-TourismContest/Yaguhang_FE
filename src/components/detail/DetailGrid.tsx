@@ -25,7 +25,12 @@ const DetailGrid: React.FC<DetailGridProps> = ({
   return (
     <div id={id}>
       <Header>
-        <Title>{detailData?.name}</Title>
+        <TitleContainer>
+          {category === "선수PICK" && (
+            <PickText>⚾️ {getDisplayValue(detailData?.picker)} Pick!</PickText>
+          )}
+          <Title>{detailData?.name}</Title>
+        </TitleContainer>
         <IconContainer>
           <BookmarkIcon
             onClick={() =>
@@ -33,7 +38,7 @@ const DetailGrid: React.FC<DetailGridProps> = ({
             }
           >
             {bookmarkStates[detailData?.contentId!] ? (
-              <BsBookmarkFill style={{ fontSize: "2rem" }} />
+              <BsBookmarkFill style={{ fontSize: "2rem", color: "#fff" }} />
             ) : (
               <BsBookmarkStar style={{ fontSize: "2rem" }} />
             )}
@@ -99,6 +104,18 @@ const DetailGrid: React.FC<DetailGridProps> = ({
             <Box>
               <h2>취급 메뉴</h2>
               <p>{getDisplayValue(detailData?.treatmenu)}</p>
+            </Box>
+          </>
+        )}
+        {category === "선수PICK" && (
+          <>
+            <Box2>
+              <h2>운영시간</h2>
+              <p>{getDisplayValue(detailData?.buisnessHours)}</p>
+            </Box2>
+            <Box>
+              <h2>휴무일</h2>
+              <p>{getDisplayValue(detailData?.closedDays)}</p>
             </Box>
           </>
         )}
@@ -173,7 +190,7 @@ const Header = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 1.5625rem;
+  font-size: 1.5rem;
   font-weight: bold;
   margin-right: 2rem;
   flex-grow: 1;
@@ -184,7 +201,7 @@ const Title = styled.h1`
   }
 
   @media (max-width: 480px) {
-    font-size: 1rem;
+    font-size: 0.7rem;
   }
 `;
 
@@ -197,17 +214,22 @@ const IconContainer = styled.div`
 const BookmarkIcon = styled.div`
   font-size: 1.5rem;
   cursor: pointer;
+  transition: color 0.3s ease; // 부드러운 색상 전환을 위해 추가
+
+  &:hover {
+    color: #ccc; // 호버 시 색상 변경 (원하는 색상으로 변경 가능)
+  }
 `;
 
 const GridContainer = styled.div`
   display: grid;
-  margin-top: 6vh;
+  margin-top: 3vh;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, auto);
-  gap: 1.25rem;
+  gap: 1rem;
   justify-items: center;
   align-items: center;
-  padding-bottom: 6vh;
+  padding-bottom: 3vh;
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
@@ -218,13 +240,13 @@ const GridContainer = styled.div`
   }
 
   @media (max-width: 480px) {
-    grid-template-columns: 1fr;\
+    grid-template-columns: 1fr;
   }
 `;
 
 const Box = styled.div`
-  width: 16.25rem;
-  height: 7.5rem;
+  width: 16rem;
+  height: 6rem;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -262,10 +284,75 @@ const Box = styled.div`
     font-size: 0.5rem;
   }
 `;
+const Box2 = styled.div`
+  width: 30rem;
+  height: 6rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  margin-bottom: 10vh;
+
+  h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 2.5vh;
+    margin-top: 12vh;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: auto;
+      font-size: 0.8rem;
+    }
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 2vh;
+    color: #ccc;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: auto;
+      font-size: 0.7rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 80%;
+    height: auto;
+    font-size: 0.5rem;
+  }
+`;
+const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+`;
+
+const PickText = styled.p`
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  margin: 10px 0;
+  padding: 5px 10px;
+  background-color: #0056b3;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+  }
+`;
 
 const Address = styled.h3`
   margin-bottom: 2vh;
-  font-size: 1.25rem;
+  font-size: 1rem;
 
   @media (max-width: 768px) {
     font-size: 0.8rem;
@@ -274,9 +361,9 @@ const Address = styled.h3`
 `;
 
 const Description = styled.p`
-  margin-bottom: 1.25rem;
-  font-size: 1.25rem;
+  font-size: 1rem;
   color: #ccc;
+  line-height: 1.3;
 
   @media (max-width: 768px) {
     font-size: 0.7rem;
@@ -314,13 +401,14 @@ const DotLine = styled.div`
     width: 90%;
   }
 `;
+
 const StyledLink = styled.a`
-  color: #ccc; /* 기본 링크 색상 */
+  color: #ccc;
   text-decoration: none;
   text-decoration: underline;
 
   &:hover {
-    color: #1a278e; /* 호버 시 글자색 변경 */
-    text-decoration: underline; /* 호버 시 밑줄 추가 (선택 사항) */
+    color: #1a278e;
+    text-decoration: underline;
   }
 `;
