@@ -8,7 +8,7 @@ import { mypage } from "../../apis/mypage";
 
 const MyPageLayout = () => {
   const { openModal, closeModal } = useModalStore();
-  const { preferTeam, setTeamSelectorActive, isTeamSelectorActive } = useStore();
+  const { setTeamSelectorActive, isTeamSelectorActive } = useStore();
   const navigate = useNavigate();
 
   const handleTeamClick = () => {
