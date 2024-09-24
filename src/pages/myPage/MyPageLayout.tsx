@@ -69,7 +69,9 @@ export default MyPageLayout;
 const PageContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin: 20vh 5vw;
+  max-width: 1300px;
+  margin: 20vh auto;
+  padding: 0 5vw;
   gap: 4vw;
   @media (max-width: 768px) {
     flex-direction: column;
@@ -80,7 +82,7 @@ const PageContainer = styled.div`
 const MenuContainer = styled.div`
   flex: 1;
   min-width: 240px;
-  overflow: hidden; /* 내부 컨텐츠가 넘치지 않도록 */
+  overflow: hidden;
 `;
 
 const ContentContainer = styled.div`
