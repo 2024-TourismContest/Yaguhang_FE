@@ -46,8 +46,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
         {spots.map((spot) => (
           <SlideContainer
             key={spot.contentId}
-            onClick={() => handleImageClick(spot.contentId)}
-          >
+            onClick={() => handleImageClick(spot.contentId)}>
             <StyledMark pick={spot.picker || "none"}>
               {spot.picker ? spot.picker : ""}
             </StyledMark>
@@ -92,9 +91,12 @@ const SlideContainer = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  background-color: rgba(236, 234, 234, 0.3);
   border-radius: 0.9vw;
   filter: drop-shadow(0px 3.101px 3.101px rgba(0, 0, 0, 0.25));
+  @media (max-width: 650px) {
+    width: clamp(130px, 100%, 370px);
+    height: clamp(150px, 14.99vw, 370px);
+  }
 `;
 
 const SlideImage = styled.img`
@@ -144,7 +146,7 @@ const SlideInfo = styled.div`
   align-items: end;
   padding: 10px 10px;
   box-sizing: border-box;
-  border-radius: 0 0 10px 10px;
+  border-radius: 0 0 0.9vw 0.9vw;
   justify-content: space-between;
 `;
 
@@ -166,6 +168,14 @@ const ImageWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 1.2vw;
+  @media (max-width: 650px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    justify-content: center;
+    width: clamp(200px, 80vw, 900px);
+    gap: 3vw;
+  }
 `;
 
 const Container = styled.div`

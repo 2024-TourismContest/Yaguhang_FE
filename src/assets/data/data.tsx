@@ -29,7 +29,7 @@ export const club: Record<number, { name: string; team: string }> = {
 
 export const clubImg: Record<number, { name: string; teamLogos: string }> = {
   1: {
-    name: "잠실",
+    name: "잠실 ",
     teamLogos: "https://yaguhang.kro.kr:8443/teamLogos/LGTwins.png",
   },
   2: {

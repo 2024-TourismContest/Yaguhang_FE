@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import useStore from "../../store/PreferTeamStore";
 import { mypage } from "../../apis/mypage";
 import useModalStore from "../../store/modalStore";
+import useBalloonStore from "../../store/ballonStore";
 
 interface TeamSelectorProps {
   teamLogos: Record<string, string>;
@@ -24,6 +25,8 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
   const { setPreferTeam } = useStore();
   const containerRef = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModalStore();
+  const { setShowBalloon } = useBalloonStore();
+  const [clickCount, setClickCount] = useState(0); // 클릭 횟수 상태 추가
 
   // 외부 클릭 시 비활성화
   useEffect(() => {
@@ -45,7 +48,14 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
 
   const handleButtonClick = useCallback(
     (team: string) => {
-      if (!isEnabled) return;
+      if (!isEnabled) {
+        setClickCount((prev) => prev + 1);
+        if (clickCount + 1 >= 2) {
+          setShowBalloon(true);
+          setClickCount(0);
+        }
+        return;
+      }
       openModal({
         title: "선호 팀 변경",
         content: `"${team}" 팀으로 변경하시겠습니까?`,
@@ -65,7 +75,7 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
         showCancel: true,
       });
     },
-    [isEnabled, setSelectedTeam, setPreferTeam, openModal]
+    [isEnabled, clickCount, setSelectedTeam, setPreferTeam, openModal]
   );
 
   return (

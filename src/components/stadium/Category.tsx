@@ -1,5 +1,6 @@
+import { useEffect } from "react";
 import styled from "styled-components";
-import { useTeamStore } from "../../store/TeamStore";
+import useTeamStore from "../../store/TeamStore";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -90,6 +91,15 @@ const Category: React.FC<CategoryProps> = ({ filterSchedules, teamLogos }) => {
     setSelectedTeam(team);
     filterSchedules(team);
   };
+  console.log(selectedTeam);
+  useEffect(() => {
+    // 페이지 첫 로드 시 teamLogos의 첫 번째 팀을 기본 선택할 수 있습니다.
+    if (!selectedTeam && Object.keys(teamLogos).length > 0) {
+      const firstTeam = Object.keys(teamLogos)[0];
+      setSelectedTeam(firstTeam);
+      filterSchedules(firstTeam);
+    }
+  }, [selectedTeam, setSelectedTeam, filterSchedules, teamLogos]);
 
   return (
     <ButtonContainer>

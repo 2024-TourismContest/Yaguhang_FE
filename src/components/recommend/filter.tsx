@@ -20,7 +20,6 @@ export const Filter = ({
     setIsOpened((prev) => !prev);
   };
   const teamLogo = teamToStadiumImg[selectedSpot];
-
   return (
     <div>
       <Button onClick={handleButton}>
@@ -65,8 +64,8 @@ export const Filter = ({
 const Dialog = styled.dialog`
   z-index: 10;
   background-color: #2e2e2e;
-  height: 380px;
-  aspect-ratio: 2/3;
+  height: 410px;
+  aspect-ratio: 1.8/3;
   border-radius: 2rem;
   inset-inline-start: -400px;
   @media (max-width: 1024px) {
@@ -75,16 +74,15 @@ const Dialog = styled.dialog`
 `;
 const Round = styled.div`
   border-radius: 50%;
-  height: 100%;
   aspect-ratio: 1/1;
   background-color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
   color: black;
+  padding: 5px;
   img {
-    width: 100%;
-    aspect-ratio: 1/1;
+    width: 56.25px;
   }
 `;
 const DefaultRound = styled.div`
@@ -140,6 +138,7 @@ const Button = styled.button`
       height: 90%;
     }
   }
+
   p {
     color: white;
   }
@@ -150,18 +149,20 @@ const Button = styled.button`
     cursor: pointer;
 
     p {
-      color: #686868; // 호버 시 글자 색상 변경 (밝은 파란색)
+      color: #686868;
     }
   }
-  }
+
   @media (max-width: 1024px) {
     width: 50px;
     height: 50px;
   }
+
   &:hover {
     border: blue;
   }
 `;
+
 const Title = styled.div`
   display: flex;
   border-bottom: 1px solid white;

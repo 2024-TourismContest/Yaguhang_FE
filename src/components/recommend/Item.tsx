@@ -73,10 +73,9 @@ export const Item = ({
 };
 
 const ProfileImg = styled.img`
-  height: 60px;
+  height: 50px;
   aspect-ratio: 1/1;
   border-radius: 50%;
-  margin-top: 10px;
   @media (max-width: 500px) {
     height: 40px;
   }
@@ -157,6 +156,6 @@ const Fan = styled.img`
   width: 30px;
   aspect-ratio: 1/1;
   position: absolute;
-  bottom: 3%;
+  bottom: 2%;
   right: 1%;
 `;
