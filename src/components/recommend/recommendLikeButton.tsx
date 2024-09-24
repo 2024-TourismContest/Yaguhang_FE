@@ -2,10 +2,10 @@ import React from "react";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { styled } from "styled-components";
 import { recommendBookmark } from "../../apis/recommend";
 import { Heart } from "../../assets/icons/heart";
+import useModalStore from "../../store/modalStore";
 
 export const RecommendLikeButton = ({
   contentId,
@@ -18,18 +18,28 @@ export const RecommendLikeButton = ({
 }) => {
   const [markedSpots, setMarkedSpots] = useState<boolean>(isMarked);
   const navigate = useNavigate();
-
+  const { openModal, closeModal } = useModalStore();
   const onClickMark = async (
     contentId: number,
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     const token = localStorage.getItem("token");
-    e.stopPropagation();
     if (!token) {
-      navigate("/login");
-      toast("로그인이 필요합니다");
-      return;
+      openModal({
+        title: "로그인 필요",
+        content: "로그인이 필요한 페이지입니다.",
+        onConfirm: () => {
+          navigate("/login");
+          closeModal();
+        },
+        onCancel: () => {
+          navigate("/");
+          closeModal();
+        },
+        showCancel: true,
+      });
     }
+    e.stopPropagation();
     try {
       const response = await recommendBookmark(contentId);
       setMarkedSpots((prev) => !prev);
