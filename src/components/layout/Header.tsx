@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import logo from "../../assets/images/logo.svg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import authStore from "../../store/authStore";
@@ -15,11 +15,27 @@ const Header = () => {
 
   const handleAuthButtonClick = () => {
     if (isAuthenticated) {
-      setIsAuthenticated(false);
-      localStorage.removeItem("token");
+      openModal({
+        title: "로그아웃 확인",
+        content: "정말로 로그아웃하시겠습니까?",
+        onConfirm: () => {
+          logout();
+          closeModal();
+        },
+        showCancel: true,
+      });
     } else {
       navigate("/login");
     }
+    setIsMenuOpen(false);
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem("token");
+    localStorage.removeItem("tokenType");
+    localStorage.removeItem("showFanTeamModalOnHome");
+    window.location.reload();
   };
 
   const handleMypageClick = () => {
@@ -36,9 +52,15 @@ const Header = () => {
     } else {
       navigate("/mypage");
     }
+    setIsMenuOpen(false);
   };
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+
+  const handleMobileLinkClick = (path: string) => {
+    navigate(path);
+    setIsMenuOpen(false);
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -60,24 +82,24 @@ const Header = () => {
       </LogoContainer>
       <NavList>
         <NavItem>
-          <StyledNavLink to="/" isActive={currentPath === "/"}>
+          <NavLink to="/" isActive={currentPath === "/"}>
             홈
-          </StyledNavLink>
+          </NavLink>
         </NavItem>
         <NavItem>
-          <StyledNavLink to="/stadium" isActive={currentPath === "/stadium"}>
+          <NavLink to="/stadium" isActive={currentPath === "/stadium"}>
             구장행
-          </StyledNavLink>
+          </NavLink>
         </NavItem>
         <NavItem>
-          <StyledNavLink to="/region" isActive={currentPath === "/region"}>
+          <NavLink to="/region" isActive={currentPath === "/region"}>
             추천행
-          </StyledNavLink>
+          </NavLink>
         </NavItem>
         <NavItem onClick={handleMypageClick}>
-          <ActiveLink isActive={currentPath === "/mypage"}>
+          <ButtonLink isActive={currentPath === "/mypage"}>
             마이페이지
-          </ActiveLink>
+          </ButtonLink>
         </NavItem>
       </NavList>
       <LoginButtonContainer>
@@ -92,45 +114,82 @@ const Header = () => {
       </HamburgerMenu>
       {isMenuOpen && (
         <MobileMenu>
-          <NavItemMobile>
-            <StyledNavLinkMobile to="/" isActive={currentPath === "/"}>
+          <NavItemMobile onClick={() => handleMobileLinkClick("/")}>
+            <NavLinkMobile to="/" isActive={currentPath === "/"}>
               홈
-            </StyledNavLinkMobile>
+            </NavLinkMobile>
           </NavItemMobile>
-          <NavItemMobile>
-            <StyledNavLinkMobile
-              to="/stadium"
-              isActive={currentPath === "/stadium"}
-            >
+          <NavItemMobile onClick={() => handleMobileLinkClick("/stadium")}>
+            <NavLinkMobile to="/stadium" isActive={currentPath === "/stadium"}>
               구장행
-            </StyledNavLinkMobile>
+            </NavLinkMobile>
           </NavItemMobile>
-          <NavItemMobile>
-            <StyledNavLinkMobile
-              to="/region"
-              isActive={currentPath === "/region"}
-            >
+          <NavItemMobile onClick={() => handleMobileLinkClick("/region")}>
+            <NavLinkMobile to="/region" isActive={currentPath === "/region"}>
               추천행
-            </StyledNavLinkMobile>
+            </NavLinkMobile>
           </NavItemMobile>
-          <NavItemMobile>
-            <StyledNavLinkMobile
-              to="/mypage"
-              isActive={currentPath === "/mypage"}
-            >
+          <NavItemMobile onClick={handleMypageClick}>
+            <ButtonLinkMobile isActive={currentPath === "/mypage"}>
               마이페이지
-            </StyledNavLinkMobile>
+            </ButtonLinkMobile>
           </NavItemMobile>
-          <LoginButtonContainerMobile>
-            <StyledLoginButton onClick={handleAuthButtonClick}>
+          <NavItemMobile onClick={handleAuthButtonClick}>
+            <ButtonLinkMobile isActive={currentPath === "/login"}>
               {isAuthenticated ? "로그아웃" : "로그인"}
-            </StyledLoginButton>
-          </LoginButtonContainerMobile>
+            </ButtonLinkMobile>
+          </NavItemMobile>
         </MobileMenu>
       )}
     </NavbarContainer>
   );
 };
+
+// 공통 스타일 정의
+const linkStyles = css<{ isActive?: boolean }>`
+  text-decoration: none;
+  color: #fff;
+  font-family: Inter, sans-serif;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  position: relative;
+
+  ${({ isActive }) =>
+    isActive &&
+    `
+    &::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: #fff;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+  `}
+`;
+
+const NavLink = styled(Link)<{ isActive?: boolean }>`
+  ${linkStyles}
+`;
+
+const ButtonLink = styled.span<{ isActive: boolean }>`
+  ${linkStyles}
+  cursor: pointer;
+`;
+
+const NavLinkMobile = styled(NavLink)`
+  display: block;
+  background: ${({ isActive }) => (isActive ? "#444" : "transparent")};
+  padding: 1rem 2rem;
+`;
+
+const ButtonLinkMobile = styled(ButtonLink)`
+  display: block;
+  background: ${({ isActive }) => (isActive ? "#444" : "transparent")};
+  padding: 1rem 2rem;
+`;
 
 const NavbarContainer = styled.nav<{ isMenuOpen: boolean }>`
   position: fixed;
@@ -144,7 +203,10 @@ const NavbarContainer = styled.nav<{ isMenuOpen: boolean }>`
   padding: 0 5%;
   box-sizing: border-box;
   z-index: 1000;
-  background: ${({ isMenuOpen }) => (isMenuOpen ? "#333" : "transparent")};
+  background: ${({ isMenuOpen }) =>
+    isMenuOpen
+      ? "#333"
+      : "linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0))"};
   transition: background 0.3s;
 `;
 
@@ -173,65 +235,7 @@ const NavItem = styled.li`
   margin: 0;
 `;
 
-const StyledNavLink = styled(Link)<{ isActive?: boolean }>`
-  text-decoration: none;
-  color: #fff;
-  text-align: center;
-  font-family: Inter, sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: normal;
-  padding: 0.75rem 1.5rem;
-  position: relative;
-
-  ${({ isActive }) =>
-    isActive &&
-    `
-    &::after {
-      content: '';
-      display: block;
-      width: 100%;
-      height: 2px;
-      background: #fff;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-    }
-  `}
-`;
-
-const ActiveLink = styled.span<{ isActive: boolean }>`
-  text-decoration: none;
-  color: #fff;
-  text-align: center;
-  font-family: Inter, sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: normal;
-  padding: 0.75rem 1.5rem;
-  position: relative;
-
-  ${({ isActive }) =>
-    isActive &&
-    `
-    &::after {
-      content: '';
-      display: block;
-      width: 100%;
-      height: 2px;
-      background: #fff;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-    }
-  `}
-`;
-
 const LoginButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
   @media (max-width: 768px) {
     display: none;
   }
@@ -239,16 +243,12 @@ const LoginButtonContainer = styled.div`
 
 const StyledLoginButton = styled.button`
   padding: 0.5rem 1.5rem;
-  border-radius: 0;
+  font-size: 1rem;
   background: transparent;
   border: none;
   color: #fff;
-  text-align: center;
   font-family: Inter, sans-serif;
-  font-size: 0.875rem;
-  font-weight: 400;
   cursor: pointer;
-  white-space: nowrap;
 `;
 
 const HamburgerMenu = styled.div`
@@ -279,30 +279,9 @@ const MobileMenu = styled.div`
   background: #333;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
-  gap: 1rem;
   z-index: 1000;
 `;
 
 const NavItemMobile = styled.div``;
-
-const StyledNavLinkMobile = styled(Link)<{ isActive: boolean }>`
-  text-decoration: none;
-  color: #fff;
-  text-align: center;
-  font-family: Inter, sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  padding: 0.75rem 1.5rem;
-  display: block;
-  background: ${({ isActive }) => (isActive ? "#444" : "transparent")};
-  border-radius: 4px;
-`;
-
-const LoginButtonContainerMobile = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
 export default Header;
