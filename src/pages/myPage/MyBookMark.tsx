@@ -61,7 +61,7 @@ const MyBookMark: React.FC = () => {
   };
 
   const handleClick = (spot: ScrapSpot) => {
-    const url = `/details/선수PICK/${spot.contentId}?stadiumId=${spot.stadiumInfo.StadiumId}`;
+    const url = `/details/${spot.category}/${spot.contentId}?stadiumId=${spot.stadiumInfo.StadiumId}`;
     navigate(url);
   };
 
