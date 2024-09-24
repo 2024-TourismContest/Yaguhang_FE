@@ -48,7 +48,6 @@ const MyPageLayout = () => {
           <Link to="/mypage">마이페이지</Link>
         </Title>
         <ProfileSection
-          preferTeam={preferTeam}
           onTeamClick={handleTeamClick}
           onProfileUpdate={handleProfileUpdate}
         />
