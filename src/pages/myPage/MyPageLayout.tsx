@@ -8,7 +8,7 @@ import { mypage } from "../../apis/mypage";
 
 const MyPageLayout = () => {
   const { openModal, closeModal } = useModalStore();
-  const { preferTeam, setTeamSelectorActive } = useStore();
+  const { preferTeam, setTeamSelectorActive, isTeamSelectorActive } = useStore();
   const navigate = useNavigate();
 
   const handleTeamClick = () => {
@@ -24,7 +24,7 @@ const MyPageLayout = () => {
         showCancel: true,
       });
     } else {
-      setTeamSelectorActive(true);
+      setTeamSelectorActive(!isTeamSelectorActive);
     }
   };
 
@@ -81,7 +81,6 @@ const PageContainer = styled.div`
 const MenuContainer = styled.div`
   flex: 1;
   min-width: 240px;
-  overflow: hidden;
 `;
 
 const ContentContainer = styled.div`

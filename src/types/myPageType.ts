@@ -24,6 +24,7 @@ export interface MyBookMarkResponse {
 }
 //내정보
 export interface MyInfo {
+  [x: string]: string;
   fanTeamName: string;
   nickname: string;
   image: string;

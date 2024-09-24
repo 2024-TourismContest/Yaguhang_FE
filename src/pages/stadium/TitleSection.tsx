@@ -1,6 +1,6 @@
-import * as S from "../../styles/common/TitleSection";
-import styled from "styled-components";
 import { HiPlus } from "react-icons/hi2";
+import styled from "styled-components";
+import * as S from "../../styles/common/TitleSection";
 
 interface TitleSectionProps {
   title: string;
@@ -19,7 +19,7 @@ export const TitleSection: React.FC<TitleSectionProps> = ({
     <Wrapper>
       <Span>
         {imageSrc && <Img src={imageSrc} alt="Dynamic Image" />}
-        <StyledDiv gap="30%">
+        <StyledDiv>
           <TitleWrapper>
             <Title>{title}</Title>
             <S.H4>{h4Text}</S.H4>
@@ -49,6 +49,14 @@ const MoreButton = styled.button`
     height: 35px;
     width: 35px;
   }
+  @media screen and (max-width: 600px) {
+    svg {
+      height: 20px;
+      width: 20px;
+    }
+    gap: 5px;
+    font-size: 1.05em;
+  }
 `;
 const Img = styled.img`
   height: 45px;
@@ -56,6 +64,10 @@ const Img = styled.img`
   right: 15px;
   @media screen and (max-width: 1050px) {
     height: 4vw;
+  }
+  @media screen and (max-width: 600px) {
+    left: 2px;
+    height: 25px;
   }
 `;
 
@@ -79,6 +91,9 @@ export const Wrapper = styled.div<{ gap?: string }>`
   padding: 50px 0 30px 0;
   align-items: center;
   box-sizing: border-box;
+  @media (max-width: 650px) {
+    width: 100vw;
+  }
 `;
 export const TitleWrapper = styled.div`
   margin-bottom: 10px;
@@ -92,9 +107,16 @@ export const StyledDiv = styled.div<{ gap?: string }>`
   gap: ${({ gap }) => gap || "30px"};
   justify-content: space-between;
   width: clamp(540px, 60vw, 900px);
+  @media screen and (max-width: 600px) {
+    gap: 0px;
+    width: clamp(200px, 95vw, 900px);
+  }
 `;
 export const Span = styled.span`
   display: flex;
   align-items: center;
   position: relative;
+  @media screen and (max-width: 600px) {
+    display: block;
+  }
 `;

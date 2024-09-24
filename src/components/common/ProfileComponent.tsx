@@ -1,8 +1,10 @@
-import { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import pencilIcon from "../../assets/icons/pencil.svg";
 import defaultProfile from "../../assets/images/default-profile.svg";
 import defaultStadium from "../../assets/images/default-stadium.svg";
+import Balloon from "./Balloon";
+import useBalloonStore from "../../store/ballonStore";
 
 interface ProfileComponentProps {
   profileImage: string | null;
@@ -20,11 +22,39 @@ const ProfileComponent = ({
   isEditing,
 }: ProfileComponentProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const teamLogoRef = useRef<HTMLDivElement | null>(null);
+  const [, setBalloonPosition] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
+  const { showBalloon, setShowBalloon } = useBalloonStore(); // 전역 상태 사용
 
   const handleClick = () => {
     if (fileInputRef.current && isEditing) {
-      fileInputRef.current.click(); // 파일 선택창 열기 (편집 모드일 때만)
+      fileInputRef.current.click();
     }
+  };
+
+  useEffect(() => {
+    if (teamLogoRef.current && showBalloon) {
+      const rect = teamLogoRef.current.getBoundingClientRect();
+      setBalloonPosition({
+        //중앙 위쪽
+        top: rect.top - 30,
+        left: rect.left + rect.width / 2,
+      });
+    }
+
+    // 말풍선 지속시간 설정
+    const timer = setTimeout(() => {
+      setShowBalloon(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [showBalloon]);
+
+  const handleLogoHover = () => {
+    setShowBalloon(true);
   };
 
   return (
@@ -43,8 +73,18 @@ const ProfileComponent = ({
           />
         </>
       ) : (
-        <TeamLogoContainer onClick={onTeamClick}>
+        <TeamLogoContainer
+          ref={teamLogoRef}
+          onClick={onTeamClick}
+          onMouseEnter={handleLogoHover}
+        >
           <TeamLogoImg src={TeamLogo || defaultStadium} alt="구장 이미지" />
+          {showBalloon && (
+            <Balloon
+              content={"팬 구단을 설정해요!"}
+              position={{ top: -30, left: "50%" }}
+            />
+          )}
         </TeamLogoContainer>
       )}
     </ProfileContainer>

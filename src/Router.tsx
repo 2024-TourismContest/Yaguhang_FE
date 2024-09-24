@@ -12,6 +12,7 @@ import MyBookMark from "./pages/myPage/MyBookMark";
 import MyRecommend from "./pages/myPage/MyRecommend";
 import MyPageMain from "./pages/myPage/MyPageMain";
 import MyAccount from "./pages/myPage/MyAccount";
+import MycoursePage from "./pages/mycourse/MycoursePage";
 
 export default function Router() {
   return (
@@ -31,6 +32,7 @@ export default function Router() {
         <Route path="account" element={<MyAccount />} />
       </Route>
       <Route path="/region" element={<RecommendPage />} />
+      <Route path="/mycourse" element={<MycoursePage />} />
     </Routes>
   );
 }
