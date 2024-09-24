@@ -1,8 +1,9 @@
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+import styled from "styled-components";
+import useTeamStore from "../../store/TeamStore";
 
 interface HeroData {
   teams: {
@@ -74,9 +75,11 @@ const HeroCarouselItem: React.FC<HeroSectionProps> = ({
   region,
 }) => {
   const navigate = useNavigate();
-
+  const { setSelectedTeam } = useTeamStore();
   const handleClickBtn = () => {
-    navigate(`/${teamName}`);
+    setSelectedTeam(teamName.split(" ")[0]);
+    navigate(`/stadium`);
+    console.log(teamName.split(" ")[0]);
   };
 
   const renderStyledText = (title: string) => {
@@ -247,7 +250,7 @@ const HeroText = styled.p`
   font-size: clamp(1rem, 1.2vw + 0.8rem, 1.125rem);
   white-space: pre-line;
   line-height: 120%;
-  
+
   @media (max-width: 768px) {
     text-align: center;
   }
