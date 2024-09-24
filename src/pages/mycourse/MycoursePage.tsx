@@ -15,6 +15,7 @@ const MycoursePage = () => {
   const [contentIdList, setContentIdList] = useState<number[]>([]);
   const [stadium, setStadium] = useState<string>("");
   const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [showTooltip, setShowTooltip] = useState(false);
 
   const navigate = useNavigate();
@@ -55,12 +56,18 @@ const MycoursePage = () => {
     }
 
     try {
-      const response = await createCourse(stadium, title, contentIdList);
+      const response = await createCourse(
+        stadium,
+        title,
+        description,
+        contentIdList
+      );
       console.log("Recommend course created:", response);
       toast.success("추천행 코스를 생성했습니다.");
       navigate("/region");
       setStadium("");
       setTitle("");
+      setDescription("");
       setContentIdList([]);
     } catch (error) {
       console.error("Failed to create recommend course:", error);
@@ -110,6 +117,8 @@ const MycoursePage = () => {
           setStadium={setStadium}
           title={title}
           setTitle={setTitle}
+          description={description}
+          setDescription={setDescription}
         />
         <TooltipWrapper>
           <FixedButton

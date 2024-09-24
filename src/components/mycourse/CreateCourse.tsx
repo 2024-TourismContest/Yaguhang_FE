@@ -21,6 +21,8 @@ interface CreateCourseProps {
   setStadium: React.Dispatch<React.SetStateAction<string>>;
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
+  description: string;
+  setDescription: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const CreateCourse: React.FC<CreateCourseProps> = ({
@@ -29,6 +31,8 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
   setContentIdList,
   title,
   setTitle,
+  description,
+  setDescription,
 }) => {
   const [recommendList, setRecommendList] = useState<ScrapData[]>([]);
 
@@ -58,6 +62,12 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
           placeholder="제목을 입력해 주세요."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+        />
+        <CourseTitleLabel>추천행 설명글 :</CourseTitleLabel>
+        <Textarea
+          placeholder="추천행 리스트를 설명해 주세요."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
       </CourseHeader>
       <ListsContainer>
@@ -154,21 +164,43 @@ const Container = styled.div`
 `;
 
 const CourseHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   gap: 10px;
   margin: 30px;
-  padding: 15px 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 500px;
+  max-width: 750px;
 `;
 
 const Input = styled.input`
-  width: 250px;
-  padding: 10px 15px;
+  width: 100%;
+  max-width: 700px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #333;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+
+  &:focus {
+    outline: none;
+    border: 1px solid #fff;
+    box-shadow: 0 0 5px rgba(131, 199, 255, 0.5);
+  }
+
+  &::placeholder {
+    color: #888;
+  }
+`;
+
+const Textarea = styled.textarea`
+  width: 100%;
+  max-width: 700px;
+  height: 80px;
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   background-color: #333;
@@ -192,6 +224,7 @@ const CourseTitleLabel = styled.p`
   font-weight: 600;
   color: #fff;
   margin-right: 10px;
+  margin-bottom: 10px;
 `;
 const ListsContainer = styled.div`
   display: flex;
@@ -323,6 +356,7 @@ const TitleText = styled.div`
 const AddressText = styled.div`
   font-size: 0.9rem;
   color: #aaa;
+  width: 180px;
 `;
 
 const IconWrapper = styled.div`
