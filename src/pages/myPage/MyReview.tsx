@@ -13,6 +13,7 @@ const MyReview = () => {
       try {
         const myReviewsData = await mypage.MyReview();
         setMyReviews(myReviewsData.reviews);
+        console.log(myReviewsData);
       } catch (error) {
         console.error("리뷰를 가져오는 중 오류 발생:", error);
       }

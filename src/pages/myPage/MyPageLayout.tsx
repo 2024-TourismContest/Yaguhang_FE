@@ -8,7 +8,7 @@ import { mypage } from "../../apis/mypage";
 
 const MyPageLayout = () => {
   const { openModal, closeModal } = useModalStore();
-  const { preferTeam, setTeamSelectorActive, isTeamSelectorActive } = useStore();
+  const { setTeamSelectorActive, isTeamSelectorActive } = useStore();
   const navigate = useNavigate();
 
   const handleTeamClick = () => {
@@ -48,7 +48,6 @@ const MyPageLayout = () => {
           <Link to="/mypage">마이페이지</Link>
         </Title>
         <ProfileSection
-          preferTeam={preferTeam}
           onTeamClick={handleTeamClick}
           onProfileUpdate={handleProfileUpdate}
         />
@@ -69,7 +68,9 @@ export default MyPageLayout;
 const PageContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin: 20vh 5vw;
+  max-width: 1300px;
+  margin: 20vh auto;
+  padding: 0 5vw;
   gap: 4vw;
   @media (max-width: 768px) {
     flex-direction: column;

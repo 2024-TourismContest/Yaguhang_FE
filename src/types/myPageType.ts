@@ -3,6 +3,7 @@ export interface Spot {
   contentId: number;
   image: string;
   title: string;
+  category: string;
 }
 
 export interface StadiumInfo {
@@ -18,8 +19,8 @@ export interface ScrapSpot extends Spot {
 
 export interface MyBookMarkResponse {
   scrapSpots: ScrapSpot[];
-  hasNextPage: boolean; // 다음 페이지 여부를 위한 필드
-  pagesize: number; // 페이지 크기 정보
+  hasNextPage: boolean;
+  pagesize: number;
 }
 //내정보
 export interface MyInfo {
@@ -39,11 +40,11 @@ export interface Review {
   star: number;
   likeCount: number;
   isLiked: boolean;
-  image: string;
+  image: string[]; 
   createdAt: string;
   content: string;
+  category: string;
 }
-
 export interface MyReviewResponse {
   reviews: Review[];
 }

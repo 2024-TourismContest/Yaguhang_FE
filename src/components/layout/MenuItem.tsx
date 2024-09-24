@@ -9,31 +9,28 @@ interface MenuItemProps {
 
 function MenuItem({ to, label }: MenuItemProps) {
   return (
-    <MenuItemContainer>
-      <Link to={to}>
-        {label} <img src={arrow} alt="arrow" />
-      </Link>
+    <MenuItemContainer to={to}>
+      {label} <img src={arrow} alt="arrow" />
     </MenuItemContainer>
   );
 }
 
 export default MenuItem;
 
-const MenuItemContainer = styled.div`
+const MenuItemContainer = styled(Link)`
+  // Link 컴포넌트로 변경
   margin-bottom: 1rem;
   background: #d9d9d9;
   padding: 28px 36px;
   border-radius: 20px;
-
-  a {
-    color: #686868;
-    font-weight: 600;
-    text-decoration: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background 0.2s;
-  }
+  z-index: 10;
+  color: #686868;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s;
 
   &:hover {
     background: #b4b4b4;

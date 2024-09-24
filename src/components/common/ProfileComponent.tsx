@@ -159,8 +159,9 @@ const TeamLogoContainer = styled.div`
   }
 `;
 
-const TeamLogoImg = styled.img`
+const TeamLogoImg = styled.img<{ hasTeamLogo?: boolean }>`
   background: #b5b5b5;
+  background-color: ${({ hasTeamLogo }) => (hasTeamLogo ? "#717171" : "#ffffff")};
   border-radius: 50%;
   width: 90%;
   height: 90%;

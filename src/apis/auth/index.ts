@@ -27,7 +27,6 @@ export const auth = {
     email: string;
     password: string;
     nickname: string;
-    phoneNumber: string;
     profileImage?: string;
   }) => {
     try {

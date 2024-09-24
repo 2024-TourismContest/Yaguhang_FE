@@ -4,22 +4,21 @@ import ProfileComponent from "../../components/common/ProfileComponent";
 import { teamLogos } from "../../types/teamLogos";
 import { mypage } from "../../apis/mypage";
 import { uploadToAws } from "../../apis/review";
+import useStore from "../../store/PreferTeamStore";
 
 interface ProfileSectionProps {
-  preferTeam: string;
   onTeamClick: () => void;
   onProfileUpdate: (nickname: string, image: string | null) => Promise<void>;
 }
 
 const ProfileSection: React.FC<ProfileSectionProps> = ({
-  preferTeam,
   onTeamClick,
   onProfileUpdate,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [nickName, setNickName] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
-
+  const { preferTeam, setPreferTeam } = useStore();
   const toggleEditMode = async () => {
     if (isEditing) {
       if (nickName.trim() === "") {
@@ -51,8 +50,10 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
     const fetchProfileData = async () => {
       try {
         const myInfo = await mypage.MyPageInfo();
+        console.log("myInfo:", myInfo);
         setNickName(myInfo.nickname);
         setProfileImage(myInfo.image);
+        setPreferTeam(myInfo.fanTeamName);
       } catch (error) {
         console.error("Error fetching MyPage data:", error);
       }

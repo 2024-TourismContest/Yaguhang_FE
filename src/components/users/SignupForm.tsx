@@ -14,13 +14,11 @@ const SignupForm = () => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({
     email: "",
     password: "",
     confirmPassword: "",
-    phoneNumber: "",
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -34,12 +32,6 @@ const SignupForm = () => {
   const validatePassword = (password: string): boolean =>
     /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
 
-  const validatePhoneNumber = (phone: string): boolean =>
-    phone === "" || /^\d{3}-\d{3,4}-\d{4}$/.test(phone);
-
-  const formatPhoneNumber = (phone: string): string =>
-    phone.replace(/[^0-9]/g, "").replace(/(\d{3})(\d{3,4})(\d{4})/, "$1-$2-$3");
-
   const validators: Validators = {
     email: (value: string) =>
       validateEmail(value) ? "" : "유효한 이메일 주소를 입력해주세요.",
@@ -49,8 +41,6 @@ const SignupForm = () => {
         : "비밀번호는 영문과 숫자를 포함하여 8자 이상이어야 합니다.",
     confirmPassword: (value: string) =>
       value === password ? "" : "비밀번호가 일치하지 않습니다.",
-    phoneNumber: (value: string) =>
-      validatePhoneNumber(value) ? "" : "올바른 휴대폰 번호를 입력해주세요.",
   };
 
   const validateField = (field: keyof Validators, value: string): string => {
@@ -62,7 +52,6 @@ const SignupForm = () => {
       email: validateField("email", email),
       password: validateField("password", password),
       confirmPassword: validateField("confirmPassword", confirmPassword),
-      phoneNumber: validateField("phoneNumber", phoneNumber),
     };
 
     setErrors(newErrors);
@@ -82,7 +71,6 @@ const SignupForm = () => {
         email,
         password,
         nickname,
-        phoneNumber: phoneNumber || "",
         profileImage: profileImage || "",
       });
 
@@ -102,24 +90,19 @@ const SignupForm = () => {
   };
 
   const updateField = (field: keyof Validators, value: string) => {
-    const formattedValue =
-      field === "phoneNumber" ? formatPhoneNumber(value) : value;
-    const error = validateField(field, formattedValue);
+    const error = validateField(field, value);
 
     setErrors((prev) => ({ ...prev, [field]: error }));
 
     switch (field) {
       case "email":
-        setEmail(formattedValue);
+        setEmail(value);
         break;
       case "password":
-        setPassword(formattedValue);
+        setPassword(value);
         break;
       case "confirmPassword":
-        setConfirmPassword(formattedValue);
-        break;
-      case "phoneNumber":
-        setPhoneNumber(formattedValue);
+        setConfirmPassword(value);
         break;
       default:
         break;
@@ -127,7 +110,7 @@ const SignupForm = () => {
   };
 
   const handleInputChange = (
-    field: "email" | "password" | "confirmPassword" | "phoneNumber",
+    field: "email" | "password" | "confirmPassword",
     value: string
   ) => {
     updateField(field, value);
@@ -200,13 +183,6 @@ const SignupForm = () => {
             type="text"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
-          />
-          <InputWithLabel
-            label="Phone"
-            type="tel"
-            value={phoneNumber}
-            onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
-            error={errors.phoneNumber}
           />
           <SubmitBtn type="submit">SIGN UP</SubmitBtn>
         </Form>

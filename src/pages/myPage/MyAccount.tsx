@@ -6,23 +6,22 @@ import { mypage } from "../../apis/mypage";
 import useModalStore from "../../store/modalStore";
 
 const MyAccount = () => {
-  const [name, setNickname] = useState("사용자 이름");
-  const [email, setEmail] = useState("user@example.com");
-  const [phoneNumber, setPhoneNumber] = useState("010-1234-5678");
+  const [nickname, setNickname] = useState("");
+  const [email, setEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const [errors, setErrors] = useState({
-    name: "",
-    phoneNumber: "",
+    nickname: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
 
   const { openModal, closeModal } = useModalStore();
+  const [, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -30,8 +29,10 @@ const MyAccount = () => {
         const myInfo = await mypage.getMyInfo();
         setNickname(myInfo.nickname);
         setEmail(myInfo.email);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching MyPage data:", error);
+        setIsLoading(false);
       }
     };
     fetchProfileData();
@@ -39,12 +40,8 @@ const MyAccount = () => {
 
   const validateInfo = () => {
     const newErrors = { ...errors };
-    newErrors.name = name.trim() === "" ? "이름을 입력해 주세요." : "";
-
-    const phoneRegex = /^\d{3}-\d{4}-\d{4}$/;
-    newErrors.phoneNumber = !phoneRegex.test(phoneNumber)
-      ? "전화번호 형식이 올바르지 않습니다."
-      : "";
+    newErrors.nickname =
+      nickname && nickname.trim() === "" ? "이름을 입력해 주세요." : "";
 
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === "");
@@ -70,8 +67,7 @@ const MyAccount = () => {
   const handleSaveInfo = async () => {
     if (validateInfo()) {
       try {
-        await mypage.EditProfile(name, phoneNumber);
-        console.log("정보 저장 요청 완료:", { name, phoneNumber });
+        await mypage.EditProfile(nickname, "");
       } catch (error) {
         console.error("Error saving info:", error);
       }
@@ -94,7 +90,6 @@ const MyAccount = () => {
 
     if (validatePassword()) {
       try {
-        // 비밀번호 확인 API 호출
         const isPasswordValid = await mypage.CheckPassword(currentPassword);
         if (!Boolean(isPasswordValid)) {
           setErrors((prev) => ({
@@ -104,7 +99,6 @@ const MyAccount = () => {
           return;
         }
 
-        // 비밀번호 변경 API 호출
         await mypage.ChangePassword(newPassword);
 
         openModal({
@@ -130,8 +124,7 @@ const MyAccount = () => {
   };
 
   const resetForm = () => {
-    setNickname("사용자 이름");
-    setPhoneNumber("010-1234-5678");
+    setNickname("");
     setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");
@@ -148,22 +141,15 @@ const MyAccount = () => {
         <InputWithLabel
           label="Nickname"
           type="text"
-          value={name}
+          value={nickname || ""}
           onChange={(e) => setNickname(e.target.value)}
-          error={errors.name}
+          error={errors.nickname}
         />
         <InputWithLabel
           label="Email"
           type="text"
-          value={email}
+          value={email || ""}
           readOnly={true}
-        />
-        <InputWithLabel
-          label="Phone"
-          type="tel"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          error={errors.phoneNumber}
         />
       </Section>
       <ButtonContainer>
