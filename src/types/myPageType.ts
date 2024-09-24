@@ -38,11 +38,11 @@ export interface Review {
   star: number;
   likeCount: number;
   isLiked: boolean;
-  image: string;
+  image: string[]; 
   createdAt: string;
   content: string;
+  category: string;
 }
-
 export interface MyReviewResponse {
   reviews: Review[];
 }

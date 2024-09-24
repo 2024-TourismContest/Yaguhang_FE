@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toggleLikeOnServer } from "../../apis/review/index"; 
+import { toggleLikeOnServer } from "../../apis/review/index";
 import styled from "styled-components";
 import StarFull from "../../assets/icons/star-fill.png";
 import StarHalf from "../../assets/icons/star-half.png";
@@ -9,6 +9,7 @@ import HeartFull from "../../assets/icons/heart-fill.png";
 import HeartEmpty from "../../assets/icons/heart-unfill.png";
 import RightArrow from "../../assets/icons/arrow_right.svg";
 import defaultImg from "../../assets/images/default-profile.svg";
+import ImageModal from "../../components/common/ImageModal";
 
 interface ReviewItemProps {
   reviewId: number;
@@ -22,8 +23,9 @@ interface ReviewItemProps {
   likeCount: number;
   isMine: boolean;
   isLiked: boolean;
-  images?: string[];
+  image?: string[];
   stadiumId: number;
+  category: string;
 }
 
 const ReviewItem: React.FC<ReviewItemProps> = ({
@@ -36,12 +38,15 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
   star,
   likeCount,
   isLiked: initialIsLiked,
-  images = [],
   spotId,
   stadiumId,
+  image = [],
+  category,
 }) => {
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likes, setLikes] = useState(likeCount);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
 
   const toggleLike = async () => {
@@ -55,8 +60,27 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
   };
 
   const handleClick = () => {
-    const url = `/details/선수PICK/${spotId}?stadiumId=${stadiumId}`;
+    const url = `/details/${category}/${spotId}?stadiumId=${stadiumId}`;
     navigate(url);
+  };
+
+  const openModal = (index: number) => {
+    setCurrentImageIndex(index);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => setIsModalOpen(false);
+
+  const nextImage = () => {
+    if (currentImageIndex < image.length - 1) {
+      setCurrentImageIndex(currentImageIndex + 1);
+    }
+  };
+
+  const prevImage = () => {
+    if (currentImageIndex > 0) {
+      setCurrentImageIndex(currentImageIndex - 1);
+    }
   };
 
   const renderStars = (star: number) => {
@@ -71,13 +95,13 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
         {Array(fullStars)
           .fill(null)
           .map((_, index) => (
-            <StarImg key={`full-${index}`} src={StarFull} alt="Full Star" />
+            <Icon key={`full-${index}`} src={StarFull} alt="Full Star" />
           ))}
-        {hasHalfStar && <StarImg src={StarHalf} alt="Half Star" />}
+        {hasHalfStar && <Icon src={StarHalf} alt="Half Star" />}
         {Array(emptyStars)
           .fill(null)
           .map((_, index) => (
-            <StarImg key={`empty-${index}`} src={StarEmpty} alt="Empty Star" />
+            <Icon key={`empty-${index}`} src={StarEmpty} alt="Empty Star" />
           ))}
       </>
     );
@@ -86,48 +110,58 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
   const formattedRating = (Math.round(star * 2) / 2).toFixed(1);
 
   return (
-    <ReviewItemContainer>
-      <LeftContent>
-        {profileImage && (
-          <ProfileImg
-            src={profileImage ? profileImage : defaultImg}
-            alt="프로필 이미지"
-          />
-        )}
-        <ContentsContainer>
-          <ReviewInfo>
-            <StadiumNameContainer onClick={handleClick}>
-              {spotName && (
-                <>
-                  <StadiumName>{spotName}</StadiumName>
-                  <ArrowIcon src={RightArrow} alt="Right Arrow" />
-                </>
+    <>
+      <ReviewItemContainer>
+        <LeftContent>
+          {profileImage && (
+            <ProfileImg
+              src={profileImage ? profileImage : defaultImg}
+              alt="프로필 이미지"
+            />
+          )}
+          <ContentsContainer>
+            <ReviewInfo>
+              <StadiumNameContainer onClick={handleClick}>
+                {spotName && (
+                  <>
+                    <StadiumName>{spotName}</StadiumName>
+                    <ArrowIcon src={RightArrow} alt="Right Arrow" />
+                  </>
+                )}
+              </StadiumNameContainer>
+              {authorName && <AuthorName>{authorName}</AuthorName>}
+              {createdAt && (
+                <DateText>{new Date(createdAt).toLocaleDateString()}</DateText>
               )}
-            </StadiumNameContainer>
-            {authorName && <AuthorName>{authorName}</AuthorName>}
-            {createdAt && (
-              <DateText>{new Date(createdAt).toLocaleDateString()}</DateText>
-            )}
-            <RatingLikesContainer>
-              <Rating>
-                {renderStars(star)} <span>({formattedRating})</span>
-              </Rating>
-              <Likes onClick={toggleLike}>
-                <HeartImg src={isLiked ? HeartFull : HeartEmpty} alt="Like" />
-                {likes}
-              </Likes>
-            </RatingLikesContainer>
-          </ReviewInfo>
-          <ReviewText>{content}</ReviewText>
-        </ContentsContainer>
-      </LeftContent>
-      {images.length > 0 && (
-        <ImageContainer>
-          <ReviewImage src={images[0]} alt="리뷰 이미지" />
-          {images.length > 1 && <ImageCount>+ {images.length - 1}</ImageCount>}
-        </ImageContainer>
-      )}
-    </ReviewItemContainer>
+              <RatingLikesContainer>
+                <Rating>
+                  {renderStars(star)} <span>({formattedRating})</span>
+                </Rating>
+                <Likes onClick={toggleLike}>
+                  <Icon src={isLiked ? HeartFull : HeartEmpty} alt="Like" />
+                  {likes}
+                </Likes>
+              </RatingLikesContainer>
+            </ReviewInfo>
+            <ReviewText>{content}</ReviewText>
+          </ContentsContainer>
+        </LeftContent>
+        {image.length > 0 && (
+          <ImageContainer onClick={() => openModal(0)}>
+            <ReviewImage src={image[0]} alt="리뷰 이미지" />
+            {image.length > 1 && <ImageCount>+ {image.length - 1}</ImageCount>}
+          </ImageContainer>
+        )}
+      </ReviewItemContainer>
+
+      <ImageModal
+        isOpen={isModalOpen}
+        image={image[currentImageIndex]}
+        onClose={closeModal}
+        onNext={nextImage}
+        onPrev={prevImage}
+      />
+    </>
   );
 };
 
@@ -135,9 +169,7 @@ export default ReviewItem;
 
 const ReviewItemContainer = styled.div`
   padding: 1.5rem;
-  background-color: #ffffff10;
-  border: 1px solid #fff;
-  border-radius: 12px;
+  border-bottom: 1px dashed #ccc;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -279,75 +311,37 @@ const ReviewText = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* 3줄로 제한 */
+`;
 
-  @media (max-width: 768px) {
-    font-size: 0.875rem;
-  }
+const ReviewImage = styled.img`
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  cursor: pointer;
 `;
 
 const ImageContainer = styled.div`
   position: relative;
-  min-width: 130px;
-  height: 130px;
-  border-radius: 12px;
+  width: 150px;
+  height: 150px;
   overflow: hidden;
-
-  @media (max-width: 768px) {
-    min-width: 100px;
-    height: 100px;
-  }
+  border-radius: 8px;
+  cursor: pointer;
 `;
 
-const ReviewImage = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
-
-  @media (max-width: 768px) {
-    border-radius: 8px;
-  }
-`;
-
-const ImageCount = styled.div`
+const ImageCount = styled.span`
   position: absolute;
   top: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.5);
   color: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0 12px 0 0;
-  font-size: 0.875rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  @media (max-width: 768px) {
-    font-size: 0.75rem;
-  }
+  border-radius: 0 8px 0 8px;
+  padding: 6px;
+  font-size: 0.8rem;
 `;
 
-const StarImg = styled.img`
-  width: 20px;
-  height: 20px;
-
-  @media (max-width: 768px) {
-    width: 16px;
-    height: 16px;
-  }
-`;
-
-const HeartImg = styled.img`
-  width: 20px;
-  height: 20px;
-
-  @media (max-width: 768px) {
-    width: 16px;
-    height: 16px;
-  }
+const Icon = styled.img`
+  width: 1rem;
 `;
