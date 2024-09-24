@@ -23,6 +23,7 @@ interface CreateCourseProps {
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   description: string;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
+  selectedSpot: string;
 }
 
 const CreateCourse: React.FC<CreateCourseProps> = ({
@@ -33,6 +34,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
   setTitle,
   description,
   setDescription,
+  selectedSpot,
 }) => {
   const [recommendList, setRecommendList] = useState<ScrapData[]>([]);
 
@@ -107,6 +109,8 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
                   </ScrapItem>
                 );
               })
+            ) : selectedSpot !== "전체" ? (
+              <EmptyMessage>북마크한 리스트가 없습니다.</EmptyMessage>
             ) : (
               <EmptyMessage>추천할 구장을 선택해주세요.</EmptyMessage>
             )}
@@ -351,6 +355,7 @@ const TitleText = styled.div`
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 5px;
+  width: 185px;
 `;
 
 const AddressText = styled.div`
@@ -392,17 +397,16 @@ const IconWrapper2 = styled.div`
   transition: background-color 0.3s ease;
 
   svg {
-    // 아이콘의 색상을 변경하려면 svg 태그를 선택합니다.
     color: #fff;
     transition: color 0.3s ease;
   }
 
   &:hover {
-    background-color: #ff4d4f; // 배경색 변경
+    background-color: #ff4d4f;
     cursor: pointer;
 
     svg {
-      color: #fff; // 아이콘 색상 변경 (필요에 따라 수정)
+      color: #fff;
     }
   }
 `;

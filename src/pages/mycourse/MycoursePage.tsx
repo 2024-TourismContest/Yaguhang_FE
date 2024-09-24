@@ -119,6 +119,7 @@ const MycoursePage = () => {
           setTitle={setTitle}
           description={description}
           setDescription={setDescription}
+          selectedSpot={selectedSpot}
         />
         <TooltipWrapper>
           <FixedButton
