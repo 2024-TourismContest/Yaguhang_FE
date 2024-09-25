@@ -33,7 +33,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
         <NavButton onClick={onNext} position="right">
           <Icon src={RightArrow} alt="Next" />
         </NavButton>
-        <Image src={image} alt="Preview" />
+        <Image src={image} alt="Preview" onClick={onClose} />
       </ModalContent>
     </ModalOverlay>
   );
@@ -85,6 +85,7 @@ const Icon = styled.img`
 
 const Image = styled.img`
   max-width: 100%;
+  cursor: zoom-out; /* 모달 클릭 시 닫힘을 표시 */
 `;
 
 export default ImageModal;

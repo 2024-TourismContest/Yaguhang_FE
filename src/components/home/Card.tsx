@@ -441,8 +441,6 @@ const DateContainer = styled.div`
   color: #fff;
   font-weight: 500;
   margin-right: 1.7rem;
-  @media (max-width: 1024px) {
-  }
 
   @media (max-width: 1024px) {
     font-size: 0.9srem;
