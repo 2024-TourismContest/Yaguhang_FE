@@ -30,6 +30,7 @@ const HeaderContainer = styled.div<{ backgroundImage: string }>`
   background: url(${(props) => props.backgroundImage}) no-repeat center center;
   background-size: cover;
   display: flex;
+  align-items: flex-end;
   justify-content: center;
 
   &::before {
@@ -41,11 +42,9 @@ const HeaderContainer = styled.div<{ backgroundImage: string }>`
     left: 0;
     background: linear-gradient(
       to bottom,
-      rgba(255, 0, 0, 0) 0%,
-      rgba(255, 0, 0, 0) 10%,
-      rgba(0, 0, 0, 0) 80%,
-      rgba(0, 0, 0, 0) 90%,
-      rgb(0, 0, 0) 100%
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.2) 50%,
+      rgba(0, 0, 0, 0.3) 100%
     );
     z-index: 1;
   }
@@ -69,12 +68,13 @@ const HeaderContainer = styled.div<{ backgroundImage: string }>`
 const HeaderText = styled.div`
   padding: 20px;
   border-radius: 10px;
-  margin-top: 55vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  margin-bottom: 10vh;
   text-align: center;
   color: #ffffff;
-
+  max-width: 80%;
   h1 {
-    font-weight: 600;
+    font-weight: 500;
     margin: 0;
     font-size: 2.5em;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
@@ -88,44 +88,40 @@ const HeaderText = styled.div`
     }
 
     @media (max-width: 480px) {
-      font-size: 1rem;
+      font-size: 1.2em;
     }
   }
 
   p {
-    max-width: 1000px;
-    max-height: 50px;
-    font-size: 25px;
-    margin: 30px;
+    padding: 10px;
+    font-size: 1.25rem;
+    margin-top: 10px;
+    line-height: 1.5;
+    border-radius: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
     @media (max-width: 1024px) {
       max-width: 500px;
-      max-height: 50px;
-      font-size: 1.3em;
+      font-size: 1.1em;
     }
     @media (max-width: 768px) {
-      font-size: 16px;
-      max-width: 500px;
-      max-height: 50px;
-      margin: 20px;
+      font-size: 1em;
+      max-width: 90%;
     }
 
     @media (max-width: 480px) {
-      font-size: 1em;
-      max-width: 300px;
-      max-height: 50px;
-      margin: 40px;
+      font-size: 0.9em;
+      max-width: 80%;
     }
   }
 
   @media (max-width: 768px) {
-    margin-top: 40vh;
+    margin-bottom: 20vh;
   }
 
   @media (max-width: 480px) {
-    margin-top: 35vh;
+    margin-bottom: 15vh;
   }
 `;
