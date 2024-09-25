@@ -88,7 +88,6 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     }
   };
 
-  // 이미지 삭제 처리
   const handleImageDelete = (index: number, isNew: boolean) => {
     if (isNew) {
       setNewImages(newImages.filter((_, i) => i !== index));
@@ -97,39 +96,38 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     }
   };
 
-  // 수정 저장 처리
   const handleEditSave = async (reviewId: number) => {
     try {
-      // 새로 추가된 이미지를 업로드
       const uploadedImageUrls = await Promise.all(
         newImages.map((image) => uploadToAws(image))
       );
 
-      // 수정된 데이터를 서버에 전송
+      const updatedImages = [...editedImages, ...uploadedImageUrls]; // 기존 이미지 + 새로 추가한 이미지
+
       await updateReview(reviewId, {
         content: editedContent,
         star: editedStar,
-        images: [...uploadedImageUrls],
+        images: updatedImages,
       });
 
-      // 상태 업데이트
-      setEditingReviewId(null); // 수정 상태 종료
-      const updatedReviews = reviews.map((review) =>
-        review.reviewId === reviewId
-          ? {
-              ...review,
-              content: editedContent,
-              star: editedStar,
-              images: [...uploadedImageUrls], // 수정된 이미지 업데이트
-            }
-          : review
+      setEditingReviewId(null);
+      setReviews((prevReviews) =>
+        prevReviews.map((review) =>
+          review.reviewId === reviewId
+            ? {
+                ...review,
+                content: editedContent,
+                star: editedStar,
+                images: updatedImages,
+              }
+            : review
+        )
       );
-      setReviews(updatedReviews);
+      setNewImages([]);
     } catch (error) {
       console.error("리뷰 수정 중 오류 발생:", error);
     }
   };
-
   // 리뷰 좋아요
   const handleLikeToggle = async (reviewId: number) => {
     const updatedLikeCount = await toggleLikeOnServer(reviewId);
@@ -203,6 +201,24 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                   value={editedContent}
                   onChange={(e) => setEditedContent(e.target.value)}
                 />
+                {/* 기존 이미지 표시 */}
+                {editedImages.length > 0 && (
+                  <ExistingImagesContainer>
+                    {editedImages.map((image, index) => (
+                      <ImageWrapper key={index}>
+                        <ReviewImage
+                          src={image}
+                          alt={`Review Image ${index}`}
+                        />
+                        <DeleteImageButton
+                          onClick={() => handleImageDelete(index, false)}
+                        >
+                          삭제
+                        </DeleteImageButton>
+                      </ImageWrapper>
+                    ))}
+                  </ExistingImagesContainer>
+                )}
 
                 {/* 새 이미지 추가 기능 */}
                 <NewImagesContainer>
@@ -343,6 +359,11 @@ const EditContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+`;
+const ExistingImagesContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 1rem;
 `;
 
 const EditInput = styled.textarea`s
