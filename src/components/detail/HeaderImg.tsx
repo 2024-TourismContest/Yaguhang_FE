@@ -42,11 +42,12 @@ const HeaderContainer = styled.div<{ backgroundImage: string }>`
     left: 0;
     background: linear-gradient(
       to bottom,
-      rgba(0, 0, 0, 0.1) 0%,
-      rgba(0, 0, 0, 0.2) 50%,
-      rgba(0, 0, 0, 0.3) 100%
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0) 20%,
+      rgba(0, 0, 0, 0) 50%,
+      rgba(0, 0, 0, 0.7) 80%,
+      rgb(0, 0, 0) 100%
     );
-    z-index: 1;
   }
 
   & > * {
@@ -54,15 +55,15 @@ const HeaderContainer = styled.div<{ backgroundImage: string }>`
     z-index: 2;
   }
   @media (max-width: 1024px) {
-    height: 70vh;
+    height: 90vh;
   }
 
   @media (max-width: 768px) {
-    height: 60vh;
+    height: 90vh;
   }
 
   @media (max-width: 480px) {
-    height: 60vh;
+    height: 90vh;
     background-size: contain;
   }
 `;

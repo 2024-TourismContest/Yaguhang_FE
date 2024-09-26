@@ -377,9 +377,9 @@ export const Wrapper = styled.div`
 `;
 const StyledCard = styled.div<StyledCardProps>`
   position: relative;
-  width: 11vw;
+  width: 200px;
   max-width: 11rem;
-  height: 14vw;
+  height: 400px;
   max-height: 14rem;
   border-radius: 1.25rem;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
@@ -397,13 +397,13 @@ const StyledCard = styled.div<StyledCardProps>`
   }
 
   @media (max-width: 1024px) {
-    width: 18vw;
-    height: 22vw;
+    width: 200px;
+    height: 400px;
   }
 
   @media (max-width: 768px) {
-    width: 28vw;
-    height: 40vw;
+    width: 200px;
+    height: 400px;
   }
 `;
 
