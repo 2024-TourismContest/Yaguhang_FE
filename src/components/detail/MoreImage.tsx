@@ -33,12 +33,15 @@ const MoreImage: React.FC<MoreImageProps> = ({ images, id }) => {
     };
   }, []);
 
+  // 빈 문자열로 된 이미지를 필터링
+  const validImages = images.filter((image) => image.trim() !== "");
+
   const indexOfLastImage = (currentPage + 1) * imagesPerPage;
   const indexOfFirstImage = indexOfLastImage - imagesPerPage;
-  const currentImages = images.slice(indexOfFirstImage, indexOfLastImage);
+  const currentImages = validImages.slice(indexOfFirstImage, indexOfLastImage);
 
   const nextPage = () => {
-    if (indexOfLastImage < images.length) {
+    if (indexOfLastImage < validImages.length) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -57,17 +60,17 @@ const MoreImage: React.FC<MoreImageProps> = ({ images, id }) => {
           <img src={left} alt="이전" />
         </PrevButton>
         <ImageContainer>
-          {currentImages.length > 0 ? (
+          {validImages.length > 0 ? (
             currentImages.map((image, index) => (
               <ImageItem key={index} src={image} alt={`Image ${index + 1}`} />
             ))
           ) : (
-            <ImageItem src={loadingImg} alt="로딩 이미지" />
+            <EmptyMessage>사진 정보를 준비중입니다.</EmptyMessage>
           )}
         </ImageContainer>
         <NextButton
           onClick={nextPage}
-          disabled={indexOfLastImage >= images.length}
+          disabled={indexOfLastImage >= validImages.length}
         >
           <img src={right} alt="다음" />
         </NextButton>
@@ -185,5 +188,16 @@ const NextButton = styled(PaginationButton)`
 
   @media (max-width: 768px) {
     right: 1rem;
+  }
+`;
+
+const EmptyMessage = styled.p`
+  font-size: 1.2rem;
+  color: #ccc;
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
   }
 `;

@@ -46,14 +46,18 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
         {spots.map((spot) => (
           <SlideContainer
             key={spot.contentId}
-            onClick={() => handleImageClick(spot.contentId)}>
+            onClick={() => handleImageClick(spot.contentId)}
+          >
             <StyledMark pick={spot.picker || "none"}>
               {spot.picker ? spot.picker : ""}
             </StyledMark>
             {spot.imageUrl ? (
               <SlideImage src={spot.imageUrl} alt={spot.name} />
             ) : (
-              <DefaultImage src={loadingImg} alt={spot.name} />
+              <DefaultImage
+                src="https://yaguhang.kro.kr:8443/defaultLogos/defaultImage.svg"
+                alt={spot.name}
+              />
             )}
             <SlideInfo>
               <span>

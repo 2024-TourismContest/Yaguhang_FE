@@ -57,7 +57,10 @@ const SimilarSpots: React.FC<SimilarSpotsProps> = ({
               {spot.imageUrl ? (
                 <SpotImage src={spot.imageUrl} alt={spot.name} />
               ) : (
-                <DefaultImage src={loadingImg} alt={spot.name} />
+                <DefaultImage
+                  src="https://yaguhang.kro.kr:8443/defaultLogos/defaultSmallImage.svg"
+                  alt={spot.name}
+                />
               )}
               <Overlay />
               <LocationText>{spot.name}</LocationText>
