@@ -160,7 +160,7 @@ const Container = styled.div`
   margin: 150px auto;
   position: relative;
   padding-bottom: 100px;
-  background-color: red;
+  // background-color: red;
 `;
 const Title = styled.h2`
   font-size: 1.7rem;

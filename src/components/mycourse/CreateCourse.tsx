@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { BsBookmarkFill, BsBookmarkStar } from "react-icons/bs";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -54,6 +54,12 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
     setRecommendList(updatedList);
     setContentIdList(updatedList.map((item) => item.contentId));
   };
+
+  // selectedSpot이 변경될 때 추천행 리스트 초기화
+  useEffect(() => {
+    setRecommendList([]);
+    setContentIdList([]);
+  }, [selectedSpot]);
 
   return (
     <Container>
