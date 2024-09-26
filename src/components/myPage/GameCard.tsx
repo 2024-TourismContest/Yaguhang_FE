@@ -81,6 +81,7 @@ const StyledCard = styled.div<{ $isSelected: boolean }>`
   transform: ${({ $isSelected }) => ($isSelected ? "scale(1.05)" : "scale(1)")};
   cursor: pointer;
   
+  width: 250px;
   min-width: calc((100% - 10px * (4 - 1)) / 4); /* 카드 너비 계산 */
   display: flex;
   flex-direction: column;

@@ -7,24 +7,33 @@ import { Schedule } from "../home/Card";
 import { mypage } from "../../apis/mypage";
 import { scrapSchedule } from "../../apis/main";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const CardList: React.FC = () => {
   const [games, setGames] = useState<Schedule[]>([]);
-  const [selectedGame, setSelectedGame] = useState<Schedule | null>(null);
+  const [page, setPage] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchScrapSpots = async () => {
+    const fetchScrapSpots = async (page: number) => {
+      setLoading(true); // 로딩 시작
       try {
-        const myScrapSchedule = await mypage.MyScrap(0, 100);
-        setGames(myScrapSchedule.scrappedSchedules);
+        const myScrapSchedule = await mypage.MyScrap(page, 100);
+        setGames((prevGames) => [
+          ...prevGames,
+          ...myScrapSchedule.scrappedSchedules,
+        ]);
       } catch (error) {
         console.error("Error fetching bookmark data:", error);
+        toast.error("데이터를 불러오는 중 오류가 발생했습니다."); // 오류 메시지
+      } finally {
+        setLoading(false); // 로딩 종료
       }
     };
 
-    fetchScrapSpots();
-  }, []);
+    fetchScrapSpots(page);
+  }, [page]);
 
   const handleScroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -40,11 +49,7 @@ const CardList: React.FC = () => {
     try {
       const isScraped = await scrapSchedule(gameId);
       setGames((prevSchedules) =>
-        prevSchedules.map((schedule) =>
-          schedule.id === gameId
-            ? { ...schedule, isScraped: !schedule.isScraped }
-            : schedule
-        )
+        prevSchedules.filter((schedule) => schedule.id !== gameId)
       );
       toast.success(
         isScraped ? "스크랩에 추가되었습니다." : "스크랩에서 제거되었습니다."
@@ -54,33 +59,38 @@ const CardList: React.FC = () => {
     }
   };
 
-  const handleSelect = (schedule: Schedule) => {
-    setSelectedGame(schedule);
+  const loadMoreGames = () => {
+    setPage((prevPage) => prevPage + 1);
   };
 
   return (
     <CarouselContainer>
-      <Button onClick={() => handleScroll("left")}>
-        <img src={leftIcon} alt="Left" />
-      </Button>
-      <CardContainer ref={scrollRef}>
-        {games.map((schedule) => (
-          <GameCard
-            key={schedule.id}
-            schedule={schedule}
-            isSelected={selectedGame?.id === schedule.id}
-            onScrap={handleScrap}
-            onSelect={handleSelect}
-            isScraped={schedule.isScraped}
-          />
-        ))}
-      </CardContainer>
-      <Button onClick={() => handleScroll("right")}>
-        <img src={rightIcon} alt="Right" />
-      </Button>
+      {games.length === 0 && !loading ? (
+        <NoDataMessage>경기 스탬프가 없습니다</NoDataMessage>
+      ) : (
+        <>
+          <Button onClick={() => handleScroll("left")}>
+            <img src={leftIcon} alt="Left" />
+          </Button>
+          <CardContainer ref={scrollRef}>
+            {games.map((schedule) => (
+              <GameCard
+                key={schedule.id}
+                schedule={schedule}
+                onScrap={handleScrap}
+                isScraped={schedule.isScraped}
+              />
+            ))}
+          </CardContainer>
+          <Button onClick={() => handleScroll("right")}>
+            <img src={rightIcon} alt="Right" />
+          </Button>
+        </>
+      )}
     </CarouselContainer>
   );
 };
+
 export default CardList;
 
 const CarouselContainer = styled.div`
@@ -112,4 +122,11 @@ const Button = styled.button`
       width: 30px;
     }
   }
+`;
+
+const NoDataMessage = styled.div`
+  font-size: 1.2rem;
+  color: white;
+  text-align: center;
+  padding: 2rem;
 `;
