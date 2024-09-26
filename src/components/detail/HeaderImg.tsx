@@ -53,14 +53,16 @@ const HeaderContainer = styled.div<{ backgroundImage: string }>`
     position: relative;
     z-index: 2;
   }
+  @media (max-width: 1024px) {
+    height: 70vh;
+  }
 
   @media (max-width: 768px) {
-    height: 40rem;
-    background-size: cover;
+    height: 60vh;
   }
 
   @media (max-width: 480px) {
-    height: 30rem;
+    height: 60vh;
     background-size: contain;
   }
 `;
