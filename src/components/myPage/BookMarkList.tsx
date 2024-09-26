@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import defaultImg from "../../assets/images/Detailnull.svg";
+// import defaultImg from "../../assets/images/Detailnull.svg";
 import leftIcon from "../../assets/icons/arrow_left.svg";
 import rightIcon from "../../assets/icons/arrow_right.svg";
 import { mypage } from "../../apis/mypage";
@@ -42,6 +42,8 @@ const BookMarkList: React.FC = () => {
     }
   };
 
+  const defaultImg =
+    "https://yaguhang.kro.kr:8443/defaultLogos/defaultBookmarkImage.svg";
   return (
     <div>
       {scrapSpots.length > 0 ? (
