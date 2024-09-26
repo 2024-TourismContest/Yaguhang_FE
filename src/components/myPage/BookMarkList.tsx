@@ -26,14 +26,14 @@ const BookMarkList: React.FC = () => {
   }, []);
 
   const handleClick = (spot: ScrapSpot) => {
-    const url = `/details/선수PICK/${spot.contentId}?stadiumId=${spot.stadiumInfo.StadiumId}`;
+    const url = `/details/${spot.category}/${spot.contentId}?stadiumId=${spot.stadiumInfo.StadiumId}`;
     navigate(url);
   };
 
   // 스크롤 처리 함수
   const handleScroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const scrollAmount = scrollRef.current.clientWidth; // 부모 컨테이너의 너비로 스크롤 양 조정
+      const scrollAmount = scrollRef.current.clientWidth;// 부모 컨테이너의 너비로 스크롤 양 조정
       scrollRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
@@ -44,29 +44,31 @@ const BookMarkList: React.FC = () => {
   return (
     <div>
       {scrapSpots.length > 0 ? (
-        <Container>
-          <Button onClick={() => handleScroll("left")}>
-            <img src={leftIcon} alt="Left" />
-          </Button>
-          <SpotsContainer ref={scrollRef}>
-            {scrapSpots.map((spot) => (
-              <ContentWrapper
-                key={spot.contentId}
-                onClick={() => handleClick(spot)}
-              >
-                <Img src={spot.image || defaultImg} alt={spot.title} />
-                <Title>{spot.title}</Title>
-              </ContentWrapper>
-            ))}
-          </SpotsContainer>
-          <Button onClick={() => handleScroll("right")}>
-            <img src={rightIcon} alt="Right" />
-          </Button>
-        </Container>
+        <>
+          <Container>
+            <Button onClick={() => handleScroll("left")}>
+              <img src={leftIcon} alt="Left" />
+            </Button>
+            <SpotsContainer ref={scrollRef}>
+              {scrapSpots.map((spot) => (
+                <ContentWrapper
+                  key={spot.contentId}
+                  onClick={() => handleClick(spot)}
+                >
+                  <Img src={spot.image || defaultImg} alt={spot.title} />
+                  <Title>{spot.title}</Title>
+                </ContentWrapper>
+              ))}
+            </SpotsContainer>
+            <Button onClick={() => handleScroll("right")}>
+              <img src={rightIcon} alt="Right" />
+            </Button>
+          </Container>
+          <MoreBtn to="/mypage/bookmark">+ 더보기</MoreBtn>
+        </>
       ) : (
         <NoDataMessage>추천 항목이 없습니다.</NoDataMessage>
       )}
-      <MoreLink to="/mypage/bookmark">+ 더보기</MoreLink>
     </div>
   );
 };
@@ -86,13 +88,14 @@ const SpotsContainer = styled.div`
   padding: 10px 0;
   scroll-snap-type: x mandatory;
   transition: 0.2s ease-in-out;
-
+  width: 100%;
   &::-webkit-scrollbar {
-    display: none; /* 스크롤바 숨김 */
+    display: none;
   }
 `;
 
 const ContentWrapper = styled.div`
+  width: 250px;
   min-width: calc((100% - 10px * (4 - 1)) / 4); /* 카드 너비 계산 */
   display: flex;
   flex-direction: column;
@@ -100,15 +103,15 @@ const ContentWrapper = styled.div`
   scroll-snap-align: start;
 
   @media (max-width: 1000px) {
-    flex: 1 0 calc(33.33% - 10px); /* 3개 */
+    flex: 1 0 calc(33.33% - 10px);
   }
 
   @media (max-width: 600px) {
-    flex: 1 0 calc(50% - 10px); /* 2개 */
+    flex: 1 0 calc(50% - 10px);
   }
 
   @media (max-width: 400px) {
-    flex: 1 0 100%; /* 1개 */
+    flex: 1 0 100%;
   }
 `;
 
@@ -143,7 +146,7 @@ const Button = styled.button`
   }
 `;
 
-const MoreLink = styled(Link)`
+const MoreBtn = styled(Link)`
   display: block;
   text-align: center;
   color: #fff;

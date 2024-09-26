@@ -29,24 +29,28 @@ const MyRecommendPage: React.FC = () => {
         title={"MY 추천행"}
         subtitle={"내가 추천행들을 모아보세요."}
       />
-      <RecommendContainer>
+      <ReviewList>
         {myRecommend.length > 0 ? (
-          myRecommend.map((recommend) => (
-            <Item key={recommend.recommendId} item={recommend} isMine={true} isLast={false} />
+          myRecommend.map((recommend, index) => (
+            <Item
+              key={recommend.recommendId}
+              item={recommend}
+              isMine={true}
+              isLast={myRecommend.length - 1 == index}
+            />
           ))
         ) : (
           <NoDataMessage>추천행이 없습니다.</NoDataMessage>
         )}
-      </RecommendContainer>
+      </ReviewList>
     </>
   );
 };
 
-const RecommendContainer = styled.div`
+const ReviewList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-top: 30px;
 `;
 
 const NoDataMessage = styled.p`

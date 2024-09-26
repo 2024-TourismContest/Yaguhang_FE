@@ -30,10 +30,10 @@ const MyPageMain: React.FC = () => {
       try {
         const myRecommendData = await mypage.MyRecommend(10);
         setMyRecommend(myRecommendData.recommendPreviewDtos);
+        console.log(myRecommendData.recommendPreviewDtos)
 
         const myReviewsData = await mypage.MyReview();
         setMyReviews(myReviewsData.reviews);
-        console.log(myReviewsData);
         const myScrapSchedule = await mypage.MyScrap(0, 100);
         setMyScrapGames(myScrapSchedule.scrappedSchedules);
       } catch (error) {
@@ -65,7 +65,7 @@ const MyPageMain: React.FC = () => {
       <SectionTitle title={"MY 추천행"} subtitle={"나의 여행 계획 모아보기"} />
       {myRecommend && myRecommend.length > 0 ? (
         <>
-          {myRecommend.map((recommend, index) => (
+          {myRecommend?.map((recommend, index) => (
             <Item
               key={recommend.recommendId}
               item={recommend}
@@ -124,10 +124,6 @@ const MoreLink = styled(Link)`
   font-size: 1rem;
   margin-top: 1rem;
   text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
 `;
 
 const NoDataMessage = styled.p`
