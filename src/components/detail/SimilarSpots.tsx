@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { BsBookmarkFill, BsBookmarkStar } from "react-icons/bs";
-import loadingImg from "../../assets/images/loadingImg.svg";
 
 export interface SpotPreviewDto {
   contentId: number;

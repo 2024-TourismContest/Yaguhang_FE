@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import DefaultImg from "../../assets/images/defaultImg.svg";
-import loadingImg from "../../assets/images/loadingImg.svg";
-// import useTeamStore from "../../store/TeamStore";
 import BookmarkIcon from "../map/BookMarkIcon";
 
 export interface SpotBasicPreviewDto {

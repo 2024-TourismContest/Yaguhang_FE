@@ -33,7 +33,6 @@ interface ReviewData {
 
 const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
   const [reviews, setReviews] = useState<ReviewData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [editingReviewId, setEditingReviewId] = useState<number | null>(null); // 수정 상태를 관리할 변수
   const [editedContent, setEditedContent] = useState<string>("");
   const [editedStar, setEditedStar] = useState<number>(0); // 수정할 별점 상태
@@ -46,13 +45,11 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
   useEffect(() => {
     const loadReviews = async () => {
       try {
-        setLoading(true);
         const fetchedReviews = await fetchReviews(contentId, sort);
         setReviews(fetchedReviews);
       } catch (error) {
         console.error("리뷰 데이터를 가져오는 중 오류 발생:", error);
       } finally {
-        setLoading(false);
       }
     };
 

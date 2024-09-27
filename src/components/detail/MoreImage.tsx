@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import left from "../../assets/icons/left.png";
 import right from "../../assets/icons/right.png";
-import loadingImg from "../../assets/images/loadingImg.svg";
-
 export interface MoreImageProps {
   images: string[];
   id?: string;
