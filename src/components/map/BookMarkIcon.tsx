@@ -1,6 +1,5 @@
 import { memo, useState } from "react";
-import { BsBookmarkStar } from "react-icons/bs";
-import { LuDot } from "react-icons/lu";
+import { BsBookmarkFill, BsBookmarkStar } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { styled } from "styled-components";
@@ -61,7 +60,7 @@ const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
 
     return (
       <Button onClick={(e) => onClickMark(contentId, e)}>
-        {markedSpots ? <LuDot /> : <BsBookmarkStar />}
+        {markedSpots ? <BsBookmarkFill /> : <BsBookmarkStar />}
       </Button>
     );
   }

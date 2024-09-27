@@ -1,13 +1,13 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import styled from "styled-components";
 import {
-  fetchReviews,
   deleteReview,
-  updateReview,
+  fetchReviews,
   toggleLikeOnServer,
+  updateReview,
   uploadToAws,
 } from "../../apis/review";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
 
 interface ReviewListProps {
   contentId: number;
@@ -208,8 +208,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                           alt={`Review Image ${index}`}
                         />
                         <DeleteImageButton
-                          onClick={() => handleImageDelete(index, false)}
-                        >
+                          onClick={() => handleImageDelete(index, false)}>
                           삭제
                         </DeleteImageButton>
                       </ImageWrapper>
@@ -226,8 +225,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                         alt={`New Image ${index}`}
                       />
                       <DeleteImageButton
-                        onClick={() => handleImageDelete(index, true)}
-                      >
+                        onClick={() => handleImageDelete(index, true)}>
                         삭제
                       </DeleteImageButton>
                     </ImageWrapper>
@@ -418,7 +416,7 @@ const ImageWrapper = styled.div`
   display: inline-block;
 `;
 
-const DeleteImageButton = styled.button`
+export const DeleteImageButton = styled.button`
   position: absolute;
   top: 5px;
   right: 5px;

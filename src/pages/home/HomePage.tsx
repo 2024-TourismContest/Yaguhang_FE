@@ -10,10 +10,10 @@ import HeroCarousel from "../../components/home/HeroCarousel";
 import ImageSlider from "../../components/home/imageSlider";
 import WeatherCard from "../../components/home/WeatherCard";
 import WeatherGraph from "../../components/home/WeatherGraph";
+import useAuthStore from "../../store/authStore";
 import useModalStore from "../../store/modalStore";
 import useTeamStore from "../../store/TeamStore";
 import { TitleSection } from "./TitleSection";
-import useAuthStore from "../../store/authStore";
 
 interface SpotBasicPreviewDto {
   contentId: number;
@@ -130,7 +130,7 @@ const HomePage = () => {
     }
   };
   return (
-    <>
+    <AppContainer>
       <HeroCarousel teams={heroData.teams} />
       <HomePageContainer className="home-page">
         <RoundBackground />
@@ -177,7 +177,7 @@ const HomePage = () => {
           </>
         )}
       </HomePageContainer>
-    </>
+    </AppContainer>
   );
 };
 
@@ -225,5 +225,6 @@ const WeatherContainer = styled.div`
     padding: 0 4vw;
   }
 `;
+const AppContainer = styled.main``;
 
 export default HomePage;

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaRegTrashAlt } from "react-icons/fa";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { styled } from "styled-components";
 import DialogOpenButton from "../../assets/icons/DialogOpenButton";
@@ -9,10 +10,12 @@ export const Item = ({
   item,
   isLast,
   isMine,
+  handleDelete,
 }: {
   item: RecommendPreviewDto;
   isLast: boolean;
   isMine?: boolean;
+  handleDelete: (recommendId: number) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [likeCnt, setLikeCnt] = useState(item.likes);
@@ -37,6 +40,11 @@ export const Item = ({
               likes={(cnt: number) => likes(cnt)}
             />
             {likeCnt}
+            {item.isMine && (
+              <DeleteButton onClick={() => handleDelete(item.recommendId)}>
+                <FaRegTrashAlt />
+              </DeleteButton>
+            )}
           </Li>
         </Title>
         <Title>
@@ -183,4 +191,13 @@ const Fan = styled.img`
 
 const DateWrapper = styled.div`
   flex-direction: column;
+`;
+const DeleteButton = styled.button`
+  border: none;
+  background-color: transparent;
+  svg {
+    color: white;
+    width: 20px;
+    height: 20px;
+  }
 `;

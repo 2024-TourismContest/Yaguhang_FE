@@ -1,15 +1,26 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
-import SectionTitle from "../../components/common/SectionTitle";
-import { mypage } from "../../apis/mypage";
-import { RecommendPreviewDto } from "../../types/myPageType";
-import { Item } from "../../components/recommend/Item";
 import { toast } from "react-toastify";
+import styled from "styled-components";
+import { mypage } from "../../apis/mypage";
+import { DeleteRecommendData } from "../../apis/recommend";
+import SectionTitle from "../../components/common/SectionTitle";
+import { Item } from "../../components/recommend/Item";
 import { NoDataMessage } from "../../styles/common/messageStyle";
+import { RecommendPreviewDto } from "../../types/myPageType";
 
 const MyRecommendPage: React.FC = () => {
   const [myRecommend, setMyRecommend] = useState<RecommendPreviewDto[]>([]);
-
+  const [deleteState, setDeleteState] = useState(true);
+  const handleDelete = async (recommendId: number) => {
+    const confirmDelete = window.confirm("이 리뷰를 삭제하시겠습니까?");
+    if (!confirmDelete) return;
+    try {
+      await DeleteRecommendData(recommendId);
+      setDeleteState((prev) => !prev);
+    } catch (error) {
+      console.error("리뷰 삭제 중 오류 발생:", error);
+    }
+  };
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
@@ -22,7 +33,7 @@ const MyRecommendPage: React.FC = () => {
     };
 
     fetchRecommendations();
-  }, []);
+  }, [deleteState]);
 
   return (
     <>
@@ -38,6 +49,7 @@ const MyRecommendPage: React.FC = () => {
               item={recommend}
               isMine={true}
               isLast={myRecommend.length - 1 == index}
+              handleDelete={handleDelete}
             />
           ))
         ) : (

@@ -34,6 +34,7 @@ export interface SpotGeneralPreviewDto {
   imageUrl: string;
   isScraped: boolean;
   category: string;
+  categoryUrl: string;
 }
 
 export interface RecommendDetailResponse {

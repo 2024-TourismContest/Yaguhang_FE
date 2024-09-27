@@ -137,3 +137,23 @@ export const fetchScrapData = async (stadiumName: string): Promise<any> => {
     throw error;
   }
 };
+export const DeleteRecommendData = async (
+  recommendId: number
+): Promise<any> => {
+  const token = getAuthToken();
+  try {
+    const response = await defaultApi.delete(
+      `/api/recommend?recommendId=${recommendId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          accept: "*/*",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

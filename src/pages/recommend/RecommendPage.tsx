@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { recommend, recommendSearch } from "../../apis/recommend";
+import {
+  DeleteRecommendData,
+  recommend,
+  recommendSearch,
+} from "../../apis/recommend";
 import title from "../../assets/images/recommendBanner.svg";
 import { Button } from "../../components/button/Button";
 import { Filter } from "../../components/recommend/filter";
@@ -25,6 +29,7 @@ export const RecommendPage = () => {
 
   const [selectedOption, setOption] = useState<string>("인기순");
   const [selectedSpot, setSelectedSpot] = useState("전체");
+  const [deleteState, setDeleteState] = useState(true);
   const handleSpotChange = (spot: string) => {
     setSelectedSpot(spot);
   };
@@ -35,6 +40,16 @@ export const RecommendPage = () => {
     setOption(option);
   };
 
+  const handleDelete = async (recommendId: number) => {
+    const confirmDelete = window.confirm("이 리뷰를 삭제하시겠습니까?");
+    if (!confirmDelete) return;
+    try {
+      await DeleteRecommendData(recommendId);
+      setDeleteState((prev) => !prev);
+    } catch (error) {
+      console.error("리뷰 삭제 중 오류 발생:", error);
+    }
+  };
   const getRecommendList = async () => {
     try {
       console.log(currentPage);
@@ -62,9 +77,13 @@ export const RecommendPage = () => {
   };
 
   useEffect(() => {
-    console.log(currentPage);
+    setCurrentPage(0);
     getRecommendList();
-  }, [selectedSpot, selectedOption, currentPage]);
+  }, [selectedSpot, selectedOption]);
+
+  useEffect(() => {
+    getRecommendList();
+  }, [currentPage, deleteState]);
 
   const onClickBtn = () => {
     if (!isAuthenticated) {
@@ -81,7 +100,7 @@ export const RecommendPage = () => {
       navigate("/mycourse");
     }
   };
-
+  //추천행 삭제
   return (
     <AppContainer>
       <TopSection>
@@ -117,6 +136,7 @@ export const RecommendPage = () => {
               key={item.recommendId}
               item={item}
               isLast={recommendList.length - 1 == index}
+              handleDelete={handleDelete}
             />
           ))}
         </ItemWrapper>

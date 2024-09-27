@@ -54,7 +54,7 @@ export default function RecommendDetail({
               alt={item.name}
             />
             <Ul>
-              <img src={item.category} alt={`${item.category} icon`} />
+              <img src={item.categoryUrl} alt={`${item.category} icon`} />
               <Li>{item.name}</Li>
               <li>{item.address}</li>
             </Ul>
@@ -81,6 +81,9 @@ const Span = styled.span`
   align-items: center;
   width: 100%;
   box-sizing: border-box;
+  svg {
+    width: 25px;
+  }
   button {
     width: 40px;
   }
@@ -108,11 +111,11 @@ const Ul = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: start;
-  gap: 5px;
+  gap: 8px;
   font-weight: 300;
   width: 100%;
   img {
-    height: 40%;
+    width: 1.4rem;
     max-height: 30px;
   }
   li {

@@ -1,6 +1,6 @@
+import { TbMapSearch } from "react-icons/tb";
 import styled from "styled-components";
 import * as S from "../../styles/common/TitleSection";
-import { TbMapSearch } from "react-icons/tb";
 
 interface TitleSectionProps {
   title: string;
@@ -66,6 +66,11 @@ const Img = styled.img`
   height: 45px;
   position: relative;
   right: 15px;
+  svg {
+    stroke: white;
+    color: white;
+    background: #fff;
+  }
   @media screen and (max-width: 1050px) {
     height: 4vw;
   }
