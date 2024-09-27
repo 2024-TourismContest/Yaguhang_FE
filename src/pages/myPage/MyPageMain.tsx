@@ -5,7 +5,7 @@ import { teamLogos } from "../../types/teamLogos";
 import TeamSelector from "../../components/myPage/TeamSelector";
 import ReviewItem from "../../components/Review/ReviewItem";
 import useStore from "../../store/PreferTeamStore";
-import CardList from "../../components/myPage/GameCardList";
+import StampList from "../../components/myPage/StampList";
 import BookMarkList from "../../components/myPage/BookMarkList";
 import { toast } from "react-toastify";
 import { mypage } from "../../apis/mypage";
@@ -60,7 +60,7 @@ const MyPageMain: React.FC = () => {
         title={"MY 야구공 스탬프"}
         subtitle={"관심 있는 야구 일정 모아보기"}
       />
-      <CardList />
+      <StampList />
       <Line />
       <SectionTitle title={"MY 추천행"} subtitle={"나의 여행 계획 모아보기"} />
       {myRecommend && myRecommend.length > 0 ? (

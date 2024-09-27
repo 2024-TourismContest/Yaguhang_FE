@@ -9,7 +9,7 @@ import { scrapSchedule } from "../../apis/main";
 import { toast } from "react-toastify";
 import { NoDataMessage } from "../../styles/common/messageStyle";
 
-const CardList: React.FC = () => {
+const StampList: React.FC = () => {
   const [games, setGames] = useState<Schedule[]>([]);
   const [page,] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -90,7 +90,7 @@ const CardList: React.FC = () => {
   );
 };
 
-export default CardList;
+export default StampList;
 
 const CarouselContainer = styled.div`
   display: flex;
