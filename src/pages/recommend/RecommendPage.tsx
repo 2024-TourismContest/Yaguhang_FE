@@ -53,7 +53,6 @@ export const RecommendPage = () => {
   };
   const getRecommendList = async () => {
     try {
-      console.log(currentPage);
       const response = searchWord
         ? await recommendSearch({
             pageIndex: currentPage,
@@ -71,7 +70,6 @@ export const RecommendPage = () => {
 
       setLastPage(response.totalPage);
       setRecommendList(response.recommendPreviewDtos);
-      console.log(response);
     } catch (error) {
       console.error("추천 리스트 가져오기 에러", error);
     }
