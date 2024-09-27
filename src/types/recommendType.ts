@@ -1,6 +1,6 @@
 //api request
 export interface recommendRequestType {
-  pagdIndex: number;
+  pageIndex: number;
   pageSize: number;
   order: string;
   filter: string;
@@ -34,6 +34,7 @@ export interface SpotGeneralPreviewDto {
   imageUrl: string;
   isScraped: boolean;
   category: string;
+  categoryUrl: string;
 }
 
 export interface RecommendDetailResponse {

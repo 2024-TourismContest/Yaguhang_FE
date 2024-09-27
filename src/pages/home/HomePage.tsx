@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { home } from "../../apis/main";
+import { heroData } from "../../assets/data/data";
 import { Button } from "../../components/button/Button";
 import Card from "../../components/home/Card";
 import { CategorySelector } from "../../components/home/CategorySelector";
@@ -9,11 +10,10 @@ import HeroCarousel from "../../components/home/HeroCarousel";
 import ImageSlider from "../../components/home/imageSlider";
 import WeatherCard from "../../components/home/WeatherCard";
 import WeatherGraph from "../../components/home/WeatherGraph";
-import { heroData } from "../../assets/data/data";
+import useAuthStore from "../../store/authStore";
 import useModalStore from "../../store/modalStore";
 import useTeamStore from "../../store/TeamStore";
 import { TitleSection } from "./TitleSection";
-import useAuthStore from "../../store/authStore";
 
 interface SpotBasicPreviewDto {
   contentId: number;
@@ -92,6 +92,7 @@ const HomePage = () => {
 
   const handleButtonClick = (page: string) => {
     navigate(`/${page}`);
+    window.scrollTo(0, 0);
   };
 
   const handleImageClick = (contentId: number, stadiumId: number) => {
@@ -99,6 +100,7 @@ const HomePage = () => {
       navigate(
         `/details/${selectedCategory}/${contentId}?stadiumId=${stadiumId}`
       );
+      window.scrollTo(0, 0);
     }
   };
 
@@ -128,7 +130,7 @@ const HomePage = () => {
     }
   };
   return (
-    <>
+    <AppContainer>
       <HeroCarousel teams={heroData.teams} />
       <HomePageContainer className="home-page">
         <RoundBackground />
@@ -175,7 +177,7 @@ const HomePage = () => {
           </>
         )}
       </HomePageContainer>
-    </>
+    </AppContainer>
   );
 };
 
@@ -223,5 +225,6 @@ const WeatherContainer = styled.div`
     padding: 0 4vw;
   }
 `;
+const AppContainer = styled.main``;
 
 export default HomePage;

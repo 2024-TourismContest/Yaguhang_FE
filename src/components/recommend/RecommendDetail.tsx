@@ -2,11 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { recommendDetail } from "../../apis/recommend";
-import ball from "../../assets/icons/ball.svg";
-import festival from "../../assets/icons/festival.svg";
-import place from "../../assets/icons/place.svg";
-import restaurant from "../../assets/icons/restaurant_white.svg";
-import shopping from "../../assets/icons/Shopping_white.svg";
 import DefaultImg from "../../assets/images/DefaultCircle.svg";
 import {
   RecommendDetailResponse,
@@ -14,13 +9,6 @@ import {
 } from "../../types/recommendType";
 import BookmarkIcon from "../common/BookMarkIcon";
 
-const categoryIcons: Record<string, string> = {
-  ACCOMMODATION: place,
-  RESTAURANT: restaurant,
-  SHOPPING: shopping,
-  CULTURE_FACILITY: festival,
-  ATHLETE_PICK: ball,
-};
 export default function RecommendDetail({
   recommendId,
   stadiumId,
@@ -66,14 +54,7 @@ export default function RecommendDetail({
               alt={item.name}
             />
             <Ul>
-              <img
-                src={
-                  categoryIcons[item.category]
-                    ? categoryIcons[item.category]
-                    : DefaultImg
-                }
-                alt={`${item.category} icon`}
-              />
+              <img src={item.categoryUrl} alt={`${item.category} icon`} />
               <Li>{item.name}</Li>
               <li>{item.address}</li>
             </Ul>
@@ -100,6 +81,9 @@ const Span = styled.span`
   align-items: center;
   width: 100%;
   box-sizing: border-box;
+  svg {
+    width: 25px;
+  }
   button {
     width: 40px;
   }
@@ -127,11 +111,11 @@ const Ul = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: start;
-  gap: 5px;
+  gap: 8px;
   font-weight: 300;
   width: 100%;
   img {
-    height: 40%;
+    width: 1.4rem;
     max-height: 30px;
   }
   li {

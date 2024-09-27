@@ -9,7 +9,7 @@ type MapCenter = {
 const useMap = (mapX: number, mapY: number, positions: Position[]) => {
   const clearPosition = usePositionStore((state) => state.clearPosition);
   const [map, setMap] = useState(null);
-  const [level, setLevel] = useState<number>(5);
+  const [level, setLevel] = useState<number>(8);
   const [center, setCenter] = useState<MapCenter>({
     lat: mapY,
     lng: mapX,

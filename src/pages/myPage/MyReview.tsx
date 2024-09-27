@@ -32,7 +32,7 @@ const MyReview = () => {
       <ReviewsContainer>
         {myReviews.length > 0 ? (
           myReviews.map((review) => (
-            <ReviewItem key={review.reviewId} isMine={true} {...review} />
+            <ReviewItem isMine={false} key={review.reviewId} {...review} />
           ))
         ) : (
           <NoDataMessage>리뷰가 없습니다.</NoDataMessage>
@@ -45,7 +45,6 @@ const MyReview = () => {
 const ReviewsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   margin-top: 30px;
 `;
 

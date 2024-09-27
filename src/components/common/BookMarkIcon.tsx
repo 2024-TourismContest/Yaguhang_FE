@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { styled } from "styled-components";
 import { home } from "../../apis/main";
+import useModalStore from "../../store/modalStore";
 
 interface BookmarkIconProps {
   stadiumId: number;
@@ -14,6 +15,7 @@ interface BookmarkIconProps {
 
 const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
   ({ stadiumId, contentId, isMarked, width = "15%" }) => {
+    const { openModal, closeModal } = useModalStore();
     const [markedSpots, setMarkedSpots] = useState<boolean>(isMarked);
     const navigate = useNavigate();
 
@@ -24,9 +26,19 @@ const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
       const token = localStorage.getItem("token");
       e.stopPropagation();
       if (!token) {
-        navigate("/login");
-        toast("로그인이 필요합니다");
-        return;
+        openModal({
+          title: "로그인 필요",
+          content: "로그인이 필요한 페이지입니다.",
+          onConfirm: () => {
+            navigate("/login");
+            closeModal();
+          },
+          onCancel: () => {
+            navigate("/");
+            closeModal();
+          },
+          showCancel: true,
+        });
       }
 
       if (stadiumId) {

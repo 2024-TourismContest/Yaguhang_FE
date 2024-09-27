@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toggleLikeOnServer } from "../../apis/review/index";
 import styled from "styled-components";
-import StarFull from "../../assets/icons/star-fill.png";
-import StarHalf from "../../assets/icons/star-half.png";
-import StarEmpty from "../../assets/icons/star-unfill.png";
-import HeartFull from "../../assets/icons/heart-fill.png";
-import HeartEmpty from "../../assets/icons/heart-unfill.png";
 import RightArrow from "../../assets/icons/arrow_right.svg";
 import defaultImg from "../../assets/images/default-profile.svg";
 import ImageModal from "../../components/common/ImageModal";
-import { Review } from "../../types/myPageType";
+import {
+  FaRegHeart,
+  FaHeart,
+  FaStar,
+  FaStarHalfAlt,
+  FaRegStar,
+} from "react-icons/fa";
 
 interface ReviewItemProps {
   reviewId: number;
@@ -18,7 +19,7 @@ interface ReviewItemProps {
   spotName?: string;
   authorName?: string;
   profileImage?: string;
-  createdAt?: string;
+  createdAt: string;
   content: string;
   star: number;
   likeCount: number;
@@ -30,16 +31,17 @@ interface ReviewItemProps {
 }
 
 const ReviewItem: React.FC<ReviewItemProps> = ({
-  authorName,
+  isMine = false, 
   reviewId,
+  spotId,
+  spotName,
+  authorName,
   profileImage,
   createdAt,
-  spotName,
   content,
   star,
   likeCount,
   isLiked: initialIsLiked,
-  spotId,
   stadiumId,
   image = [],
   category,
@@ -65,11 +67,11 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
     navigate(url);
   };
 
-  //이미지 모달
   const openModal = (index: number) => {
     setCurrentImageIndex(index);
     setIsModalOpen(true);
   };
+
   const closeModal = () => setIsModalOpen(false);
   const nextImage = () => {
     if (currentImageIndex < image.length - 1) {
@@ -84,7 +86,6 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
 
   const renderStars = (star: number) => {
     const validRating = Math.max(0, Math.min(star, 5));
-
     const fullStars = Math.floor(validRating);
     const hasHalfStar = validRating % 1 !== 0;
     const emptyStars = Math.max(0, 5 - fullStars - (hasHalfStar ? 1 : 0));
@@ -94,13 +95,13 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
         {Array(fullStars)
           .fill(null)
           .map((_, index) => (
-            <Icon key={`full-${index}`} src={StarFull} alt="Full Star" />
+            <FaStar key={`full-${index}`} color="#FFD700" />
           ))}
-        {hasHalfStar && <Icon src={StarHalf} alt="Half Star" />}
+        {hasHalfStar && <FaStarHalfAlt color="#FFD700" />}
         {Array(emptyStars)
           .fill(null)
           .map((_, index) => (
-            <Icon key={`empty-${index}`} src={StarEmpty} alt="Empty Star" />
+            <FaRegStar key={`empty-${index}`} color="#FFD700" />
           ))}
       </>
     );
@@ -113,62 +114,55 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
       <ReviewItemContainer>
         <LeftContent>
           {profileImage && (
-            <ProfileImg
-              src={profileImage ? profileImage : defaultImg}
-              alt="프로필 이미지"
-            />
+            <ProfileImg src={profileImage || defaultImg} alt="프로필 이미지" />
           )}
-          <ContentsContainer>
-            <ReviewInfo>
+          <ReviewInfo>
+            {spotName && (
               <StadiumNameContainer onClick={handleClick}>
-                {spotName && (
-                  <>
-                    <StadiumName>{spotName}</StadiumName>
-                    <ArrowIcon src={RightArrow} alt="Right Arrow" />
-                  </>
-                )}
+                <StadiumName>{spotName}</StadiumName>
+                <ArrowIcon src={RightArrow} alt="Right Arrow" />
               </StadiumNameContainer>
-              {authorName && <AuthorName>{authorName}</AuthorName>}
-              {createdAt && (
-                <DateText>{new Date(createdAt).toLocaleDateString()}</DateText>
-              )}
-              <RatingLikesContainer>
-                <Rating>
-                  {renderStars(star)} <span>({formattedRating})</span>
-                </Rating>
-                <Likes onClick={toggleLike}>
-                  <Icon src={isLiked ? HeartFull : HeartEmpty} alt="Like" />
-                  {likes}
-                </Likes>
-              </RatingLikesContainer>
-            </ReviewInfo>
-            <ReviewText>{content}</ReviewText>
-          </ContentsContainer>
+            )}
+            {authorName && <AuthorName>{authorName}</AuthorName>}
+            {createdAt && (
+              <DateText>{new Date(createdAt).toLocaleDateString()}</DateText>
+            )}
+          </ReviewInfo>
         </LeftContent>
-        <ImagesContainer>
-          {image.length > 0 &&
-            image
-              .slice(0, 4)
-              .map((img, index) => (
-                <ReviewImage
-                  key={index}
-                  src={img}
-                  alt={`리뷰 이미지 ${index + 1}`}
-                  onClick={() => openModal(index)}
-                />
-              ))}
-          {image.length > 4 && (
-            <ImageCount onClick={() => openModal(4)}>
-              + {image.length - 4}
-            </ImageCount>
+        <Rating>
+          {renderStars(star)} <span>({formattedRating})</span>
+        </Rating>
+        <ReviewText>{content}</ReviewText>
+        {image.length > 0 && (
+          <ImagesContainer>
+            {image.slice(0, 4).map((img, index) => (
+              <ReviewImage
+                key={index}
+                src={img}
+                alt={`리뷰 이미지 ${index + 1}`}
+                onClick={() => openModal(index)}
+              />
+            ))}
+            {image.length > 4 && (
+              <DarkenedImageContainer onClick={() => openModal(4)}>
+                <DarkenedImage src={image[4]} alt="리뷰 이미지 5" />
+                <ImageCount>+ {image.length - 4}</ImageCount>
+              </DarkenedImageContainer>
+            )}
+          </ImagesContainer>
+        )}
+        <Div>
+          <Likes onClick={toggleLike}>
+            {isLiked ? <FaHeart /> : <FaRegHeart />}{" "}
+            {`${likes}명에게 도움이 된 후기`}
+          </Likes>
+          {!isMine && (
+            <Actions>
+              <TextBtn onClick={() => {/* 수정 로직 */}}>수정</TextBtn>
+              <TextBtn onClick={() => {/* 삭제 로직 */}}>삭제</TextBtn>
+            </Actions>
           )}
-        </ImagesContainer>
-        <Actions>
-          <EditButton onClick={() => {}}>수정</EditButton>
-          <DeleteButton onClick={() => {}}>
-            삭제
-          </DeleteButton>
-        </Actions>
+        </Div>
       </ReviewItemContainer>
 
       <ImageModal
@@ -181,26 +175,25 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
     </>
   );
 };
-
 export default ReviewItem;
 
 const ReviewItemContainer = styled.div`
   padding: 1.5rem;
   border-bottom: 1px dashed #ccc;
   display: flex;
-  flex-direction: column; /* 방향을 세로로 변경 */
+  flex-direction: column;
   align-items: flex-start;
-  gap: 1.5rem;
 
   @media (max-width: 768px) {
     padding: 1rem;
-    gap: 1rem;
   }
 `;
 
 const LeftContent = styled.div`
   display: flex;
-  width: 100%; /* 전체 너비 사용 */
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -220,23 +213,12 @@ const ProfileImg = styled.img`
   }
 `;
 
-const ContentsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 0.75rem;
-
-  @media (max-width: 768px) {
-    margin-left: 0;
-  }
-`;
-
 const ReviewInfo = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 0.875rem;
   color: #fff;
   gap: 0.5rem;
-  margin-bottom: 0.75rem;
 
   @media (max-width: 768px) {
     gap: 0.25rem;
@@ -288,31 +270,13 @@ const DateText = styled.p`
   }
 `;
 
-const RatingLikesContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const Rating = styled.div`
   display: flex;
   align-items: center;
   font-size: 1rem;
   color: white;
-  margin-right: 1rem;
+  margin: 0.75rem 0;
   gap: 0.25rem;
-
-  @media (max-width: 768px) {
-    font-size: 0.875rem;
-  }
-`;
-
-const Likes = styled.div`
-  display: flex;
-  align-items: center;
-  color: white;
-  cursor: pointer;
-  font-size: 1rem;
-  gap: 0.5rem;
 
   @media (max-width: 768px) {
     font-size: 0.875rem;
@@ -323,7 +287,7 @@ const ReviewText = styled.p`
   color: #fff;
   font-family: Inter;
   font-size: 1rem;
-  margin-bottom: 0.75rem;
+  margin: 1rem 0;
 
   @media (max-width: 768px) {
     font-size: 0.875rem;
@@ -340,7 +304,18 @@ const ReviewImage = styled.img`
   width: 100px;
   height: 100px;
   object-fit: cover;
-  border-radius: 8px;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    width: 80px;
+    height: 80px;
+  }
+`;
+
+const DarkenedImageContainer = styled.div`
+  position: relative;
+  width: 100px;
+  height: 100px;
   cursor: pointer;
 
   &:hover {
@@ -348,49 +323,52 @@ const ReviewImage = styled.img`
   }
 `;
 
-const ImageCount = styled.div`
-  color: white;
-  font-size: 1rem;
-  align-self: center;
-  cursor: pointer;
+const DarkenedImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+`;
+
+const ImageCount = styled.span`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  color: #fff;
+`;
+
+const Div = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 0.5rem;
+`;
+
+const Likes = styled.button`
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.5);
-  transition: background 0.3s;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #e74c3c;
 
-  &:hover {
-    background: rgba(0, 0, 0, 0.7);
+
+  svg {
+    margin-right: 0.25rem;
   }
 `;
 
-const Icon = styled.img`
-  width: 1rem;
-  height: 1rem;
-  margin-right: 0.25rem;
-`;
-
-const EditButton = styled.button`
-  background-color: transparent;
-  border: none;
-  color: #888;
-  cursor: pointer;
-  font-size: 0.875rem;
-`;
-
-const DeleteButton = styled.button`
-  background-color: transparent;
-  border: none;
-  color: #888;
-  cursor: pointer;
-  font-size: 0.875rem;
-`;
-
 const Actions = styled.div`
-  margin-top: 0.5rem;
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
+`;
+
+const TextBtn = styled.button`
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
 `;

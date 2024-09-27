@@ -10,12 +10,12 @@ const getAuthToken = () => localStorage.getItem("token") || "";
 export const recommend = async (
   params: recommendRequestType
 ): Promise<RecommendResponse> => {
-  const { pagdIndex, pageSize, order, filter } = params;
-
+  const { pageIndex, pageSize, order, filter } = params;
+  console.log(pageIndex);
   try {
     const response = await defaultApi.get("/api/recommend", {
       params: {
-        pagdIndex,
+        pageIndex,
         pageSize,
         order,
         filter,
@@ -67,12 +67,12 @@ export const recommendBookmark = async (recommendId: number): Promise<any> => {
 export const recommendSearch = async (
   params: recommendRequestType & { keyWord: string }
 ): Promise<RecommendResponse> => {
-  const { pagdIndex, pageSize, order, filter, keyWord } = params;
+  const { pageIndex, pageSize, order, filter, keyWord } = params;
 
   try {
     const response = await defaultApi.get("/api/recommend/search", {
       params: {
-        pagdIndex,
+        pageIndex,
         pageSize,
         order,
         filter,
@@ -134,6 +134,26 @@ export const fetchScrapData = async (stadiumName: string): Promise<any> => {
     return response.data;
   } catch (error) {
     console.error("스크랩 리스트 가져오기 에러", error);
+    throw error;
+  }
+};
+export const DeleteRecommendData = async (
+  recommendId: number
+): Promise<any> => {
+  const token = getAuthToken();
+  try {
+    const response = await defaultApi.delete(
+      `/api/recommend?recommendId=${recommendId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          accept: "*/*",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 };
