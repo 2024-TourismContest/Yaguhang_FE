@@ -53,7 +53,7 @@ const Card: React.FC = () => {
     } else if (window.innerWidth <= 1024) {
       setSchedulesPerPage(3); // 태블릿 화면에서는 카드 3개
     } else {
-      setSchedulesPerPage(5); // 데스크탑에서는 카드 5개
+      setSchedulesPerPage(4); // 데스크탑에서는 카드 5개
     }
   };
 
@@ -365,21 +365,32 @@ const CardContainer = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  height: 50vh;
-  overflow-x: auto;
-  margin-top: -50px;
+  overflow: hidden;
+  max-width: 1000px;
+  height: 400px;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    width: 90%;
+  }
+
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 `;
+
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: -30px;
 `;
+
 const StyledCard = styled.div<StyledCardProps>`
   position: relative;
-  width: 200px;
+  width: 170px;
   max-width: 11rem;
-  height: 400px;
+  height: 220px;
   max-height: 14rem;
   border-radius: 1.25rem;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
@@ -397,13 +408,13 @@ const StyledCard = styled.div<StyledCardProps>`
   }
 
   @media (max-width: 1024px) {
-    width: 200px;
-    height: 400px;
+    width: 170px;
+    height: 220px;
   }
 
   @media (max-width: 768px) {
-    width: 200px;
-    height: 400px;
+    width: 180px;
+    height: 220px;
   }
 `;
 
@@ -487,25 +498,11 @@ const PaginationButton = styled.button`
     height: 2rem;
   }
 `;
-const PrevButton = styled(PaginationButton)`
-  left: 12vw;
-  @media (max-width: 1024px) {
-    left: 10svw;
-  }
 
-  @media (max-width: 768px) {
-    left: 1vw;
-  }
+const PrevButton = styled(PaginationButton)`
+  left: 0.2rem;
 `;
 
 const NextButton = styled(PaginationButton)`
-  right: 12vw;
-
-  @media (max-width: 1024px) {
-    right: 10svw;
-  }
-
-  @media (max-width: 768px) {
-    right: 1vw;
-  }
+  right: 0.2rem;
 `;

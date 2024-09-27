@@ -119,7 +119,7 @@ const ButtonContainer = styled.div<{ isEnabled: boolean }>`
   margin-bottom: 1rem;
   border-radius: 50px;
   border: ${({ isEnabled }) =>
-    isEnabled ? "4px solid #fff" : "1px solid #fff"};
+    isEnabled ? "2px solid #fff" : "1px solid #fff"};
   background: ${({ isEnabled }) => (isEnabled ? "#ffffff30" : "none")};
   transition: border 0.2s ease-out;
 `;

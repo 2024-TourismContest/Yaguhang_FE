@@ -69,8 +69,8 @@ const IconButton = styled.div`
   justify-content: center;
   align-items: center;
   overflow-x: auto;
-  width: 60vw;
-  height: auto; /* 높이를 자동으로 조정 */
+  width: 56vw;
+  height: auto;
   border: 1px solid #fff;
   border-radius: 50px;
   &::-webkit-scrollbar {
