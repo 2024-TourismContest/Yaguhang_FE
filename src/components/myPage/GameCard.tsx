@@ -92,9 +92,7 @@ const StyledCard = styled.div<{ $isSelected: boolean }>`
   scroll-snap-align: start;
   box-sizing: border-box;
   transition: 0.2s;
-  &:hover {
-    background-color: #4e4e4e;
-  }
+
   @media (max-width: 1300px) {
     flex: 1 0 calc(33.33% - 10px); /* 3개로 나누기 */
   }
