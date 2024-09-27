@@ -2,7 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import ball from "../../assets/icons/ball.svg";
 import checkedball from "../../assets/icons/checkedball.svg";
-
+interface StyledCardProps {
+  $isScraped: boolean;
+}
 interface GameCardProps {
   schedule: {
     id: number;
@@ -80,7 +82,7 @@ const StyledCard = styled.div<{ $isSelected: boolean }>`
     $isSelected ? "rgba(255, 255, 255, 0.3)" : "rgba(255, 255, 255, 0.1)"};
   transform: ${({ $isSelected }) => ($isSelected ? "scale(1.05)" : "scale(1)")};
   cursor: pointer;
-  
+
   width: 250px;
   min-width: calc((100% - 10px * (4 - 1)) / 4); /* 카드 너비 계산 */
   display: flex;
@@ -101,18 +103,28 @@ const StyledCard = styled.div<{ $isSelected: boolean }>`
   }
 `;
 
-const BeforeElement = styled.div<{ $isScraped: boolean }>`
+const BeforeElement = styled.div<StyledCardProps>`
   position: absolute;
-  top: -2rem;
+  top: -2.2rem;
   left: 50%;
   transform: translateX(-50%);
-  width: 60px;
-  height: 60px;
-  background-image: url(${($isScraped) => ($isScraped ? checkedball : ball)});
+  width: 4rem;
+  height: 4rem;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.7);
+  background-image: url(${(props) => (props.$isScraped ? checkedball : ball)});
   background-size: cover;
+  z-index: 99;
   cursor: pointer;
-`;
+  transition: transform 0.3s ease, background-color 0.3s ease,
+    box-shadow 0.3s ease;
 
+  &:hover {
+    box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 1);
+    transform: translateX(-50%) scale(1.1);
+  }
+`;
 const Teams = styled.div`
   display: flex;
   justify-content: center;

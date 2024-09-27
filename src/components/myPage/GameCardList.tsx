@@ -7,7 +7,7 @@ import { Schedule } from "../home/Card";
 import { mypage } from "../../apis/mypage";
 import { scrapSchedule } from "../../apis/main";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { NoDataMessage } from "../../styles/common/messageStyle";
 
 const CardList: React.FC = () => {
   const [games, setGames] = useState<Schedule[]>([]);
@@ -59,10 +59,6 @@ const CardList: React.FC = () => {
     }
   };
 
-  const loadMoreGames = () => {
-    setPage((prevPage) => prevPage + 1);
-  };
-
   return (
     <CarouselContainer>
       {games.length === 0 && !loading ? (
@@ -96,10 +92,12 @@ export default CardList;
 const CarouselContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
 `;
 
 const CardContainer = styled.div`
+  width: 100%;
   display: flex;
   overflow-x: auto;
   gap: 10px;
@@ -122,11 +120,4 @@ const Button = styled.button`
       width: 30px;
     }
   }
-`;
-
-const NoDataMessage = styled.div`
-  font-size: 1.2rem;
-  color: white;
-  text-align: center;
-  padding: 2rem;
 `;

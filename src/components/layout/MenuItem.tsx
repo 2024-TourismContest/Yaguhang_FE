@@ -18,10 +18,9 @@ function MenuItem({ to, label }: MenuItemProps) {
 export default MenuItem;
 
 const MenuItemContainer = styled(Link)`
-  // Link 컴포넌트로 변경
   margin-bottom: 1rem;
   background: #d9d9d9;
-  padding: 28px 36px;
+  padding: 24px 30px;
   border-radius: 20px;
   z-index: 10;
   color: #686868;

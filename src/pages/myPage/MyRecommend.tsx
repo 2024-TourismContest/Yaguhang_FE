@@ -5,6 +5,7 @@ import { mypage } from "../../apis/mypage";
 import { RecommendPreviewDto } from "../../types/myPageType";
 import { Item } from "../../components/recommend/Item";
 import { toast } from "react-toastify";
+import { NoDataMessage } from "../../styles/common/messageStyle";
 
 const MyRecommendPage: React.FC = () => {
   const [myRecommend, setMyRecommend] = useState<RecommendPreviewDto[]>([]);
@@ -52,12 +53,4 @@ const ReviewList = styled.div`
   flex-direction: column;
   gap: 1rem;
 `;
-
-const NoDataMessage = styled.p`
-  text-align: center;
-  color: #fff;
-  font-size: 1rem;
-  margin-top: 1rem;
-`;
-
 export default MyRecommendPage;

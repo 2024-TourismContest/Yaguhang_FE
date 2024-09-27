@@ -11,8 +11,8 @@ import { toast } from "react-toastify";
 import { mypage } from "../../apis/mypage";
 import { Item } from "../../components/recommend/Item";
 import { Review, RecommendPreviewDto } from "../../types/myPageType";
-import { Link } from "react-router-dom";
 import { Schedule } from "../../components/home/Card";
+import { MoreLink, NoDataMessage } from "../../styles/common/messageStyle";
 
 const MyPageMain: React.FC = () => {
   const {
@@ -84,15 +84,17 @@ const MyPageMain: React.FC = () => {
       <Line />
       <SectionTitle title={"MY 야구행 리뷰"} />
       {myReviews && myReviews.length > 0 ? (
+        <>
         <ReviewList>
           {myReviews.slice(0, 2).map((review) => (
             <ReviewItem key={review.reviewId} isMine={true} {...review} />
           ))}
         </ReviewList>
+        <MoreLink to="/mypage/review">+ 더보기</MoreLink>
+        </>
       ) : (
-        <NoDataMessage>리뷰가 없습니다.</NoDataMessage> // 리뷰가 없을 경우 메시지 추가
+        <NoDataMessage>리뷰가 없습니다.</NoDataMessage> 
       )}
-      <MoreLink to="/mypage/review">+ 더보기</MoreLink>
     </MainPageContainer>
   );
 };
@@ -115,22 +117,6 @@ const ReviewList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-`;
-
-const MoreLink = styled(Link)`
-  display: block;
-  text-align: center;
-  color: #fff;
-  font-size: 1rem;
-  margin-top: 1rem;
-  text-decoration: none;
-`;
-
-const NoDataMessage = styled.p`
-  text-align: center;
-  color: #fff;
-  font-size: 1rem;
-  margin-top: 1rem;
 `;
 
 export default MyPageMain;

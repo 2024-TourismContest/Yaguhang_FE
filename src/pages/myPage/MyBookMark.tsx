@@ -6,6 +6,7 @@ import { ScrapSpot } from "../../types/myPageType";
 import SectionTitle from "../../components/common/SectionTitle";
 import { Filter } from "../../components/recommend/filter";
 import { useNavigate } from "react-router-dom";
+import { NoDataMessage } from "../../styles/common/messageStyle";
 
 const MyBookMark: React.FC = () => {
   const [scrapSpots, setScrapSpots] = useState<ScrapSpot[]>([]);
@@ -150,11 +151,4 @@ const Title = styled.h2`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-`;
-
-const NoDataMessage = styled.p`
-  text-align: center;
-  color: #fff;
-  font-size: 1rem;
-  margin-top: 1rem;
 `;
