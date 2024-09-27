@@ -130,54 +130,57 @@ const HomePage = () => {
     }
   };
   return (
-    <AppContainer>
+    <>
       <HeroCarousel teams={heroData.teams} />
       <HomePageContainer className="home-page">
         <RoundBackground />
-        <Card />
-        <Button
-          text="MY 야구공 스탬프 모아보기 "
-          onClick={onClickBtn}
-          bgColor="#FF0000"
-        />
-        <TitleSection
-          subtitle={`${
-            selectedTeam === "전체" ? "야구" : selectedTeam
-          } 팬들에게 추천하는`}
-          title={`${selectedGame?.stadium || "구장"}의 핫플레이스!`}
-          description="열정 넘치는 스포츠와 함께 즐길 콘텐츠로 더 풍족한 여행!"
-          icon="marker"
-        />
-        <CategorySelector
-          category={selectedCategory}
-          setCategory={setSelectedCategory}
-          color="black"
-          categoryList={["숙소", "맛집", "쇼핑", "문화"]}
-        />
-        <ImageSlider
-          category={selectedCategory}
-          spots={placeData?.spotPreviewDtos || []}
-          stadiumId={stadiumId!}
-          onImageClick={handleImageClick}
-        />
-        <Button
-          text="야구선수 PICK 보러가기"
-          onClick={() => handleButtonClick("category/선수PICK/LG")}
-        />
-        {selectedGame?.id && (
-          <>
-            <TitleSection
-              title={`현재 ${selectedGame?.stadium || "구장"}의 날씨는?`}
-              description="오늘은 비가 안와야 할텐데.."
-            />
-            <WeatherContainer>
-              <WeatherCard gameId={selectedGame.id} />
-              <WeatherGraph gameId={selectedGame.id} />
-            </WeatherContainer>
-          </>
-        )}
+
+        <AppContainer>
+          <Card />
+          <Button
+            text="MY 야구공 스탬프 모아보기 "
+            onClick={onClickBtn}
+            bgColor="#FF0000"
+          />
+          <TitleSection
+            subtitle={`${
+              selectedTeam === "전체" ? "야구" : selectedTeam
+            } 팬들에게 추천하는`}
+            title={`${selectedGame?.stadium || "구장"}의 핫플레이스!`}
+            description="열정 넘치는 스포츠와 함께 즐길 콘텐츠로 더 풍족한 여행!"
+            icon="marker"
+          />
+          <CategorySelector
+            category={selectedCategory}
+            setCategory={setSelectedCategory}
+            color="black"
+            categoryList={["숙소", "맛집", "쇼핑", "문화"]}
+          />
+          <ImageSlider
+            category={selectedCategory}
+            spots={placeData?.spotPreviewDtos || []}
+            stadiumId={stadiumId!}
+            onImageClick={handleImageClick}
+          />
+          <Button
+            text="야구선수 PICK 보러가기"
+            onClick={() => handleButtonClick("category/선수PICK/LG")}
+          />
+          {selectedGame?.id && (
+            <>
+              <TitleSection
+                title={`현재 ${selectedGame?.stadium || "구장"}의 날씨는?`}
+                description="오늘은 비가 안와야 할텐데.."
+              />
+              <WeatherContainer>
+                <WeatherCard gameId={selectedGame.id} />
+                <WeatherGraph gameId={selectedGame.id} />
+              </WeatherContainer>
+            </>
+          )}
+        </AppContainer>
       </HomePageContainer>
-    </AppContainer>
+    </>
   );
 };
 
@@ -225,6 +228,9 @@ const WeatherContainer = styled.div`
     padding: 0 4vw;
   }
 `;
-const AppContainer = styled.main``;
+const AppContainer = styled.main`
+  padding: 0 15vw;
+  max-width: 1400px;
+`;
 
 export default HomePage;

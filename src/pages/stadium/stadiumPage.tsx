@@ -75,7 +75,6 @@ const StadiumPage = () => {
 
   // 각 카테고리에 대해 데이터 로드
   useEffect(() => {
-    // console.log("Selected stadiumId:", teamToStadiumId);
     setStadiumId(teamToStadiumId);
     fetchPlaceData("숙소");
     fetchPlaceData("맛집");
