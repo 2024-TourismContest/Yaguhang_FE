@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import pencilIcon from "../../assets/icons/pencil.svg";
 import defaultProfile from "../../assets/images/default-profile.svg";
-import defaultStadium from "../../assets/images/default-stadium.svg";
 import Balloon from "./Balloon";
 import useBalloonStore from "../../store/ballonStore";
 
@@ -78,7 +77,7 @@ const ProfileComponent = ({
           onClick={onTeamClick}
           onMouseEnter={handleLogoHover}
         >
-          <TeamLogoImg src={TeamLogo || defaultStadium} alt="구장 이미지" />
+          <TeamLogoImg src={TeamLogo || 'https://yaguhang.kro.kr:8443/teamLogos/BaseBall.png'} alt="구장 이미지" />
           {showBalloon && (
             <Balloon
               content={"팬 구단을 설정해요!"}

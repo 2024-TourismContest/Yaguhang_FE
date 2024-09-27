@@ -20,10 +20,13 @@ const CardList: React.FC = () => {
       setLoading(true); // 로딩 시작
       try {
         const myScrapSchedule = await mypage.MyScrap(page, 100);
-        setGames((prevGames) => [
-          ...prevGames,
-          ...myScrapSchedule.scrappedSchedules,
-        ]);
+
+        // 페이지가 0일 때는 이전 데이터를 초기화하고, 이후 페이지에서는 데이터 추가
+        setGames((prevGames) =>
+          page === 0
+            ? myScrapSchedule.scrappedSchedules
+            : [...prevGames, ...myScrapSchedule.scrappedSchedules]
+        );
       } catch (error) {
         console.error("Error fetching bookmark data:", error);
         toast.error("데이터를 불러오는 중 오류가 발생했습니다."); // 오류 메시지
