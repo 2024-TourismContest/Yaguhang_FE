@@ -6,6 +6,7 @@ import rightIcon from "../../assets/icons/arrow_right.svg";
 import { mypage } from "../../apis/mypage";
 import { ScrapSpot } from "../../types/myPageType";
 import { Link, useNavigate } from "react-router-dom";
+import { MoreLink, NoDataMessage } from "../../styles/common/messageStyle";
 
 const BookMarkList: React.FC = () => {
   const [scrapSpots, setScrapSpots] = useState<ScrapSpot[]>([]);
@@ -64,7 +65,7 @@ const BookMarkList: React.FC = () => {
               <img src={rightIcon} alt="Right" />
             </Button>
           </Container>
-          <MoreBtn to="/mypage/bookmark">+ 더보기</MoreBtn>
+          <MoreLink to="/mypage/bookmark">+ 더보기</MoreLink>
         </>
       ) : (
         <NoDataMessage>추천 항목이 없습니다.</NoDataMessage>
@@ -95,6 +96,7 @@ const SpotsContainer = styled.div`
 `;
 
 const ContentWrapper = styled.div`
+  max-width: 250px;
   width: 250px;
   min-width: calc((100% - 10px * (4 - 1)) / 4); /* 카드 너비 계산 */
   display: flex;
@@ -144,24 +146,4 @@ const Button = styled.button`
       width: 30px;
     }
   }
-`;
-
-const MoreBtn = styled(Link)`
-  display: block;
-  text-align: center;
-  color: #fff;
-  font-size: 1rem;
-  margin-top: 1rem;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const NoDataMessage = styled.p`
-  text-align: center;
-  color: #fff;
-  font-size: 1rem;
-  margin-top: 1rem;
 `;

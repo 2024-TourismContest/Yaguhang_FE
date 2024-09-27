@@ -45,7 +45,7 @@ const GameCard: React.FC<GameCardProps> = ({
         }}
         $isScraped={schedule.isScraped}
       />
-      <div style={{ marginTop: "2rem" }}>
+      <div style={{ width: "100%", marginTop: "2rem" }}>
         <div>
           {schedule.stadium} | {schedule.time}
         </div>
@@ -83,6 +83,7 @@ const StyledCard = styled.div<{ $isSelected: boolean }>`
   transform: ${({ $isSelected }) => ($isSelected ? "scale(1.05)" : "scale(1)")};
   cursor: pointer;
 
+  max-width: 250px;
   width: 250px;
   min-width: calc((100% - 10px * (4 - 1)) / 4); /* 카드 너비 계산 */
   display: flex;
@@ -90,6 +91,10 @@ const StyledCard = styled.div<{ $isSelected: boolean }>`
   align-items: center;
   scroll-snap-align: start;
   box-sizing: border-box;
+  transition: 0.2s;
+  &:hover {
+    background-color: #4e4e4e;
+  }
   @media (max-width: 1300px) {
     flex: 1 0 calc(33.33% - 10px); /* 3개로 나누기 */
   }
@@ -145,7 +150,7 @@ const Team = styled.div`
 const Divider = styled.div`
   height: 1px;
   background-color: #fff;
-  margin: 2.5rem 0 1.5rem 0;
+  margin: 1.5rem 0;
 `;
 
 const DateAndWeather = styled.div`
