@@ -1,6 +1,6 @@
 //api request
 export interface recommendRequestType {
-  pagdIndex: number;
+  pageIndex: number;
   pageSize: number;
   order: string;
   filter: string;

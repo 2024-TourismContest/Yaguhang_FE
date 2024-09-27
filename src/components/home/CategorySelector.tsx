@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import ball from "../../assets/icons/ball.svg";
 import festival from "../../assets/icons/festival.svg";
@@ -44,20 +45,20 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
   );
 };
 
-const CategoryButtons = styled.div<{ color: string }>`
+// 카테고리 버튼들을 묶는 스타일
+const CategoryButtons = styled.div<{ color?: string }>`
   display: flex;
-  gap: 0px;
-  margin: 4vh 0;
+  gap: 5%;
+  margin: 4vh auto;
   width: clamp(44vw, 51vw, 51vw);
   justify-content: center;
-  width: 100%;
-  gap: 5%;
   padding-left: 2vw;
   padding-right: 2vw;
   box-sizing: border-box;
   color: ${(props) => props.color || "#ffffff"};
 `;
 
+// 각각의 카테고리 버튼 스타일
 const CategoryButton = styled.button<{ active: boolean; color?: string }>`
   position: relative;
   width: clamp(100px, 11vw, 24px);
@@ -71,29 +72,38 @@ const CategoryButton = styled.button<{ active: boolean; color?: string }>`
   cursor: pointer;
   transition: all 0.1s ease;
   font-size: clamp(13px, 1.6vw, 24px);
+
+  &:hover > div {
+    opacity: 1;
+    visibility: visible;
+  }
 `;
 
-const IconWrapper = styled.div<{ active: boolean; color?: string }>`
+// 버튼 위에 나타나는 아이콘 스타일
+const IconWrapper = styled.div<{ active: boolean }>`
   position: absolute;
   top: -3px;
   right: -10px;
   width: clamp(8px, 1.38vw, 20px);
   height: 20px;
-  opacity: ${(props) =>
-    props.active && props.color !== "white" && props.color !== "#ffffff"
-      ? 1
-      : 0};
-  visibility: ${(props) =>
-    props.active && props.color !== "white" && props.color !== "#ffffff"
-      ? "visible"
-      : "hidden"};
+  opacity: ${(props) => (props.active ? 1 : 0)};
+  visibility: ${(props) => (props.active ? "visible" : "hidden")};
   transition: opacity 0.3s ease, visibility 0.3s ease;
+
+  ${CategoryButton}:hover & {
+    opacity: 1;
+    visibility: visible;
+  }
 
   img {
     width: 100%;
     height: 100%;
     object-fit: contain;
   }
+  svg {
+    color: black;
+  }
+
   @media (max-width: 800px) {
     width: clamp(15px, 1.38vw, 20px);
     top: -3px;

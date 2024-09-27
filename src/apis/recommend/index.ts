@@ -10,12 +10,12 @@ const getAuthToken = () => localStorage.getItem("token") || "";
 export const recommend = async (
   params: recommendRequestType
 ): Promise<RecommendResponse> => {
-  const { pagdIndex, pageSize, order, filter } = params;
-
+  const { pageIndex, pageSize, order, filter } = params;
+  console.log(pageIndex);
   try {
     const response = await defaultApi.get("/api/recommend", {
       params: {
-        pagdIndex,
+        pageIndex,
         pageSize,
         order,
         filter,
@@ -67,12 +67,12 @@ export const recommendBookmark = async (recommendId: number): Promise<any> => {
 export const recommendSearch = async (
   params: recommendRequestType & { keyWord: string }
 ): Promise<RecommendResponse> => {
-  const { pagdIndex, pageSize, order, filter, keyWord } = params;
+  const { pageIndex, pageSize, order, filter, keyWord } = params;
 
   try {
     const response = await defaultApi.get("/api/recommend/search", {
       params: {
-        pagdIndex,
+        pageIndex,
         pageSize,
         order,
         filter,

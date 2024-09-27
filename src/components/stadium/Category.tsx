@@ -18,9 +18,9 @@ const IconButton = styled.div`
   display: flex;
   overflow-x: auto;
   width: 60vw;
-  height: 4rem;
   border: 1px solid #fff;
   border-radius: 50px;
+  flex-wrap: wrap;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -33,7 +33,7 @@ const Button = styled.button<{ selected?: boolean; teamName: string }>`
   align-items: center;
   width: 4rem;
   height: 4rem;
-  margin: 0 0.9rem;
+  margin: 0 0.7rem;
   background-color: ${(props) => (props.selected ? "#fff" : "#000")};
   border: none;
   border-radius: 50%;
@@ -69,16 +69,6 @@ const Button = styled.button<{ selected?: boolean; teamName: string }>`
   }
 `;
 
-const TextButton = styled(Button)`
-  border: 1px solid #fff;
-  font-size: 1rem;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  &:hover {
-    background-color: #000000;
-  }
-`;
 interface CategoryProps {
   filterSchedules: (team: string) => void;
   teamLogos: Record<string, string>;
@@ -103,10 +93,6 @@ const Category: React.FC<CategoryProps> = ({ filterSchedules, teamLogos }) => {
 
   return (
     <ButtonContainer>
-      <TextButton teamName="">
-        <span>구장</span>
-        <span>선택</span>
-      </TextButton>
       <IconButton>
         {Object.keys(teamLogos).map((team) => (
           <Button

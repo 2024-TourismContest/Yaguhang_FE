@@ -113,8 +113,8 @@ const Ul = styled.ul`
   }
 `;
 const Button = styled.button`
-  width: 75px;
-  height: 75px;
+  width: 65px;
+  height: 65px;
   border-radius: 50%;
   padding: 10%;
   border: 1px solid white;

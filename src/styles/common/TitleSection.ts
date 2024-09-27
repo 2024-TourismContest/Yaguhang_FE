@@ -7,11 +7,13 @@ export const Wrapper = styled.div<WrapperProps>`
   display: flex;
   justify-content: flex-start;
   gap: ${({ gap }) => gap || "30px"};
-  padding-left: 14.68vw;
   padding-top: clamp(80px, 3vw, 200px);
   margin-top: 100px;
   @media (max-width: 650px) {
     padding-left: 3vw;
+  }
+  @media (max-height: 800px) {
+    margin-top: 160px;
   }
 `;
 export const TitleWrapper = styled.div`

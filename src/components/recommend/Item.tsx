@@ -88,7 +88,7 @@ const Title = styled.ul`
   align-items: start;
 
   h2 {
-    font-size: 1.8em;
+    font-size: 1.4em;
     font-weight: 500;
     margin-bottom: 15px;
     @media (max-width: 900px) {
@@ -103,7 +103,7 @@ const Info = styled.div`
 `;
 const Section = styled.section`
   color: white;
-  padding: 1%;
+  padding: 10px 20px;
   margin-bottom: 0;
   box-sizing: border-box;
   @media (max-width: 900px) {
@@ -116,10 +116,14 @@ const Li = styled.li`
   h5 {
     margin-left: 10px;
   }
+  svg {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 export const Hr = styled.hr`
-  width: 70vw;
+  width: 60vw;
   border-bottom: 1px dashed #d9d9d9;
   @media (max-width: 900px) {
     width: 85vw;
@@ -128,15 +132,15 @@ export const Hr = styled.hr`
 export const Button = styled.button<{ isOpen: boolean }>`
   background-color: transparent;
   border: none;
-  width: 42px;
-  height: 42px;
+  width: 30px;
+  height: 30px;
   padding: 0;
 
   svg {
     transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")};
     transition: transform 0.3s ease-in-out;
-    width: 42px;
-    height: 42px;
+    width: 30px;
+    height: 30px;
   }
 `;
 const ImgWrapper = styled.div`
@@ -151,9 +155,8 @@ const ImgWrapper = styled.div`
   }
 `;
 const Fan = styled.img`
-  height: 30px;
-  width: 30px;
-  aspect-ratio: 1/1;
+  height: 25px;
+
   position: absolute;
   bottom: 2%;
   right: 1%;
