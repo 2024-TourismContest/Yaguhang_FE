@@ -31,6 +31,7 @@ interface ReviewItemProps {
 }
 
 const ReviewItem: React.FC<ReviewItemProps> = ({
+  isMine = false, 
   reviewId,
   spotId,
   spotName,
@@ -155,10 +156,12 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
             {isLiked ? <FaHeart /> : <FaRegHeart />}{" "}
             {`${likes}명에게 도움이 된 후기`}
           </Likes>
-          <Actions>
-            <TextBtn onClick={() => {}}>수정</TextBtn>
-            <TextBtn onClick={() => {}}>삭제</TextBtn>
-          </Actions>
+          {!isMine && (
+            <Actions>
+              <TextBtn onClick={() => {/* 수정 로직 */}}>수정</TextBtn>
+              <TextBtn onClick={() => {/* 삭제 로직 */}}>삭제</TextBtn>
+            </Actions>
+          )}
         </Div>
       </ReviewItemContainer>
 
