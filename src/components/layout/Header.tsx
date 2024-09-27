@@ -12,6 +12,32 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isAuthenticated, setIsAuthenticated } = authStore();
   const navigate = useNavigate();
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  // 스크롤 방향에 따라 헤더 가시성을 조절하는 함수
+  const controlNavbar = () => {
+    if (typeof window !== "undefined") {
+      if (window.scrollY > lastScrollY) {
+        // 스크롤이 아래로 이동했을 때
+        setIsVisible(false);
+      } else {
+        // 스크롤이 위로 이동했을 때
+        setIsVisible(true);
+      }
+      setLastScrollY(window.scrollY);
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.addEventListener("scroll", controlNavbar);
+
+      return () => {
+        window.removeEventListener("scroll", controlNavbar);
+      };
+    }
+  }, [lastScrollY]);
 
   const handleAuthButtonClick = () => {
     if (isAuthenticated) {
@@ -74,7 +100,7 @@ const Header = () => {
   }, []);
 
   return (
-    <NavbarContainer isMenuOpen={isMenuOpen}>
+    <NavbarContainer isMenuOpen={isMenuOpen} isVisible={isVisible}>
       <LogoContainer>
         <Link to="/" className="logo">
           <LogoIcon src={logo} alt="Logo" />
@@ -150,7 +176,7 @@ const linkStyles = css<{ isActive?: boolean }>`
   text-decoration: none;
   color: #fff;
   font-family: Inter, sans-serif;
-  font-size: 1rem;
+  font-size: 17px;
   padding: 0.75rem 1.5rem;
   position: relative;
 
@@ -191,12 +217,12 @@ const ButtonLinkMobile = styled(ButtonLink)`
   padding: 1rem 2rem;
 `;
 
-const NavbarContainer = styled.nav<{ isMenuOpen: boolean }>`
+const NavbarContainer = styled.nav<{ isMenuOpen: boolean; isVisible: boolean }>`
   position: fixed;
-  top: 0;
+  top: ${({ isVisible }) => (isVisible ? "0" : "-80px")};
   left: 0;
   width: 100%;
-  height: 80px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -206,13 +232,14 @@ const NavbarContainer = styled.nav<{ isMenuOpen: boolean }>`
   background: ${({ isMenuOpen }) =>
     isMenuOpen
       ? "#333"
-      : "linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0))"};
+      : "linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0))"};
   transition: background 0.3s;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 1),
-    rgba(255, 255, 255, 0.1)
-  );
+  background: #000;
+  // linear-gradient(
+  //   180deg,
+  //   rgba(0, 0, 0, 0.6),
+  //   rgba(255, 255, 255, 0.1)
+  // );
 `;
 
 const LogoContainer = styled.div`

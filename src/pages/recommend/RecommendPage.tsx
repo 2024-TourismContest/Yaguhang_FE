@@ -139,16 +139,14 @@ const AppContainer = styled.div`
 `;
 const ItemWrapper = styled.div`
   display: grid;
-  gap: 2.5vh;
 `;
 const Section = styled.section`
-  margin-top: 70px;
+  margin-top: 50px;
   display: flex;
   width: 100vw;
   justify-content: center;
   align-items: center;
   gap: 15px;
-  margin-bottom: 15px;
 `;
 const TopSection = styled.section`
   width: 100%;
