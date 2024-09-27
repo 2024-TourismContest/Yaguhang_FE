@@ -1,6 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { DatePicker, Space } from "antd";
+import moment, { Moment } from "moment";
 import styled from "styled-components";
 import { fetchSchedules, scrapSchedule } from "../../apis/main";
 import ball from "../../assets/icons/ball.svg";
@@ -11,9 +13,8 @@ import useTeamStore from "../../store/TeamStore";
 import * as S from "../../styles/common/TitleSection";
 import { teamLogos } from "../../types/teamLogos";
 import Category from "./Category";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import { FaRegCalendarCheck } from "react-icons/fa6";
+
+const { RangePicker } = DatePicker;
 
 export interface Schedule {
   id: number;
@@ -37,24 +38,20 @@ interface StyledCardProps {
 const Card: React.FC = () => {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const [schedulesPerPage, setSchedulesPerPage] = useState(5); // 한 페이지에 보여줄 카드 개수
+  const [schedulesPerPage, setSchedulesPerPage] = useState(5);
   const { selectedTeam, setSelectedGame, selectedGame } = useTeamStore();
   const [selectedDateRange, setSelectedDateRange] = useState<
-    [Date, Date] | null
-  >(null); // 날짜 범위 선택
-  const [isCalendarVisible, setIsCalendarVisible] = useState(false); // 캘린더 표시 여부
-  const calendarRef = useRef<HTMLDivElement>(null);
-
+    [Moment, Moment] | null
+  >(null);
   const navigate = useNavigate();
 
-  // 화면 크기에 따라 카드 개수를 설정하는 함수
   const updateSchedulesPerPage = () => {
     if (window.innerWidth <= 768) {
-      setSchedulesPerPage(2); // 모바일 화면에서는 카드 2개
+      setSchedulesPerPage(2);
     } else if (window.innerWidth <= 1024) {
-      setSchedulesPerPage(3); // 태블릿 화면에서는 카드 3개
+      setSchedulesPerPage(3);
     } else {
-      setSchedulesPerPage(4); // 데스크탑에서는 카드 4개
+      setSchedulesPerPage(4);
     }
   };
 
@@ -62,7 +59,7 @@ const Card: React.FC = () => {
     const loadSchedules = async () => {
       const schedules = await fetchSchedules(selectedTeam);
       setSchedules(schedules);
-      setCurrentPage(0); // 팀이 변경될 때 페이지를 초기화
+      setCurrentPage(0);
     };
     loadSchedules();
   }, [selectedTeam]);
@@ -78,36 +75,17 @@ const Card: React.FC = () => {
   }, [schedules]);
 
   useEffect(() => {
-    // 페이지 크기 변화 감지 및 한 페이지에 보여줄 카드 개수 조정
     updateSchedulesPerPage();
     window.addEventListener("resize", updateSchedulesPerPage);
     return () => window.removeEventListener("resize", updateSchedulesPerPage);
   }, []);
 
-  // 캘린더 팝업 외부 클릭 시 닫기
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        calendarRef.current &&
-        !calendarRef.current.contains(event.target as Node)
-      ) {
-        setIsCalendarVisible(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   const indexOfLastSchedule = (currentPage + 1) * schedulesPerPage;
   const indexOfFirstSchedule = indexOfLastSchedule - schedulesPerPage;
 
-  // 캘린더: 선택한 날짜 범위에 맞는 경기 일정 필터링
   const filteredSchedules = selectedDateRange
     ? schedules.filter((schedule) => {
-        const scheduleDate = new Date(schedule.date);
+        const scheduleDate = moment(schedule.date);
         return (
           scheduleDate >= selectedDateRange[0] &&
           scheduleDate <= selectedDateRange[1]
@@ -150,7 +128,6 @@ const Card: React.FC = () => {
         )
       );
 
-      // 스크랩을 누른 경기 정보를 selectedGame에 업데이트
       const selectedSchedule = schedules.find((s) => s.id === gameId);
       if (selectedSchedule) {
         setSelectedGame({
@@ -176,23 +153,8 @@ const Card: React.FC = () => {
     });
   };
 
-  const toggleCalendarVisibility = () => {
-    setIsCalendarVisible((prev) => !prev);
-  };
-
-  // 날짜 범위 표시 함수
-  const formatSelectedDateRange = (range: [Date, Date] | null) => {
-    if (!range) return "날짜를 선택하세요";
-    const [start, end] = range;
-    const options: Intl.DateTimeFormatOptions = {
-      month: "2-digit",
-      day: "2-digit",
-      weekday: "short",
-    };
-    return `${start.toLocaleDateString(
-      "ko-KR",
-      options
-    )} - ${end.toLocaleDateString("ko-KR", options)}`;
+  const handleDateChange = (dates: any) => {
+    setSelectedDateRange(dates as [Moment, Moment] | null);
   };
 
   return (
@@ -204,28 +166,13 @@ const Card: React.FC = () => {
           <S.H4>
             열정과 감동을 선사하는 스포츠! 그 현장을 직접 경험해보세요!
           </S.H4>
-          <CalendarButtonContainer>
-            <SelectedDateDisplay>
-              {formatSelectedDateRange(selectedDateRange)}
-            </SelectedDateDisplay>
-            <div style={{ color: "#fff" }}>:</div>
-            <CalendarButton onClick={toggleCalendarVisibility}>
-              <FaRegCalendarCheck />
-              캘린더
-            </CalendarButton>
-          </CalendarButtonContainer>
-          {isCalendarVisible && (
-            <CalendarContainer ref={calendarRef}>
-              <Calendar
-                onChange={(value) =>
-                  setSelectedDateRange(value as [Date, Date])
-                }
-                value={selectedDateRange}
-                selectRange
-                className="custom-calendar"
-              />
-            </CalendarContainer>
-          )}
+          <StyledSpace direction="vertical" size={12}>
+            <StyledRangePicker
+              onChange={handleDateChange}
+              placeholder={["시작 날짜", "종료 날짜"]}
+              style={{ color: "#fff" }}
+            />
+          </StyledSpace>
         </S.TitleWrapper>
       </S.Wrapper>
       <CardContainer>
@@ -236,9 +183,7 @@ const Card: React.FC = () => {
           <StyledCard
             key={schedule.id}
             $isScraped={schedule.isScraped}
-            $isHighlighted={
-              selectedGame?.id === schedule.id // 하이라이트 상태를 반영
-            }
+            $isHighlighted={selectedGame?.id === schedule.id}
             onClick={() => handleCardClick(schedule)}
           >
             <BeforeElement
@@ -305,54 +250,43 @@ const Card: React.FC = () => {
 
 export default Card;
 
-const CalendarContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  top: 100%;
-  z-index: 999;
-  background: #fff;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  .custom-calendar {
-    border: none;
-    border-radius: 10px;
-    background-color: #f4f4f4;
+const StyledSpace = styled(Space)`
+  margin-top: 20px;
+`;
+
+const StyledRangePicker = styled(RangePicker)`
+  width: 300px;
+  border-radius: 8px;
+  border-color: #ffffff;
+  background-color: #000;
+
+  .ant-picker-input > input {
+    color: #fff;
+  }
+  .ant-picker-input > input::placeholder {
+    color: #fff;
+    padding-left: 10px;
+  }
+
+  .ant-picker-suffix {
+    color: #fff;
+    font-size: 20px;
+  }
+
+  .ant-picker-separator {
+    color: #fff;
+  }
+
+  .ant-picker-input {
+    background-color: #333;
+    color: #fff;
+    border-radius: 8px;
+  }
+
+  .ant-picker-clear {
+    color: #fff;
   }
 `;
-
-const CalendarButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 1rem;
-  gap: 1rem;
-`;
-
-const CalendarButton = styled.button`
-  font-size: 1rem;
-  width: 100px;
-  padding: 0.5rem 1rem;
-  background-color: #fff;
-  color: #000;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-`;
-
-const SelectedDateDisplay = styled.div`
-  font-size: 1rem;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border-radius: 25px;
-  border: 1px solid #fff;
-`;
-
 const CardContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -370,13 +304,6 @@ const CardContainer = styled.div`
   @media (max-width: 768px) {
     width: 95%;
   }
-`;
-
-export const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: -30px;
 `;
 
 const StyledCard = styled.div<StyledCardProps>`
