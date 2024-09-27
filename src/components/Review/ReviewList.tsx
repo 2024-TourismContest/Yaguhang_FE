@@ -308,7 +308,7 @@ const EditContainer = styled.div`
   gap: 0.5rem;
 `;
 
-const EditInput = styled.textarea`s
+const EditInput = styled.textarea`
   width: 95%;
   padding: 0.5rem;
   border: 1px solid #ccc;

@@ -10,6 +10,7 @@ import HeartEmpty from "../../assets/icons/heart-unfill.png";
 import RightArrow from "../../assets/icons/arrow_right.svg";
 import defaultImg from "../../assets/images/default-profile.svg";
 import ImageModal from "../../components/common/ImageModal";
+import { Review } from "../../types/myPageType";
 
 interface ReviewItemProps {
   reviewId: number;
@@ -64,19 +65,17 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
     navigate(url);
   };
 
+  //이미지 모달
   const openModal = (index: number) => {
     setCurrentImageIndex(index);
     setIsModalOpen(true);
   };
-
   const closeModal = () => setIsModalOpen(false);
-
   const nextImage = () => {
     if (currentImageIndex < image.length - 1) {
       setCurrentImageIndex(currentImageIndex + 1);
     }
   };
-
   const prevImage = () => {
     if (currentImageIndex > 0) {
       setCurrentImageIndex(currentImageIndex - 1);
@@ -146,12 +145,30 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
             <ReviewText>{content}</ReviewText>
           </ContentsContainer>
         </LeftContent>
-        {image.length > 0 && (
-          <ImageContainer onClick={() => openModal(0)}>
-            <ReviewImage src={image[0]} alt="리뷰 이미지" />
-            {image.length > 1 && <ImageCount>+ {image.length - 1}</ImageCount>}
-          </ImageContainer>
-        )}
+        <ImagesContainer>
+          {image.length > 0 &&
+            image
+              .slice(0, 4)
+              .map((img, index) => (
+                <ReviewImage
+                  key={index}
+                  src={img}
+                  alt={`리뷰 이미지 ${index + 1}`}
+                  onClick={() => openModal(index)}
+                />
+              ))}
+          {image.length > 4 && (
+            <ImageCount onClick={() => openModal(4)}>
+              + {image.length - 4}
+            </ImageCount>
+          )}
+        </ImagesContainer>
+        <Actions>
+          <EditButton onClick={() => {}}>수정</EditButton>
+          <DeleteButton onClick={() => {}}>
+            삭제
+          </DeleteButton>
+        </Actions>
       </ReviewItemContainer>
 
       <ImageModal
@@ -171,12 +188,11 @@ const ReviewItemContainer = styled.div`
   padding: 1.5rem;
   border-bottom: 1px dashed #ccc;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column; /* 방향을 세로로 변경 */
   align-items: flex-start;
   gap: 1.5rem;
 
   @media (max-width: 768px) {
-    flex-direction: column;
     padding: 1rem;
     gap: 1rem;
   }
@@ -184,6 +200,7 @@ const ReviewItemContainer = styled.div`
 
 const LeftContent = styled.div`
   display: flex;
+  width: 100%; /* 전체 너비 사용 */
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -306,42 +323,74 @@ const ReviewText = styled.p`
   color: #fff;
   font-family: Inter;
   font-size: 1rem;
-  line-height: normal;
-  margin-top: 0.5rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3; /* 3줄로 제한 */
+  margin-bottom: 0.75rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
+  }
+`;
+
+const ImagesContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 `;
 
 const ReviewImage = styled.img`
-  width: 100%;
-  height: auto;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
-const ImageContainer = styled.div`
-  position: relative;
-  width: 150px;
-  height: 150px;
-  overflow: hidden;
-  border-radius: 8px;
-  cursor: pointer;
-`;
-
-const ImageCount = styled.span`
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.5);
+const ImageCount = styled.div`
   color: white;
-  border-radius: 0 8px 0 8px;
-  padding: 6px;
-  font-size: 0.8rem;
+  font-size: 1rem;
+  align-self: center;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  transition: background 0.3s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
 `;
 
 const Icon = styled.img`
   width: 1rem;
+  height: 1rem;
+  margin-right: 0.25rem;
+`;
+
+const EditButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 0.875rem;
+`;
+
+const DeleteButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 0.875rem;
+`;
+
+const Actions = styled.div`
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
 `;
