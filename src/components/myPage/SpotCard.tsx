@@ -1,21 +1,21 @@
-import React from "react";
 import styled from "styled-components";
 import BookmarkIcon from "../common/BookMarkIcon";
 import { ScrapSpot } from "../../types/myPageType";
-
 interface SpotCardProps {
   spot: ScrapSpot;
   defaultImg: string;
   handleClick: (spot: ScrapSpot) => void;
+  variant?: "list" | "page"; // variant prop 수정
 }
 
 const SpotCard: React.FC<SpotCardProps> = ({
   spot,
   defaultImg,
   handleClick,
+  variant = "page", // 기본값을 'page'로 설정
 }) => {
   return (
-    <ContentWrapper onClick={() => handleClick(spot)}>
+    <ContentWrapper variant={variant} onClick={() => handleClick(spot)}>
       <ImgWrapper>
         <Img src={spot.image || defaultImg} alt={spot.title} />
         <Gradient />
@@ -35,28 +35,33 @@ const SpotCard: React.FC<SpotCardProps> = ({
 
 export default SpotCard;
 
-const ContentWrapper = styled.div`
-  /* max-width: 230px; */
-  /* width: 230px; */
-  min-width: calc((100% - 10px * (4 - 1)) / 4); /* 카드 너비 계산 */
+const ContentWrapper = styled.div<{ variant?: string }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  scroll-snap-align: start;
 
-  @media (max-width: 1100px) {
-    flex: 1 0 calc(33.33% - 10px);
-  }
+  /* 리스트일 때 */
+  ${(props) =>
+    props.variant === "list" &&
+    `
+      scroll-snap-align: start; 
+      max-width: 230px; 
+      width: 100%; /* 너비를 100%로 설정하여 grid에서 유연하게 배치되도록 함 */
+      min-width: calc((100% - 10px * (4 - 1)) / 4); 
 
-  @media (max-width: 800px) {
-    flex: 1 0 calc(50% - 10px);
-  }
+      @media (max-width: 1100px) {
+        flex: 1 0 calc(33.33% - 10px);
+      }
 
-  @media (max-width: 400px) {
-    flex: 1 0 100%;
-  }
+      @media (max-width: 900px) {
+        flex: 1 0 calc(50% - 10px);
+      }
+
+      @media (max-width: 400px) {
+        flex: 1 0 100%;
+      }
+  `}
 `;
-
 const ImgWrapper = styled.div`
   position: relative;
   width: 100%;

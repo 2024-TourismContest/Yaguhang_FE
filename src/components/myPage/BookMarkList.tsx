@@ -60,6 +60,7 @@ const BookMarkList: React.FC = () => {
                   spot={spot}
                   defaultImg={defaultImg}
                   handleClick={handleClick}
+                  variant="list"
                 />
               ))}
             </SpotsContainer>

@@ -125,5 +125,5 @@ const Grid = styled.div`
   display: grid;
   width: 100%;
   gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); /* 최소 230px, 카드 간 간격 조정 */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 최소 230px, 카드 간 간격 조정 */
 `;
