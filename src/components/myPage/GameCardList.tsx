@@ -7,24 +7,36 @@ import { Schedule } from "../home/Card";
 import { mypage } from "../../apis/mypage";
 import { scrapSchedule } from "../../apis/main";
 import { toast } from "react-toastify";
+import { NoDataMessage } from "../../styles/common/messageStyle";
 
 const CardList: React.FC = () => {
   const [games, setGames] = useState<Schedule[]>([]);
-  const [selectedGame, setSelectedGame] = useState<Schedule | null>(null);
+  const [page,] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchScrapSpots = async () => {
+    const fetchScrapSpots = async (page: number) => {
+      setLoading(true); // 로딩 시작
       try {
-        const myScrapSchedule = await mypage.MyScrap(0, 100);
-        setGames(myScrapSchedule.scrappedSchedules);
+        const myScrapSchedule = await mypage.MyScrap(page, 100);
+
+        // 페이지가 0일 때는 이전 데이터를 초기화하고, 이후 페이지에서는 데이터 추가
+        setGames((prevGames) =>
+          page === 0
+            ? myScrapSchedule.scrappedSchedules
+            : [...prevGames, ...myScrapSchedule.scrappedSchedules]
+        );
       } catch (error) {
         console.error("Error fetching bookmark data:", error);
+        toast.error("데이터를 불러오는 중 오류가 발생했습니다."); // 오류 메시지
+      } finally {
+        setLoading(false); // 로딩 종료
       }
     };
 
-    fetchScrapSpots();
-  }, []);
+    fetchScrapSpots(page);
+  }, [page]);
 
   const handleScroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -40,11 +52,7 @@ const CardList: React.FC = () => {
     try {
       const isScraped = await scrapSchedule(gameId);
       setGames((prevSchedules) =>
-        prevSchedules.map((schedule) =>
-          schedule.id === gameId
-            ? { ...schedule, isScraped: !schedule.isScraped }
-            : schedule
-        )
+        prevSchedules.filter((schedule) => schedule.id !== gameId)
       );
       toast.success(
         isScraped ? "스크랩에 추가되었습니다." : "스크랩에서 제거되었습니다."
@@ -54,42 +62,45 @@ const CardList: React.FC = () => {
     }
   };
 
-  const handleSelect = (schedule: Schedule) => {
-    setSelectedGame(schedule);
-  };
-
   return (
     <CarouselContainer>
-      <Button onClick={() => handleScroll("left")}>
-        <img src={leftIcon} alt="Left" />
-      </Button>
-      <CardContainer ref={scrollRef}>
-        {games.map((schedule) => (
-          <GameCard
-            key={schedule.id}
-            schedule={schedule}
-            isSelected={selectedGame?.id === schedule.id}
-            onScrap={handleScrap}
-            onSelect={handleSelect}
-            isScraped={schedule.isScraped}
-          />
-        ))}
-      </CardContainer>
-      <Button onClick={() => handleScroll("right")}>
-        <img src={rightIcon} alt="Right" />
-      </Button>
+      {games.length === 0 && !loading ? (
+        <NoDataMessage>경기 스탬프가 없습니다</NoDataMessage>
+      ) : (
+        <>
+          <Button onClick={() => handleScroll("left")}>
+            <img src={leftIcon} alt="Left" />
+          </Button>
+          <CardContainer ref={scrollRef}>
+            {games.map((schedule) => (
+              <GameCard
+                key={schedule.id}
+                schedule={schedule}
+                onScrap={handleScrap}
+                isScraped={schedule.isScraped}
+              />
+            ))}
+          </CardContainer>
+          <Button onClick={() => handleScroll("right")}>
+            <img src={rightIcon} alt="Right" />
+          </Button>
+        </>
+      )}
     </CarouselContainer>
   );
 };
+
 export default CardList;
 
 const CarouselContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
 `;
 
 const CardContainer = styled.div`
+  width: 100%;
   display: flex;
   overflow-x: auto;
   gap: 10px;

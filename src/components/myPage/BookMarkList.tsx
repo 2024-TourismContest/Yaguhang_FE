@@ -5,7 +5,8 @@ import leftIcon from "../../assets/icons/arrow_left.svg";
 import rightIcon from "../../assets/icons/arrow_right.svg";
 import { mypage } from "../../apis/mypage";
 import { ScrapSpot } from "../../types/myPageType";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { MoreLink, NoDataMessage } from "../../styles/common/messageStyle";
 
 const BookMarkList: React.FC = () => {
   const [scrapSpots, setScrapSpots] = useState<ScrapSpot[]>([]);
@@ -26,7 +27,7 @@ const BookMarkList: React.FC = () => {
   }, []);
 
   const handleClick = (spot: ScrapSpot) => {
-    const url = `/details/선수PICK/${spot.contentId}?stadiumId=${spot.stadiumInfo.StadiumId}`;
+    const url = `/details/${spot.category}/${spot.contentId}?stadiumId=${spot.stadiumInfo.StadiumId}`;
     navigate(url);
   };
 
@@ -44,29 +45,34 @@ const BookMarkList: React.FC = () => {
   return (
     <div>
       {scrapSpots.length > 0 ? (
-        <Container>
-          <Button onClick={() => handleScroll("left")}>
-            <img src={leftIcon} alt="Left" />
-          </Button>
-          <SpotsContainer ref={scrollRef}>
-            {scrapSpots.map((spot) => (
-              <ContentWrapper
-                key={spot.contentId}
-                onClick={() => handleClick(spot)}
-              >
-                <Img src={spot.image || defaultImg} alt={spot.title} />
-                <Title>{spot.title}</Title>
-              </ContentWrapper>
-            ))}
-          </SpotsContainer>
-          <Button onClick={() => handleScroll("right")}>
-            <img src={rightIcon} alt="Right" />
-          </Button>
-        </Container>
+        <>
+          <Container>
+            <Button onClick={() => handleScroll("left")}>
+              <img src={leftIcon} alt="Left" />
+            </Button>
+            <SpotsContainer ref={scrollRef}>
+              {scrapSpots.map((spot) => (
+                <ContentWrapper
+                  key={spot.contentId}
+                  onClick={() => handleClick(spot)}
+                >
+                  <ImgWrapper>
+                    <Img src={spot.image || defaultImg} alt={spot.title} />
+                    <Gradient />
+                    <Title>{spot.title}</Title>
+                  </ImgWrapper>
+                </ContentWrapper>
+              ))}
+            </SpotsContainer>
+            <Button onClick={() => handleScroll("right")}>
+              <img src={rightIcon} alt="Right" />
+            </Button>
+          </Container>
+          <MoreLink to="/mypage/bookmark">+ 더보기</MoreLink>
+        </>
       ) : (
         <NoDataMessage>추천 항목이 없습니다.</NoDataMessage>
       )}
-      <MoreLink to="/mypage/bookmark">+ 더보기</MoreLink>
     </div>
   );
 };
@@ -86,13 +92,15 @@ const SpotsContainer = styled.div`
   padding: 10px 0;
   scroll-snap-type: x mandatory;
   transition: 0.2s ease-in-out;
-
+  width: 100%;
   &::-webkit-scrollbar {
-    display: none; /* 스크롤바 숨김 */
+    display: none;
   }
 `;
 
 const ContentWrapper = styled.div`
+  max-width: 230px;
+  width: 230px;
   min-width: calc((100% - 10px * (4 - 1)) / 4); /* 카드 너비 계산 */
   display: flex;
   flex-direction: column;
@@ -100,35 +108,58 @@ const ContentWrapper = styled.div`
   scroll-snap-align: start;
 
   @media (max-width: 1000px) {
-    flex: 1 0 calc(33.33% - 10px); /* 3개 */
+    flex: 1 0 calc(33.33% - 10px);
   }
 
   @media (max-width: 600px) {
-    flex: 1 0 calc(50% - 10px); /* 2개 */
+    flex: 1 0 calc(50% - 10px);
   }
 
   @media (max-width: 400px) {
-    flex: 1 0 100%; /* 1개 */
+    flex: 1 0 100%;
   }
+`;
+
+const ImgWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 130px;
+  border-radius: 8px;
+  overflow: hidden;
 `;
 
 const Img = styled.img`
   width: 100%;
-  height: 130px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 8px;
   transition: 0.2s ease-in-out;
 `;
 
+const Gradient = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  &:hover {
+    background: linear-gradient(rgba(0, 0, 0, 0.8));
+    height: 100%;
+  }
+`;
+
 const Title = styled.h2`
-  max-width: 100%;
-  padding-top: 0.5rem;
-  text-align: center;
+  width: 100%;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
   font-size: 1rem;
   color: white;
+  text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  z-index: 1;
 `;
 
 const Button = styled.button`
@@ -141,24 +172,4 @@ const Button = styled.button`
       width: 30px;
     }
   }
-`;
-
-const MoreLink = styled(Link)`
-  display: block;
-  text-align: center;
-  color: #fff;
-  font-size: 1rem;
-  margin-top: 1rem;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const NoDataMessage = styled.p`
-  text-align: center;
-  color: #fff;
-  font-size: 1rem;
-  margin-top: 1rem;
 `;

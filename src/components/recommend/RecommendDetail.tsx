@@ -144,7 +144,6 @@ const Li = styled.li`
 const Section = styled.section`
   display: flex;
   flex-direction: column;
-  width: 70vw;
   gap: 15px;
   @media (max-width: 900px) {
     width: 85vw;

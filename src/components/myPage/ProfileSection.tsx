@@ -96,7 +96,7 @@ const ProfileContainer = styled.div`
   margin-bottom: 1rem;
   background: #d9d9d9;
   border-radius: 20px;
-  padding: 65px 20px 40px;
+  padding: 65px 10px 40px;
 `;
 
 const NickName = styled.p`

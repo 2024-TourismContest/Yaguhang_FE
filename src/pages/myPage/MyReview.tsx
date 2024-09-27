@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { mypage } from "../../apis/mypage";
 import { Review } from "../../types/myPageType";
 import SectionTitle from "../../components/common/SectionTitle";
+import { NoDataMessage } from "../../styles/common/messageStyle";
 
 const MyReview = () => {
   const [myReviews, setMyReviews] = useState<Review[]>([]);
@@ -34,7 +35,7 @@ const MyReview = () => {
             <ReviewItem key={review.reviewId} isMine={true} {...review} />
           ))
         ) : (
-          <NoReviewsMessage>리뷰가 없습니다.</NoReviewsMessage>
+          <NoDataMessage>리뷰가 없습니다.</NoDataMessage>
         )}
       </ReviewsContainer>
     </>
@@ -46,11 +47,6 @@ const ReviewsContainer = styled.div`
   flex-direction: column;
   gap: 1rem;
   margin-top: 30px;
-`;
-
-const NoReviewsMessage = styled.p`
-  color: #aaa;
-  text-align: center;
 `;
 
 export default MyReview;

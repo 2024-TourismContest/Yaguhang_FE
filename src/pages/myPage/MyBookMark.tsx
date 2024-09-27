@@ -6,6 +6,7 @@ import { ScrapSpot } from "../../types/myPageType";
 import SectionTitle from "../../components/common/SectionTitle";
 import { Filter } from "../../components/recommend/filter";
 import { useNavigate } from "react-router-dom";
+import { NoDataMessage } from "../../styles/common/messageStyle";
 
 const MyBookMark: React.FC = () => {
   const [scrapSpots, setScrapSpots] = useState<ScrapSpot[]>([]);
@@ -87,8 +88,11 @@ const MyBookMark: React.FC = () => {
               key={spot.contentId}
               onClick={() => handleClick(spot)}
             >
-              <Img src={spot.image || defaultImg} alt={spot.title} />
-              <Title>{spot.title}</Title>
+              <ImgWrapper>
+                <Img src={spot.image || defaultImg} alt={spot.title} />
+                <Gradient />
+                <Title>{spot.title}</Title>
+              </ImgWrapper>
             </ContentWrapper>
           ))}
         </Grid>
@@ -133,28 +137,44 @@ const ContentWrapper = styled.div`
   flex: 1;
 `;
 
-const Img = styled.img`
+const ImgWrapper = styled.div`
+  position: relative;
   width: 100%;
   height: 130px;
-  object-fit: cover;
   border-radius: 8px;
-  transition: 0.2s ease-in-out;
-`;
-
-const Title = styled.h2`
-  max-width: 100%;
-  padding-top: 0.5rem;
-  text-align: center;
-  font-size: 1rem;
-  color: white;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   overflow: hidden;
 `;
 
-const NoDataMessage = styled.p`
-  text-align: center;
-  color: #fff;
+const Img = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.2s ease-in-out;
+`;
+
+const Gradient = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  &:hover {
+    background: linear-gradient(rgba(0, 0, 0, 0.8));
+    height: 100%;
+  }
+`;
+
+const Title = styled.h2`
+  width: 100%;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
   font-size: 1rem;
-  margin-top: 1rem;
+  color: white;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: 1;
 `;
