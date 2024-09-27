@@ -162,7 +162,7 @@ const HomePage = () => {
         />
         <Button
           text="야구선수 PICK 보러가기"
-          onClick={() => handleButtonClick("stadium")}
+          onClick={() => handleButtonClick("category/선수PICK/LG")}
         />
         {selectedGame?.id && (
           <>

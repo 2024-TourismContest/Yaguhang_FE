@@ -98,6 +98,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         </CameraIcon>
         <SubmitButton onClick={handleReviewSubmit}>등록</SubmitButton>
       </SubmitContainer>
+
       {images.length > 0 && (
         <ImagePreviewContainer>
           {images.map((image, index) => (
@@ -124,23 +125,39 @@ const ReviewInputContainer = styled.div`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   max-width: 70vw;
   margin: 1rem auto;
+
+  @media (max-width: 1024px) {
+    width: 650px;
+    height: 100px;
+  }
+
+  @media (max-width: 768px) {
+    width: 400px;
+    height: 70px;
+  }
 `;
 
 const RatingContainer = styled.div`
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.3rem;
 `;
 
 const Star = styled.span<{ filled: boolean }>`
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: ${(props) => (props.filled ? "#FFD700" : "#ccc")};
   cursor: pointer;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 17px;
+  }
 `;
 
 const ReviewInput = styled.textarea`
   width: 99%;
-  min-height: 100%;
+  min-height: 70%;
   padding: 10px;
   border: none;
   border-radius: 5px;
@@ -150,6 +167,19 @@ const ReviewInput = styled.textarea`
   margin-bottom: 1rem;
   resize: vertical;
   outline: none;
+
+  @media (max-width: 1024px) {
+    width: 98%;
+    min-height: 25%;
+    height: 100px;
+  }
+
+  @media (max-width: 768px) {
+    min-height: 6%;
+    width: 98%;
+    height: 80px;
+    font-size: 12px;
+  }
 `;
 
 const SubmitContainer = styled.div`
@@ -160,8 +190,16 @@ const SubmitContainer = styled.div`
 `;
 
 const CameraIcon = styled.div`
-  font-size: 2.5rem;
+  font-size: 2rem;
   cursor: pointer;
+
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 23px;
+  }
 
   input {
     display: none;
@@ -173,13 +211,22 @@ const CameraIcon = styled.div`
 `;
 
 const SubmitButton = styled.button`
-  padding: 0.5rem 1rem;
-  color: #000;
+  padding: 0.4rem 0.7rem;
+  background-color: #007bff;
+  color: #fff;
   border: none;
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
+
+  @media (max-width: 1024px) {
+    font-size: 13px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
 
   &:hover {
     background-color: #0056b3;

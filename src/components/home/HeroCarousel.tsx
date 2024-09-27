@@ -292,6 +292,10 @@ const Button = styled.button`
   @media (max-width: 768px) {
     margin-top: 100px;
   }
+
+  &:hover {
+    background-color: #000;
+  }
 `;
 
 export default HeroCarousel;

@@ -25,6 +25,7 @@ export type RecommendPreviewDto = {
   stadiumId: number;
   likeTeam: string;
   likeTeamUrl: string;
+  description?: string;
 };
 export interface SpotGeneralPreviewDto {
   contentId: number;

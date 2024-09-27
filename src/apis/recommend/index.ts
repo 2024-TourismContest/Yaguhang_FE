@@ -92,6 +92,7 @@ export const recommendSearch = async (
 export const createCourse = async (
   stadium: string,
   title: string,
+  description: string,
   contentIdList: number[]
 ): Promise<any> => {
   const token = getAuthToken();
@@ -101,6 +102,7 @@ export const createCourse = async (
       {
         Stadium: stadium,
         title: title,
+        description: description,
         contentIdList: contentIdList,
       },
       {

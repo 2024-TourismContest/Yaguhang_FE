@@ -15,6 +15,7 @@ const MycoursePage = () => {
   const [contentIdList, setContentIdList] = useState<number[]>([]);
   const [stadium, setStadium] = useState<string>("");
   const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [showTooltip, setShowTooltip] = useState(false);
 
   const navigate = useNavigate();
@@ -55,12 +56,18 @@ const MycoursePage = () => {
     }
 
     try {
-      const response = await createCourse(stadium, title, contentIdList);
+      const response = await createCourse(
+        stadium,
+        title,
+        description,
+        contentIdList
+      );
       console.log("Recommend course created:", response);
       toast.success("추천행 코스를 생성했습니다.");
       navigate("/region");
       setStadium("");
       setTitle("");
+      setDescription("");
       setContentIdList([]);
     } catch (error) {
       console.error("Failed to create recommend course:", error);
@@ -110,6 +117,9 @@ const MycoursePage = () => {
           setStadium={setStadium}
           title={title}
           setTitle={setTitle}
+          description={description}
+          setDescription={setDescription}
+          selectedSpot={selectedSpot}
         />
         <TooltipWrapper>
           <FixedButton
@@ -140,7 +150,7 @@ export default MycoursePage;
 
 const Container = styled.div`
   width: 100%;
-  max-width: 60vw;
+  max-width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -150,6 +160,7 @@ const Container = styled.div`
   margin: 150px auto;
   position: relative;
   padding-bottom: 100px;
+  // background-color: red;
 `;
 const Title = styled.h2`
   font-size: 1.7rem;
@@ -183,7 +194,7 @@ const Highlight = styled.span`
 `;
 
 const CategoryContainer = styled.div`
-  max-width: 600px;
+  max-width: 60vw;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -206,7 +217,8 @@ const DotLineContainer = styled.div`
 `;
 
 const DotLine = styled.div`
-  width: 400px;
+  min-width: 30vw;
+  max-width: 400px;
   border-top: 1px dashed #d9d9d9;
 `;
 
@@ -228,6 +240,20 @@ const Local = styled.div`
   justify-content: center;
   border: 1px solid #fff;
   padding: 10px 20px;
+
+  @media (max-width: 1024px) {
+    width: 40px;
+    height: 25px;
+    font-size: 16px;
+    padding: 5px 8px;
+  }
+
+  @media (max-width: 768px) {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    padding: 5px 8px;
+  }
 `;
 
 const FixedButton = styled(OriginalButton)<{ disabled: boolean }>`

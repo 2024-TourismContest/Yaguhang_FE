@@ -41,6 +41,7 @@ const UserDetails = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
+  max-width: 60vw;
 `;
 
 const UserProfile = styled.div`
