@@ -125,7 +125,7 @@ const Title = styled.ul`
 
 const Section = styled.section`
   color: white;
-  padding: 10px 20px;
+  padding: 10px 0;
   margin-bottom: 0;
   box-sizing: border-box;
   @media (max-width: 900px) {
