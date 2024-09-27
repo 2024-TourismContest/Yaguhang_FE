@@ -103,7 +103,6 @@ const Info = styled.div`
 `;
 const Section = styled.section`
   color: white;
-  width: 70vw;
   padding: 1%;
   margin-bottom: 0;
   box-sizing: border-box;

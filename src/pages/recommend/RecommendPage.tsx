@@ -9,6 +9,8 @@ import { Item } from "../../components/recommend/Item";
 import { Option } from "../../components/recommend/Option";
 import Pagenation from "../../components/recommend/pagenation";
 import { SearchInput } from "../../components/recommend/SearchInput";
+import useAuthStore from "../../store/authStore";
+import useModalStore from "../../store/modalStore";
 import { RecommendPreviewDto } from "../../types/recommendType";
 
 export const RecommendPage = () => {
@@ -17,7 +19,10 @@ export const RecommendPage = () => {
   const [lastPage, setLastPage] = useState(1);
   const [recommendList, setRecommendList] = useState<RecommendPreviewDto[]>(); // 상태 추가
   const [searchWord, setSearchWord] = useState<string>("");
-  4;
+
+  const { isAuthenticated } = useAuthStore();
+  const { openModal, closeModal } = useModalStore();
+
   const [selectedOption, setOption] = useState<string>("인기순");
   const [selectedSpot, setSelectedSpot] = useState("전체");
   const handleSpotChange = (spot: string) => {
@@ -57,10 +62,23 @@ export const RecommendPage = () => {
   useEffect(() => {
     getRecommendList();
   }, [selectedSpot, selectedOption]);
-  const handleButtonClick = (page: string) => {
-    navigate(`/${page}`);
-    window.scrollTo(0, 0);
+
+  const onClickBtn = () => {
+    if (!isAuthenticated) {
+      openModal({
+        title: "로그인 필요",
+        content: "추천행 코스를 작성하시려면 로그인해주세요.",
+        onConfirm: () => {
+          navigate("/login");
+          closeModal();
+        },
+        showCancel: true,
+      });
+    } else {
+      navigate("/mycourse");
+    }
   };
+
   return (
     <AppContainer>
       <TopSection>
@@ -70,7 +88,7 @@ export const RecommendPage = () => {
           color="black"
           text="나의 추천행 코스 만들기 >"
           fontWeight="bold"
-          onClick={() => handleButtonClick("mycourse")}
+          onClick={() => onClickBtn()}
         />
       </TopSection>
 

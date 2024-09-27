@@ -13,6 +13,7 @@ import WeatherGraph from "../../components/home/WeatherGraph";
 import useModalStore from "../../store/modalStore";
 import useTeamStore from "../../store/TeamStore";
 import { TitleSection } from "./TitleSection";
+import useAuthStore from "../../store/authStore";
 
 interface SpotBasicPreviewDto {
   contentId: number;
@@ -35,6 +36,8 @@ const HomePage = () => {
   const { selectedGame, selectedTeam, setSelectedTeam } = useTeamStore();
   const { openModal, closeModal } = useModalStore();
   const [isInitialCheckDone, setIsInitialCheckDone] = useState(false);
+  const { isAuthenticated } = useAuthStore();
+
   useEffect(() => {
     const checkFanTeamStatus = async () => {
       try {
@@ -111,6 +114,21 @@ const HomePage = () => {
     }
   };
 
+  const onClickBtn = () => {
+    if (!isAuthenticated) {
+      openModal({
+        title: "로그인 필요",
+        content: "스탬프 기능을 이용하시려면 로그인해주세요.",
+        onConfirm: () => {
+          navigate("/login");
+          closeModal();
+        },
+        showCancel: true,
+      });
+    } else {
+      navigate("/mypage");
+    }
+  };
   return (
     <>
       <HeroCarousel teams={heroData.teams} />
@@ -119,7 +137,7 @@ const HomePage = () => {
         <Card />
         <Button
           text="MY 야구공 스탬프 모아보기 "
-          onClick={() => handleButtonClick("mypage")}
+          onClick={onClickBtn}
           bgColor="#FF0000"
         />
         <TitleSection
@@ -149,7 +167,7 @@ const HomePage = () => {
         {selectedGame?.id && (
           <>
             <TitleSection
-              title="현재 잠실구장의 날씨는?"
+              title={`현재 ${selectedGame?.stadium || "구장"}의 날씨는?`}
               description="오늘은 비가 안와야 할텐데.."
             />
             <WeatherContainer>
@@ -175,7 +193,7 @@ const RoundBackground = styled.div`
   position: absolute;
   top: 0;
   left: 50%;
-  width: 2700px;
+  width: 200vw;
   height: 1500px;
   background-color: #000000;
   border-radius: 46%;

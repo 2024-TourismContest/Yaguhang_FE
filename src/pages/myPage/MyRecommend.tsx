@@ -5,6 +5,7 @@ import { mypage } from "../../apis/mypage";
 import { RecommendPreviewDto } from "../../types/myPageType";
 import { Item } from "../../components/recommend/Item";
 import { toast } from "react-toastify";
+import { NoDataMessage } from "../../styles/common/messageStyle";
 
 const MyRecommendPage: React.FC = () => {
   const [myRecommend, setMyRecommend] = useState<RecommendPreviewDto[]>([]);
@@ -29,31 +30,27 @@ const MyRecommendPage: React.FC = () => {
         title={"MY 추천행"}
         subtitle={"내가 추천행들을 모아보세요."}
       />
-      <RecommendContainer>
+      <ReviewList>
         {myRecommend.length > 0 ? (
-          myRecommend.map((recommend) => (
-            <Item key={recommend.recommendId} item={recommend} isMine={true} isLast={false} />
+          myRecommend.map((recommend, index) => (
+            <Item
+              key={recommend.recommendId}
+              item={recommend}
+              isMine={true}
+              isLast={myRecommend.length - 1 == index}
+            />
           ))
         ) : (
           <NoDataMessage>추천행이 없습니다.</NoDataMessage>
         )}
-      </RecommendContainer>
+      </ReviewList>
     </>
   );
 };
 
-const RecommendContainer = styled.div`
+const ReviewList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-top: 30px;
 `;
-
-const NoDataMessage = styled.p`
-  text-align: center;
-  color: #fff;
-  font-size: 1rem;
-  margin-top: 1rem;
-`;
-
 export default MyRecommendPage;

@@ -1,6 +1,6 @@
-import { HiPlus } from "react-icons/hi2";
 import styled from "styled-components";
 import * as S from "../../styles/common/TitleSection";
+import { TbMapSearch } from "react-icons/tb";
 
 interface TitleSectionProps {
   title: string;
@@ -25,7 +25,7 @@ export const TitleSection: React.FC<TitleSectionProps> = ({
             <S.H4>{h4Text}</S.H4>
           </TitleWrapper>
           <MoreButton onClick={onMoreClick}>
-            more <HiPlus />
+            지도로 보기 <TbMapSearch />
           </MoreButton>
         </StyledDiv>
       </Span>
@@ -40,14 +40,18 @@ const MoreButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 16px;
+  padding: 5px 16px;
   border: none;
-  font-size: 1.25em;
+  font-size: 1.2em;
   gap: 15px;
   font-weight: 400;
   svg {
     height: 35px;
     width: 35px;
+
+    &:hover {
+      color: #0056b3;
+    }
   }
   @media screen and (max-width: 600px) {
     svg {

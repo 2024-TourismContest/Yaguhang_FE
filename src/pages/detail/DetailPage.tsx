@@ -33,6 +33,8 @@ export interface SpotDetailDto {
   firstmenu?: string;
   treatmenu?: string;
   usefee?: string;
+  picker?: string;
+  buisnessHours?: string;
 }
 
 export interface SpotPreviewDto {
@@ -42,6 +44,7 @@ export interface SpotPreviewDto {
   imageUrl: string;
   isScraped: boolean;
   stadiumId: number;
+  category: string;
 }
 
 const DetailPage = () => {
@@ -50,10 +53,8 @@ const DetailPage = () => {
     contentId: string;
   }>();
 
-  // contentId가 유효한지 검사 후 number로 변환
   const numericContentId = contentId ? parseInt(contentId, 10) : null;
 
-  // contentId가 유효하지 않으면 에러 메시지 출력
   if (!numericContentId) {
     console.log("유효하지 않은 contentId입니다");
   }
@@ -117,7 +118,7 @@ const DetailPage = () => {
           {
             params: {
               stadiumId,
-              category,
+              category: category === "선수PICK" ? "맛집" : category,
               pagesize: 6,
               radius: 10,
             },
@@ -176,7 +177,7 @@ const DetailPage = () => {
     return value ? value : "정보 준비중";
   };
 
-  const onClickContent = (contentId: number) => {
+  const onClickContent = (category: string, contentId: number) => {
     navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
     window.scrollTo(0, 0);
   };
@@ -240,8 +241,8 @@ const Container = styled.div`
 `;
 
 const DotLine = styled.div`
-  width: 100%; /* 가로 전체 너비 */
+  width: 100%;
   max-width: 1100px;
   border-top: 1px dotted gray;
-  margin: 20px 0; /* 상하 여백 추가 */
+  margin: 20px 0;
 `;
