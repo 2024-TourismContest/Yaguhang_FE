@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import { teamToStadiumMap } from "../../assets/data/data";
 import usePositionStore from "../../store/MapPositionStore";
 import useTeamStore from "../../store/TeamStore";
-import BookmarkIcon from "./BookMarkIcon";
+import BookmarkIcon from "../common/BookMarkIcon";
 
 export const SelectedPosition = ({
   onClickContent,

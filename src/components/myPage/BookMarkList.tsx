@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-// import defaultImg from "../../assets/images/Detailnull.svg";
+import SpotCard from "./SpotCard";
 import leftIcon from "../../assets/icons/arrow_left.svg";
 import rightIcon from "../../assets/icons/arrow_right.svg";
 import { mypage } from "../../apis/mypage";
@@ -44,6 +44,7 @@ const BookMarkList: React.FC = () => {
 
   const defaultImg =
     "https://yaguhang.kro.kr:8443/defaultLogos/defaultBookmarkImage.svg";
+
   return (
     <div>
       {scrapSpots.length > 0 ? (
@@ -54,16 +55,12 @@ const BookMarkList: React.FC = () => {
             </Button>
             <SpotsContainer ref={scrollRef}>
               {scrapSpots.map((spot) => (
-                <ContentWrapper
+                <SpotCard
                   key={spot.contentId}
-                  onClick={() => handleClick(spot)}
-                >
-                  <ImgWrapper>
-                    <Img src={spot.image || defaultImg} alt={spot.title} />
-                    <Gradient />
-                    <Title>{spot.title}</Title>
-                  </ImgWrapper>
-                </ContentWrapper>
+                  spot={spot}
+                  defaultImg={defaultImg}
+                  handleClick={handleClick}
+                />
               ))}
             </SpotsContainer>
             <Button onClick={() => handleScroll("right")}>
@@ -98,70 +95,6 @@ const SpotsContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-`;
-
-const ContentWrapper = styled.div`
-  max-width: 230px;
-  width: 230px;
-  min-width: calc((100% - 10px * (4 - 1)) / 4); /* 카드 너비 계산 */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  scroll-snap-align: start;
-
-  @media (max-width: 1000px) {
-    flex: 1 0 calc(33.33% - 10px);
-  }
-
-  @media (max-width: 600px) {
-    flex: 1 0 calc(50% - 10px);
-  }
-
-  @media (max-width: 400px) {
-    flex: 1 0 100%;
-  }
-`;
-
-const ImgWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: 130px;
-  border-radius: 8px;
-  overflow: hidden;
-`;
-
-const Img = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: 0.2s ease-in-out;
-`;
-
-const Gradient = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-  &:hover {
-    background: linear-gradient(rgba(0, 0, 0, 0.8));
-    height: 100%;
-  }
-`;
-
-const Title = styled.h2`
-  width: 100%;
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  font-size: 1rem;
-  color: white;
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  z-index: 1;
 `;
 
 const Button = styled.button`

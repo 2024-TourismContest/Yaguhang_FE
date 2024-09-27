@@ -110,11 +110,12 @@ const Title = styled.ul`
   h3 {
     font-size: 1.1em;
     font-weight: 400;
-    color:#dfdfdf;
+    color: #dfdfdf;
     margin-bottom: 20px;
     @media (max-width: 900px) {
       font-size: 1em;
     }
+  }
 `;
 const Info = styled.div`
   display: flex;

@@ -12,7 +12,7 @@ import {
   RecommendDetailResponse,
   SpotGeneralPreviewDto,
 } from "../../types/recommendType";
-import BookmarkIcon from "../map/BookMarkIcon";
+import BookmarkIcon from "../common/BookMarkIcon";
 
 const categoryIcons: Record<string, string> = {
   ACCOMMODATION: place,

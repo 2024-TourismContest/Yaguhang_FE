@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import DefaultImg from "../../assets/images/defaultImg.svg";
-import BookmarkIcon from "../map/BookMarkIcon";
+import BookmarkIcon from "../common/BookMarkIcon";
 
 export interface SpotBasicPreviewDto {
   contentId: number;
