@@ -7,6 +7,7 @@ import SectionTitle from "../../components/common/SectionTitle";
 import { Filter } from "../../components/recommend/filter";
 import { useNavigate } from "react-router-dom";
 import { NoDataMessage } from "../../styles/common/messageStyle";
+import SpotCard from "../../components/myPage/SpotCard";
 
 const MyBookMark: React.FC = () => {
   const [scrapSpots, setScrapSpots] = useState<ScrapSpot[]>([]);
@@ -84,16 +85,12 @@ const MyBookMark: React.FC = () => {
       ) : (
         <Grid>
           {scrapSpots.map((spot) => (
-            <ContentWrapper
+            <SpotCard
               key={spot.contentId}
-              onClick={() => handleClick(spot)}
-            >
-              <ImgWrapper>
-                <Img src={spot.image || defaultImg} alt={spot.title} />
-                <Gradient />
-                <Title>{spot.title}</Title>
-              </ImgWrapper>
-            </ContentWrapper>
+              spot={spot}
+              defaultImg={defaultImg}
+              handleClick={handleClick}
+            />
           ))}
         </Grid>
       )}
@@ -122,59 +119,11 @@ const Container = styled.div`
 `;
 
 const Grid = styled.div`
+  padding: 0 10px;
+  box-sizing: border-box;
   margin-top: 30px;
   display: grid;
   width: 100%;
   gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-`;
-
-const ContentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 0;
-  flex: 1;
-`;
-
-const ImgWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: 130px;
-  border-radius: 8px;
-  overflow: hidden;
-`;
-
-const Img = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: 0.2s ease-in-out;
-`;
-
-const Gradient = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-  &:hover {
-    background: linear-gradient(rgba(0, 0, 0, 0.8));
-    height: 100%;
-  }
-`;
-
-const Title = styled.h2`
-  width: 100%;
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  font-size: 1rem;
-  color: white;
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  z-index: 1;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 최소 230px, 카드 간 간격 조정 */
 `;

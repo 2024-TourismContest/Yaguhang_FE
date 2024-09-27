@@ -1,5 +1,5 @@
 import { memo, useState } from "react";
-import { BsBookmarkFill, BsBookmarkStar } from "react-icons/bs";
+import { BsBookmarkStarFill, BsBookmarkStar } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { styled } from "styled-components";
@@ -10,10 +10,11 @@ interface BookmarkIconProps {
   stadiumId: number;
   contentId: number;
   isMarked: boolean;
+  width?: string; 
 }
 
 const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
-  ({ stadiumId, contentId, isMarked }) => {
+  ({ stadiumId, contentId, isMarked, width = "15%" }) => {
     const { openModal, closeModal } = useModalStore();
     const [markedSpots, setMarkedSpots] = useState<boolean>(isMarked);
     const navigate = useNavigate();
@@ -59,8 +60,8 @@ const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
     };
 
     return (
-      <Button onClick={(e) => onClickMark(contentId, e)}>
-        {markedSpots ? <BsBookmarkFill /> : <BsBookmarkStar />}
+      <Button onClick={(e) => onClickMark(contentId, e)} width={width}>
+        {markedSpots ? <BsBookmarkStarFill /> : <BsBookmarkStar />}
       </Button>
     );
   }
@@ -68,10 +69,10 @@ const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
 
 export default BookmarkIcon;
 
-const Button = styled.button`
+const Button = styled.button<{ width: string }>`
   background-color: transparent;
   border: none;
-  width: 15%;
+  width: ${(props) => props.width};
   display: flex;
   align-items: center;
   justify-content: center;

@@ -7,7 +7,7 @@ import {
   RecommendDetailResponse,
   SpotGeneralPreviewDto,
 } from "../../types/recommendType";
-import BookmarkIcon from "../map/BookMarkIcon";
+import BookmarkIcon from "../common/BookMarkIcon";
 
 export default function RecommendDetail({
   recommendId,

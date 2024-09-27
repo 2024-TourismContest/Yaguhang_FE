@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import styled from "styled-components";
-import { mypage } from "../../apis/mypage";
 import { DeleteRecommendData } from "../../apis/recommend";
 import SectionTitle from "../../components/common/SectionTitle";
-import { Schedule } from "../../components/home/Card";
-import BookMarkList from "../../components/myPage/BookMarkList";
-import CardList from "../../components/myPage/GameCardList";
 import TeamSelector from "../../components/myPage/TeamSelector";
-import { Item } from "../../components/recommend/Item";
 import ReviewItem from "../../components/Review/ReviewItem";
 import useStore from "../../store/PreferTeamStore";
+import StampList from "../../components/myPage/StampList";
+import BookMarkList from "../../components/myPage/BookMarkList";
+import { toast } from "react-toastify";
+import { mypage } from "../../apis/mypage";
+import { Item } from "../../components/recommend/Item";
+import { Review, RecommendPreviewDto } from "../../types/myPageType";
+import { Schedule } from "../../components/home/Card";
 import { MoreLink, NoDataMessage } from "../../styles/common/messageStyle";
-import { RecommendPreviewDto, Review } from "../../types/myPageType";
 import { teamLogos } from "../../types/teamLogos";
 
 const MyPageMain: React.FC = () => {
@@ -71,7 +71,7 @@ const MyPageMain: React.FC = () => {
         title={"MY 야구공 스탬프"}
         subtitle={"관심 있는 야구 일정 모아보기"}
       />
-      <CardList />
+      <StampList />
       <Line />
       <SectionTitle title={"MY 추천행"} subtitle={"나의 여행 계획 모아보기"} />
       {myRecommend && myRecommend.length > 0 ? (
