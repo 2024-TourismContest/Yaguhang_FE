@@ -5,7 +5,7 @@ import leftIcon from "../../assets/icons/arrow_left.svg";
 import rightIcon from "../../assets/icons/arrow_right.svg";
 import { mypage } from "../../apis/mypage";
 import { ScrapSpot } from "../../types/myPageType";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MoreLink, NoDataMessage } from "../../styles/common/messageStyle";
 
 const BookMarkList: React.FC = () => {
