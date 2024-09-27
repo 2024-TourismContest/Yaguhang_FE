@@ -34,7 +34,7 @@ const BookMarkList: React.FC = () => {
   // 스크롤 처리 함수
   const handleScroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const scrollAmount = scrollRef.current.clientWidth;// 부모 컨테이너의 너비로 스크롤 양 조정
+      const scrollAmount = scrollRef.current.clientWidth; // 부모 컨테이너의 너비로 스크롤 양 조정
       scrollRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
@@ -56,8 +56,11 @@ const BookMarkList: React.FC = () => {
                   key={spot.contentId}
                   onClick={() => handleClick(spot)}
                 >
-                  <Img src={spot.image || defaultImg} alt={spot.title} />
-                  <Title>{spot.title}</Title>
+                  <ImgWrapper>
+                    <Img src={spot.image || defaultImg} alt={spot.title} />
+                    <Gradient />
+                    <Title>{spot.title}</Title>
+                  </ImgWrapper>
                 </ContentWrapper>
               ))}
             </SpotsContainer>
@@ -96,8 +99,8 @@ const SpotsContainer = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  max-width: 250px;
-  width: 250px;
+  max-width: 230px;
+  width: 230px;
   min-width: calc((100% - 10px * (4 - 1)) / 4); /* 카드 너비 계산 */
   display: flex;
   flex-direction: column;
@@ -117,23 +120,46 @@ const ContentWrapper = styled.div`
   }
 `;
 
-const Img = styled.img`
+const ImgWrapper = styled.div`
+  position: relative;
   width: 100%;
   height: 130px;
-  object-fit: cover;
   border-radius: 8px;
+  overflow: hidden;
+`;
+
+const Img = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   transition: 0.2s ease-in-out;
 `;
 
+const Gradient = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  &:hover {
+    background: linear-gradient(rgba(0, 0, 0, 0.8));
+    height: 100%;
+  }
+`;
+
 const Title = styled.h2`
-  max-width: 100%;
-  padding-top: 0.5rem;
-  text-align: center;
+  width: 100%;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
   font-size: 1rem;
   color: white;
+  text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  z-index: 1;
 `;
 
 const Button = styled.button`

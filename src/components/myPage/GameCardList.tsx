@@ -11,7 +11,7 @@ import { NoDataMessage } from "../../styles/common/messageStyle";
 
 const CardList: React.FC = () => {
   const [games, setGames] = useState<Schedule[]>([]);
-  const [page, setPage] = useState(0);
+  const [page,] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
 
