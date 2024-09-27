@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import styled from "styled-components";
+import { mypage } from "../../apis/mypage";
+import { DeleteRecommendData } from "../../apis/recommend";
 import SectionTitle from "../../components/common/SectionTitle";
-import { teamLogos } from "../../types/teamLogos";
+import { Schedule } from "../../components/home/Card";
+import BookMarkList from "../../components/myPage/BookMarkList";
+import CardList from "../../components/myPage/GameCardList";
 import TeamSelector from "../../components/myPage/TeamSelector";
+import { Item } from "../../components/recommend/Item";
 import ReviewItem from "../../components/Review/ReviewItem";
 import useStore from "../../store/PreferTeamStore";
-import CardList from "../../components/myPage/GameCardList";
-import BookMarkList from "../../components/myPage/BookMarkList";
-import { toast } from "react-toastify";
-import { mypage } from "../../apis/mypage";
-import { Item } from "../../components/recommend/Item";
-import { Review, RecommendPreviewDto } from "../../types/myPageType";
-import { Schedule } from "../../components/home/Card";
 import { MoreLink, NoDataMessage } from "../../styles/common/messageStyle";
+import { RecommendPreviewDto, Review } from "../../types/myPageType";
+import { teamLogos } from "../../types/teamLogos";
 
 const MyPageMain: React.FC = () => {
   const {
@@ -24,13 +25,23 @@ const MyPageMain: React.FC = () => {
   const [myRecommend, setMyRecommend] = useState<RecommendPreviewDto[]>([]);
   const [myReviews, setMyReviews] = useState<Review[]>([]);
   const [, setMyScrapGames] = useState<Schedule[]>([]);
-
+  const [deleteState, setDeleteState] = useState(true);
+  const handleDelete = async (recommendId: number) => {
+    const confirmDelete = window.confirm("이 리뷰를 삭제하시겠습니까?");
+    if (!confirmDelete) return;
+    try {
+      await DeleteRecommendData(recommendId);
+      setDeleteState((prev) => !prev);
+    } catch (error) {
+      console.error("리뷰 삭제 중 오류 발생:", error);
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
         const myRecommendData = await mypage.MyRecommend(10);
         setMyRecommend(myRecommendData.recommendPreviewDtos);
-        console.log(myRecommendData.recommendPreviewDtos)
+        console.log(myRecommendData.recommendPreviewDtos);
 
         const myReviewsData = await mypage.MyReview();
         setMyReviews(myReviewsData.reviews);
@@ -43,7 +54,7 @@ const MyPageMain: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [deleteState]);
 
   return (
     <MainPageContainer>
@@ -71,6 +82,7 @@ const MyPageMain: React.FC = () => {
               item={recommend}
               isLast={myRecommend.length - 1 === index}
               isMine={true}
+              handleDelete={handleDelete}
             />
           ))}
           <MoreLink to="/mypage/recommend">+ 더보기</MoreLink>
@@ -85,15 +97,15 @@ const MyPageMain: React.FC = () => {
       <SectionTitle title={"MY 야구행 리뷰"} />
       {myReviews && myReviews.length > 0 ? (
         <>
-        <ReviewList>
-          {myReviews.slice(0, 2).map((review) => (
-            <ReviewItem key={review.reviewId} isMine={true} {...review} />
-          ))}
-        </ReviewList>
-        <MoreLink to="/mypage/review">+ 더보기</MoreLink>
+          <ReviewList>
+            {myReviews.slice(0, 2).map((review) => (
+              <ReviewItem key={review.reviewId} isMine={true} {...review} />
+            ))}
+          </ReviewList>
+          <MoreLink to="/mypage/review">+ 더보기</MoreLink>
         </>
       ) : (
-        <NoDataMessage>리뷰가 없습니다.</NoDataMessage> 
+        <NoDataMessage>리뷰가 없습니다.</NoDataMessage>
       )}
     </MainPageContainer>
   );

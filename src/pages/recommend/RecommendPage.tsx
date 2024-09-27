@@ -1,17 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { recommend, recommendSearch } from "../../apis/recommend";
-import title from "../../assets/images/recommendTitle.svg";
+import {
+  DeleteRecommendData,
+  recommend,
+  recommendSearch,
+} from "../../apis/recommend";
+import title from "../../assets/images/recommendBanner.svg";
 import { Button } from "../../components/button/Button";
 import { Filter } from "../../components/recommend/filter";
 import { Item } from "../../components/recommend/Item";
 import { Option } from "../../components/recommend/Option";
 import Pagenation from "../../components/recommend/pagenation";
 import { SearchInput } from "../../components/recommend/SearchInput";
-import { RecommendPreviewDto } from "../../types/recommendType";
 import useAuthStore from "../../store/authStore";
 import useModalStore from "../../store/modalStore";
+import { RecommendPreviewDto } from "../../types/recommendType";
 
 export const RecommendPage = () => {
   const navigate = useNavigate();
@@ -25,6 +29,8 @@ export const RecommendPage = () => {
 
   const [selectedOption, setOption] = useState<string>("인기순");
   const [selectedSpot, setSelectedSpot] = useState("전체");
+  const [deleteState, setDeleteState] = useState(true);
+  const itemWrapperRef = useRef<HTMLDivElement>(null);
   const handleSpotChange = (spot: string) => {
     setSelectedSpot(spot);
   };
@@ -35,18 +41,29 @@ export const RecommendPage = () => {
     setOption(option);
   };
 
+  const handleDelete = async (recommendId: number) => {
+    const confirmDelete = window.confirm("이 리뷰를 삭제하시겠습니까?");
+    if (!confirmDelete) return;
+    try {
+      await DeleteRecommendData(recommendId);
+      setDeleteState((prev) => !prev);
+    } catch (error) {
+      console.error("리뷰 삭제 중 오류 발생:", error);
+    }
+  };
   const getRecommendList = async () => {
     try {
+      console.log(currentPage);
       const response = searchWord
         ? await recommendSearch({
-            pagdIndex: 1,
+            pageIndex: currentPage,
             pageSize: 10,
             order: selectedOption,
             filter: selectedSpot,
             keyWord: searchWord,
           })
         : await recommend({
-            pagdIndex: 1,
+            pageIndex: currentPage,
             pageSize: 10,
             order: selectedOption,
             filter: selectedSpot,
@@ -54,14 +71,23 @@ export const RecommendPage = () => {
 
       setLastPage(response.totalPage);
       setRecommendList(response.recommendPreviewDtos);
+      console.log(response);
     } catch (error) {
       console.error("추천 리스트 가져오기 에러", error);
     }
   };
 
   useEffect(() => {
+    setCurrentPage(0);
     getRecommendList();
   }, [selectedSpot, selectedOption]);
+
+  useEffect(() => {
+    getRecommendList();
+    if (itemWrapperRef.current) {
+      itemWrapperRef.current.scrollIntoView({ behavior: "smooth" }); // ItemWrapper로 스크롤
+    }
+  }, [currentPage, deleteState]);
 
   const onClickBtn = () => {
     if (!isAuthenticated) {
@@ -78,7 +104,7 @@ export const RecommendPage = () => {
       navigate("/mycourse");
     }
   };
-
+  //추천행 삭제
   return (
     <AppContainer>
       <TopSection>
@@ -89,11 +115,10 @@ export const RecommendPage = () => {
           text="나의 추천행 코스 만들기 >"
           fontWeight="bold"
           onClick={() => onClickBtn()}
-          //추천행 만들기 페이지로
         />
       </TopSection>
 
-      <Section>
+      <Section ref={itemWrapperRef}>
         <Filter
           selectedSpot={selectedSpot}
           handleSpotChange={handleSpotChange}
@@ -115,6 +140,7 @@ export const RecommendPage = () => {
               key={item.recommendId}
               item={item}
               isLast={recommendList.length - 1 == index}
+              handleDelete={handleDelete}
             />
           ))}
         </ItemWrapper>
@@ -139,6 +165,7 @@ const AppContainer = styled.div`
 `;
 const ItemWrapper = styled.div`
   display: grid;
+  width: 60vw;
 `;
 const Section = styled.section`
   margin-top: 50px;
@@ -150,28 +177,21 @@ const Section = styled.section`
 `;
 const TopSection = styled.section`
   width: 100%;
-  height: 45vh;
-  background-color: #dce6f1;
   position: relative;
   img {
-    position: absolute;
-    top: 30%;
-    left: 30%;
+    width: 100%;
+    margin: 0 auto;
   }
   button {
     position: absolute;
-    bottom: 5%;
-    left: 32%;
+    bottom: 20%;
+    left: 15%;
   }
   @media (max-width: 500px) {
     margin-bottom: 1vh;
-    img,
     button {
       width: 50%;
       font-size: x-small;
-    }
-    button {
-      left: 30%;
     }
   }
 `;

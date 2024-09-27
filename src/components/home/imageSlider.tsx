@@ -44,8 +44,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
         {spots.map((spot) => (
           <SlideContainer
             key={spot.contentId}
-            onClick={() => handleImageClick(spot.contentId)}
-          >
+            onClick={() => handleImageClick(spot.contentId)}>
             <StyledMark pick={spot.picker || "none"}>
               {spot.picker ? spot.picker : ""}
             </StyledMark>
@@ -113,7 +112,7 @@ const DefaultImage = styled.img`
   height: 100%;
   object-fit: cover;
   border-radius: 0.9vw;
-  background-color: #ffffff;
+  background-color: transparent;
 `;
 const StyledMark = styled.div<{ pick: string }>`
   z-index: 5;

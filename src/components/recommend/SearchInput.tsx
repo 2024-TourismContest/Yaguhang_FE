@@ -40,7 +40,7 @@ const InputWrapper = styled.div`
   border-radius: 3rem;
   width: 60%;
   max-width: 750px;
-  height: 70px;
+  height: 56px;
   position: relative;
   @media (max-width: 1024px) {
     height: 40px;
@@ -66,11 +66,11 @@ const Button = styled.button`
   position: absolute;
   right: 15px;
   top: 10px;
+  svg {
+    width: 30px;
+    height: 30px;
+  }
   @media (max-width: 1024px) {
     top: 5px;
-    svg {
-      width: 30px;
-      height: 30px;
-    }
   }
 `;

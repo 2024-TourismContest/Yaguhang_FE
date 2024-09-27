@@ -20,25 +20,26 @@ const Pagenation = ({
       setPageList(0);
     } else if (value === "last") {
       setCurrentPage(lastPage);
-      setPageList(lastPage - 8);
+      setPageList(Math.floor(lastPage / 9) * 9); // 마지막 페이지 그룹으로 이동
     } else if (value === "prev") {
       if (currentPage > 0) {
-        if (pageList === currentPage) {
-          setPageList(pageList - 1);
+        const newPage = currentPage - 1;
+        setCurrentPage(newPage);
+        if (newPage < pageList) {
+          setPageList(pageList - 9); // 이전 페이지 그룹으로 이동
         }
-        setCurrentPage(currentPage - 1);
-      } else if (currentPage <= pageList && currentPage !== 0) {
-        setPageList(pageList - 1);
       }
     } else if (value === "next") {
       if (currentPage < lastPage) {
-        if (currentPage === pageList + 8 && currentPage !== lastPage) {
-          setPageList(pageList + 1);
+        const newPage = currentPage + 1;
+        setCurrentPage(newPage);
+        if (newPage >= pageList + 9) {
+          setPageList(pageList + 9); // 다음 페이지 그룹으로 이동
         }
-        setCurrentPage(currentPage + 1);
       }
     } else {
-      setCurrentPage(Number(value));
+      const newPage = Number(value);
+      setCurrentPage(newPage);
     }
   };
 
@@ -46,7 +47,9 @@ const Pagenation = ({
     setCurrentPage(0);
     setPageList(0);
   }, [lastPage, setCurrentPage]);
-  if (!lastPage) return;
+
+  if (!lastPage) return null; // lastPage가 없는 경우 반환
+
   return (
     <Wrapper>
       <Page value="first" onClick={handleClick} disabled={currentPage === 0}>
@@ -56,7 +59,7 @@ const Pagenation = ({
         &lt;
       </Page>
       {Array.from(
-        { length: Math.min(9, lastPage - pageList) }, // lastPage에 맞춰 버튼 개수를 조정
+        { length: Math.min(9, lastPage - pageList) }, // 9개씩 묶어서 표시, 마지막 페이지 이상은 안 나옴
         (_, index) => (
           <Page
             key={index}
@@ -88,8 +91,6 @@ const Wrapper = styled.div`
   display: flex;
   margin: 10px;
   justify-content: center;
-  position: fixed;
-  bottom: 10px;
 `;
 
 const Page = styled.button<{ isSelected?: boolean }>`

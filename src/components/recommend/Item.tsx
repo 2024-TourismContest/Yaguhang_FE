@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaRegTrashAlt } from "react-icons/fa";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { styled } from "styled-components";
 import DialogOpenButton from "../../assets/icons/DialogOpenButton";
@@ -9,10 +10,12 @@ export const Item = ({
   item,
   isLast,
   isMine,
+  handleDelete,
 }: {
   item: RecommendPreviewDto;
   isLast: boolean;
   isMine?: boolean;
+  handleDelete: (recommendId: number) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [likeCnt, setLikeCnt] = useState(item.likes);
@@ -26,9 +29,7 @@ export const Item = ({
           <li>
             <h2>{item.title}</h2>
             <h3>{item.description}</h3>
-            <Info>
-              <p>{item.stadiumName} 야구장</p>
-            </Info>
+            <p>{item.stadiumName} 야구장</p>
           </li>
           <Li>
             <RecommendLikeButton
@@ -37,6 +38,11 @@ export const Item = ({
               likes={(cnt: number) => likes(cnt)}
             />
             {likeCnt}
+            {item.isMine && (
+              <DeleteButton onClick={() => handleDelete(item.recommendId)}>
+                <FaRegTrashAlt />
+              </DeleteButton>
+            )}
           </Li>
         </Title>
         <Title>
@@ -58,8 +64,7 @@ export const Item = ({
                       marginTop: "8px",
                       color: "#ccc",
                       fontSize: "12px",
-                    }}
-                  >
+                    }}>
                     {item.createdAt}
                   </h5>
                 </DateWrapper>
@@ -110,19 +115,17 @@ const Title = styled.ul`
   h3 {
     font-size: 1.1em;
     font-weight: 400;
-    color:#dfdfdf;
-    margin-bottom: 20px;
+    color: #dfdfdf;
+    margin-bottom: 10px;
     @media (max-width: 900px) {
       font-size: 1em;
     }
+  }
 `;
-const Info = styled.div`
-  display: flex;
-  gap: 4px;
-`;
+
 const Section = styled.section`
   color: white;
-  padding: 1%;
+  padding: 10px 0;
   margin-bottom: 0;
   box-sizing: border-box;
   @media (max-width: 900px) {
@@ -135,10 +138,14 @@ const Li = styled.li`
   h5 {
     margin-left: 10px;
   }
+  svg {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 export const Hr = styled.hr`
-  width: 70vw;
+  width: 60vw;
   border-bottom: 1px dashed #d9d9d9;
   @media (max-width: 900px) {
     width: 85vw;
@@ -147,15 +154,15 @@ export const Hr = styled.hr`
 export const Button = styled.button<{ isOpen: boolean }>`
   background-color: transparent;
   border: none;
-  width: 42px;
-  height: 42px;
+  width: 30px;
+  height: 30px;
   padding: 0;
 
   svg {
     transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")};
     transition: transform 0.3s ease-in-out;
-    width: 42px;
-    height: 42px;
+    width: 30px;
+    height: 30px;
   }
 `;
 const ImgWrapper = styled.div`
@@ -170,9 +177,8 @@ const ImgWrapper = styled.div`
   }
 `;
 const Fan = styled.img`
-  height: 30px;
-  width: 30px;
-  aspect-ratio: 1/1;
+  height: 25px;
+
   position: absolute;
   bottom: 2%;
   right: 1%;
@@ -180,4 +186,13 @@ const Fan = styled.img`
 
 const DateWrapper = styled.div`
   flex-direction: column;
+`;
+const DeleteButton = styled.button`
+  border: none;
+  background-color: transparent;
+  svg {
+    color: white;
+    width: 20px;
+    height: 20px;
+  }
 `;
