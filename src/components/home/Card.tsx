@@ -31,6 +31,7 @@ export interface Schedule {
 
 interface StyledCardProps {
   $isScraped: boolean;
+  $isHighlighted?: boolean;
 }
 
 const Card: React.FC = () => {
@@ -53,7 +54,7 @@ const Card: React.FC = () => {
     } else if (window.innerWidth <= 1024) {
       setSchedulesPerPage(3); // 태블릿 화면에서는 카드 3개
     } else {
-      setSchedulesPerPage(4); // 데스크탑에서는 카드 5개
+      setSchedulesPerPage(4); // 데스크탑에서는 카드 4개
     }
   };
 
@@ -148,6 +149,17 @@ const Card: React.FC = () => {
             : schedule
         )
       );
+
+      // 스크랩을 누른 경기 정보를 selectedGame에 업데이트
+      const selectedSchedule = schedules.find((s) => s.id === gameId);
+      if (selectedSchedule) {
+        setSelectedGame({
+          id: selectedSchedule.id,
+          date: selectedSchedule.date,
+          stadium: selectedSchedule.stadium,
+        });
+      }
+
       toast.success(
         isScraped ? "스크랩에 추가되었습니다." : "스크랩에서 제거되었습니다."
       );
@@ -224,30 +236,10 @@ const Card: React.FC = () => {
           <StyledCard
             key={schedule.id}
             $isScraped={schedule.isScraped}
+            $isHighlighted={
+              selectedGame?.id === schedule.id // 하이라이트 상태를 반영
+            }
             onClick={() => handleCardClick(schedule)}
-            style={{
-              border:
-                selectedGame?.date === schedule.date &&
-                selectedGame?.stadium === schedule.stadium
-                  ? "5px solid #ffffff"
-                  : "1px solid #ffffff",
-              boxShadow:
-                selectedGame?.date === schedule.date &&
-                selectedGame?.stadium === schedule.stadium
-                  ? "0 0 20px rgba(255, 255, 255, 0.7)"
-                  : "none",
-              transform:
-                selectedGame?.date === schedule.date &&
-                selectedGame?.stadium === schedule.stadium
-                  ? "scale(1.05)"
-                  : "scale(1)",
-              backgroundColor:
-                selectedGame?.date === schedule.date &&
-                selectedGame?.stadium === schedule.stadium
-                  ? "rgba(255, 255, 255, 0.3)"
-                  : "rgba(255, 255, 255, 0.1)",
-              transition: "all 0.3s ease-in-out",
-            }}
           >
             <BeforeElement
               $isScraped={schedule.isScraped}
@@ -268,19 +260,20 @@ const Card: React.FC = () => {
                 <img
                   src={schedule.homeTeamLogo}
                   alt={`${schedule.home}`}
-                  style={{ width: "3rem", height: "2.5rem" }}
+                  style={{ width: "3.5rem", height: "2.5rem" }}
                 />
                 <span style={{ margin: "0 1rem" }}>VS</span>
                 <img
                   src={schedule.awayTeamLogo}
                   alt={`${schedule.away}`}
-                  style={{ width: "3rem", height: "2.5rem" }}
+                  style={{ width: "3.5rem", height: "2.5rem" }}
                 />
               </div>
               <div
                 style={{
                   display: "flex",
                   justifyContent: "space-around",
+                  gap: "40px",
                   marginTop: "10px",
                   fontSize: "0.8rem",
                 }}
@@ -406,6 +399,15 @@ const StyledCard = styled.div<StyledCardProps>`
     background-color: #4e4e4e !important;
     transform: scale(1.05) !important;
   }
+
+  ${({ $isHighlighted }) =>
+    $isHighlighted &&
+    `
+    border: 5px solid #ffffff;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.3);
+  `}
 
   @media (max-width: 1024px) {
     width: 170px;
