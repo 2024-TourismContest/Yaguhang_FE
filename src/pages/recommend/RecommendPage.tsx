@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -30,6 +30,7 @@ export const RecommendPage = () => {
   const [selectedOption, setOption] = useState<string>("인기순");
   const [selectedSpot, setSelectedSpot] = useState("전체");
   const [deleteState, setDeleteState] = useState(true);
+  const itemWrapperRef = useRef<HTMLDivElement>(null);
   const handleSpotChange = (spot: string) => {
     setSelectedSpot(spot);
   };
@@ -83,6 +84,9 @@ export const RecommendPage = () => {
 
   useEffect(() => {
     getRecommendList();
+    if (itemWrapperRef.current) {
+      itemWrapperRef.current.scrollIntoView({ behavior: "smooth" }); // ItemWrapper로 스크롤
+    }
   }, [currentPage, deleteState]);
 
   const onClickBtn = () => {
@@ -114,7 +118,7 @@ export const RecommendPage = () => {
         />
       </TopSection>
 
-      <Section>
+      <Section ref={itemWrapperRef}>
         <Filter
           selectedSpot={selectedSpot}
           handleSpotChange={handleSpotChange}
@@ -161,6 +165,7 @@ const AppContainer = styled.div`
 `;
 const ItemWrapper = styled.div`
   display: grid;
+  width: 60vw;
 `;
 const Section = styled.section`
   margin-top: 50px;

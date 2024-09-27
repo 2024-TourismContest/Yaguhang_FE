@@ -29,9 +29,7 @@ export const Item = ({
           <li>
             <h2>{item.title}</h2>
             <h3>{item.description}</h3>
-            <Info>
-              <p>{item.stadiumName} 야구장</p>
-            </Info>
+            <p>{item.stadiumName} 야구장</p>
           </li>
           <Li>
             <RecommendLikeButton
@@ -118,16 +116,13 @@ const Title = styled.ul`
     font-size: 1.1em;
     font-weight: 400;
     color: #dfdfdf;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     @media (max-width: 900px) {
       font-size: 1em;
     }
   }
 `;
-const Info = styled.div`
-  display: flex;
-  gap: 4px;
-`;
+
 const Section = styled.section`
   color: white;
   padding: 10px 20px;
