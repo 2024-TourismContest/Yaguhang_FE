@@ -66,6 +66,7 @@ const LoginForm = () => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          autoFocus
         />
         <Input
           placeholder="Password"

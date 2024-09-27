@@ -25,6 +25,7 @@ export const Item = ({
         <Title>
           <li>
             <h2>{item.title}</h2>
+            <h3>{item.description}</h3>
             <Info>
               <p>{item.stadiumName} 야구장</p>
             </Info>
@@ -50,7 +51,18 @@ export const Item = ({
                   )}
                   <Fan src={item.likeTeamUrl} />
                 </ImgWrapper>
-                <h5>{item.authorName}</h5>
+                <DateWrapper>
+                  <h5>{item.authorName}</h5>
+                  <h5
+                    style={{
+                      marginTop: "8px",
+                      color: "#ccc",
+                      fontSize: "12px",
+                    }}
+                  >
+                    {item.createdAt}
+                  </h5>
+                </DateWrapper>
               </>
             )}
           </Li>
@@ -77,7 +89,7 @@ const ProfileImg = styled.img`
   aspect-ratio: 1/1;
   border-radius: 50%;
   @media (max-width: 500px) {
-    height: 40px;
+    height: 30px;
   }
 `;
 
@@ -88,18 +100,25 @@ const Title = styled.ul`
   align-items: start;
 
   h2 {
-    font-size: 1.8em;
-    font-weight: 500;
-    margin-bottom: 15px;
+    font-size: 1.3em;
+    font-weight: 600;
+    margin-bottom: 10px;
     @media (max-width: 900px) {
       font-size: 1.3em;
     }
   }
+  h3 {
+    font-size: 1.1em;
+    font-weight: 400;
+    color:#dfdfdf;
+    margin-bottom: 20px;
+    @media (max-width: 900px) {
+      font-size: 1em;
+    }
 `;
 const Info = styled.div`
   display: flex;
   gap: 4px;
-  margin-top: 15px;
 `;
 const Section = styled.section`
   color: white;
@@ -157,4 +176,8 @@ const Fan = styled.img`
   position: absolute;
   bottom: 2%;
   right: 1%;
+`;
+
+const DateWrapper = styled.div`
+  flex-direction: column;
 `;

@@ -33,24 +33,23 @@ interface ReviewData {
 
 const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
   const [reviews, setReviews] = useState<ReviewData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [editingReviewId, setEditingReviewId] = useState<number | null>(null); // 수정 상태를 관리할 변수
   const [editedContent, setEditedContent] = useState<string>("");
   const [editedStar, setEditedStar] = useState<number>(0); // 수정할 별점 상태
   const [editedImages, setEditedImages] = useState<string[]>([]); // 기존 이미지 상태
   const [newImages, setNewImages] = useState<File[]>([]); // 새로 추가한 이미지 상태
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태 관리
+  const [currentImage, setCurrentImage] = useState<string | null>(null); // 현재 모달에 표시할 이미지
 
   useEffect(() => {
     const loadReviews = async () => {
       try {
-        setLoading(true);
         const fetchedReviews = await fetchReviews(contentId, sort);
         setReviews(fetchedReviews);
       } catch (error) {
         console.error("리뷰 데이터를 가져오는 중 오류 발생:", error);
       } finally {
-        setLoading(false);
       }
     };
 
@@ -86,7 +85,6 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     }
   };
 
-  // 이미지 삭제 처리
   const handleImageDelete = (index: number, isNew: boolean) => {
     if (isNew) {
       setNewImages(newImages.filter((_, i) => i !== index));
@@ -95,39 +93,38 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     }
   };
 
-  // 수정 저장 처리
   const handleEditSave = async (reviewId: number) => {
     try {
-      // 새로 추가된 이미지를 업로드
       const uploadedImageUrls = await Promise.all(
         newImages.map((image) => uploadToAws(image))
       );
 
-      // 수정된 데이터를 서버에 전송
+      const updatedImages = [...editedImages, ...uploadedImageUrls]; // 기존 이미지 + 새로 추가한 이미지
+
       await updateReview(reviewId, {
         content: editedContent,
         star: editedStar,
-        images: [...uploadedImageUrls],
+        images: updatedImages,
       });
 
-      // 상태 업데이트
-      setEditingReviewId(null); // 수정 상태 종료
-      const updatedReviews = reviews.map((review) =>
-        review.reviewId === reviewId
-          ? {
-              ...review,
-              content: editedContent,
-              star: editedStar,
-              images: [...uploadedImageUrls], // 수정된 이미지 업데이트
-            }
-          : review
+      setEditingReviewId(null);
+      setReviews((prevReviews) =>
+        prevReviews.map((review) =>
+          review.reviewId === reviewId
+            ? {
+                ...review,
+                content: editedContent,
+                star: editedStar,
+                images: updatedImages,
+              }
+            : review
+        )
       );
-      setReviews(updatedReviews);
+      setNewImages([]);
     } catch (error) {
       console.error("리뷰 수정 중 오류 발생:", error);
     }
   };
-
   // 리뷰 좋아요
   const handleLikeToggle = async (reviewId: number) => {
     const updatedLikeCount = await toggleLikeOnServer(reviewId);
@@ -146,10 +143,17 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
       );
     }
   };
+  // 이미지 클릭 시 모달 열기
+  const handleImageClick = (image: string) => {
+    setCurrentImage(image);
+    setIsModalOpen(true);
+  };
 
-  if (loading) {
-    return <div>리뷰 데이터를 불러오는 중...</div>;
-  }
+  // 모달 닫기
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setCurrentImage(null);
+  };
 
   return (
     <ListContainer>
@@ -194,6 +198,24 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                   value={editedContent}
                   onChange={(e) => setEditedContent(e.target.value)}
                 />
+                {/* 기존 이미지 표시 */}
+                {editedImages.length > 0 && (
+                  <ExistingImagesContainer>
+                    {editedImages.map((image, index) => (
+                      <ImageWrapper key={index}>
+                        <ReviewImage
+                          src={image}
+                          alt={`Review Image ${index}`}
+                        />
+                        <DeleteImageButton
+                          onClick={() => handleImageDelete(index, false)}
+                        >
+                          삭제
+                        </DeleteImageButton>
+                      </ImageWrapper>
+                    ))}
+                  </ExistingImagesContainer>
+                )}
 
                 {/* 새 이미지 추가 기능 */}
                 <NewImagesContainer>
@@ -211,7 +233,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                     </ImageWrapper>
                   ))}
                   <AddImageButton onClick={() => fileInputRef.current?.click()}>
-                    이미지 추가
+                    이미지 추가 +
                   </AddImageButton>
                   <input
                     type="file"
@@ -238,6 +260,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                         key={index}
                         src={image}
                         alt={`Review Image ${index + 1}`}
+                        onClick={() => handleImageClick(image)}
                       />
                     ))}
                   </ImagesContainer>
@@ -264,11 +287,38 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
           </ReviewItem>
         ))
       )}
+      {/* 이미지 확대 모달 */}
+      {isModalOpen && currentImage && (
+        <ImageModal onClick={handleCloseModal}>
+          <ModalImage src={currentImage} alt="확대 이미지" />
+        </ImageModal>
+      )}
     </ListContainer>
   );
 };
 
 export default ReviewList;
+
+const ImageModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  cursor: zoom-out; /* 닫기 버튼 대신 모달 클릭 시 닫힘을 표시 */
+`;
+
+const ModalImage = styled.img`
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+  border-radius: 10px;
+`;
 
 const ListContainer = styled.div`
   display: flex;
@@ -307,6 +357,11 @@ const EditContainer = styled.div`
   flex-direction: column;
   gap: 0.5rem;
 `;
+const ExistingImagesContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 1rem;
+`;
 
 const EditInput = styled.textarea`s
   width: 95%;
@@ -336,10 +391,20 @@ const ImagesContainer = styled.div`
 `;
 
 const ReviewImage = styled.img`
-  width: 160px;
-  height: 180px;
+  width: 150px;
+  height: 160px;
   object-fit: cover;
   border-radius: 20px;
+
+  @media (max-width: 1024px) {
+    width: 120px;
+    height: 130px;
+  }
+
+  @media (max-width: 768px) {
+    width: 80px;
+    height: 80px;
+  }
 `;
 
 const NewImagesContainer = styled.div`
@@ -372,11 +437,24 @@ const AddImageButton = styled.button`
   color: white;
   border: none;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 20px;
   font-size: 0.875rem;
+  width: 150px;
+  height: 160px;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #bfbfbf;
+  }
+
+  @media (max-width: 1024px) {
+    width: 120px;
+    height: 130px;
+  }
+
+  @media (max-width: 768px) {
+    width: 80px;
+    height: 70px;
+    font-size: 12px;
   }
 `;
 
@@ -470,10 +548,8 @@ const FanTeamImage = styled.img`
   position: absolute;
   top: 0;
   right: 0;
-  width: 25px;
-  height: 25px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background-color: white;
-  border: 2px solid white;
   object-fit: cover;
 `;
