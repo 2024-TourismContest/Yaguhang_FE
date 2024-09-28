@@ -160,7 +160,14 @@ const Container = styled.div`
   margin: 150px auto;
   position: relative;
   padding-bottom: 100px;
-  // background-color: red;
+
+  @media (max-width: 768px) {
+    margin: 120px auto;
+  }
+
+  @media (max-width: 360px) {
+    margin: 100px auto;
+  }
 `;
 const Title = styled.h2`
   font-size: 1.7rem;
@@ -242,15 +249,22 @@ const Local = styled.div`
   padding: 10px 20px;
 
   @media (max-width: 1024px) {
-    width: 40px;
+    width: 50px;
     height: 25px;
     font-size: 16px;
     padding: 5px 8px;
   }
 
   @media (max-width: 768px) {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 40px;
+    font-size: 14px;
+    padding: 5px 8px;
+  }
+
+  @media (max-width: 360px) {
+    width: 35px;
+    height: 35px;
     font-size: 14px;
     padding: 5px 8px;
   }
@@ -276,7 +290,7 @@ const FixedButton = styled(OriginalButton)<{ disabled: boolean }>`
 `;
 const TooltipWrapper = styled.div`
   position: fixed; /* 툴팁과 버튼을 함께 이동시키기 위해 고정 */
-  bottom: 60px; /* 버튼에서 약간 위로 */
+  bottom: 60px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
