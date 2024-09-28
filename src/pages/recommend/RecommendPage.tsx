@@ -162,7 +162,6 @@ const AppContainer = styled.div`
   align-items: center;
 `;
 const ItemWrapper = styled.div`
-  display: grid;
   width: 60vw;
 `;
 const Section = styled.section`
