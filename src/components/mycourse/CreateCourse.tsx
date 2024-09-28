@@ -4,6 +4,7 @@ import { BsBookmarkFill, BsBookmarkStar } from "react-icons/bs";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { GrNext } from "react-icons/gr";
 import { IoMdCheckboxOutline } from "react-icons/io";
+import DefaultImg from "../../assets/images/DefaultCircle.svg";
 
 interface ScrapData {
   contentId: number;
@@ -98,7 +99,10 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
                   >
                     <ItemWrapper>
                       <ImageWrapper>
-                        <Image src={item.image} alt={item.title} />
+                        <Image
+                          src={item.image ? item.image : DefaultImg}
+                          alt={item.title}
+                        />
                       </ImageWrapper>
                       <TextWrapper>
                         <CategoryLogo
