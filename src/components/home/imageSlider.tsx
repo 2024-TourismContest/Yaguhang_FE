@@ -44,9 +44,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
         {spots.map((spot) => (
           <SlideContainer
             key={spot.contentId}
-            onClick={() => handleImageClick(spot.contentId)}>
+            onClick={() => handleImageClick(spot.contentId)}
+          >
             <StyledMark pick={spot.picker || "none"}>
-              {spot.picker ? spot.picker : ""}
+              ⚾️ {spot.picker ? spot.picker : ""}
             </StyledMark>
             {spot.imageUrl ? (
               <SlideImage src={spot.imageUrl} alt={spot.name} />
@@ -120,17 +121,29 @@ const StyledMark = styled.div<{ pick: string }>`
   width: 50%;
   top: 0;
   right: 10%;
-  height: 12%;
-  background: #000000;
+  height: 13%;
+  background: #000;
   color: white;
   padding: 5px;
   box-sizing: border-box;
   border-radius: 0 0 10px 10px;
-  font-size: 0.85em;
+  font-size: 0.8em;
   display: grid;
   place-items: center;
   visibility: ${(props) => (props.pick === "none" ? "hidden" : "visible")};
   font-weight: 600;
+
+  @media (max-width: 1024px) {
+    font-size: 0.5rem;
+    width: 60%;
+    margin-bottom: 1vh;
+  }
+
+  @media (max-width: 768px) {
+    width: 45%;
+    height: 15%;
+    font-size: 0.7rem;
+  }
 `;
 
 const SlideInfo = styled.div`

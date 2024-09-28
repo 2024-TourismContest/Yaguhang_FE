@@ -65,7 +65,7 @@ const ButtonContainer = styled.div`
 
 const IconButton = styled.div`
   display: flex;
-  flex-wrap: wrap; /* 버튼이 여러 줄로 배치될 수 있도록 설정 */
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   overflow-x: auto;

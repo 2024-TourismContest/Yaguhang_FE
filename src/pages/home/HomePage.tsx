@@ -239,6 +239,10 @@ const AppContainer = styled.main`
   @media (max-width: 768px) {
     padding: 0 2vw;
   }
+
+  @media (max-width: 768px) {
+    padding: 0 2vw;
+  }
 `;
 
 export default HomePage;

@@ -97,7 +97,7 @@ const StadiumPage = () => {
 
   return (
     <>
-      <div style={{ width: "100vw", height: "20vh" }}></div>
+      <div style={{ width: "100vw", height: "10vh" }}></div>
       <Category filterSchedules={fetchSchedules} teamLogos={teamLogos} />
       <TitleSection
         title="맛잘알 프로야구선수들의 맛집은?"
@@ -182,7 +182,7 @@ export default StadiumPage;
 
 const Hr = styled.hr`
   width: 70%;
-  border-bottom: 1px solid #c8c3c3;
-  margin-top: 50px;
+  border-bottom: 0.3px solid #dfdfdf;
+  margin-top: 30px;
   margin-bottom: 50px;
 `;
