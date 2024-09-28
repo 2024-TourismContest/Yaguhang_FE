@@ -342,8 +342,8 @@ const StyledCard = styled.div<StyledCardProps>`
   }
 
   @media (max-width: 768px) {
-    width: 180px;
-    height: 220px;
+    width: 170px;
+    height: 210px;
   }
 `;
 
@@ -429,9 +429,9 @@ const PaginationButton = styled.button`
 `;
 
 const PrevButton = styled(PaginationButton)`
-  left: 0.2rem;
+  left: -1rem;
 `;
 
 const NextButton = styled(PaginationButton)`
-  right: 0.2rem;
+  right: -1rem;
 `;
