@@ -16,11 +16,11 @@ const Pagenation = ({
     const value = e.currentTarget.value;
 
     if (value === "first") {
-      setCurrentPage(0);
-      setPageList(0);
+      setCurrentPage(0); // 첫 페이지로 이동
+      setPageList(0); // 첫 번째 페이지 그룹으로 이동
     } else if (value === "last") {
-      setCurrentPage(lastPage);
-      setPageList(Math.floor(lastPage / 9) * 9); // 마지막 페이지 그룹으로 이동
+      setCurrentPage(lastPage - 1); // 마지막 페이지로 이동 (0-based 처리)
+      setPageList(Math.floor((lastPage - 1) / 9) * 9); // 마지막 페이지 그룹으로 이동
     } else if (value === "prev") {
       if (currentPage > 0) {
         const newPage = currentPage - 1;
@@ -30,7 +30,8 @@ const Pagenation = ({
         }
       }
     } else if (value === "next") {
-      if (currentPage < lastPage) {
+      if (currentPage < lastPage - 1) {
+        // 마지막 페이지로 이동 방지
         const newPage = currentPage + 1;
         setCurrentPage(newPage);
         if (newPage >= pageList + 9) {
