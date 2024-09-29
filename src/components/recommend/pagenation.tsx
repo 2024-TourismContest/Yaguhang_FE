@@ -48,7 +48,7 @@ const Pagenation = ({
     setPageList(0);
   }, [lastPage, setCurrentPage]);
 
-  if (!lastPage) return null; // lastPage가 없는 경우 반환
+  // if (!lastPage) return null; // lastPage가 없는 경우 반환
 
   return (
     <Wrapper>
@@ -59,28 +59,28 @@ const Pagenation = ({
         &lt;
       </Page>
       {Array.from(
-        { length: Math.min(9, lastPage - pageList) }, // 9개씩 묶어서 표시, 마지막 페이지 이상은 안 나옴
+        { length: Math.min(9, lastPage - pageList) }, // 9개씩 묶어서 표시
         (_, index) => (
           <Page
             key={index}
             value={pageList + index}
             onClick={handleClick}
-            disabled={pageList + index > lastPage}
+            disabled={pageList + index >= lastPage} // 수정: >=로 변경
             isSelected={pageList + index === currentPage}>
-            {pageList + index + 1}
+            {pageList + index + 1} {/* 1-based로 표시 */}
           </Page>
         )
       )}
       <Page
         value="next"
         onClick={handleClick}
-        disabled={currentPage === lastPage}>
+        disabled={currentPage >= lastPage - 1}>
         &gt;
       </Page>
       <Page
         value="last"
         onClick={handleClick}
-        disabled={currentPage === lastPage}>
+        disabled={currentPage >= lastPage - 1}>
         &gt;&gt;
       </Page>
     </Wrapper>
