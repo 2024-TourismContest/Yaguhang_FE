@@ -187,6 +187,7 @@ const AppContainer = styled.div`
   margin: 8vh auto;
   padding: 0 5vw;
   box-sizing: border-box;
+  margin-bottom: 20vh;
 `;
 
 const ItemWrapper = styled.div`

@@ -215,4 +215,8 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1.5vw;
+
+  &:last-child {
+    margin-bottom: 25vh;
+  }
 `;

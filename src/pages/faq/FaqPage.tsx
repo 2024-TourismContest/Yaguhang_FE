@@ -50,6 +50,7 @@ const FaqContainer = styled.div`
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   margin-top: 10vh;
+  margin-bottom: 30vh;
 `;
 
 const FaqTitle = styled.h1`
