@@ -34,7 +34,7 @@ jobs:
         run: rm -rf ./dist
 
       - name: Copy .env File
-        run: cp /home/mschoi/Desktop/tourismContest/Spring-FE/.env /home/mschoi/actions-runner-FE/_work/String-FE/String-FE
+        run: cp /home/mschoi/Desktop/tourismContest/Yaguhang-FE/.env /home/mschoi/actions-runner-FE/_work/Yaguhang-FE/Yaguhang-FE
         
       - name: Build project
         run: yarn build
@@ -45,7 +45,7 @@ jobs:
 
       - name: Copy build files
         run: |
-          cp -r ./dist /home/mschoi/Desktop/tourismContest/Spring-FE
+          cp -r ./dist /home/mschoi/Desktop/tourismContest/Yaguhang-FE
 
       - name: Start server with PM2
-        run: pm2 start /home/mschoi/Desktop/tourismContest/Spring-FE/server.js --name "tourismContest" --watch
+        run: pm2 start /home/mschoi/Desktop/tourismContest/Yaguhang-FE/server.js --name "tourismContest" --watch
