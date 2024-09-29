@@ -32,6 +32,7 @@
     <td align="center">
         <img src="https://tr.rbxcdn.com/ecac8c841a5aea0586a50a17181934ff/420/420/Hat/Png" width="120px;"/> 
         <br />
+        
     </td>
   </tr>
   <tr>
