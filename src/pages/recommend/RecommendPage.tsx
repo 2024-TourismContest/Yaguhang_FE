@@ -6,8 +6,8 @@ import {
   recommend,
   recommendSearch,
 } from "../../apis/recommend";
-import title from "../../assets/images/recommendBanner(Web).svg";
 import title2 from "../../assets/images/recommendBanner(mobile).svg";
+import title from "../../assets/images/recommendBanner(Web).svg";
 import { Button } from "../../components/button/Button";
 import { Filter } from "../../components/recommend/filter";
 import { Item } from "../../components/recommend/Item";
@@ -21,7 +21,7 @@ import { RecommendPreviewDto } from "../../types/recommendType";
 export const RecommendPage = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
-  const [lastPage, setLastPage] = useState(1);
+  const [lastPage, setLastPage] = useState(0);
   const [recommendList, setRecommendList] = useState<RecommendPreviewDto[]>(); // 상태 추가
   const [searchWord, setSearchWord] = useState<string>("");
 
@@ -32,7 +32,7 @@ export const RecommendPage = () => {
   const [selectedSpot, setSelectedSpot] = useState("전체");
   const [deleteState, setDeleteState] = useState(true);
   const itemWrapperRef = useRef<HTMLDivElement>(null);
-
+  const [isFirst, setIsFirst] = useState(true);
   // 화면 크기에 따라 배너 이미지를 변경하기 위한 상태
   const [bannerSrc, setBannerSrc] = useState<string>(title);
 
@@ -87,8 +87,9 @@ export const RecommendPage = () => {
   }, [selectedSpot, selectedOption]);
 
   useEffect(() => {
-    getRecommendList();
-    if (itemWrapperRef.current) {
+    if (isFirst) setIsFirst(false);
+    if (itemWrapperRef.current && !isFirst) {
+      getRecommendList();
       itemWrapperRef.current.scrollIntoView({ behavior: "smooth" }); // ItemWrapper로 스크롤
     }
   }, [currentPage, deleteState]);
@@ -169,7 +170,7 @@ export const RecommendPage = () => {
         <Notice>검색 결과가 없습니다.</Notice>
       )}
       <Pagenation
-        lastPage={lastPage}
+        lastPage={lastPage} // 1-based로 그대로 유지
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
@@ -185,10 +186,14 @@ const AppContainer = styled.div`
   align-items: center;
   margin: 8vh auto;
   padding: 0 5vw;
+  box-sizing: border-box;
 `;
 
 const ItemWrapper = styled.div`
   width: 60vw;
+  @media (max-width: 400px) {
+    width: 80vw;
+  }
 `;
 
 const Section = styled.section`

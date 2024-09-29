@@ -80,6 +80,7 @@ const Span = styled.span`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  height: auto;
   box-sizing: border-box;
   svg {
     width: 25px;
@@ -87,9 +88,8 @@ const Span = styled.span`
   button {
     width: 40px;
   }
-  @media (max-width: 900px) {
-    height: 15vh;
-  }
+  height: 12vh;
+  min-height: 100px;
 `;
 const Div = styled.div`
   display: flex;
@@ -126,10 +126,13 @@ const Li = styled.li`
   font-weight: bold;
 `;
 const Section = styled.section`
+  min-width: auto;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  padding: 1.5vh 0;
+  width: 60vw;
   @media (max-width: 900px) {
-    width: 85vw;
+    width: 100%;
   }
 `;
