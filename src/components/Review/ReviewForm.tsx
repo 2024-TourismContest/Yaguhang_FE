@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { IoImageOutline } from "react-icons/io5";
 import { postReview, uploadToAws } from "../../apis/review"; // api에서 uploadToAws 가져오기
 import { toast } from "react-toastify";
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
 interface ReviewFormProps {
   contentId: number;
@@ -31,6 +32,34 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 
   const handleCameraClick = () => {
     fileInputRef.current?.click();
+  };
+
+  // 별점 아이콘 렌더링 함수
+  const renderStars = () => {
+    const fullStars = Math.floor(rating); // 채워진 별 개수
+    const hasHalfStar = rating % 1 !== 0; // 반 별 여부
+
+    return (
+      <>
+        {Array.from({ length: 5 }, (_, i) => (
+          <div key={i} style={{ display: "inline-block" }}>
+            {/* 완전한 별 */}
+            {i < fullStars ? (
+              <FaStar onClick={() => setRating(i + 1)} />
+            ) : (
+              <>
+                {/* 반 별 처리 */}
+                {i === fullStars && hasHalfStar ? (
+                  <FaStarHalfAlt onClick={() => setRating(i + 0.5)} />
+                ) : (
+                  <FaRegStar onClick={() => setRating(i + 0.5)} />
+                )}
+              </>
+            )}
+          </div>
+        ))}
+      </>
+    );
   };
 
   // 리뷰 제출
@@ -69,17 +98,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 
   return (
     <ReviewInputContainer>
-      <RatingContainer>
-        {[1, 2, 3, 4, 5].map((star) => (
-          <Star
-            key={star}
-            filled={star <= rating}
-            onClick={() => setRating(star)}
-          >
-            ★
-          </Star>
-        ))}
-      </RatingContainer>
+      <RatingContainer>{renderStars()}</RatingContainer>
       <ReviewInput
         placeholder="리뷰를 입력하세요. (최대 300자)"
         value={newReview}
@@ -140,12 +159,14 @@ const ReviewInputContainer = styled.div`
 const RatingContainer = styled.div`
   display: flex;
   gap: 0.3rem;
-`;
-
-const Star = styled.span<{ filled: boolean }>`
   font-size: 1.4rem;
-  color: ${(props) => (props.filled ? "#FFD700" : "#ccc")};
+  color: #ffd700;
   cursor: pointer;
+
+  svg {
+    cursor: pointer;
+  }
+
   @media (max-width: 1024px) {
     font-size: 20px;
   }

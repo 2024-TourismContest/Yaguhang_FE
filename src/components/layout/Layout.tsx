@@ -1,4 +1,3 @@
-
 import Footer from "./Footer";
 import Header from "./Header";
 
@@ -10,7 +9,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div>
       <Header />
-      <main>{children}</main>
+      <main style={{ marginBottom: "10vh" }}>{children}</main>
       <Footer />
     </div>
   );

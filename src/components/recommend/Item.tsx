@@ -64,7 +64,8 @@ export const Item = ({
                       marginTop: "8px",
                       color: "#ccc",
                       fontSize: "12px",
-                    }}>
+                    }}
+                  >
                     {item.createdAt}
                   </h5>
                 </DateWrapper>

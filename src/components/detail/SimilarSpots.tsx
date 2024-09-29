@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { BsBookmarkFill, BsBookmarkStar } from "react-icons/bs";
 
 export interface SpotPreviewDto {
@@ -72,6 +72,17 @@ const SimilarSpots: React.FC<SimilarSpotsProps> = ({
 };
 
 export default SimilarSpots;
+
+const shake = keyframes`
+  0% { transform: translateX(0); }
+  10% { transform: translateX(-2px); }
+  20% { transform: translateX(2px); }
+  30% { transform: translateX(-2px); }
+  40% { transform: translateX(2px); }
+  50% { transform: translateX(-2px); }
+  60% { transform: translateX(2px); }
+  100% { transform: translateX(0); }
+`;
 
 const Section = styled.div`
   position: relative;
@@ -206,7 +217,7 @@ const BookmarkIcon = styled.div`
   transition: color 0.3s ease;
 
   &:hover {
-    color: #ccc;
+    animation: ${shake} 0.6s ease-in-out;
   }
 
   @media (max-width: 1024px) {

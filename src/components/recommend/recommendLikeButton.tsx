@@ -59,12 +59,13 @@ export const RecommendLikeButton = ({
 const Button = styled.button`
   background-color: transparent;
   border: none;
-  width: 45px;
+  width: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
   z-index: 50;
+  margin-right: -3px;
   svg {
     width: 45px;
     height: 45px;

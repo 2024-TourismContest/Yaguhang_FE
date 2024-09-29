@@ -44,9 +44,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
         {spots.map((spot) => (
           <SlideContainer
             key={spot.contentId}
-            onClick={() => handleImageClick(spot.contentId)}>
+            onClick={() => handleImageClick(spot.contentId)}
+          >
             <StyledMark pick={spot.picker || "none"}>
-              {spot.picker ? spot.picker : ""}
+              ⚾️ {spot.picker ? spot.picker : ""}
             </StyledMark>
             {spot.imageUrl ? (
               <SlideImage src={spot.imageUrl} alt={spot.name} />
@@ -84,6 +85,14 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
 
 export default ImageSlider;
 
+const SlideImage = styled.img`
+  width: 100%;
+  height: clamp(150px, 14.99vw, 370px);
+  object-fit: cover;
+  border-radius: 0.9vw;
+  transition: filter 0.3s ease-in-out;
+`;
+
 const SlideContainer = styled.div`
   width: clamp(130px, 11.6vw, 370px);
   height: clamp(150px, 14.99vw, 370px);
@@ -94,17 +103,15 @@ const SlideContainer = styled.div`
   position: relative;
   border-radius: 0.9vw;
   filter: drop-shadow(0px 3.101px 3.101px rgba(0, 0, 0, 0.25));
+
+  &:hover ${SlideImage} {
+    filter: brightness(0.7);
+  }
+
   @media (max-width: 650px) {
     width: clamp(130px, 100%, 370px);
     height: clamp(150px, 14.99vw, 370px);
   }
-`;
-
-const SlideImage = styled.img`
-  width: 100%;
-  height: clamp(150px, 14.99vw, 370px);
-  object-fit: cover;
-  border-radius: 0.9vw;
 `;
 
 const DefaultImage = styled.img`
@@ -113,6 +120,11 @@ const DefaultImage = styled.img`
   object-fit: cover;
   border-radius: 0.9vw;
   background-color: transparent;
+  transition: filter 0.3s ease-in-out;
+
+  &:hover {
+    filter: brightness(0.7);
+  }
 `;
 const StyledMark = styled.div<{ pick: string }>`
   z-index: 5;
@@ -120,17 +132,29 @@ const StyledMark = styled.div<{ pick: string }>`
   width: 50%;
   top: 0;
   right: 10%;
-  height: 12%;
-  background: #000000;
+  height: 13%;
+  background: #000;
   color: white;
   padding: 5px;
   box-sizing: border-box;
   border-radius: 0 0 10px 10px;
-  font-size: 0.85em;
+  font-size: 0.8em;
   display: grid;
   place-items: center;
   visibility: ${(props) => (props.pick === "none" ? "hidden" : "visible")};
   font-weight: 600;
+
+  @media (max-width: 1024px) {
+    font-size: 0.5rem;
+    width: 60%;
+    margin-bottom: 1vh;
+  }
+
+  @media (max-width: 768px) {
+    width: 45%;
+    height: 15%;
+    font-size: 0.7rem;
+  }
 `;
 
 const SlideInfo = styled.div`

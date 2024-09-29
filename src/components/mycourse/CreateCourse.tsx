@@ -4,6 +4,7 @@ import { BsBookmarkFill, BsBookmarkStar } from "react-icons/bs";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { GrNext } from "react-icons/gr";
 import { IoMdCheckboxOutline } from "react-icons/io";
+import DefaultImg from "../../assets/images/DefaultCircle.svg";
 
 interface ScrapData {
   contentId: number;
@@ -38,7 +39,6 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
 }) => {
   const [recommendList, setRecommendList] = useState<ScrapData[]>([]);
 
-  // 북마크 아이템을 추천행 리스트에 추가하는 함수
   const handleScrapItemClick = (item: ScrapData) => {
     if (!recommendList.find((i) => i.contentId === item.contentId)) {
       setRecommendList([...recommendList, item]);
@@ -46,7 +46,6 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
     }
   };
 
-  // 추천행 리스트에서 아이템을 제거하는 함수
   const handleRecommendItemClick = (contentId: number) => {
     const updatedList = recommendList.filter(
       (item) => item.contentId !== contentId
@@ -55,7 +54,6 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
     setContentIdList(updatedList.map((item) => item.contentId));
   };
 
-  // selectedSpot이 변경될 때 추천행 리스트 초기화
   useEffect(() => {
     setRecommendList([]);
     setContentIdList([]);
@@ -98,7 +96,10 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
                   >
                     <ItemWrapper>
                       <ImageWrapper>
-                        <Image src={item.image} alt={item.title} />
+                        <Image
+                          src={item.image ? item.image : DefaultImg}
+                          alt={item.title}
+                        />
                       </ImageWrapper>
                       <TextWrapper>
                         <CategoryLogo
@@ -172,6 +173,11 @@ const Container = styled.div`
   align-items: center;
   color: #fff;
   padding: 20px;
+
+  @media (max-width: 480px) {
+    padding: 18px;
+    width: 75vw;
+  }
 `;
 
 const CourseHeader = styled.div`
@@ -180,17 +186,13 @@ const CourseHeader = styled.div`
   margin: 20px 0;
   width: 100%;
 
-  @media (max-width: 768px) {
-    margin: 15px 0;
-  }
-
   @media (max-width: 480px) {
     margin: 10px 0;
   }
 `;
 
 const Input = styled.input`
-  width: 100%;
+  width: 93%;
   max-width: 700px;
   padding: 10px 20px;
   border: none;
@@ -211,23 +213,19 @@ const Input = styled.input`
     color: #888;
   }
 
-  @media (max-width: 768px) {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-    margin-bottom: 15px;
-  }
-
   @media (max-width: 480px) {
-    padding: 6px 12px;
-    font-size: 0.8rem;
+    width: 100%;
+    padding: 13px 10px;
+    margin-left: -10px;
+    font-size: 1rem;
     margin-bottom: 10px;
   }
 `;
 
 const Textarea = styled.textarea`
-  width: 100%;
+  width: 93%;
   max-width: 700px;
-  height: 80px;
+  height: 100px;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -246,16 +244,12 @@ const Textarea = styled.textarea`
     color: #888;
   }
 
-  @media (max-width: 768px) {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-    height: 70px;
-  }
-
   @media (max-width: 480px) {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    height: 60px;
+    width: 100%;
+    padding: 20px 10px;
+    margin-left: -10px;
+    font-size: 1rem;
+    height: 100px;
   }
 `;
 
@@ -265,11 +259,6 @@ const CourseTitleLabel = styled.p`
   color: #fff;
   margin-bottom: 10px;
 
-  @media (max-width: 768px) {
-    font-size: 1rem;
-    margin-bottom: 8px;
-  }
-
   @media (max-width: 480px) {
     font-size: 0.9rem;
     margin-bottom: 6px;
@@ -277,7 +266,7 @@ const CourseTitleLabel = styled.p`
 `;
 
 const ListsContainer = styled.div`
-  max-width: 80vw;
+  max-width: 78vw;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -290,12 +279,13 @@ const ListsContainer = styled.div`
 
   @media (max-width: 768px) {
     max-width: 80vw;
+    margin-top: 3vh;
     gap: 15px;
   }
 
   @media (max-width: 480px) {
-    max-width: 90vw;
-    gap: 10px;
+    flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -319,15 +309,14 @@ const List = styled.div`
   &::-webkit-scrollbar-track {
     background-color: #1f1f1f;
   }
-
   @media (max-width: 768px) {
     width: 400px;
     padding: 15px;
   }
 
   @media (max-width: 480px) {
-    width: 400px;
-    padding: 10px;
+    width: 100%;
+    padding: 23px;
   }
 `;
 
@@ -340,11 +329,6 @@ const Title = styled.div`
 
   span {
     margin-left: 10px;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 1.1rem;
-    margin-bottom: 15px;
   }
 
   @media (max-width: 480px) {
@@ -377,10 +361,6 @@ const ScrapItem = styled.li<{ disabled: boolean }>`
     border-bottom: none;
   }
 
-  @media (max-width: 768px) {
-    padding: 12px 0;
-  }
-
   @media (max-width: 480px) {
     padding: 10px 0;
   }
@@ -407,10 +387,6 @@ const RecommendItem = styled.li`
     border-bottom: none;
   }
 
-  @media (max-width: 768px) {
-    padding: 12px 0;
-  }
-
   @media (max-width: 480px) {
     padding: 10px 0;
   }
@@ -428,12 +404,6 @@ const ImageWrapper = styled.div`
   overflow: hidden;
   border-radius: 50%;
   margin-right: 15px;
-
-  @media (max-width: 768px) {
-    width: 45px;
-    height: 45px;
-    margin-right: 10px;
-  }
 
   @media (max-width: 480px) {
     width: 40px;
@@ -456,12 +426,6 @@ const CategoryLogo = styled.img`
   height: 20px;
   margin-right: 10px;
 
-  @media (max-width: 768px) {
-    width: 18px;
-    height: 18px;
-    margin-right: 8px;
-  }
-
   @media (max-width: 480px) {
     width: 16px;
     height: 16px;
@@ -475,11 +439,6 @@ const TitleText = styled.div`
   margin-bottom: 5px;
   width: 185px;
 
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-    width: 160px;
-  }
-
   @media (max-width: 480px) {
     font-size: 0.8rem;
     width: 140px;
@@ -490,11 +449,6 @@ const AddressText = styled.div`
   font-size: 0.9rem;
   color: #aaa;
   width: 180px;
-
-  @media (max-width: 768px) {
-    font-size: 0.8rem;
-    width: 160px;
-  }
 
   @media (max-width: 480px) {
     font-size: 0.7rem;
@@ -511,11 +465,6 @@ const IconWrapper = styled.div`
   background-color: #2f2f2f;
   border-radius: 50%;
 
-  @media (max-width: 768px) {
-    width: 28px;
-    height: 28px;
-  }
-
   @media (max-width: 480px) {
     width: 25px;
     height: 25px;
@@ -528,10 +477,6 @@ const EmptyMessage = styled.div`
   font-size: 1rem;
   color: #aaa;
 
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-  }
-
   @media (max-width: 480px) {
     font-size: 0.8rem;
   }
@@ -541,10 +486,6 @@ const Arrow = styled.div`
   font-size: 2rem;
   color: #fff;
   margin: auto;
-
-  @media (max-width: 768px) {
-    font-size: 1.5rem;
-  }
 
   @media (max-width: 480px) {
     font-size: 1.2rem;
@@ -573,11 +514,6 @@ const IconWrapper2 = styled.div`
     svg {
       color: #fff;
     }
-  }
-
-  @media (max-width: 768px) {
-    width: 28px;
-    height: 28px;
   }
 
   @media (max-width: 480px) {

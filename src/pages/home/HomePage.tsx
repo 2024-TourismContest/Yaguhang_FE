@@ -187,9 +187,11 @@ const HomePage = () => {
 const HomePageContainer = styled.div`
   position: relative;
   min-height: 100vh;
+  margin-bottom: 10vh;
   overflow: hidden;
   justify-content: center;
   z-index: 1;
+  background-color: #fff;
 `;
 
 const RoundBackground = styled.div`
@@ -198,7 +200,7 @@ const RoundBackground = styled.div`
   left: 50%;
   width: 200vw;
   height: 1500px;
-  background-color: #000000;
+  background-color: #000;
   border-radius: 46%;
   transform: translate(-50%, -30%);
   z-index: -1;
@@ -231,6 +233,18 @@ const WeatherContainer = styled.div`
 const AppContainer = styled.main`
   padding: 0 15vw;
   max-width: 1400px;
+
+  @media (max-width: 1024px) {
+    padding: 0 2vw;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 2vw;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 2vw;
+  }
 `;
 
 export default HomePage;

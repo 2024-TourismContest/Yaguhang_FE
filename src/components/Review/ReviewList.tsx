@@ -1,5 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import {
+  FaRegHeart,
+  FaHeart,
+  FaStar,
+  FaStarHalfAlt,
+  FaRegStar,
+} from "react-icons/fa";
 import styled from "styled-components";
 import {
   deleteReview,
@@ -8,12 +13,14 @@ import {
   updateReview,
   uploadToAws,
 } from "../../apis/review";
+import { useEffect, useRef, useState } from "react";
 
 interface ReviewListProps {
   contentId: number;
   sort: string; // 정렬 기준 (new, like, old)
   reviews: any[];
 }
+
 interface ReviewData {
   user: {
     userId: number;
@@ -125,6 +132,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
       console.error("리뷰 수정 중 오류 발생:", error);
     }
   };
+
   // 리뷰 좋아요
   const handleLikeToggle = async (reviewId: number) => {
     const updatedLikeCount = await toggleLikeOnServer(reviewId);
@@ -143,6 +151,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
       );
     }
   };
+
   // 이미지 클릭 시 모달 열기
   const handleImageClick = (image: string) => {
     setCurrentImage(image);
@@ -153,6 +162,29 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setCurrentImage(null);
+  };
+
+  // 별점 렌더링 함수
+  const renderStars = (rating: number) => {
+    const fullStars = Math.floor(rating);
+    const halfStar = rating - fullStars >= 0.5;
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+    return (
+      <>
+        {Array(fullStars)
+          .fill(null)
+          .map((_, index) => (
+            <FaStar key={`full-${index}`} color="#FFD700" />
+          ))}
+        {halfStar && <FaStarHalfAlt color="#FFD700" />}
+        {Array(emptyStars)
+          .fill(null)
+          .map((_, index) => (
+            <FaRegStar key={`empty-${index}`} color="#FFD700" />
+          ))}
+      </>
+    );
   };
 
   return (
@@ -177,20 +209,19 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                   </ReviewDate>
                 </UserDetails>
               </UserInfo>
-              <Rating>⭐ {review.star}</Rating>
+              <Rating>{renderStars(review.star)}</Rating>
             </ReviewHeader>
 
-            {/* 수정 중인지 확인 */}
             {editingReviewId === review.reviewId ? (
               <EditContainer>
                 <StarContainer>
-                  {[1, 2, 3, 4, 5].map((star) => (
+                  {[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5].map((star) => (
                     <Star
                       key={star}
                       filled={star <= editedStar}
                       onClick={() => setEditedStar(star)} // 별점 수정
                     >
-                      ★
+                      {star % 1 === 0 ? <FaStar /> : <FaStarHalfAlt />}
                     </Star>
                   ))}
                 </StarContainer>
@@ -198,8 +229,9 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                   value={editedContent}
                   onChange={(e) => setEditedContent(e.target.value)}
                 />
-                {/* 기존 이미지 표시 */}
-                {editedImages.length > 0 && (
+
+                {/* 기존 이미지와 새 이미지 추가 버튼을 감싸는 ImagesWrapper */}
+                <ImagesWrapper>
                   <ExistingImagesContainer>
                     {editedImages.map((image, index) => (
                       <ImageWrapper key={index}>
@@ -208,40 +240,45 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                           alt={`Review Image ${index}`}
                         />
                         <DeleteImageButton
-                          onClick={() => handleImageDelete(index, false)}>
+                          onClick={() => handleImageDelete(index, false)}
+                        >
                           삭제
                         </DeleteImageButton>
                       </ImageWrapper>
                     ))}
                   </ExistingImagesContainer>
-                )}
 
-                {/* 새 이미지 추가 기능 */}
-                <NewImagesContainer>
-                  {newImages.map((image, index) => (
-                    <ImageWrapper key={index}>
-                      <ReviewImage
-                        src={URL.createObjectURL(image)}
-                        alt={`New Image ${index}`}
-                      />
-                      <DeleteImageButton
-                        onClick={() => handleImageDelete(index, true)}>
-                        삭제
-                      </DeleteImageButton>
-                    </ImageWrapper>
-                  ))}
-                  <AddImageButton onClick={() => fileInputRef.current?.click()}>
-                    이미지 추가 +
-                  </AddImageButton>
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    ref={fileInputRef}
-                    style={{ display: "none" }}
-                    onChange={handleImageUpload}
-                  />
-                </NewImagesContainer>
+                  {/* 새 이미지 추가 기능 */}
+                  <NewImagesContainer>
+                    {newImages.map((image, index) => (
+                      <ImageWrapper key={index}>
+                        <ReviewImage
+                          src={URL.createObjectURL(image)}
+                          alt={`New Image ${index}`}
+                        />
+                        <DeleteImageButton
+                          onClick={() => handleImageDelete(index, true)}
+                        >
+                          삭제
+                        </DeleteImageButton>
+                      </ImageWrapper>
+                    ))}
+                    <AddImageButton
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      이미지 추가 +
+                    </AddImageButton>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      ref={fileInputRef}
+                      style={{ display: "none" }}
+                      onChange={handleImageUpload}
+                    />
+                  </NewImagesContainer>
+                </ImagesWrapper>
+
                 <SaveButton onClick={() => handleEditSave(review.reviewId)}>
                   저장
                 </SaveButton>
@@ -250,7 +287,6 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
               <>
                 <Content>{review.content}</Content>
 
-                {/* 기존 이미지를 수정 모드가 아닐 때만 렌더링 */}
                 {review.images.length > 0 && (
                   <ImagesContainer>
                     {review.images.map((image, index) => (
@@ -285,6 +321,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
           </ReviewItem>
         ))
       )}
+
       {/* 이미지 확대 모달 */}
       {isModalOpen && currentImage && (
         <ImageModal onClick={handleCloseModal}>
@@ -296,7 +333,12 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
 };
 
 export default ReviewList;
-
+const ImagesWrapper = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+`;
 const ImageModal = styled.div`
   position: fixed;
   top: 0;
@@ -308,7 +350,7 @@ const ImageModal = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  cursor: zoom-out; /* 닫기 버튼 대신 모달 클릭 시 닫힘을 표시 */
+  cursor: zoom-out;
 `;
 
 const ModalImage = styled.img`
@@ -346,8 +388,13 @@ const Rating = styled.div`
 
 const Content = styled.p`
   margin-top: 0.5rem;
+  width: 100%;
   font-size: 0.95rem;
   color: #dfdfdf;
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 10px;
+  border-radius: 10px;
 `;
 
 const EditContainer = styled.div`
@@ -358,7 +405,7 @@ const EditContainer = styled.div`
 const ExistingImagesContainer = styled.div`
   display: flex;
   gap: 10px;
-  margin-top: 1rem;
+  align-items: center;
 `;
 
 const EditInput = styled.textarea`
@@ -366,8 +413,8 @@ const EditInput = styled.textarea`
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color:#000;
-  color:#ccc;
+  background-color: #000;
+  color: #ccc;
 `;
 
 const StarContainer = styled.div`
@@ -389,8 +436,8 @@ const ImagesContainer = styled.div`
 `;
 
 const ReviewImage = styled.img`
-  width: 150px;
-  height: 160px;
+  width: 130px;
+  height: 140px;
   object-fit: cover;
   border-radius: 20px;
 
@@ -408,7 +455,7 @@ const ReviewImage = styled.img`
 const NewImagesContainer = styled.div`
   display: flex;
   gap: 10px;
-  margin-top: 1rem;
+  align-items: center;
 `;
 
 const ImageWrapper = styled.div`
@@ -437,8 +484,8 @@ const AddImageButton = styled.button`
   cursor: pointer;
   border-radius: 20px;
   font-size: 0.875rem;
-  width: 150px;
-  height: 160px;
+  width: 130px;
+  height: 140px;
 
   &:hover {
     background-color: #bfbfbf;

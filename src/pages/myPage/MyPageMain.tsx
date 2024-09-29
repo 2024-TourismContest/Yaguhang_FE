@@ -58,7 +58,7 @@ const MyPageMain: React.FC = () => {
 
   return (
     <MainPageContainer>
-      <SectionTitle title={"관심 있는 구장"} />
+      <SectionTitle title={"관심 있는 구단"} />
       <TeamSelector
         selectedTeam={preferTeam}
         setSelectedTeam={setPreferTeam}
