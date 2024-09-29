@@ -26,7 +26,7 @@ export const Item = ({
     <>
       <Section>
         <Title>
-          <li style={{ width : "100%" }}>
+          <li style={{ width: "100%" }}>
             <h2>{item.title}</h2>
             <h3>{item.description}</h3>
             <p>{item.stadiumName} 야구장</p>
@@ -64,8 +64,7 @@ export const Item = ({
                       marginTop: "8px",
                       color: "#ccc",
                       fontSize: "12px",
-                    }}
-                  >
+                    }}>
                     {item.createdAt}
                   </h5>
                 </DateWrapper>
@@ -118,6 +117,8 @@ const Title = styled.ul`
     font-weight: 400;
     color: #dfdfdf;
     margin-bottom: 10px;
+    line-height: 1.5;
+    padding: 10px 0;
     @media (max-width: 900px) {
       font-size: 1em;
     }

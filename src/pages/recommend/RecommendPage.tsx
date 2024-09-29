@@ -191,6 +191,9 @@ const AppContainer = styled.div`
 
 const ItemWrapper = styled.div`
   width: 60vw;
+  @media (max-width: 400px) {
+    width: 80vw;
+  }
 `;
 
 const Section = styled.section`
