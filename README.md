@@ -17,7 +17,7 @@
     <td align="center">
        <img src="https://avatars.githubusercontent.com/u/77667199?v=4" width="120px;"/>   
         <br />
-        <a href="\https://github.com/dani001024" title="Code"><b>dani001024</b></a>
+        <a href="https://github.com/dani001024" title="Code"><b>dani001024</b></a>
     </td>
     <td align="center">
         <img src="https://avatars.githubusercontent.com/u/120546936?v=4" width="120px;"/> 
