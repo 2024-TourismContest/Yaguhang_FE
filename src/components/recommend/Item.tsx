@@ -26,7 +26,7 @@ export const Item = ({
     <>
       <Section>
         <Title>
-          <li>
+          <li style={{ width : "100%" }}>
             <h2>{item.title}</h2>
             <h3>{item.description}</h3>
             <p>{item.stadiumName} 야구장</p>
@@ -104,7 +104,6 @@ const Title = styled.ul`
   display: flex;
   justify-content: space-between;
   align-items: start;
-
   h2 {
     font-size: 1.3em;
     font-weight: 600;
@@ -114,6 +113,7 @@ const Title = styled.ul`
     }
   }
   h3 {
+    white-space: normal;
     font-size: 1.1em;
     font-weight: 400;
     color: #dfdfdf;
@@ -129,9 +129,6 @@ const Section = styled.section`
   padding: 10px 0;
   margin-bottom: 0;
   box-sizing: border-box;
-  @media (max-width: 900px) {
-    width: 85vw;
-  }
 `;
 const Li = styled.li`
   display: flex;
@@ -146,11 +143,8 @@ const Li = styled.li`
 `;
 
 export const Hr = styled.hr`
-  width: 60vw;
+  width: 100%;
   border-bottom: 1px dashed #d9d9d9;
-  @media (max-width: 900px) {
-    width: 85vw;
-  }
 `;
 export const Button = styled.button<{ isOpen: boolean }>`
   background-color: transparent;
@@ -179,7 +173,6 @@ const ImgWrapper = styled.div`
 `;
 const Fan = styled.img`
   height: 25px;
-
   position: absolute;
   bottom: 2%;
   right: 1%;

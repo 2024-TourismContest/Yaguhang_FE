@@ -22,12 +22,11 @@ export const Option = ({
 };
 
 const Container = styled.div`
-  margin-top: 5px;
+  margin-top: 20px;
   margin-bottom: 5vh;
   width: 100%;
   display: flex;
   justify-content: end;
-  padding-right: 15%;
   box-sizing: border-box;
   @media (max-width: 1024px) {
     padding-right: 10%;

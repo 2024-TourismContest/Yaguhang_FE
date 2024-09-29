@@ -150,12 +150,12 @@ export const RecommendPage = () => {
           searchWord={searchWord}
         />
       </Section>
-      <Option
-        selectedOption={selectedOption}
-        handleOptionChange={handleOptionChange}
-      />
       {lastPage != 0 ? (
         <ItemWrapper>
+          <Option
+            selectedOption={selectedOption}
+            handleOptionChange={handleOptionChange}
+          />
           {recommendList?.map((item, index) => (
             <Item
               key={item.recommendId}
@@ -183,10 +183,11 @@ const AppContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 20vh auto;
+  padding: 0 5vw;
 `;
 
 const ItemWrapper = styled.div`
-  display: grid;
   width: 60vw;
 `;
 

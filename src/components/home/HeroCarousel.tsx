@@ -174,11 +174,13 @@ const HeroContainer = styled.div<{ heroImage: string }>`
     background: linear-gradient(
       to bottom,
       rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0) 20%,
-      rgba(0, 0, 0, 0) 50%,
-      rgba(0, 0, 0, 0.7) 80%,
+      rgba(0, 0, 0, 0) 40%,
+      rgba(0, 0, 0, 0.6) 70%,
+      rgba(0, 0, 0, 0.9) 90%,
       rgb(0, 0, 0) 100%
     );
+    background-size: 100% 100%;
+    background-position: top;
   }
 
   & > * {
@@ -190,7 +192,6 @@ const HeroContainer = styled.div<{ heroImage: string }>`
     height: 97vh;
   }
 `;
-
 const RowWrapper = styled.div`
   display: flex;
   flex-direction: row;
