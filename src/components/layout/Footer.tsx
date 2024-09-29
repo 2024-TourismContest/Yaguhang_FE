@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 export default function Footer() {
   return (
     <FooterContainer>
-      <ContentWrapper>
         <LogoImg src={logo} alt="야구행 로고" />
         <TextWrapper>
           <FooterText>야구행</FooterText>
@@ -16,39 +15,21 @@ export default function Footer() {
           </HorizontalInfo>
           <FooterText>© 2024 yaguhang. All rights reserved.</FooterText>
         </TextWrapper>
-      </ContentWrapper>
     </FooterContainer>
   );
 }
 
 const FooterContainer = styled.footer`
   background-color: #101b52;
-  color: #fff;
   padding: 2rem 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  // border-top: 1px solid rgba(255, 255, 255, 0.2);
-
+  gap: 1.5rem;
   @media (max-width: 768px) {
     padding: 1.5rem 1rem;
   }
 `;
-
-const ContentWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-  max-width: 1200px;
-  width: 100%;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    text-align: center;
-  }
-`;
-
 const LogoImg = styled.img`
   width: 60px;
   height: 60px;

@@ -9,7 +9,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div>
       <Header />
-      <main style={{ marginBottom: "10vh" }}>{children}</main>
+      <main>{children}</main>
       <Footer />
     </div>
   );

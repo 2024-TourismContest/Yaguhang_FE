@@ -183,7 +183,7 @@ const AppContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 20vh auto;
+  margin: 8vh auto;
   padding: 0 5vw;
 `;
 

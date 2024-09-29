@@ -187,7 +187,6 @@ const HomePage = () => {
 const HomePageContainer = styled.div`
   position: relative;
   min-height: 100vh;
-  margin-bottom: 10vh;
   overflow: hidden;
   justify-content: center;
   z-index: 1;
