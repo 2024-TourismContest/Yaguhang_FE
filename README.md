@@ -15,6 +15,11 @@
 <table align="center">
   <tr>
     <td align="center">
+        <img src="https://tr.rbxcdn.com/ecac8c841a5aea0586a50a17181934ff/420/420/Hat/Png" width="120px;"/> 
+        <br />
+        <br/>
+    </td>
+    <td align="center">
        <img src="https://avatars.githubusercontent.com/u/77667199?v=4" width="120px;"/>   
         <br />
         <a href="https://github.com/dani001024" title="Code"><b>dani001024</b></a>
@@ -29,22 +34,17 @@
         <br />
         <a href="https://github.com/aong13" title="Code"><b>aong13</b></a>
     </td>
-    <td align="center">
-        <img src="https://tr.rbxcdn.com/ecac8c841a5aea0586a50a17181934ff/420/420/Hat/Png" width="120px;"/> 
-        <br />
-        <br/>
-    </td>
   </tr>
   <tr>
+    <td align="center"><b>김지혜</b></td>
     <td align="center"><b>김예진</b></td>
     <td align="center"><b>임성경</b></td>
     <td align="center"><b>오아영</b></td>
-    <td align="center"><b>김지혜</b></td>
   </tr>
   <tr>
-    <td align="center"><b>FrontEnd</b></td>
-    <td align="center"><b>FrontEnd</b></td>
-    <td align="center"><b>FrontEnd</b></td>
     <td align="center"><b>Designer</b></td>
+    <td align="center"><b>FrontEnd</b></td>
+    <td align="center"><b>FrontEnd</b></td>
+    <td align="center"><b>FrontEnd</b></td>
   </tr>
 </table>
