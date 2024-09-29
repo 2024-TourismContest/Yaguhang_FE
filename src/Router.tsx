@@ -13,6 +13,7 @@ import MyRecommend from "./pages/myPage/MyRecommend";
 import MyPageMain from "./pages/myPage/MyPageMain";
 import MyAccount from "./pages/myPage/MyAccount";
 import MycoursePage from "./pages/mycourse/MycoursePage";
+import FaqPage from "./pages/faq/FaqPage";
 import authStore from "./store/authStore";
 import useModalStore from "./store/modalStore";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +30,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
         title: "로그인 필요",
         content: "로그인이 필요한 페이지입니다.",
         onConfirm: () => {
-          navigate("/login"); 
+          navigate("/login");
           closeModal();
         },
         onCancel: () => {
@@ -47,6 +48,7 @@ export default function Router() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/faq" element={<FaqPage />} />
       <Route path="/stadium" element={<StadiumPage />} />
       <Route path="*" element={<Navigate replace to="/" />} />
       <Route path="/login" element={<LoginPage />} />
