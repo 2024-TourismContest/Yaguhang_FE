@@ -6,7 +6,8 @@ import {
   recommend,
   recommendSearch,
 } from "../../apis/recommend";
-import title from "../../assets/images/recommendBanner.svg";
+import title from "../../assets/images/recommendBanner(Web).svg";
+import title2 from "../../assets/images/recommendBanner(mobile).svg";
 import { Button } from "../../components/button/Button";
 import { Filter } from "../../components/recommend/filter";
 import { Item } from "../../components/recommend/Item";
@@ -31,6 +32,10 @@ export const RecommendPage = () => {
   const [selectedSpot, setSelectedSpot] = useState("전체");
   const [deleteState, setDeleteState] = useState(true);
   const itemWrapperRef = useRef<HTMLDivElement>(null);
+
+  // 화면 크기에 따라 배너 이미지를 변경하기 위한 상태
+  const [bannerSrc, setBannerSrc] = useState<string>(title);
+
   const handleSpotChange = (spot: string) => {
     setSelectedSpot(spot);
   };
@@ -51,6 +56,7 @@ export const RecommendPage = () => {
       console.error("리뷰 삭제 중 오류 발생:", error);
     }
   };
+
   const getRecommendList = async () => {
     try {
       const response = searchWord
@@ -87,6 +93,23 @@ export const RecommendPage = () => {
     }
   }, [currentPage, deleteState]);
 
+  // 화면 크기에 따라 배너 이미지를 동적으로 변경
+  useEffect(() => {
+    const updateBannerSrc = () => {
+      if (window.innerWidth <= 768) {
+        setBannerSrc(title2); // 모바일용 이미지
+      } else {
+        setBannerSrc(title); // 웹용 이미지
+      }
+    };
+
+    updateBannerSrc(); // 초기 로딩 시 배너 설정
+    window.addEventListener("resize", updateBannerSrc); // 창 크기 변경 시 배너 설정
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => window.removeEventListener("resize", updateBannerSrc);
+  }, []);
+
   const onClickBtn = () => {
     if (!isAuthenticated) {
       openModal({
@@ -102,11 +125,11 @@ export const RecommendPage = () => {
       navigate("/mycourse");
     }
   };
-  //추천행 삭제
+
   return (
     <AppContainer>
       <TopSection>
-        <img src={title} alt="title" />
+        <img src={bannerSrc} alt="title" />
         <Button
           bgColor="#a7cfec"
           color="black"
@@ -161,10 +184,12 @@ const AppContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 const ItemWrapper = styled.div`
   display: grid;
   width: 60vw;
 `;
+
 const Section = styled.section`
   margin-top: 50px;
   display: flex;
@@ -173,18 +198,22 @@ const Section = styled.section`
   align-items: center;
   gap: 15px;
 `;
+
 const TopSection = styled.section`
   width: 100%;
   position: relative;
+
   img {
     width: 100%;
     margin: 0 auto;
   }
+
   button {
     position: absolute;
     bottom: 20%;
     left: 15%;
   }
+
   @media (max-width: 500px) {
     margin-bottom: 1vh;
     button {
@@ -193,6 +222,7 @@ const TopSection = styled.section`
     }
   }
 `;
+
 const Notice = styled.h5`
   color: white;
 `;

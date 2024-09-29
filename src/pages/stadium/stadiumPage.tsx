@@ -173,7 +173,6 @@ const StadiumPage = () => {
           handleImageClick(contentId, stadiumId, "문화")
         }
       />
-      <Hr />
     </>
   );
 };
