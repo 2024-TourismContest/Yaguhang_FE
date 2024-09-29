@@ -34,7 +34,11 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   if (!spots || spots.length === 0)
     return (
       <Container>
-        <img src={DefaultImg} alt="준비중입니다" style={{ width: "20%" }} />
+        <img
+          src={DefaultImg}
+          alt="준비중입니다"
+          style={{ fontSize: "1rem", width: "20%" }}
+        />
       </Container>
     );
 
