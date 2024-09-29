@@ -288,6 +288,7 @@ const Button = styled.button`
   color: #fff;
   font-family: Inter;
   font-size: 1rem;
+  cursor: pointer;
 
   margin-top: 10%;
   @media (max-width: 768px) {

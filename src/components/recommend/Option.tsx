@@ -39,6 +39,7 @@ const Select = styled.select`
   padding: 3px 5px;
   background-color: transparent;
   color: white;
+  cursor: pointer;
 `;
 const SelectOption = styled.option`
   color: black;

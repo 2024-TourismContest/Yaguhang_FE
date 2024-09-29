@@ -47,7 +47,8 @@ export default function RecommendDetail({
           key={item.contentId}
           onClick={() =>
             onClickContent(item.category, item.contentId, stadiumId)
-          }>
+          }
+        >
           <Div>
             <Img
               src={item.imageUrl ? item.imageUrl : DefaultImg}
@@ -103,6 +104,7 @@ const Img = styled.img`
   border-radius: 50%;
   margin-right: 10px;
   object-fit: cover;
+  cursor: pointer;
   @media (max-width: 900px) {
     height: 50%;
   }

@@ -77,7 +77,12 @@ const ProfileComponent = ({
           onClick={onTeamClick}
           onMouseEnter={handleLogoHover}
         >
-          <TeamLogoImg src={TeamLogo || 'https://yaguhang.kro.kr:8443/teamLogos/BaseBall.png'} alt="구장 이미지" />
+          <TeamLogoImg
+            src={
+              TeamLogo || "https://yaguhang.kro.kr:8443/teamLogos/BaseBall.png"
+            }
+            alt="구장 이미지"
+          />
           {showBalloon && (
             <Balloon
               content={"팬 구단을 설정해요!"}
@@ -160,11 +165,13 @@ const TeamLogoContainer = styled.div`
 
 const TeamLogoImg = styled.img<{ hasTeamLogo?: boolean }>`
   background: #b5b5b5;
-  background-color: ${({ hasTeamLogo }) => (hasTeamLogo ? "#717171" : "#ffffff")};
+  background-color: ${({ hasTeamLogo }) =>
+    hasTeamLogo ? "#717171" : "#ffffff"};
   border-radius: 50%;
   width: 90%;
   height: 90%;
   object-fit: contain;
+  cursor: pointer;
 `;
 
 const HiddenFileInput = styled.input`

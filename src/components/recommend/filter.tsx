@@ -110,6 +110,7 @@ const Ul = styled.ul`
     align-items: center;
     gap: 3px;
     color: white;
+    cursor: pointer;
   }
 `;
 const Button = styled.button`

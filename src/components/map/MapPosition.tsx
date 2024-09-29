@@ -64,6 +64,7 @@ export const Img = styled.img`
   object-fit: fill;
   border-radius: 1.0417vw;
   background-color: #ffffff;
+  cursor: pointer;
 `;
 export const H3 = styled.h3`
   color: white;

@@ -47,6 +47,7 @@ const MoreButton = styled.button`
   gap: 12px;
   font-weight: 600;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
 
   svg {
     height: 25px;

@@ -64,7 +64,8 @@ export const Item = ({
                       marginTop: "8px",
                       color: "#ccc",
                       fontSize: "12px",
-                    }}>
+                    }}
+                  >
                     {item.createdAt}
                   </h5>
                 </DateWrapper>
@@ -153,6 +154,7 @@ export const Button = styled.button<{ isOpen: boolean }>`
   width: 30px;
   height: 30px;
   padding: 0;
+  cursor: pointer;
 
   svg {
     transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")};
@@ -185,6 +187,7 @@ const DateWrapper = styled.div`
 const DeleteButton = styled.button`
   border: none;
   background-color: transparent;
+  cursor: pointer;
   svg {
     color: white;
     width: 20px;

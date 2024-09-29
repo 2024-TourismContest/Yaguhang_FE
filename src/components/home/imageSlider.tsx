@@ -95,6 +95,7 @@ const SlideImage = styled.img`
   object-fit: cover;
   border-radius: 0.9vw;
   transition: filter 0.3s ease-in-out;
+  cursor: pointer;
 `;
 
 const SlideContainer = styled.div`
@@ -125,6 +126,7 @@ const DefaultImage = styled.img`
   border-radius: 0.9vw;
   background-color: transparent;
   transition: filter 0.3s ease-in-out;
+  cursor: pointer;
 
   &:hover {
     filter: brightness(0.7);

@@ -80,6 +80,7 @@ const Img = styled.img`
   height: 100%;
   object-fit: cover;
   transition: 0.2s ease-in-out;
+  cursor: pointer;
 `;
 
 const Gradient = styled.div`
@@ -90,6 +91,7 @@ const Gradient = styled.div`
   height: 50%;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
   transition: 0.2s ease-in-out;
+  cursor: pointer;
   &:hover {
     background: linear-gradient(rgba(0, 0, 0, 0.8));
     height: 100%;

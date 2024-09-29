@@ -133,6 +133,7 @@ const IconButton = styled.div`
   overflow-x: auto;
   height: auto;
   border-radius: 50px;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -155,6 +156,7 @@ const Button = styled.button<{
   transition: background 0.3s;
   overflow: hidden;
   margin: 0.5rem;
+  cursor: pointer;
 
   &:hover {
     background: ${(props) =>
