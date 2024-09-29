@@ -64,12 +64,7 @@ const WeatherGraph: React.FC<WeatherGraphProps> = ({ gameId }) => {
             right: 50,
           }}
         >
-          <XAxis
-            dataKey="fcstTime"
-            domain={["auto", "auto"]}
-            tickFormatter={(value) => `${value}시`}
-          />
-          <YAxis domain={["dataMin - 3", "dataMax + 3"]} hide={true} />
+          <YAxis domain={["dataMin - 1", "dataMax + 3"]} hide={true} />
           <Line
             type="monotone"
             dataKey="temp"
@@ -87,16 +82,6 @@ const WeatherGraph: React.FC<WeatherGraphProps> = ({ gameId }) => {
         </LineChart>
       </ResponsiveContainer>
 
-      <WeatherImagesContainer>
-        {weatherData.weathers.map((weather, index) => (
-          <WeatherImage
-            key={index}
-            src={weather.weatherImgUrl}
-            alt={`Weather icon for ${weather.fcstTime}`}
-          />
-        ))}
-      </WeatherImagesContainer>
-
       <ResponsiveContainer width="100%" height={100}>
         <BarChart
           data={weatherData.weathers}
@@ -104,7 +89,12 @@ const WeatherGraph: React.FC<WeatherGraphProps> = ({ gameId }) => {
             top: 20,
           }}
         >
-          <XAxis dataKey="fcstTime" tick={false} />
+          <XAxis
+            dataKey="fcstTime"
+            domain={["auto", "auto"]}
+            tickFormatter={(value) => `${value}시`}
+          />
+
           <Bar dataKey="rainyPercent" fill="#8884d8" barSize={30}>
             <LabelList
               dataKey="rainyPercent"
@@ -114,6 +104,16 @@ const WeatherGraph: React.FC<WeatherGraphProps> = ({ gameId }) => {
           </Bar>
         </BarChart>
       </ResponsiveContainer>
+
+      <WeatherImagesContainer>
+        {weatherData.weathers.map((weather, index) => (
+          <WeatherImage
+            key={index}
+            src={weather.weatherImgUrl}
+            alt={`Weather icon for ${weather.fcstTime}`}
+          />
+        ))}
+      </WeatherImagesContainer>
     </ChartContainer>
   );
 };
@@ -131,7 +131,7 @@ const ChartContainer = styled.div`
 const WeatherImagesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 95%;
+  width: 90%;
   justify-content: space-between;
   padding: 10px 20px;
 `;
