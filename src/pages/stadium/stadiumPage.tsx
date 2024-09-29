@@ -107,7 +107,7 @@ const StadiumPage = () => {
       />
       <ImageSlider
         category="선수PICK"
-        spots={playerPickData?.spotPreviewDtos.slice(0, 4) || []}
+        spots={playerPickData?.spotPreviewDtos || []}
         stadiumId={stadiumId}
         onImageClick={(contentId, stadiumId) =>
           handleImageClick(contentId, stadiumId, "선수PICK")
