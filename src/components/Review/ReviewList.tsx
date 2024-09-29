@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import {
+  FaRegHeart,
+  FaHeart,
+  FaStar,
+  FaStarHalfAlt,
+  FaRegStar,
+} from "react-icons/fa";
 import styled from "styled-components";
 import {
   deleteReview,
@@ -155,6 +161,29 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     setCurrentImage(null);
   };
 
+  // 별점 렌더링 함수
+  const renderStars = (rating: number) => {
+    const fullStars = Math.floor(rating); // 꽉 찬 별 개수
+    const halfStar = rating - fullStars >= 0.5; // 반쪽 별 여부
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0); // 빈 별 개수
+
+    return (
+      <>
+        {Array(fullStars)
+          .fill(null)
+          .map((_, index) => (
+            <FaStar key={`full-${index}`} color="#FFD700" />
+          ))}
+        {halfStar && <FaStarHalfAlt color="#FFD700" />}
+        {Array(emptyStars)
+          .fill(null)
+          .map((_, index) => (
+            <FaRegStar key={`empty-${index}`} color="#FFD700" />
+          ))}
+      </>
+    );
+  };
+
   return (
     <ListContainer>
       {reviews.length === 0 ? (
@@ -177,20 +206,20 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                   </ReviewDate>
                 </UserDetails>
               </UserInfo>
-              <Rating>⭐ {review.star}</Rating>
+              <Rating>{renderStars(review.star)}</Rating>
             </ReviewHeader>
 
             {/* 수정 중인지 확인 */}
             {editingReviewId === review.reviewId ? (
               <EditContainer>
                 <StarContainer>
-                  {[1, 2, 3, 4, 5].map((star) => (
+                  {[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5].map((star) => (
                     <Star
                       key={star}
                       filled={star <= editedStar}
                       onClick={() => setEditedStar(star)} // 별점 수정
                     >
-                      ★
+                      {star % 1 === 0 ? <FaStar /> : <FaStarHalfAlt />}
                     </Star>
                   ))}
                 </StarContainer>
@@ -208,7 +237,8 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                           alt={`Review Image ${index}`}
                         />
                         <DeleteImageButton
-                          onClick={() => handleImageDelete(index, false)}>
+                          onClick={() => handleImageDelete(index, false)}
+                        >
                           삭제
                         </DeleteImageButton>
                       </ImageWrapper>
@@ -225,7 +255,8 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                         alt={`New Image ${index}`}
                       />
                       <DeleteImageButton
-                        onClick={() => handleImageDelete(index, true)}>
+                        onClick={() => handleImageDelete(index, true)}
+                      >
                         삭제
                       </DeleteImageButton>
                     </ImageWrapper>
@@ -366,8 +397,8 @@ const EditInput = styled.textarea`
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color:#000;
-  color:#ccc;
+  background-color: #000;
+  color: #ccc;
 `;
 
 const StarContainer = styled.div`
