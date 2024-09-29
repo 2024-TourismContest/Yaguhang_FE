@@ -30,8 +30,8 @@ interface PlaceData {
 const HomePage = () => {
   const stadium = useTeamStore((state) => state.selectedGame?.stadium);
   const [selectedCategory, setSelectedCategory] = useState<string>("숙소");
-  const [placeData, setPlaceData] = useState<PlaceData | null>(null);
-  const [stadiumId, setStadiumId] = useState<number | null>(null);
+  const [placeData, setPlaceData] = useState<PlaceData>();
+  const [stadiumId, setStadiumId] = useState<number>();
   const navigate = useNavigate();
   const { selectedGame, selectedTeam, setSelectedTeam } = useTeamStore();
   const { openModal, closeModal } = useModalStore();
