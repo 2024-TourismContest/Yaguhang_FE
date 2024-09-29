@@ -30,20 +30,20 @@
     {
       "id": 4,
       "teamName": "LG 트윈스",
-      "region": "고척",
-      "heroImage": "https://yaguhang.kro.kr:8443/stadiums/gocheokStadium.webp",
+      "region": "잠실",
+      "heroImage": "https://yaguhang.kro.kr:8443/stadiums/jamsilStadium.jpeg",
       "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/LGTwins.png",
-      "heroTitle": "LG 트윈스와 함께하는\n고척의 핫플레이스 탐방",
-      "heroText": "고척의 최신 핫플레이스와 전통 명소를 함께 즐기세요!\nLG 트윈스와 함께하는 고척 구장 주변 명소 탐방과 인기 맛집 투어."
+      "heroTitle": "LG 트윈스와 함께하는\n잠실의 핫플레이스 탐방",
+      "heroText": "잠실의 최신 핫플레이스와 전통 명소를 함께 즐기세요!\nLG 트윈스와 함께하는 잠실 구장 주변 명소 탐방과 인기 맛집 투어."
     },
     {
       "id": 5,
       "teamName": "두산 베어스",
-      "region": "고척",
-      "heroImage": "https://yaguhang.kro.kr:8443/stadiums/gocheokStadium.webp",
+      "region": "잠실",
+      "heroImage": "https://yaguhang.kro.kr:8443/stadiums/jamsilStadium.jpeg",
       "teamLogo": "https://yaguhang.kro.kr:8443/teamLogos/Doosan.png",
-      "heroTitle": "두산 베어스와 함께하는\n고척의 전통과 현대를 느끼세요",
-      "heroText": "고척의 전통 명소와 현대적인 문화가 만나는 패키지!\n두산 베어스와 함께하는 전통 탐방과 최신 쇼핑 거리 체험."
+      "heroTitle": "두산 베어스와 함께하는\n잠실의 전통과 현대를 느끼세요",
+      "heroText": "잠실의 전통 명소와 현대적인 문화가 만나는 패키지!\n두산 베어스와 함께하는 전통 탐방과 최신 쇼핑 거리 체험."
     },
     {
       "id": 6,
