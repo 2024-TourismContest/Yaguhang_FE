@@ -90,7 +90,7 @@ const Button = styled.button<{ width: string }>`
 
   &:hover {
     color: #ccc;
-    animation: ${shake} 0.4s linear; /* 애니메이션 추가 */
+    animation: ${shake} 0.4s linear;
   }
   svg {
     width: 100%;

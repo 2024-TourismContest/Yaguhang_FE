@@ -85,6 +85,14 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
 
 export default ImageSlider;
 
+const SlideImage = styled.img`
+  width: 100%;
+  height: clamp(150px, 14.99vw, 370px);
+  object-fit: cover;
+  border-radius: 0.9vw;
+  transition: filter 0.3s ease-in-out;
+`;
+
 const SlideContainer = styled.div`
   width: clamp(130px, 11.6vw, 370px);
   height: clamp(150px, 14.99vw, 370px);
@@ -95,17 +103,15 @@ const SlideContainer = styled.div`
   position: relative;
   border-radius: 0.9vw;
   filter: drop-shadow(0px 3.101px 3.101px rgba(0, 0, 0, 0.25));
+
+  &:hover ${SlideImage} {
+    filter: brightness(0.7);
+  }
+
   @media (max-width: 650px) {
     width: clamp(130px, 100%, 370px);
     height: clamp(150px, 14.99vw, 370px);
   }
-`;
-
-const SlideImage = styled.img`
-  width: 100%;
-  height: clamp(150px, 14.99vw, 370px);
-  object-fit: cover;
-  border-radius: 0.9vw;
 `;
 
 const DefaultImage = styled.img`
@@ -114,6 +120,11 @@ const DefaultImage = styled.img`
   object-fit: cover;
   border-radius: 0.9vw;
   background-color: transparent;
+  transition: filter 0.3s ease-in-out;
+
+  &:hover {
+    filter: brightness(0.7);
+  }
 `;
 const StyledMark = styled.div<{ pick: string }>`
   z-index: 5;
