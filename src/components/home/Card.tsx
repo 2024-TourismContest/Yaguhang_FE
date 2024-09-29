@@ -7,7 +7,7 @@ import styled, { keyframes } from "styled-components";
 import { fetchSchedules, scrapSchedule } from "../../apis/main";
 import ball from "../../assets/icons/ball.svg";
 import checkedball from "../../assets/icons/checkedball.svg";
-import { GiBaseballGlove, GiBaseballBat } from "react-icons/gi";
+import { GiBaseballBat } from "react-icons/gi";
 import { IoBaseballOutline } from "react-icons/io5";
 import left from "../../assets/icons/left.png";
 import right from "../../assets/icons/right.png";
