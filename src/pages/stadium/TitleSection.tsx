@@ -34,54 +34,60 @@ export const TitleSection: React.FC<TitleSectionProps> = ({
 };
 
 const MoreButton = styled.button`
-  background-color: transparent;
+  background-color: #0056b3;
+  height: 50px;
   color: white;
-
+  border-radius: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px 16px;
+  padding: 2px 15px;
   border: none;
-  font-size: 1.2em;
-  gap: 15px;
-  font-weight: 400;
-  svg {
-    height: 35px;
-    width: 35px;
+  font-size: 1em;
+  gap: 12px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 
-    &:hover {
-      color: #0056b3;
+  svg {
+    height: 25px;
+    width: 25px;
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+
+  &:hover {
+    background-color: #004b9c;
+    transform: translateY(-2px);
+    svg {
+      transform: scale(1.2);
     }
   }
+
   @media screen and (max-width: 600px) {
+    font-size: 1.05em;
+    padding: 5px 12px;
     svg {
       height: 20px;
       width: 20px;
     }
-    gap: 5px;
-    font-size: 1.05em;
   }
 `;
+
 const Img = styled.img`
   height: 45px;
   position: relative;
   right: 15px;
-  svg {
-    stroke: white;
-    color: white;
-    background: #fff;
-  }
+
   @media screen and (max-width: 1050px) {
     height: 4vw;
   }
   @media screen and (max-width: 600px) {
-    left: 2px;
     height: 25px;
+    left: 2px;
   }
 `;
 
 export const Title = styled.h2`
-  font-size: clamp(12px, 2.4em, 30px);
+  font-size: clamp(12px, 2.4em, 25px);
   margin-bottom: 20px;
   font-weight: 600;
   color: #ffffff;
@@ -92,18 +98,21 @@ export const Title = styled.h2`
     font-size: clamp(10px, 4.5vw, 24px);
   }
 `;
+
 export const Wrapper = styled.div<{ gap?: string }>`
   width: 100vw;
   display: flex;
   justify-content: center;
   gap: ${({ gap }) => gap || "30px"};
-  padding: 50px 0 30px 0;
+  padding: 20px 0 30px 0;
   align-items: center;
   box-sizing: border-box;
+
   @media (max-width: 650px) {
     width: 100vw;
   }
 `;
+
 export const TitleWrapper = styled.div`
   margin-bottom: 10px;
   display: flex;
@@ -111,6 +120,7 @@ export const TitleWrapper = styled.div`
   gap: 7px;
   justify-content: center;
 `;
+
 export const StyledDiv = styled.div<{ gap?: string }>`
   display: flex;
   gap: ${({ gap }) => gap || "30px"};
@@ -121,6 +131,7 @@ export const StyledDiv = styled.div<{ gap?: string }>`
     width: clamp(200px, 95vw, 900px);
   }
 `;
+
 export const Span = styled.span`
   display: flex;
   align-items: center;
