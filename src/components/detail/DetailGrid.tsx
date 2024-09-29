@@ -176,15 +176,16 @@ const DetailGrid: React.FC<DetailGridProps> = ({
 };
 
 export default DetailGrid;
-const shake = keyframes`
-  0% { transform: translateX(0); }
-  10% { transform: translateX(-2px); }
-  20% { transform: translateX(2px); }
-  30% { transform: translateX(-2px); }
-  40% { transform: translateX(2px); }
-  50% { transform: translateX(-2px); }
-  60% { transform: translateX(2px); }
-  100% { transform: translateX(0); }
+const pop = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 `;
 const Header = styled.div`
   display: flex;
@@ -228,17 +229,13 @@ const BookmarkIcon = styled.div`
   transition: color 0.3s ease;
 
   &:hover {
-    animation: ${shake} 0.6s ease-in-out;
+    animation: ${pop} 0.3s ease-in-out;
   }
 `;
 
 const ShareIcon = styled.div`
   cursor: pointer;
   transition: color 0.3s ease;
-
-  &:hover {
-    animation: ${shake} 0.6s ease-in-out;
-  }
 `;
 
 const GridContainer = styled.div`

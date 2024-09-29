@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { styled } from "styled-components";
 import { getStadiumCoordinate } from "../../apis/map";
 import { teamToStadiumMap } from "../../assets/data/data";
 import { CategorySelector } from "../../components/home/CategorySelector";
