@@ -34,7 +34,7 @@ jobs:
         run: rm -rf ./dist
 
       - name: Copy .env File
-        run: cp /home/mschoi/Desktop/tourismContest/Yaguhang-FE/.env /home/mschoi/actions-runner-FE/_work/Yaguhang-FE/Yaguhang-FE
+        run: cp /home/mschoi/Desktop/tourismContest/Yaguhang-FE/.env /home/mschoi/actions-runner-FE/_work/Yaguhang_FE/Yaguhang_FE
         
       - name: Build project
         run: yarn build
