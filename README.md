@@ -20,9 +20,9 @@
         <a href="https://github.com/dani001024" title="Code"><b>dani001024</b></a>
     </td>
     <td align="center">
-        <img src="https://avatars.githubusercontent.com/u/120546936?v=4" width="120px;"/> 
+        <img src="https://avatars.githubusercontent.com/u/131395142?v=4" width="120px;"/> 
         <br />
-        <a href="https://github.com/m0304s title="Code"><b>m0304s</b></a>
+        <a href="https://github.com/5622lsk" title="Code"><b>5622lsk</b></a>
     </td>
     <td align="center">
         <img src="https://avatars.githubusercontent.com/u/110577667?v=4" width="120px;"/> 
