@@ -231,7 +231,6 @@ const WeatherContainer = styled.div`
 `;
 const AppContainer = styled.main`
   padding: 0 15vw;
-  max-width: 1400px;
 
   @media (max-width: 1024px) {
     padding: 0 2vw;
