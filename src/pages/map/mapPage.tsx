@@ -96,16 +96,9 @@ const MapPage = () => {
       />
       <Category filterSchedules={fetchStadiumData} teamLogos={teamLogos} />
       <SelectedPosition onClickContent={onClickContent} />
-      <Hr />
       <MapPosition onClickContent={onClickContent} />
     </>
   );
 };
 
 export default MapPage;
-const Hr = styled.hr`
-  width: 70%;
-  border-bottom: 1px solid #c8c3c3;
-  margin-top: 50px;
-  margin-bottom: 50px;
-`;

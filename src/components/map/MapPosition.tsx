@@ -39,6 +39,7 @@ export const Container = styled.div`
   width: 100vw;
   display: flex;
   font-family: Arial;
+  margin-bottom: 25vh;
 `;
 export const ItemList = styled.div`
   width: 65vw;
