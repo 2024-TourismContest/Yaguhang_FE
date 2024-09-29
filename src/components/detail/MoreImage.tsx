@@ -10,6 +10,8 @@ export interface MoreImageProps {
 const MoreImage: React.FC<MoreImageProps> = ({ images, id }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [imagesPerPage, setImagesPerPage] = useState(4); // 기본값 4개
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
+  const [selectedImage, setSelectedImage] = useState<string | null>(null); // 선택된 이미지
 
   // 화면 크기에 따라 이미지 개수를 동적으로 조정하는 함수
   const handleResize = () => {
@@ -50,6 +52,18 @@ const MoreImage: React.FC<MoreImageProps> = ({ images, id }) => {
     }
   };
 
+  // 이미지 클릭 시 모달 열기
+  const handleImageClick = (image: string) => {
+    setSelectedImage(image);
+    setIsModalOpen(true);
+  };
+
+  // 모달 닫기
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
+  };
+
   return (
     <div id={id}>
       <Section>
@@ -60,7 +74,12 @@ const MoreImage: React.FC<MoreImageProps> = ({ images, id }) => {
         <ImageContainer>
           {validImages.length > 0 ? (
             currentImages.map((image, index) => (
-              <ImageItem key={index} src={image} alt={`Image ${index + 1}`} />
+              <ImageItem
+                key={index}
+                src={image}
+                alt={`Image ${index + 1}`}
+                onClick={() => handleImageClick(image)} // 이미지 클릭 시 모달 열기
+              />
             ))
           ) : (
             <EmptyMessage>사진 정보를 준비중입니다.</EmptyMessage>
@@ -73,6 +92,15 @@ const MoreImage: React.FC<MoreImageProps> = ({ images, id }) => {
           <img src={right} alt="다음" />
         </NextButton>
       </Section>
+
+      {/* 모달 */}
+      {isModalOpen && selectedImage && (
+        <ModalOverlay onClick={closeModal}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalImage src={selectedImage} alt="확대 이미지" />
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </div>
   );
 };
@@ -125,6 +153,7 @@ const ImageItem = styled.img`
   height: 20vh;
   object-fit: cover;
   border-radius: 25px;
+  cursor: pointer;
 
   @media (max-width: 1024px) {
     width: 160px;
@@ -198,4 +227,31 @@ const EmptyMessage = styled.p`
   @media (max-width: 480px) {
     font-size: 0.8rem;
   }
+`;
+
+/* 모달 스타일 */
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  cursor: zoom-out;
+`;
+
+const ModalContent = styled.div`
+  max-width: 90%;
+  max-height: 90%;
+`;
+
+const ModalImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 10px;
 `;

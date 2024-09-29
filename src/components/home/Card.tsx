@@ -262,6 +262,7 @@ const StyledRangePicker = styled(RangePicker)`
 
   .ant-picker-input > input {
     color: #fff;
+    cursor: pointer;
   }
   .ant-picker-input > input::placeholder {
     color: #fff;

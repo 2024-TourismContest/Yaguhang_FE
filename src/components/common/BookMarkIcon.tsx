@@ -2,7 +2,7 @@ import { memo, useState } from "react";
 import { BsBookmarkStarFill, BsBookmarkStar } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { styled } from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { home } from "../../apis/main";
 import useModalStore from "../../store/modalStore";
 
@@ -10,7 +10,7 @@ interface BookmarkIconProps {
   stadiumId: number;
   contentId: number;
   isMarked: boolean;
-  width?: string; 
+  width?: string;
 }
 
 const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
@@ -68,6 +68,16 @@ const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
 );
 
 export default BookmarkIcon;
+const shake = keyframes`
+0% { transform: translateX(0); }
+10% { transform: translateX(-2px); }
+20% { transform: translateX(2px); }
+30% { transform: translateX(-2px); }
+40% { transform: translateX(2px); }
+50% { transform: translateX(-2px); }
+60% { transform: translateX(2px); }
+100% { transform: translateX(0); }
+`;
 
 const Button = styled.button<{ width: string }>`
   background-color: transparent;
@@ -78,6 +88,10 @@ const Button = styled.button<{ width: string }>`
   justify-content: center;
   padding: 0;
 
+  &:hover {
+    color: #ccc;
+    animation: ${shake} 0.4s linear; /* 애니메이션 추가 */
+  }
   svg {
     width: 100%;
     height: 100%;

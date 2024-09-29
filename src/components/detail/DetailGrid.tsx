@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { SpotDetailDto } from "../../pages/detail/DetailPage";
 import { BsBookmarkStarFill, BsBookmarkStar } from "react-icons/bs";
 import Share from "./Share";
@@ -43,11 +43,13 @@ const DetailGrid: React.FC<DetailGridProps> = ({
               <BsBookmarkStar style={{ fontSize: "2rem" }} />
             )}
           </BookmarkIcon>
-          <Share
-            name={detailData?.name}
-            address={detailData?.address}
-            description={detailData?.description}
-          />
+          <ShareIcon>
+            <Share
+              name={detailData?.name}
+              address={detailData?.address}
+              description={detailData?.description}
+            />
+          </ShareIcon>
         </IconContainer>
       </Header>
       <Section>
@@ -174,7 +176,16 @@ const DetailGrid: React.FC<DetailGridProps> = ({
 };
 
 export default DetailGrid;
-
+const shake = keyframes`
+  0% { transform: translateX(0); }
+  10% { transform: translateX(-2px); }
+  20% { transform: translateX(2px); }
+  30% { transform: translateX(-2px); }
+  40% { transform: translateX(2px); }
+  50% { transform: translateX(-2px); }
+  60% { transform: translateX(2px); }
+  100% { transform: translateX(0); }
+`;
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
@@ -217,7 +228,16 @@ const BookmarkIcon = styled.div`
   transition: color 0.3s ease;
 
   &:hover {
-    color: #ccc;
+    animation: ${shake} 0.6s ease-in-out;
+  }
+`;
+
+const ShareIcon = styled.div`
+  cursor: pointer;
+  transition: color 0.3s ease;
+
+  &:hover {
+    animation: ${shake} 0.6s ease-in-out;
   }
 `;
 
