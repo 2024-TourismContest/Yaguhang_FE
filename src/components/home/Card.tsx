@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { DatePicker, Space } from "antd";
 import moment, { Moment } from "moment";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { fetchSchedules, scrapSchedule } from "../../apis/main";
 import ball from "../../assets/icons/ball.svg";
 import checkedball from "../../assets/icons/checkedball.svg";
+import { GiBaseballGlove, GiBaseballBat } from "react-icons/gi";
+import { IoBaseballOutline } from "react-icons/io5";
 import left from "../../assets/icons/left.png";
 import right from "../../assets/icons/right.png";
 import useTeamStore from "../../store/TeamStore";
@@ -179,64 +181,80 @@ const Card: React.FC = () => {
         <PrevButton onClick={prevPage} disabled={currentPage === 0}>
           <img src={left} alt="이전" />
         </PrevButton>
-        {currentSchedules.map((schedule) => (
-          <StyledCard
-            key={schedule.id}
-            $isScraped={schedule.isScraped}
-            $isHighlighted={selectedGame?.id === schedule.id}
-            onClick={() => handleCardClick(schedule)}
-          >
-            <BeforeElement
+
+        {/* 경기 일정이 없을 경우 표시 */}
+        {currentSchedules.length === 0 ? (
+          <NoScheduleContainer>
+            <SpinningBall />
+            <SwingingBat />
+            <NoScheduleText>
+              지금은 경기가 없어요. 다음 경기 일정을 기다려주세요!
+            </NoScheduleText>
+          </NoScheduleContainer>
+        ) : (
+          currentSchedules.map((schedule) => (
+            <StyledCard
+              key={schedule.id}
               $isScraped={schedule.isScraped}
-              onClick={() => handleScrapSchedule(schedule.id)}
-            />
-            <div style={{ marginTop: "2rem" }}>
-              <div>
-                {schedule.stadium} | {schedule.time}
+              $isHighlighted={selectedGame?.id === schedule.id}
+              onClick={() => handleCardClick(schedule)}
+            >
+              <BeforeElement
+                $isScraped={schedule.isScraped}
+                onClick={() => handleScrapSchedule(schedule.id)}
+              />
+              <div style={{ marginTop: "2rem" }}>
+                <div>
+                  {schedule.stadium} | {schedule.time}
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "2.5vh",
+                  }}
+                >
+                  <img
+                    src={schedule.homeTeamLogo}
+                    alt={`${schedule.home}`}
+                    style={{ width: "3.5rem", height: "2.5rem" }}
+                  />
+                  <span style={{ margin: "0 1rem" }}>VS</span>
+                  <img
+                    src={schedule.awayTeamLogo}
+                    alt={`${schedule.away}`}
+                    style={{ width: "3.5rem", height: "2.5rem" }}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    gap: "40px",
+                    marginTop: "10px",
+                    fontSize: "0.8rem",
+                  }}
+                >
+                  <span style={{ whiteSpace: "pre-line" }}>
+                    {schedule.home}
+                  </span>
+                  <span style={{ whiteSpace: "pre-line" }}>
+                    {schedule.away}
+                  </span>
+                </div>
+                <Divider />
+                <DateAndWeatherContainer>
+                  <DateContainer>{schedule.date}</DateContainer>
+                  <WeatherIcon
+                    src={schedule.weatherUrl}
+                    alt={`${schedule.weather}`}
+                  />
+                </DateAndWeatherContainer>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginTop: "2.5vh",
-                }}
-              >
-                <img
-                  src={schedule.homeTeamLogo}
-                  alt={`${schedule.home}`}
-                  style={{ width: "3.5rem", height: "2.5rem" }}
-                />
-                <span style={{ margin: "0 1rem" }}>VS</span>
-                <img
-                  src={schedule.awayTeamLogo}
-                  alt={`${schedule.away}`}
-                  style={{ width: "3.5rem", height: "2.5rem" }}
-                />
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-around",
-                  gap: "40px",
-                  marginTop: "10px",
-                  fontSize: "0.8rem",
-                }}
-              >
-                <span style={{ whiteSpace: "pre-line" }}>{schedule.home}</span>
-                <span style={{ whiteSpace: "pre-line" }}>{schedule.away}</span>
-              </div>
-              <Divider />
-              <DateAndWeatherContainer>
-                <DateContainer>{schedule.date}</DateContainer>
-                <WeatherIcon
-                  src={schedule.weatherUrl}
-                  alt={`${schedule.weather}`}
-                />
-              </DateAndWeatherContainer>
-            </div>
-          </StyledCard>
-        ))}
+            </StyledCard>
+          ))
+        )}
         <NextButton
           onClick={nextPage}
           disabled={indexOfLastSchedule >= schedules.length}
@@ -250,10 +268,97 @@ const Card: React.FC = () => {
 
 export default Card;
 
-const StyledSpace = styled(Space)`
-  margin-top: 20px;
+const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 `;
 
+const swing = keyframes`
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(-20deg); }
+  100% { transform: rotate(0deg); }
+`;
+
+const SpinningBall = styled(IoBaseballOutline)`
+  font-size: 3rem;
+  animation: ${spin} 2s linear infinite;
+  color: #fff;
+
+  @media (max-width: 1024px) {
+    font-size: 2.5rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+`;
+
+const SwingingBat = styled(GiBaseballBat)`
+  font-size: 5rem;
+  animation: ${swing} 1s ease-in-out infinite;
+  color: #fff;
+
+  @media (max-width: 1024px) {
+    font-size: 4rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 3.5rem;
+  }
+`;
+
+const NoScheduleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 30vh;
+  color: white;
+
+  @media (max-width: 1024px) {
+    width: 450px;
+  }
+
+  @media (max-width: 768px) {
+    width: 300px;
+    height: 25vh;
+  }
+
+  @media (max-width: 480px) {
+    width: 250px;
+    height: 20vh;
+  }
+`;
+
+const NoScheduleText = styled.p`
+  font-size: 1.2rem;
+  margin-top: 2rem;
+  color: #fff;
+
+  @media (max-width: 1024px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
+`;
+
+const StyledSpace = styled(Space)`
+  margin-top: 20px;
+
+  @media (max-width: 768px) {
+    margin-top: 15px;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 10px;
+  }
+`;
 const StyledRangePicker = styled(RangePicker)`
   width: 300px;
   border-radius: 8px;
