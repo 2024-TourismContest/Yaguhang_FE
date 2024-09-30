@@ -26,7 +26,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   useEffect(() => {
     // 텍스트 변경 시마다 textarea 높이 자동 조절
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto"; // 높이 초기화
+      textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // scrollHeight로 높이 조정
     }
   }, [newReview]); // newReview 값이 변경될 때마다 동작
@@ -40,6 +40,11 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
     }
   };
 
+  // 이미지 삭제
+  const handleImageDelete = (index: number) => {
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+  };
+
   const handleCameraClick = () => {
     fileInputRef.current?.click();
   };
@@ -50,9 +55,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 
     // 클릭한 위치가 별의 중간보다 왼쪽이면 반 개로, 오른쪽이면 전체로 설정
     if (clickPosition < starElement.width / 2) {
-      setRating(index + 0.5); // 반 개 선택
+      setRating(index + 0.5);
     } else {
-      setRating(index + 1); // 전체 선택
+      setRating(index + 1);
     }
   };
 
@@ -89,7 +94,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   // 리뷰 제출
   const handleReviewSubmit = async () => {
     if (!newReview.trim() || rating === 0) {
-      toast.error("별점과 리뷰를 입력해주세요!");
+      toast.error("별점과 리뷰를 모두 입력해주세요!");
       return;
     }
 
@@ -115,7 +120,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       setImages([]);
       onSubmitSuccess();
     } catch (error) {
-      toast.error("로그인이 필요합니다.");
+      toast.error("이미지파일 용량이 너무 큽니다!");
       console.error("리뷰 작성 오류:", error);
     }
   };
@@ -133,11 +138,15 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       {images.length > 0 && (
         <ImagePreviewContainer>
           {images.map((image, index) => (
-            <PreviewImage
-              key={index}
-              src={URL.createObjectURL(image)}
-              alt={`preview-${index}`}
-            />
+            <ImageWrapper key={index}>
+              <PreviewImage
+                src={URL.createObjectURL(image)}
+                alt={`preview-${index}`}
+              />
+              <DeleteImageButton onClick={() => handleImageDelete(index)}>
+                삭제
+              </DeleteImageButton>
+            </ImageWrapper>
           ))}
         </ImagePreviewContainer>
       )}
@@ -159,7 +168,23 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 };
 
 export default ReviewForm;
+const ImageWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+`;
 
+const DeleteImageButton = styled.button`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border-radius: 50%;
+`;
 const ReviewInputContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -169,9 +194,9 @@ const ReviewInputContainer = styled.div`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   max-width: 70vw;
   margin: 1rem auto;
-  min-height: 180px; /* 기본 최소 높이 설정 */
-  height: auto; /* 내용이 길어질 때 자동으로 늘어나도록 설정 */
-  overflow: visible; /* 컨테이너가 자동으로 늘어날 수 있게 설정 */
+  min-height: 180px;
+  height: auto;
+  overflow: visible;
 
   @media (max-width: 1024px) {
     width: 650px;
@@ -256,7 +281,7 @@ const CameraIcon = styled.div`
   }
 
   &:hover {
-    color: #007bff;
+    color: #ccc;
   }
 `;
 
@@ -279,7 +304,7 @@ const SubmitButton = styled.button`
   }
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #ccc;
   }
 `;
 
