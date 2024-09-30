@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { IoImageOutline } from "react-icons/io5";
 import { postReview, uploadToAws } from "../../apis/review"; // api에서 uploadToAws 가져오기
@@ -20,6 +20,15 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   const [rating, setRating] = useState(0);
   const [images, setImages] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조
+  const textareaRef = useRef<HTMLTextAreaElement>(null); // textarea 참조
+
+  useEffect(() => {
+    // 텍스트 변경 시마다 textarea 높이 자동 조절
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto"; // 높이 초기화
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // scrollHeight로 높이 조정
+    }
+  }, [newReview]); // newReview 값이 변경될 때마다 동작
 
   // 이미지 선택 처리
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,6 +109,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
     <ReviewInputContainer>
       <RatingContainer>{renderStars()}</RatingContainer>
       <ReviewInput
+        ref={textareaRef}
         placeholder="리뷰를 입력하세요."
         value={newReview}
         onChange={(e) => setNewReview(e.target.value)}
@@ -144,15 +154,18 @@ const ReviewInputContainer = styled.div`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   max-width: 70vw;
   margin: 1rem auto;
+  min-height: 180px; /* 기본 최소 높이 설정 */
+  height: auto; /* 내용이 길어질 때 자동으로 늘어나도록 설정 */
+  overflow: visible; /* 컨테이너가 자동으로 늘어날 수 있게 설정 */
 
   @media (max-width: 1024px) {
     width: 650px;
-    height: 300px;
+    min-height: 180px;
   }
 
   @media (max-width: 768px) {
     width: 450px;
-    height: 170px;
+    mibn-height: 170px;
   }
 `;
 
@@ -186,19 +199,20 @@ const ReviewInput = styled.textarea`
   background-color: #000;
   font-size: 1rem;
   margin-bottom: 1rem;
-  resize: vertical;
+  resize: none;
+  overflow-y: hidden;
   outline: none;
 
   @media (max-width: 1024px) {
     width: 98%;
     min-height: 25%;
-    height: 100px;
+    height: auto;
   }
 
   @media (max-width: 768px) {
     min-height: 6%;
     width: 98%;
-    height: 80px;
+    height: auto;
     font-size: 12px;
   }
 `;
@@ -258,14 +272,15 @@ const ImagePreviewContainer = styled.div`
   display: flex;
   gap: 10px;
   margin-top: 1rem;
+  flex-wrap: wrap;
   @media (max-width: 1024px) {
     width:100%
-    height:100px;
+    min-height:70px;
   }
 
   @media (max-width: 768px) {
     width:100%
-    height:200px;
+    min-height:70px;
   }
 `;
 
@@ -276,12 +291,20 @@ const PreviewImage = styled.img`
   border-radius: 10px;
 
   @media (max-width: 1024px) {
-    width: 120px;
-    height: 130px;
+    width: 100px;
+    height: 110px;
+    object-fit: cover;
+    margin-top: -40px;
   }
 
   @media (max-width: 768px) {
     width: 70px;
+    height: 70px;
+    margin-top: 5px;
+  }
+
+  @media (max-width: 480px) {
+    width: 60px;
     height: 70px;
   }
 `;

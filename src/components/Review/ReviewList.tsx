@@ -366,6 +366,7 @@ const ListContainer = styled.div`
   gap: 1.5rem;
   max-width: 70vw;
   margin: 0 auto;
+  margin-bottom: 20vh;
 `;
 
 const ReviewItem = styled.div`
