@@ -131,7 +131,6 @@ const Section = styled.section`
   flex-direction: column;
   gap: 15px;
   padding: 1.5vh 0;
-  width: 60vw;
   @media (max-width: 900px) {
     width: 100%;
   }

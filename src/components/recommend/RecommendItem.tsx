@@ -6,31 +6,32 @@ import DialogOpenButton from "../../assets/icons/DialogOpenButton";
 import { RecommendPreviewDto } from "../../types/recommendType";
 import RecommendDetail from "./RecommendDetail";
 import { RecommendLikeButton } from "./recommendLikeButton";
+
 export const Item = ({
   item,
   isLast,
   isMine,
   handleDelete,
+  isOpen: initialIsOpen = false,
 }: {
   item: RecommendPreviewDto;
   isLast: boolean;
   isMine?: boolean;
   handleDelete: (recommendId: number) => void;
+  isOpen?: boolean;
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(initialIsOpen);
   const [likeCnt, setLikeCnt] = useState(item.likes);
+
   const likes = (cnt: number) => {
     setLikeCnt(cnt);
   };
+
   return (
     <>
       <Section>
         <Title>
-          <li style={{ width: "100%" }}>
-            <h2>{item.title}</h2>
-            <h3>{item.description}</h3>
-            <p>{item.stadiumName} 야구장</p>
-          </li>
+          <h2>{item.title}</h2>
           <Li>
             <RecommendLikeButton
               contentId={item.recommendId}
@@ -45,38 +46,41 @@ export const Item = ({
             )}
           </Li>
         </Title>
-        <Title>
-          <Li>
-            {!isMine && (
-              <>
-                <ImgWrapper>
-                  {item.profileImage ? (
-                    <ProfileImg src={item.profileImage} alt="프로필" />
-                  ) : (
-                    <IoPersonCircleOutline />
-                  )}
-                  <Fan src={item.likeTeamUrl} />
-                </ImgWrapper>
-                <DateWrapper>
-                  <h5>{item.authorName}</h5>
-                  <h5
-                    style={{
-                      marginTop: "8px",
-                      color: "#ccc",
-                      fontSize: "12px",
-                    }}>
-                    {item.createdAt}
-                  </h5>
-                </DateWrapper>
-              </>
-            )}
-          </Li>
-          <li>
-            <Button onClick={() => setIsOpen((prev) => !prev)} isOpen={isOpen}>
-              <DialogOpenButton />
-            </Button>
-          </li>
-        </Title>
+        <Li>
+          <Container>
+            <h3>{item.description}</h3>
+            <p>{item.stadiumName} 야구장</p>
+            <Li>
+              {!isMine && (
+                <>
+                  <ImgWrapper>
+                    {item.profileImage ? (
+                      <ProfileImg src={item.profileImage} alt="프로필" />
+                    ) : (
+                      <IoPersonCircleOutline />
+                    )}
+                    <Fan src={item.likeTeamUrl} />
+                  </ImgWrapper>
+                  <DateWrapper>
+                    <h5>{item.authorName}</h5>
+                    <h5
+                      style={{
+                        marginTop: "8px",
+                        color: "#ccc",
+                        fontSize: "12px",
+                      }}
+                    >
+                      {item.createdAt}
+                    </h5>
+                  </DateWrapper>
+                </>
+              )}
+            </Li>
+          </Container>
+          <Button onClick={() => setIsOpen((prev) => !prev)} isOpen={isOpen}>
+            <DialogOpenButton />
+          </Button>
+        </Li>
       </Section>
       {isOpen && (
         <RecommendDetail
@@ -100,22 +104,37 @@ const ProfileImg = styled.img`
 
 const Title = styled.ul`
   width: 100%;
+  align-items: center;
   display: flex;
-  justify-content: space-between;
-  align-items: start;
   h2 {
+    height: 30px;
     font-size: 1.3em;
     font-weight: 600;
+    margin-right: auto;
+    align-content: center;
     margin-bottom: 10px;
     @media (max-width: 900px) {
       font-size: 1.3em;
     }
   }
+`;
+
+const Section = styled.section`
+  color: white;
+  margin-top: 20px;
+  box-sizing: border-box;
+`;
+
+const Container = styled.div`
+  margin-right: auto;
+  padding-right: 10px;
   h3 {
     white-space: normal;
+    line-height: 1.5;
     font-size: 1.1em;
     font-weight: 400;
     color: #dfdfdf;
+    text-align: justify;
     margin-bottom: 10px;
     line-height: 1.5;
     padding: 10px 0;
@@ -125,15 +144,10 @@ const Title = styled.ul`
   }
 `;
 
-const Section = styled.section`
-  color: white;
-  padding: 10px 0;
-  margin-bottom: 0;
-  box-sizing: border-box;
-`;
 const Li = styled.li`
   display: flex;
   align-items: center;
+
   h5 {
     margin-left: 10px;
   }
@@ -143,17 +157,20 @@ const Li = styled.li`
   }
 `;
 
-export const Hr = styled.hr`
+export const Hr = styled.div`
   width: 100%;
-  border-bottom: 1px dashed #d9d9d9;
+  border-bottom: 1px dashed #ccc;
+  margin-top: 20px;
 `;
+
 export const Button = styled.button<{ isOpen: boolean }>`
   background-color: transparent;
   border: none;
   width: 30px;
   height: 30px;
   padding: 0;
-
+  margin-top: auto;
+  margin-bottom: 10px;
   svg {
     transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")};
     transition: transform 0.3s ease-in-out;
@@ -161,6 +178,7 @@ export const Button = styled.button<{ isOpen: boolean }>`
     height: 30px;
   }
 `;
+
 const ImgWrapper = styled.div`
   height: 60px;
   aspect-ratio: 1/1;
@@ -172,6 +190,7 @@ const ImgWrapper = styled.div`
     height: 100%;
   }
 `;
+
 const Fan = styled.img`
   height: 25px;
   position: absolute;
@@ -182,6 +201,7 @@ const Fan = styled.img`
 const DateWrapper = styled.div`
   flex-direction: column;
 `;
+
 const DeleteButton = styled.button`
   border: none;
   background-color: transparent;

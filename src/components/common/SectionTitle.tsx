@@ -23,6 +23,7 @@ export default SectionTitle;
 
 const Container = styled.div`
   gap: 10px;
+  margin: 30px 0;
 `;
 
 const Title = styled.h1<{ color: "white" | "black" }>`

@@ -10,7 +10,7 @@ import title2 from "../../assets/images/recommendBanner(mobile).svg";
 import title from "../../assets/images/recommendBanner(Web).svg";
 import { Button } from "../../components/button/Button";
 import { Filter } from "../../components/recommend/filter";
-import { Item } from "../../components/recommend/Item";
+import { Item } from "../../components/recommend/RecommendItem";
 import { Option } from "../../components/recommend/Option";
 import Pagenation from "../../components/recommend/pagenation";
 import { SearchInput } from "../../components/recommend/SearchInput";
@@ -47,13 +47,13 @@ export const RecommendPage = () => {
   };
 
   const handleDelete = async (recommendId: number) => {
-    const confirmDelete = window.confirm("이 리뷰를 삭제하시겠습니까?");
+    const confirmDelete = window.confirm("이 추천행을 삭제하시겠습니까?");
     if (!confirmDelete) return;
     try {
       await DeleteRecommendData(recommendId);
       setDeleteState((prev) => !prev);
     } catch (error) {
-      console.error("리뷰 삭제 중 오류 발생:", error);
+      console.error("추천행 삭제 중 오류 발생:", error);
     }
   };
 
@@ -184,9 +184,6 @@ const AppContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 8vh auto;
-  padding: 0 5vw;
-  box-sizing: border-box;
 `;
 
 const ItemWrapper = styled.div`
@@ -208,6 +205,7 @@ const Section = styled.section`
 const TopSection = styled.section`
   width: 100%;
   position: relative;
+  margin-top: 5vh;
 
   img {
     width: 100%;
@@ -221,6 +219,7 @@ const TopSection = styled.section`
   }
 
   @media (max-width: 500px) {
+  margin-top: 0;
     margin-bottom: 1vh;
     button {
       width: 50%;
