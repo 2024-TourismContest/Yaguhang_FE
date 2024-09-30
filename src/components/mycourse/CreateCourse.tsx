@@ -37,7 +37,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
   setDescription,
   selectedSpot,
 }) => {
-  const maxLength = 200;
+  const maxLength = 400;
   const [recommendList, setRecommendList] = useState<ScrapData[]>([]);
 
   const handleScrapItemClick = (item: ScrapData) => {

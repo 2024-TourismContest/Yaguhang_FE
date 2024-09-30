@@ -4,6 +4,7 @@ import { IoImageOutline } from "react-icons/io5";
 import { postReview, uploadToAws } from "../../apis/review"; // api에서 uploadToAws 가져오기
 import { toast } from "react-toastify";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
+import { MouseEvent } from "react";
 
 interface ReviewFormProps {
   contentId: number;
@@ -43,25 +44,39 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
     fileInputRef.current?.click();
   };
 
+  const handleStarClick = (e: MouseEvent, index: number) => {
+    const starElement = e.currentTarget.getBoundingClientRect();
+    const clickPosition = e.clientX - starElement.left;
+
+    // 클릭한 위치가 별의 중간보다 왼쪽이면 반 개로, 오른쪽이면 전체로 설정
+    if (clickPosition < starElement.width / 2) {
+      setRating(index + 0.5); // 반 개 선택
+    } else {
+      setRating(index + 1); // 전체 선택
+    }
+  };
+
   // 별점 아이콘 렌더링 함수
   const renderStars = () => {
-    const fullStars = Math.floor(rating); // 채워진 별 개수
-    const hasHalfStar = rating % 1 !== 0; // 반 별 여부
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
 
     return (
       <>
         {Array.from({ length: 5 }, (_, i) => (
-          <div key={i} style={{ display: "inline-block" }}>
-            {/* 완전한 별 */}
+          <div
+            key={i}
+            style={{ display: "inline-block" }}
+            onClick={(e) => handleStarClick(e, i)}
+          >
             {i < fullStars ? (
-              <FaStar onClick={() => setRating(i + 1)} />
+              <FaStar />
             ) : (
               <>
-                {/* 반 별 처리 */}
                 {i === fullStars && hasHalfStar ? (
-                  <FaStarHalfAlt onClick={() => setRating(i + 0.5)} />
+                  <FaStarHalfAlt />
                 ) : (
-                  <FaRegStar onClick={() => setRating(i + 0.5)} />
+                  <FaRegStar />
                 )}
               </>
             )}
