@@ -663,8 +663,6 @@ const FanTeamImage = styled.img`
   position: absolute;
   top: 0;
   right: 0;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  object-fit: cover;
+  width: 33px;
+  height: 30px;
 `;
