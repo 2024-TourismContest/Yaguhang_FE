@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import InputWithLabel from "../input/InputWithLabel";
+import InputWithLabel from "../common/InputWithLabel";
 import { auth } from "../../apis/auth";
 import ProfileImg from "../common/ProfileComponent";
 

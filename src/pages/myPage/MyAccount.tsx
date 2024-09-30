@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import SectionTitle from "../../components/common/SectionTitle";
-import InputWithLabel from "../../components/input/InputWithLabel";
+import InputWithLabel from "../../components/common/InputWithLabel";
 import { mypage } from "../../apis/mypage";
 import useModalStore from "../../store/modalStore";
 import { auth } from "../../apis/auth";
@@ -20,17 +20,25 @@ const MyAccount = () => {
     newPassword: "",
     confirmPassword: "",
   });
+  const [originalInfo, setOriginalInfo] = useState({
+    nickname: "",
+    email: "",
+  });
+
   const logout = useAuthStore((state) => state.logout);
 
   const { openModal, closeModal } = useModalStore();
   const [, setIsLoading] = useState(true);
-
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
         const myInfo = await mypage.getMyInfo();
         setNickname(myInfo.nickname);
         setEmail(myInfo.email);
+        setOriginalInfo({
+          nickname: myInfo.nickname,
+          email: myInfo.email,
+        });
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching MyPage data:", error);
@@ -153,7 +161,8 @@ const MyAccount = () => {
   };
 
   const resetForm = () => {
-    setNickname("");
+    setNickname(originalInfo.nickname);
+    setEmail(originalInfo.email);
     setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");

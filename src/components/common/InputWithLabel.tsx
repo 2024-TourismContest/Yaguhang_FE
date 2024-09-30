@@ -32,7 +32,9 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
   return (
     <InputWrapper>
       <InputContainer hasError={!!error} width={width}>
-        <Label>{label}</Label>
+        <LabelContainer>
+          <Label>{label}</Label>
+        </LabelContainer>
         <InputWrapperWithIcon>
           <Input
             type={type}
@@ -57,6 +59,8 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
     </InputWrapper>
   );
 };
+export default InputWithLabel;
+
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -67,7 +71,7 @@ const InputContainer = styled.div<{ hasError: boolean; width?: string }>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 1.2em 1.5em;
+  padding: 0.8rem 1.5em;
   border-radius: 0.933rem;
   background-color: #000;
   border: 0.3px solid ${({ hasError }) => (hasError ? "#ff4d4f" : "#fff")};
@@ -86,20 +90,19 @@ const InputWrapperWithIcon = styled.div`
 `;
 
 const Label = styled.div`
+  padding: 0.4rem 0;
   color: white;
   font-size: 1rem;
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  width: 110px; /* 라벨 너비 고정 */
+  width: 110px;
   @media (max-width: 768px) {
     font-size: 0.8rem;
-  width: 90px; 
-
+    width: 90px;
   }
 `;
 
 const Input = styled.input<{ hasError: boolean }>`
-  flex: 1;
   border: none;
   background-color: #000;
   color: white;
@@ -107,11 +110,12 @@ const Input = styled.input<{ hasError: boolean }>`
   font-size: 1rem;
   font-weight: 400;
   text-align: left;
-  padding-right: 2rem; /* 아이콘의 너비만큼 여백 추가 */
+  padding-right: 2rem;
+  height: 100%;
   &:focus {
     outline: none;
-  }s
-  &[readonly] {
+  }
+  s &[readonly] {
     cursor: not-allowed;
   }
   @media (max-width: 768px) {
@@ -150,4 +154,9 @@ const ErrorText = styled.span`
   display: block;
 `;
 
-export default InputWithLabel;
+const LabelContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 100%;
+  border-right: 1px solid #cfcfcf;
+`;
