@@ -10,7 +10,7 @@ import title from "../../assets/images/recommendBanner(Web).svg";
 import title2 from "../../assets/images/recommendBanner(mobile).svg";
 import { Button } from "../../components/button/Button";
 import { Filter } from "../../components/recommend/filter";
-import { Item } from "../../components/recommend/Item";
+import { Item } from "../../components/recommend/RecommendItem";
 import { Option } from "../../components/recommend/Option";
 import Pagenation from "../../components/recommend/pagenation";
 import { SearchInput } from "../../components/recommend/SearchInput";
@@ -183,8 +183,7 @@ const AppContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 8vh auto;
-  padding: 0 5vw;
+  
 `;
 
 const ItemWrapper = styled.div`
@@ -203,6 +202,7 @@ const Section = styled.section`
 const TopSection = styled.section`
   width: 100%;
   position: relative;
+  margin-top: 5vh;
 
   img {
     width: 100%;
@@ -216,6 +216,7 @@ const TopSection = styled.section`
   }
 
   @media (max-width: 500px) {
+  margin-top: 0;
     margin-bottom: 1vh;
     button {
       width: 50%;

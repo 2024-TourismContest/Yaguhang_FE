@@ -56,6 +56,7 @@ const StadiumPage = () => {
 
     try {
       const response = await stadium.Category(queryParams);
+      console.log(response)
       setPlaceData((prevData) => ({
         ...prevData,
         [category]: response.data,
@@ -94,13 +95,12 @@ const StadiumPage = () => {
   ) => {
     navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
   };
-
   return (
     <>
       <div style={{ width: "100vw", height: "10vh" }}></div>
-      <Category filterSchedules={fetchSchedules} teamLogos={teamLogos} />
+      <Category filterSchedules={fetchSchedules} teamLogos={teamLogos} />'
       <TitleSection
-        title="맛잘알 프로야구선수들의 맛집은?"
+        title={`맛잘알 ${selectedTeam} 프로야구선수들의 맛집은?`}
         h4Text="오늘 승리하고 뒷풀이는 여기?!"
         imageSrc={ball}
         onMoreClick={() => handleMoreClick("선수PICK")}
@@ -116,7 +116,7 @@ const StadiumPage = () => {
       <Hr />
       <TitleSection
         title="야구장 근처 숙소 추천!"
-        h4Text="내 체력도 충전해야 응원도 열심히 하지!"
+        h4Text={`내 체력도 충전해야 ${selectedTeam} 응원도 열심히 하지!`}
         imageSrc={place}
         onMoreClick={() => handleMoreClick("숙소")}
       />

@@ -9,7 +9,7 @@ import StampList from "../../components/myPage/StampList";
 import BookMarkList from "../../components/myPage/BookMarkList";
 import { toast } from "react-toastify";
 import { mypage } from "../../apis/mypage";
-import { Item } from "../../components/recommend/Item";
+import { Item } from "../../components/recommend/RecommendItem";
 import { Review, RecommendPreviewDto } from "../../types/myPageType";
 import { Schedule } from "../../components/home/Card";
 import { MoreLink, NoDataMessage } from "../../styles/common/messageStyle";
@@ -39,7 +39,7 @@ const MyPageMain: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const myRecommendData = await mypage.MyRecommend(10);
+        const myRecommendData = await mypage.MyRecommend(2);
         setMyRecommend(myRecommendData.recommendPreviewDtos);
         console.log(myRecommendData.recommendPreviewDtos);
 
@@ -83,6 +83,7 @@ const MyPageMain: React.FC = () => {
               isLast={myRecommend.length - 1 === index}
               isMine={true}
               handleDelete={handleDelete}
+              isOpen={true}
             />
           ))}
           <MoreLink to="/mypage/recommend">+ 더보기</MoreLink>
@@ -115,7 +116,6 @@ const MainPageContainer = styled.div`
   display: flex;
   max-width: 100%;
   flex-direction: column;
-  gap: 2rem;
   width: 100%;
 `;
 
@@ -123,6 +123,7 @@ const Line = styled.div`
   width: 100%;
   height: 1px;
   background-color: #686868;
+  margin: 10px 0;
 `;
 
 const ReviewList = styled.div`
