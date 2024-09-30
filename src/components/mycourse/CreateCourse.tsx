@@ -144,7 +144,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
                 <RecommendItem key={index}>
                   <ItemWrapper>
                     <ImageWrapper>
-                      <Image src={item.image} alt={item.title} />
+                      <Image src={item.image ? item.image : DefaultImg} />
                     </ImageWrapper>
                     <TextWrapper>
                       <CategoryLogo

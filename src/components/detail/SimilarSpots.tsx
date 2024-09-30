@@ -47,13 +47,13 @@ const SimilarSpots: React.FC<SimilarSpotsProps> = ({
                   handleBookmarkToggle(spot.contentId);
                 }}
               >
-                <BookmarkIcon2>
+                <BookmarkIconContainer>
                   {bookmarkStates[spot.contentId] ? (
                     <BsBookmarkFill style={{ fontSize: "1.5rem" }} />
                   ) : (
                     <BsBookmarkStar style={{ fontSize: "1.5rem" }} />
                   )}
-                </BookmarkIcon2>
+                </BookmarkIconContainer>
               </BookmarkIcon>
               {spot.imageUrl ? (
                 <SpotImage src={spot.imageUrl} alt={spot.name} />
@@ -86,6 +86,7 @@ const pop = keyframes`
     transform: scale(1);
   }
 `;
+
 const Section = styled.div`
   position: relative;
   flex: 1 1 45%;
@@ -201,11 +202,6 @@ const Overlay = styled.div`
   );
   border-radius: 50%;
 `;
-const BookmarkIcon2 = styled.div`
-  &:hover {
-    animation: ${pop} 0.3s ease-in-out;
-  }
-`;
 
 const BookmarkIcon = styled.div`
   position: absolute;
@@ -250,7 +246,11 @@ const BookmarkIcon = styled.div`
     }
   }
 `;
-
+const BookmarkIconContainer = styled.div`
+  &:hover {
+    animation: ${pop} 0.3s ease-in-out;
+  }
+`;
 const SpotImage = styled.img`
   width: 100%;
   height: 100%;

@@ -238,7 +238,6 @@ const Container = styled.div`
   padding: 20px;
   color: white;
   letter-spacing: 1px;
-  margin-bottom: 28vh;
 `;
 
 const DotLine = styled.div`

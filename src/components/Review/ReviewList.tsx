@@ -17,7 +17,7 @@ import { useEffect, useRef, useState } from "react";
 
 interface ReviewListProps {
   contentId: number;
-  sort: string; // 정렬 기준 (new, like, old)
+  sort: string;
   reviews: any[];
 }
 
@@ -439,7 +439,7 @@ const ReviewImage = styled.img`
   width: 130px;
   height: 140px;
   object-fit: cover;
-  border-radius: 20px;
+  border-radius: 10px;
 
   @media (max-width: 1024px) {
     width: 120px;

@@ -100,10 +100,22 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
     <ReviewInputContainer>
       <RatingContainer>{renderStars()}</RatingContainer>
       <ReviewInput
-        placeholder="리뷰를 입력하세요. (최대 300자)"
+        placeholder="리뷰를 입력하세요."
         value={newReview}
         onChange={(e) => setNewReview(e.target.value)}
       />
+
+      {images.length > 0 && (
+        <ImagePreviewContainer>
+          {images.map((image, index) => (
+            <PreviewImage
+              key={index}
+              src={URL.createObjectURL(image)}
+              alt={`preview-${index}`}
+            />
+          ))}
+        </ImagePreviewContainer>
+      )}
       <SubmitContainer>
         <CameraIcon onClick={handleCameraClick}>
           <IoImageOutline />
@@ -117,18 +129,6 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         </CameraIcon>
         <SubmitButton onClick={handleReviewSubmit}>등록</SubmitButton>
       </SubmitContainer>
-
-      {images.length > 0 && (
-        <ImagePreviewContainer>
-          {images.map((image, index) => (
-            <PreviewImage
-              key={index}
-              src={URL.createObjectURL(image)}
-              alt={`preview-${index}`}
-            />
-          ))}
-        </ImagePreviewContainer>
-      )}
     </ReviewInputContainer>
   );
 };
@@ -147,12 +147,12 @@ const ReviewInputContainer = styled.div`
 
   @media (max-width: 1024px) {
     width: 650px;
-    height: 100px;
+    height: 300px;
   }
 
   @media (max-width: 768px) {
-    width: 400px;
-    height: 70px;
+    width: 450px;
+    height: 170px;
   }
 `;
 
@@ -215,11 +215,11 @@ const CameraIcon = styled.div`
   cursor: pointer;
 
   @media (max-width: 1024px) {
-    font-size: 20px;
+    font-size: 25px;
   }
 
   @media (max-width: 768px) {
-    font-size: 23px;
+    font-size: 25px;
   }
 
   input {
@@ -233,8 +233,8 @@ const CameraIcon = styled.div`
 
 const SubmitButton = styled.button`
   padding: 0.4rem 0.7rem;
-  background-color: #007bff;
-  color: #fff;
+  background-color: #fff;
+  color: #000;
   border: none;
   border-radius: 5px;
   font-weight: bold;
@@ -246,7 +246,7 @@ const SubmitButton = styled.button`
   }
 
   @media (max-width: 768px) {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   &:hover {
@@ -258,12 +258,30 @@ const ImagePreviewContainer = styled.div`
   display: flex;
   gap: 10px;
   margin-top: 1rem;
+  @media (max-width: 1024px) {
+    width:100%
+    height:100px;
+  }
+
+  @media (max-width: 768px) {
+    width:100%
+    height:200px;
+  }
 `;
 
 const PreviewImage = styled.img`
-  width: 60px;
-  height: 60px;
+  width: 130px;
+  height: 140px;
   object-fit: cover;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+  border-radius: 10px;
+
+  @media (max-width: 1024px) {
+    width: 120px;
+    height: 130px;
+  }
+
+  @media (max-width: 768px) {
+    width: 70px;
+    height: 70px;
+  }
 `;
