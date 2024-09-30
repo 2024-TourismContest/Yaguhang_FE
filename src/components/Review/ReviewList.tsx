@@ -13,7 +13,7 @@ import {
   updateReview,
   uploadToAws,
 } from "../../apis/review";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, MouseEvent } from "react";
 
 interface ReviewListProps {
   contentId: number;
@@ -164,26 +164,35 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     setCurrentImage(null);
   };
 
+  // 별점 클릭 처리 함수
+  const handleStarClick = (e: MouseEvent, index: number) => {
+    const starElement = e.currentTarget.getBoundingClientRect();
+    const clickPosition = e.clientX - starElement.left;
+
+    // 클릭한 위치가 별의 중간보다 왼쪽이면 반 개로, 오른쪽이면 전체로 설정
+    const newRating =
+      clickPosition < starElement.width / 2 ? index + 0.5 : index + 1;
+    setEditedStar(newRating); // 수정할 별점 상태에 반영
+  };
   // 별점 렌더링 함수
   const renderStars = (rating: number) => {
     const fullStars = Math.floor(rating);
-    const halfStar = rating - fullStars >= 0.5;
+    const halfStar = rating % 1 !== 0;
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
     return (
-      <>
-        {Array(fullStars)
-          .fill(null)
-          .map((_, index) => (
-            <FaStar key={`full-${index}`} color="#FFD700" />
-          ))}
+      <div style={{ display: "flex", alignItems: "center" }}>
+        {Array.from({ length: fullStars }, (_, i) => (
+          <FaStar key={`full-${i}`} color="#FFD700" />
+        ))}
         {halfStar && <FaStarHalfAlt color="#FFD700" />}
-        {Array(emptyStars)
-          .fill(null)
-          .map((_, index) => (
-            <FaRegStar key={`empty-${index}`} color="#FFD700" />
-          ))}
-      </>
+        {Array.from({ length: emptyStars }, (_, i) => (
+          <FaRegStar key={`empty-${i}`} color="#FFD700" />
+        ))}
+        <span style={{ marginLeft: "8px", color: "#fff" }}>
+          ({rating.toFixed(1)})
+        </span>
+      </div>
     );
   };
 
@@ -215,13 +224,20 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
             {editingReviewId === review.reviewId ? (
               <EditContainer>
                 <StarContainer>
-                  {[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5].map((star) => (
+                  {Array.from({ length: 5 }, (_, i) => (
                     <Star
-                      key={star}
-                      filled={star <= editedStar}
-                      onClick={() => setEditedStar(star)} // 별점 수정
+                      key={i}
+                      filled={i < Math.floor(editedStar)}
+                      onClick={(e) => handleStarClick(e, i)}
                     >
-                      {star % 1 === 0 ? <FaStar /> : <FaStarHalfAlt />}
+                      {i < Math.floor(editedStar) ? (
+                        <FaStar color="#FFD700" />
+                      ) : i === Math.floor(editedStar) &&
+                        editedStar % 1 !== 0 ? (
+                        <FaStarHalfAlt color="#FFD700" />
+                      ) : (
+                        <FaRegStar color="#FFD700" />
+                      )}
                     </Star>
                   ))}
                 </StarContainer>
@@ -230,7 +246,6 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                   onChange={(e) => setEditedContent(e.target.value)}
                 />
 
-                {/* 기존 이미지와 새 이미지 추가 버튼을 감싸는 ImagesWrapper */}
                 <ImagesWrapper>
                   <ExistingImagesContainer>
                     {editedImages.map((image, index) => (
@@ -423,7 +438,10 @@ const StarContainer = styled.div`
   gap: 0.25rem;
 `;
 
-const Star = styled.span<{ filled: boolean }>`
+// Star 컴포넌트에 shouldForwardProp을 사용해 filled 속성을 필터링
+const Star = styled.span.withConfig({
+  shouldForwardProp: (prop) => prop !== "filled",
+})<{ filled: boolean }>`
   font-size: 1.5rem;
   color: ${(props) => (props.filled ? "#FFD700" : "#ccc")};
   cursor: pointer;
