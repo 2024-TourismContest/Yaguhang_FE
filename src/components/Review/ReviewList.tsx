@@ -5,6 +5,7 @@ import {
   FaStarHalfAlt,
   FaRegStar,
 } from "react-icons/fa";
+import { IoImageOutline } from "react-icons/io5";
 import styled from "styled-components";
 import {
   deleteReview,
@@ -45,6 +46,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
   const [editedStar, setEditedStar] = useState<number>(0); // 수정할 별점 상태
   const [editedImages, setEditedImages] = useState<string[]>([]); // 기존 이미지 상태
   const [newImages, setNewImages] = useState<File[]>([]); // 새로 추가한 이미지 상태
+  const [isEditing, setIsEditing] = useState<boolean>(false); // 수정 모드 상태 추가
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태 관리
   const [currentImage, setCurrentImage] = useState<string | null>(null); // 현재 모달에 표시할 이미지
@@ -56,7 +58,6 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
         setReviews(fetchedReviews);
       } catch (error) {
         console.error("리뷰 데이터를 가져오는 중 오류 발생:", error);
-      } finally {
       }
     };
 
@@ -83,6 +84,13 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     setEditedContent(review.content); // 기존 리뷰 내용을 폼에 표시
     setEditedStar(review.star); // 기존 별점 표시
     setEditedImages(review.images); // 기존 이미지 표시
+    setIsEditing(true); // 수정 모드로 전환
+  };
+
+  // 리뷰 수정 취소
+  const handleCancelEdit = () => {
+    setEditingReviewId(null); // 수정할 리뷰 ID 초기화
+    setIsEditing(false); // 수정 모드 종료
   };
 
   // 이미지 선택 처리
@@ -115,6 +123,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
       });
 
       setEditingReviewId(null);
+      setIsEditing(false); // 수정 모드 종료
       setReviews((prevReviews) =>
         prevReviews.map((review) =>
           review.reviewId === reviewId
@@ -169,11 +178,11 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     const starElement = e.currentTarget.getBoundingClientRect();
     const clickPosition = e.clientX - starElement.left;
 
-    // 클릭한 위치가 별의 중간보다 왼쪽이면 반 개로, 오른쪽이면 전체로 설정
     const newRating =
       clickPosition < starElement.width / 2 ? index + 0.5 : index + 1;
-    setEditedStar(newRating); // 수정할 별점 상태에 반영
+    setEditedStar(newRating);
   };
+
   // 별점 렌더링 함수
   const renderStars = (rating: number) => {
     const fullStars = Math.floor(rating);
@@ -281,7 +290,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                     <AddImageButton
                       onClick={() => fileInputRef.current?.click()}
                     >
-                      이미지 추가 +
+                      <IoImageOutline /> {/* 이미지 아이콘 표시 */}
                     </AddImageButton>
                     <input
                       type="file"
@@ -294,9 +303,14 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                   </NewImagesContainer>
                 </ImagesWrapper>
 
-                <SaveButton onClick={() => handleEditSave(review.reviewId)}>
-                  저장
-                </SaveButton>
+                <ButtonContainer>
+                  <SaveButton onClick={() => handleEditSave(review.reviewId)}>
+                    저장
+                  </SaveButton>
+                  <CancelButton onClick={handleCancelEdit}>
+                    수정 취소
+                  </CancelButton>
+                </ButtonContainer>
               </EditContainer>
             ) : (
               <>
@@ -317,22 +331,24 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
               </>
             )}
 
-            <ReviewFooter>
-              <Likes onClick={() => handleLikeToggle(review.reviewId)}>
-                {review.isLiked ? <FaHeart /> : <FaRegHeart />}{" "}
-                {review.likeCount}명에게 도움이 된 후기
-              </Likes>
-              {review.isMine && (
-                <Actions>
-                  <EditButton onClick={() => handleEditClick(review)}>
-                    수정
-                  </EditButton>
-                  <DeleteButton onClick={() => handleDelete(review.reviewId)}>
-                    삭제
-                  </DeleteButton>
-                </Actions>
-              )}
-            </ReviewFooter>
+            {!isEditing && ( // 수정 모드가 아닐 때만 수정/삭제 버튼을 표시
+              <ReviewFooter>
+                <Likes onClick={() => handleLikeToggle(review.reviewId)}>
+                  {review.isLiked ? <FaHeart /> : <FaRegHeart />}{" "}
+                  {review.likeCount}명에게 도움이 된 후기
+                </Likes>
+                {review.isMine && (
+                  <Actions>
+                    <EditButton onClick={() => handleEditClick(review)}>
+                      수정
+                    </EditButton>
+                    <DeleteButton onClick={() => handleDelete(review.reviewId)}>
+                      삭제
+                    </DeleteButton>
+                  </Actions>
+                )}
+              </ReviewFooter>
+            )}
           </ReviewItem>
         ))
       )}
@@ -348,12 +364,14 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
 };
 
 export default ReviewList;
+
 const ImagesWrapper = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
   flex-wrap: wrap;
 `;
+
 const ImageModal = styled.div`
   position: fixed;
   top: 0;
@@ -418,6 +436,7 @@ const EditContainer = styled.div`
   flex-direction: column;
   gap: 0.5rem;
 `;
+
 const ExistingImagesContainer = styled.div`
   display: flex;
   gap: 10px;
@@ -438,7 +457,6 @@ const StarContainer = styled.div`
   gap: 0.25rem;
 `;
 
-// Star 컴포넌트에 shouldForwardProp을 사용해 filled 속성을 필터링
 const Star = styled.span.withConfig({
   shouldForwardProp: (prop) => prop !== "filled",
 })<{ filled: boolean }>`
@@ -496,18 +514,28 @@ export const DeleteImageButton = styled.button`
 `;
 
 const AddImageButton = styled.button`
-  padding: 0.5rem;
-  background-color: #ccc;
-  color: white;
-  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ); 
+  color: #fff;
+  border: 1px dashed #ddd;
   cursor: pointer;
-  border-radius: 20px;
-  font-size: 0.875rem;
+  border-radius: 10px;
+  font-size: 1.5rem;
   width: 130px;
   height: 140px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background-color: #bfbfbf;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: #fff;
   }
 
   @media (max-width: 1024px) {
@@ -517,22 +545,44 @@ const AddImageButton = styled.button`
 
   @media (max-width: 768px) {
     width: 80px;
-    height: 70px;
-    font-size: 12px;
+    height: 80px;
   }
+
+  svg {
+    font-size: 2.5rem;
+    color: #fff; 
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
 `;
 
 const SaveButton = styled.button`
-  background-color: #0056b3;
-  color: white;
+  background-color: #fff;
+  color: #000;
   width: 60px;
   border: none;
+  font-weight: 600;
   padding: 0.5rem 1rem;
   border-radius: 5px;
   cursor: pointer;
 
   &:hover {
-    background-color: #2980b9;
+    background-color: #ccc;
+  }
+`;
+
+const CancelButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 0.875rem;
+
+  &:hover {
+    color: #ccc;
   }
 `;
 
@@ -582,6 +632,7 @@ const EmptyMessage = styled.div`
   font-size: 1.1rem;
   color: #888;
 `;
+
 const UserInfo = styled.div`
   display: flex;
   align-items: center;
