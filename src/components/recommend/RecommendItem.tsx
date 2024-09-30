@@ -130,7 +130,7 @@ const Container = styled.div`
   padding-right: 10px;
   h3 {
     white-space: normal;
-    line-height: 120%;
+    line-height: 1.5;
     font-size: 1.1em;
     font-weight: 400;
     color: #dfdfdf;

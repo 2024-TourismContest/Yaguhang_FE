@@ -47,13 +47,13 @@ export const RecommendPage = () => {
   };
 
   const handleDelete = async (recommendId: number) => {
-    const confirmDelete = window.confirm("이 리뷰를 삭제하시겠습니까?");
+    const confirmDelete = window.confirm("이 추천행을 삭제하시겠습니까?");
     if (!confirmDelete) return;
     try {
       await DeleteRecommendData(recommendId);
       setDeleteState((prev) => !prev);
     } catch (error) {
-      console.error("리뷰 삭제 중 오류 발생:", error);
+      console.error("추천행 삭제 중 오류 발생:", error);
     }
   };
 
