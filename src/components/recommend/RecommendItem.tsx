@@ -121,7 +121,7 @@ const Title = styled.ul`
 
 const Section = styled.section`
   color: white;
-  margin: 20px 0;
+  margin-top: 20px;
   box-sizing: border-box;
 `;
 
@@ -136,6 +136,8 @@ const Container = styled.div`
     color: #dfdfdf;
     text-align: justify;
     margin-bottom: 10px;
+    line-height: 1.5;
+    padding: 10px 0;
     @media (max-width: 900px) {
       font-size: 1em;
     }

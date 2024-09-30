@@ -16,11 +16,11 @@ const Pagenation = ({
     const value = e.currentTarget.value;
 
     if (value === "first") {
-      setCurrentPage(0);
-      setPageList(0);
+      setCurrentPage(0); // 첫 페이지로 이동
+      setPageList(0); // 첫 번째 페이지 그룹으로 이동
     } else if (value === "last") {
-      setCurrentPage(lastPage);
-      setPageList(Math.floor(lastPage / 9) * 9); // 마지막 페이지 그룹으로 이동
+      setCurrentPage(lastPage - 1); // 마지막 페이지로 이동 (0-based 처리)
+      setPageList(Math.floor((lastPage - 1) / 9) * 9); // 마지막 페이지 그룹으로 이동
     } else if (value === "prev") {
       if (currentPage > 0) {
         const newPage = currentPage - 1;
@@ -30,7 +30,8 @@ const Pagenation = ({
         }
       }
     } else if (value === "next") {
-      if (currentPage < lastPage) {
+      if (currentPage < lastPage - 1) {
+        // 마지막 페이지로 이동 방지
         const newPage = currentPage + 1;
         setCurrentPage(newPage);
         if (newPage >= pageList + 9) {
@@ -48,7 +49,7 @@ const Pagenation = ({
     setPageList(0);
   }, [lastPage, setCurrentPage]);
 
-  if (!lastPage) return null; // lastPage가 없는 경우 반환
+  // if (!lastPage) return null; // lastPage가 없는 경우 반환
 
   return (
     <Wrapper>
@@ -59,28 +60,28 @@ const Pagenation = ({
         &lt;
       </Page>
       {Array.from(
-        { length: Math.min(9, lastPage - pageList) }, // 9개씩 묶어서 표시, 마지막 페이지 이상은 안 나옴
+        { length: Math.min(9, lastPage - pageList) }, // 9개씩 묶어서 표시
         (_, index) => (
           <Page
             key={index}
             value={pageList + index}
             onClick={handleClick}
-            disabled={pageList + index > lastPage}
+            disabled={pageList + index >= lastPage} // 수정: >=로 변경
             isSelected={pageList + index === currentPage}>
-            {pageList + index + 1}
+            {pageList + index + 1} {/* 1-based로 표시 */}
           </Page>
         )
       )}
       <Page
         value="next"
         onClick={handleClick}
-        disabled={currentPage === lastPage}>
+        disabled={currentPage >= lastPage - 1}>
         &gt;
       </Page>
       <Page
         value="last"
         onClick={handleClick}
-        disabled={currentPage === lastPage}>
+        disabled={currentPage >= lastPage - 1}>
         &gt;&gt;
       </Page>
     </Wrapper>
