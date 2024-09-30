@@ -116,7 +116,6 @@ const MainPageContainer = styled.div`
   display: flex;
   max-width: 100%;
   flex-direction: column;
-  width: 100%;
 `;
 
 const Line = styled.div`
