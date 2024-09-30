@@ -4,6 +4,8 @@ import SectionTitle from "../../components/common/SectionTitle";
 import InputWithLabel from "../../components/input/InputWithLabel";
 import { mypage } from "../../apis/mypage";
 import useModalStore from "../../store/modalStore";
+import { auth } from "../../apis/auth";
+import useAuthStore from "../../store/authStore";
 
 const MyAccount = () => {
   const [nickname, setNickname] = useState("");
@@ -12,13 +14,13 @@ const MyAccount = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
   const [errors, setErrors] = useState({
     nickname: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
+  const logout = useAuthStore((state) => state.logout);
 
   const { openModal, closeModal } = useModalStore();
   const [, setIsLoading] = useState(true);
@@ -123,6 +125,33 @@ const MyAccount = () => {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    openModal({
+      title: "회원 탈퇴",
+      content: `
+            탈퇴 시 모든 북마크 및 저장된 정보가 영구히 삭제됩니다.\n
+            이 작업은 되돌릴 수 없어요. 정말 탈퇴하시겠어요?
+            `,
+      onConfirm: async () => {
+        try {
+          await auth.deleteAccount(); // 회원 탈퇴 API 호출
+          closeModal();
+          logout();
+        } catch (error) {
+          console.error("Error deleting account:", error);
+          openModal({
+            title: "탈퇴 실패",
+            content: "회원 탈퇴 중 문제가 발생했습니다. 다시 시도해 주세요.",
+            onConfirm: () => {
+              closeModal();
+            },
+          });
+        }
+      },
+      showCancel: true,
+    });
+  };
+
   const resetForm = () => {
     setNickname("");
     setCurrentPassword("");
@@ -190,6 +219,12 @@ const MyAccount = () => {
         <CancelButton onClick={resetForm}>취소</CancelButton>
         <SaveButton onClick={handleSavePassword}>저장</SaveButton>
       </ButtonContainer>
+
+      <Line />
+
+      <DeleteAccountButton onClick={handleDeleteAccount}>
+        회원 탈퇴
+      </DeleteAccountButton>
     </MainPageContainer>
   );
 };
@@ -200,7 +235,6 @@ const MainPageContainer = styled.div`
   display: flex;
   max-width: 100%;
   flex-direction: column;
-  gap: 2rem;
 `;
 
 const Line = styled.div`
@@ -229,12 +263,18 @@ const ButtonContainer = styled.div`
 const CancelButton = styled.button`
   padding: 0.5em 1em;
   background-color: transparent;
-  color: #000;
   border: 1px solid #ccc;
   color: #fff;
   border-radius: 0.5em;
   cursor: pointer;
   font-size: 1.2rem;
+  transition: 0.2s;
+
+  &:hover {
+    /* font-weight: 700; */
+    background-color: #222222;
+  }
+
   @media (max-width: 768px) {
     font-size: 1rem;
   }
@@ -244,10 +284,37 @@ const SaveButton = styled.button`
   padding: 0.5em 1em;
   background-color: #fff;
   color: #000;
-  border: none;
+  border: 1px solid #fff;
   border-radius: 0.5em;
   cursor: pointer;
   font-size: 1.2rem;
+  transition: 0.2s;
+
+  &:hover {
+    /* font-weight: 700; */
+    background-color: #c2c2c2;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+`;
+
+const DeleteAccountButton = styled.button`
+  padding: 0.5em 1em;
+  background-color: transparent;
+  border: 1px solid #a4a4a4;
+  color: #a4a4a4;
+  border-radius: 0.5em;
+  cursor: pointer;
+  font-size: 1.2rem;
+  width: fit-content;
+  margin-left: auto;
+  transition: 0.2s;
+
+  &:hover {
+  }
+
   @media (max-width: 768px) {
     font-size: 1rem;
   }

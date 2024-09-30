@@ -37,4 +37,13 @@ export const auth = {
       throw error;
     }
   },
+  deleteAccount: async () => {
+    try {
+      const response = await defaultApi.delete("/api/users");
+      return response.data;
+    } catch (error) {
+      console.error("Signup error:", error);
+      throw error;
+    }
+  },
 };
