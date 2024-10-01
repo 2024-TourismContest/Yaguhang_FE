@@ -1,5 +1,4 @@
 import { styled } from "styled-components";
-import loadingImg from "../../assets/images/loadingImg.svg";
 import usePositionsStore from "../../store/MapPositionsStore";
 
 export const MapPosition = ({
@@ -17,10 +16,13 @@ export const MapPosition = ({
             onClick={() => {
               // console.log("Position stadiumId:", position.stadiumId);
               onClickContent(position.contentId, position.stadiumId);
-            }}
-          >
+            }}>
             <Img
-              src={position.image ? position.image : loadingImg}
+              src={
+                position.image
+                  ? position.image
+                  : "https://yaguhang.kro.kr:8443/defaultLogos/defaultSmallImage2.png"
+              }
               alt={position.title}
             />
             <TextWrapper>
@@ -60,8 +62,10 @@ export const ItemWrapper = styled.div`
 `;
 export const Img = styled.img`
   width: 100%;
-  height: 60%;
-  object-fit: fill;
+  /* height: 60%; */
+  /* max-height: 60%; */
+
+  /* overflow: hidden; */
   border-radius: 1.0417vw;
   background-color: #ffffff;
   cursor: pointer;
@@ -70,6 +74,8 @@ export const H3 = styled.h3`
   color: white;
   font-size: 1.2em;
   width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 `;
 export const H4 = styled.h4`
