@@ -322,7 +322,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
 
                 {review.images.length > 0 && (
                   <ImagesContainer>
-                    {review.images.map((image, index) => (
+                    {review.images.slice(0, 4).map((image, index) => (
                       <ReviewImage
                         key={index}
                         src={image}
@@ -330,6 +330,17 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                         onClick={() => openModal(review, index)}
                       />
                     ))}
+                    {review.images.length > 4 && (
+                      <DarkenedImageContainer
+                        onClick={() => openModal(review, 4)}
+                      >
+                        <DarkenedImage
+                          src={review.images[4]}
+                          alt={`Review Image 5`}
+                        />
+                        <ImageCount>+ {review.images.length - 4}</ImageCount>
+                      </DarkenedImageContainer>
+                    )}
                   </ImagesContainer>
                 )}
               </>
@@ -373,12 +384,25 @@ export default ReviewList;
 
 const DarkenedImageContainer = styled.div`
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 140px;
   cursor: pointer;
+  display: flex; /* 추가 */
+  align-items: center; /* 추가 */
+  justify-content: center; /* 추가 */
 
   &:hover {
     opacity: 0.8;
+  }
+
+  @media (max-width: 1024px) {
+    width: 120px;
+    height: 130px;
+  }
+
+  @media (max-width: 768px) {
+    width: 80px;
+    height: 80px;
   }
 `;
 
@@ -386,7 +410,16 @@ const DarkenedImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 10px;
   opacity: 0.6;
+
+  @media (max-width: 1024px) {
+    border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    border-radius: 6px;
+  }
 `;
 
 const ImageCount = styled.span`
@@ -395,7 +428,17 @@ const ImageCount = styled.span`
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #fff;
+  z-index: 1 @media (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const ImagesWrapper = styled.div`
@@ -405,19 +448,6 @@ const ImagesWrapper = styled.div`
   flex-wrap: wrap;
 `;
 
-// const ImageModal = styled.div`
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   height: 100%;
-//   background-color: rgba(0, 0, 0, 0.8);
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   z-index: 1000;
-// `;
-
 const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -425,12 +455,21 @@ const ListContainer = styled.div`
   max-width: 70vw;
   margin: 0 auto;
   margin-bottom: 20vh;
+
+  @media (max-width: 768px) {
+    max-width: 95vw;
+    gap: 1rem;
+  }
 `;
 
 const ReviewItem = styled.div`
   padding: 1rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-bottom: 0.5px dashed #ccc;
+
+  @media (max-width: 768px) {
+    padding: 0.8rem;
+  }
 `;
 
 const ReviewHeader = styled.div`
@@ -438,11 +477,20 @@ const ReviewHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const Rating = styled.div`
   font-size: 1rem;
   color: #f1c40f;
+
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+  }
 `;
 
 const Content = styled.p`
@@ -454,8 +502,12 @@ const Content = styled.p`
   word-break: break-word;
   padding: 10px;
   border-radius: 10px;
-`;
 
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+`;
 const EditContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -628,14 +680,21 @@ const Likes = styled.div`
   color: #e74c3c;
   cursor: pointer;
   font-size: 0.875rem;
-`;
 
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+  }
+`;
 const EditButton = styled.button`
   background-color: transparent;
   border: none;
   color: #888;
   cursor: pointer;
   font-size: 0.875rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+  }
 `;
 
 const DeleteButton = styled.button`
@@ -644,8 +703,11 @@ const DeleteButton = styled.button`
   color: #888;
   cursor: pointer;
   font-size: 0.875rem;
-`;
 
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+  }
+`;
 const Actions = styled.div`
   margin-top: 0.5rem;
   display: flex;
@@ -682,6 +744,11 @@ const UserImage = styled.img`
   border-radius: 50%;
   object-fit: cover;
   position: relative;
+
+  @media (max-width: 768px) {
+    width: 50px;
+    height: 50px;
+  }
 `;
 
 const FanTeamImage = styled.img`
@@ -690,4 +757,9 @@ const FanTeamImage = styled.img`
   right: 0;
   width: 33px;
   height: 30px;
+
+  @media (max-width: 768px) {
+    width: 28px;
+    height: 25px;
+  }
 `;
