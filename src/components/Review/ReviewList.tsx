@@ -15,7 +15,7 @@ import {
   uploadToAws,
 } from "../../apis/review";
 import { useEffect, useRef, useState, MouseEvent } from "react";
-
+import ImageModal from "../../components/common/ImageModal";
 interface ReviewListProps {
   contentId: number;
   sort: string;
@@ -41,15 +41,16 @@ interface ReviewData {
 
 const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
   const [reviews, setReviews] = useState<ReviewData[]>([]);
-  const [editingReviewId, setEditingReviewId] = useState<number | null>(null); // 수정 상태를 관리할 변수
+  const [editingReviewId, setEditingReviewId] = useState<number | null>(null);
   const [editedContent, setEditedContent] = useState<string>("");
-  const [editedStar, setEditedStar] = useState<number>(0); // 수정할 별점 상태
-  const [editedImages, setEditedImages] = useState<string[]>([]); // 기존 이미지 상태
-  const [newImages, setNewImages] = useState<File[]>([]); // 새로 추가한 이미지 상태
-  const [isEditing, setIsEditing] = useState<boolean>(false); // 수정 모드 상태 추가
+  const [editedStar, setEditedStar] = useState<number>(0);
+  const [editedImages, setEditedImages] = useState<string[]>([]);
+  const [newImages, setNewImages] = useState<File[]>([]);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태 관리
-  const [currentImage, setCurrentImage] = useState<string | null>(null); // 현재 모달에 표시할 이미지
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentReviewImages, setCurrentReviewImages] = useState<string[]>([]); // 모달에서 사용할 이미지 배열
 
   useEffect(() => {
     const loadReviews = async () => {
@@ -64,7 +65,6 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     loadReviews();
   }, [contentId, sort]);
 
-  // 리뷰 삭제
   const handleDelete = async (reviewId: number) => {
     const confirmDelete = window.confirm("이 리뷰를 삭제하시겠습니까?");
     if (!confirmDelete) return;
@@ -78,22 +78,19 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     }
   };
 
-  // 리뷰 수정 시작 시 기존 데이터 로드
   const handleEditClick = (review: ReviewData) => {
-    setEditingReviewId(review.reviewId); // 수정할 리뷰 ID 설정
-    setEditedContent(review.content); // 기존 리뷰 내용을 폼에 표시
-    setEditedStar(review.star); // 기존 별점 표시
-    setEditedImages(review.images); // 기존 이미지 표시
-    setIsEditing(true); // 수정 모드로 전환
+    setEditingReviewId(review.reviewId);
+    setEditedContent(review.content);
+    setEditedStar(review.star);
+    setEditedImages(review.images);
+    setIsEditing(true);
   };
 
-  // 리뷰 수정 취소
   const handleCancelEdit = () => {
-    setEditingReviewId(null); // 수정할 리뷰 ID 초기화
-    setIsEditing(false); // 수정 모드 종료
+    setEditingReviewId(null);
+    setIsEditing(false);
   };
 
-  // 이미지 선택 처리
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setNewImages([...newImages, ...Array.from(e.target.files)]);
@@ -114,7 +111,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
         newImages.map((image) => uploadToAws(image))
       );
 
-      const updatedImages = [...editedImages, ...uploadedImageUrls]; // 기존 이미지 + 새로 추가한 이미지
+      const updatedImages = [...editedImages, ...uploadedImageUrls];
 
       await updateReview(reviewId, {
         content: editedContent,
@@ -123,7 +120,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
       });
 
       setEditingReviewId(null);
-      setIsEditing(false); // 수정 모드 종료
+      setIsEditing(false);
       setReviews((prevReviews) =>
         prevReviews.map((review) =>
           review.reviewId === reviewId
@@ -142,7 +139,6 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     }
   };
 
-  // 리뷰 좋아요
   const handleLikeToggle = async (reviewId: number) => {
     const updatedLikeCount = await toggleLikeOnServer(reviewId);
 
@@ -161,19 +157,26 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     }
   };
 
-  // 이미지 클릭 시 모달 열기
-  const handleImageClick = (image: string) => {
-    setCurrentImage(image);
-    setIsModalOpen(true);
+  const openModal = (review: ReviewData, index: number) => {
+    setCurrentReviewImages(review.images); // 클릭한 리뷰의 이미지 배열 설정
+    setCurrentImageIndex(index); // 클릭한 이미지 인덱스 설정
+    setIsModalOpen(true); // 모달 열기
   };
 
-  // 모달 닫기
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setCurrentImage(null);
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? currentReviewImages.length - 1 : prevIndex - 1
+    );
   };
 
-  // 별점 클릭 처리 함수
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === currentReviewImages.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const closeModal = () => setIsModalOpen(false);
+
   const handleStarClick = (e: MouseEvent, index: number) => {
     const starElement = e.currentTarget.getBoundingClientRect();
     const clickPosition = e.clientX - starElement.left;
@@ -183,7 +186,6 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     setEditedStar(newRating);
   };
 
-  // 별점 렌더링 함수
   const renderStars = (rating: number) => {
     const fullStars = Math.floor(rating);
     const halfStar = rating % 1 !== 0;
@@ -232,6 +234,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
 
             {editingReviewId === review.reviewId ? (
               <EditContainer>
+                {/* 수정 모드 처리 */}
                 <StarContainer>
                   {Array.from({ length: 5 }, (_, i) => (
                     <Star
@@ -261,7 +264,8 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                       <ImageWrapper key={index}>
                         <ReviewImage
                           src={image}
-                          alt={`Review Image ${index}`}
+                          alt={`Review Image ${index + 1}`}
+                          onClick={() => openModal(review, index)}
                         />
                         <DeleteImageButton
                           onClick={() => handleImageDelete(index, false)}
@@ -272,7 +276,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                     ))}
                   </ExistingImagesContainer>
 
-                  {/* 새 이미지 추가 기능 */}
+                  {/* 새 이미지 추가 */}
                   <NewImagesContainer>
                     {newImages.map((image, index) => (
                       <ImageWrapper key={index}>
@@ -290,7 +294,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                     <AddImageButton
                       onClick={() => fileInputRef.current?.click()}
                     >
-                      <IoImageOutline /> {/* 이미지 아이콘 표시 */}
+                      <IoImageOutline /> {/* 이미지 추가 버튼 */}
                     </AddImageButton>
                     <input
                       type="file"
@@ -323,7 +327,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                         key={index}
                         src={image}
                         alt={`Review Image ${index + 1}`}
-                        onClick={() => handleImageClick(image)}
+                        onClick={() => openModal(review, index)}
                       />
                     ))}
                   </ImagesContainer>
@@ -331,7 +335,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
               </>
             )}
 
-            {!isEditing && ( // 수정 모드가 아닐 때만 수정/삭제 버튼을 표시
+            {!isEditing && (
               <ReviewFooter>
                 <Likes onClick={() => handleLikeToggle(review.reviewId)}>
                   {review.isLiked ? <FaHeart /> : <FaRegHeart />}{" "}
@@ -353,17 +357,46 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
         ))
       )}
 
-      {/* 이미지 확대 모달 */}
-      {isModalOpen && currentImage && (
-        <ImageModal onClick={handleCloseModal}>
-          <ModalImage src={currentImage} alt="확대 이미지" />
-        </ImageModal>
-      )}
+      {/* 이미지 모달 컴포넌트 */}
+      <ImageModal
+        isOpen={isModalOpen}
+        image={currentReviewImages[currentImageIndex]} // 현재 이미지
+        onClose={closeModal}
+        onNext={nextImage}
+        onPrev={prevImage}
+      />
     </ListContainer>
   );
 };
 
 export default ReviewList;
+
+const DarkenedImageContainer = styled.div`
+  position: relative;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const DarkenedImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+`;
+
+const ImageCount = styled.span`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  color: #fff;
+`;
 
 const ImagesWrapper = styled.div`
   display: flex;
@@ -372,26 +405,18 @@ const ImagesWrapper = styled.div`
   flex-wrap: wrap;
 `;
 
-const ImageModal = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  cursor: zoom-out;
-`;
-
-const ModalImage = styled.img`
-  max-width: 80%;
-  max-height: 80%;
-  object-fit: contain;
-  border-radius: 10px;
-`;
+// const ImageModal = styled.div`
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 100%;
+//   background-color: rgba(0, 0, 0, 0.8);
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   z-index: 1000;
+// `;
 
 const ListContainer = styled.div`
   display: flex;
