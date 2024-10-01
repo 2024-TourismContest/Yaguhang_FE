@@ -62,8 +62,7 @@ export const ItemWrapper = styled.div`
 `;
 export const Img = styled.img`
   width: 100%;
-  /* height: 60%; */
-  /* max-height: 60%; */
+  height: 60%;
 
   /* overflow: hidden; */
   border-radius: 1.0417vw;
