@@ -233,3 +233,4 @@ const TopSection = styled.section`
 const Notice = styled.h5`
   color: white;
 `;
+//수정
