@@ -15,6 +15,7 @@ import useTeamStore from "../../store/TeamStore";
 import * as S from "../../styles/common/TitleSection";
 import { teamLogos } from "../../types/teamLogos";
 import Category from "./Category";
+import useModalStore from "../../store/modalStore";
 
 const { RangePicker } = DatePicker;
 
@@ -45,6 +46,7 @@ const Card: React.FC = () => {
   const [selectedDateRange, setSelectedDateRange] = useState<
     [Moment, Moment] | null
   >(null);
+  const { openModal, closeModal } = useModalStore();
   const navigate = useNavigate();
 
   const updateSchedulesPerPage = () => {
@@ -116,9 +118,18 @@ const Card: React.FC = () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      toast("로그인이 필요합니다");
-      navigate("/login");
-      return;
+      openModal({
+        title: "로그인 필요",
+        content: "경기를 스크랩하기 위해 로그인이 필요합니다.",
+        onConfirm: () => {
+          navigate("/login");
+          closeModal();
+        },
+        onCancel: () => {
+          closeModal();
+        },
+        showCancel: true,
+      });
     }
     try {
       const isScraped = await scrapSchedule(gameId);
@@ -145,7 +156,9 @@ const Card: React.FC = () => {
           : "스크랩에서 제거되었습니다."
       );
     } catch (error) {
-      toast.error("스크랩 중 오류가 발생했습니다.");
+      if (token) {
+        toast.error("스크랩 중 오류가 발생했습니다.");
+      }
     }
   };
 

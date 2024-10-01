@@ -28,13 +28,12 @@ const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
       if (!token) {
         openModal({
           title: "로그인 필요",
-          content: "로그인이 필요한 페이지입니다.",
+          content: "북마크를 하기 위해 로그인이 필요합니다.",
           onConfirm: () => {
             navigate("/login");
             closeModal();
           },
           onCancel: () => {
-            navigate("/");
             closeModal();
           },
           showCancel: true,
@@ -54,7 +53,9 @@ const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
           );
         } catch (error) {
           console.error("북마크 상태 변경 오류:", error);
-          toast.error("북마크 상태 변경에 실패했습니다.");
+          if (token) {
+            toast.error("북마크 상태 변경에 실패했습니다.");
+          }
         }
       }
     };

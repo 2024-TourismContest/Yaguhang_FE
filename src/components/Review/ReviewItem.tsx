@@ -301,7 +301,9 @@ const ReviewText = styled.p`
   font-family: Inter;
   font-size: 1rem;
   margin: 1rem 0;
-
+  line-height: 1.5;
+  font-weight: 400;
+  text-align: justify;
   @media (max-width: 768px) {
     font-size: 0.875rem;
   }

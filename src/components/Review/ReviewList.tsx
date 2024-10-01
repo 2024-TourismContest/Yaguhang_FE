@@ -16,6 +16,8 @@ import {
   uploadToAws,
 } from "../../apis/review";
 import ImageModal from "../../components/common/ImageModal";
+import useModalStore from "../../store/modalStore";
+import { useNavigate } from "react-router-dom";
 interface ReviewListProps {
   contentId: number;
   sort: string;
@@ -51,6 +53,10 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [currentReviewImages, setCurrentReviewImages] = useState<string[]>([]); // 모달에서 사용할 이미지 배열
+
+  const { openModal, closeModal } = useModalStore();
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const loadReviews = async () => {
@@ -140,6 +146,21 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
   };
 
   const handleLikeToggle = async (reviewId: number) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      openModal({
+        title: "로그인 필요",
+        content: "좋아요 기능은 로그인이 필요합니다.",
+        onConfirm: () => {
+          navigate("/login");
+          closeModal();
+        },
+        onCancel: () => {
+          closeModal();
+        },
+        showCancel: true,
+      });
+    }
     const updatedLikeCount = await toggleLikeOnServer(reviewId);
 
     if (updatedLikeCount !== null) {
@@ -157,7 +178,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     }
   };
 
-  const openModal = (review: ReviewData, index: number) => {
+  const openImgModal = (review: ReviewData, index: number) => {
     setCurrentReviewImages(review.images); // 클릭한 리뷰의 이미지 배열 설정
     setCurrentImageIndex(index); // 클릭한 이미지 인덱스 설정
     setIsModalOpen(true); // 모달 열기
@@ -175,7 +196,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     );
   };
 
-  const closeModal = () => setIsModalOpen(false);
+  const closeImgModal = () => setIsModalOpen(false);
 
   const handleStarClick = (e: MouseEvent, index: number) => {
     const starElement = e.currentTarget.getBoundingClientRect();
@@ -323,12 +344,12 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                         key={index}
                         src={image}
                         alt={`Review Image ${index + 1}`}
-                        onClick={() => openModal(review, index)}
+                        onClick={() => openImgModal(review, index)}
                       />
                     ))}
                     {review.images.length > 4 && (
                       <DarkenedImageContainer
-                        onClick={() => openModal(review, 4)}>
+                        onClick={() => openImgModal(review, 4)}>
                         <DarkenedImage
                           src={review.images[4]}
                           alt={`Review Image 5`}
@@ -367,7 +388,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
       <ImageModal
         isOpen={isModalOpen}
         image={currentReviewImages[currentImageIndex]} // 현재 이미지
-        onClose={closeModal}
+        onClose={closeImgModal}
         onNext={nextImage}
         onPrev={prevImage}
       />
