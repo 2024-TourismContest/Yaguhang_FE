@@ -51,7 +51,7 @@ const StadiumPage = () => {
       category,
       pagesize: 4,
       pageindex: 0,
-      radius: 3,
+      radius: 10,
     };
 
     try {
@@ -96,7 +96,7 @@ const StadiumPage = () => {
     navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
   };
   return (
-    <div style={{ width: "100vw", marginTop: "10vh", marginBottom:"20vh" }}>
+    <div style={{ width: "100vw", marginTop: "10vh", marginBottom: "20vh" }}>
       <Category filterSchedules={fetchSchedules} teamLogos={teamLogos} />'
       <TitleSection
         title={`맛잘알 ${selectedTeam} 프로야구선수들의 맛집은?`}
