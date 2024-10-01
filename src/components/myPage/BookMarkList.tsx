@@ -88,8 +88,6 @@ const Container = styled.div`
 const SpotsContainer = styled.div`
   display: flex;
   overflow-x: auto;
-  gap: 10px;
-  padding: 10px 0;
   scroll-snap-type: x mandatory;
   transition: 0.2s ease-in-out;
   width: 100%;

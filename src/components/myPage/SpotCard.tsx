@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import BookmarkIcon from "../common/BookMarkIcon";
 import { ScrapSpot } from "../../types/myPageType";
+
 interface SpotCardProps {
   spot: ScrapSpot;
   defaultImg: string;
@@ -35,44 +36,13 @@ const SpotCard: React.FC<SpotCardProps> = ({
 
 export default SpotCard;
 
-const ContentWrapper = styled.div<{ variant?: string }>`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  /* 리스트일 때 */
-  ${(props) =>
-    props.variant === "list" &&
-    `
-      scroll-snap-align: start; 
-      max-width: 230px; 
-      width: 100%;
-      min-width: calc((100% - 10px * (4 - 1)) / 4); 
-
-      @media (max-width: 1100px) {
-        flex: 1 0 calc(33.33% - 10px);
-      }
-
-      @media (max-width: 900px) {
-        flex: 1 0 calc(50% - 10px);
-      }
-
-      @media (max-width: 400px) {
-        flex: 1 0 100%;
-      }
-  `}
-`;
 const ImgWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 150px;
   border-radius: 8px;
   overflow: hidden;
-  transition: 0.2s ease-in-out;
-
-  &:hover {
-    transform: scale(1.05);
-  }
+  transition: transform 0.2s ease-in-out; 
 `;
 
 const Img = styled.img`
@@ -89,8 +59,44 @@ const Gradient = styled.div`
   right: 0;
   height: 50%;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-  transition: 0.2s ease-in-out;
-  &:hover {
+  transition: background 0.2s ease-in-out; 
+`;
+
+const ContentWrapper = styled.div<{ variant?: string }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+
+  /* 리스트일 때 */
+  ${(props) =>
+    props.variant === "list" &&
+    `
+      scroll-snap-align: start; 
+      max-width: 230px; 
+      width: 100%;
+      min-width: calc((100% - 15px * (4 - 1)) / 4); 
+
+      @media (max-width: 1100px) {
+        flex: 1 0 calc(33.33% - 10px);
+      }
+
+      @media (max-width: 900px) {
+        flex: 1 0 calc(50% - 10px);
+      }
+
+      @media (max-width: 400px) {
+        flex: 1 0 100%;
+      }
+  `}
+
+  /* 호버 시 크기 변화 및 그라디언트 효과 적용 */
+  &:hover ${ImgWrapper} {
+    transform: scale(1.05); 
+    z-index: 1;
+  }
+
+  &:hover ${Gradient} {
     background: linear-gradient(rgba(0, 0, 0, 0.8));
     height: 100%;
   }
