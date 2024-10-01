@@ -184,6 +184,10 @@ const AppContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 8vh auto;
+  padding: 0 5vw;
+  box-sizing: border-box;
+  margin-bottom: 20vh;
 `;
 
 const ItemWrapper = styled.div`
@@ -231,3 +235,4 @@ const TopSection = styled.section`
 const Notice = styled.h5`
   color: white;
 `;
+//수정

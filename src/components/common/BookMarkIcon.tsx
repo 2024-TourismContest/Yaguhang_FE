@@ -68,15 +68,16 @@ const BookmarkIcon: React.FC<BookmarkIconProps> = memo(
 );
 
 export default BookmarkIcon;
-const shake = keyframes`
-0% { transform: translateX(0); }
-10% { transform: translateX(-2px); }
-20% { transform: translateX(2px); }
-30% { transform: translateX(-2px); }
-40% { transform: translateX(2px); }
-50% { transform: translateX(-2px); }
-60% { transform: translateX(2px); }
-100% { transform: translateX(0); }
+const pop = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 `;
 
 const Button = styled.button<{ width: string }>`
@@ -87,10 +88,11 @@ const Button = styled.button<{ width: string }>`
   align-items: center;
   justify-content: center;
   padding: 0;
+  cursor: pointer;
 
   &:hover {
     color: #ccc;
-    animation: ${shake} 0.4s linear;
+    animation: ${pop} 0.3s ease-in-out;
   }
   svg {
     width: 100%;

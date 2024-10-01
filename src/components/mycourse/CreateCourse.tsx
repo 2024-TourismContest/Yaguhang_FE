@@ -37,6 +37,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
   setDescription,
   selectedSpot,
 }) => {
+  const maxLength = 400;
   const [recommendList, setRecommendList] = useState<ScrapData[]>([]);
 
   const handleScrapItemClick = (item: ScrapData) => {
@@ -70,11 +71,17 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
           onChange={(e) => setTitle(e.target.value)}
         />
         <CourseTitleLabel>추천행 설명글 :</CourseTitleLabel>
-        <Textarea
-          placeholder="추천행 리스트를 설명해 주세요."
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+        <TextareaWrapper>
+          <Textarea
+            placeholder="추천행 리스트를 설명해 주세요."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            maxLength={maxLength}
+          />
+          <CharCount>
+            {description.length}/{maxLength}
+          </CharCount>
+        </TextareaWrapper>
       </CourseHeader>
       <ListsContainer>
         <List>
@@ -137,7 +144,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
                 <RecommendItem key={index}>
                   <ItemWrapper>
                     <ImageWrapper>
-                      <Image src={item.image} alt={item.title} />
+                      <Image src={item.image ? item.image : DefaultImg} />
                     </ImageWrapper>
                     <TextWrapper>
                       <CategoryLogo
@@ -191,6 +198,54 @@ const CourseHeader = styled.div`
   }
 `;
 
+const TextareaWrapper = styled.div`
+  position: relative;
+  width: 93%;
+  max-width: 700px;
+`;
+
+const Textarea = styled.textarea`
+  width: 100%;
+  height: 100px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #333;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border: 1px solid #fff;
+    box-shadow: 0 0 5px rgba(131, 199, 255, 0.5);
+  }
+
+  &::placeholder {
+    color: #888;
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px 10px;
+    font-size: 1rem;
+    height: 100px;
+  }
+`;
+
+const CharCount = styled.div`
+  position: absolute;
+  bottom: 10px;
+  right: 1px;
+  font-size: 0.8rem;
+  color: #aaa;
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
+    bottom: 5px;
+    right: 1px;
+  }
+`;
+
 const Input = styled.input`
   width: 93%;
   max-width: 700px;
@@ -219,37 +274,6 @@ const Input = styled.input`
     margin-left: -10px;
     font-size: 1rem;
     margin-bottom: 10px;
-  }
-`;
-
-const Textarea = styled.textarea`
-  width: 93%;
-  max-width: 700px;
-  height: 100px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #333;
-  color: #fff;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-
-  &:focus {
-    outline: none;
-    border: 1px solid #fff;
-    box-shadow: 0 0 5px rgba(131, 199, 255, 0.5);
-  }
-
-  &::placeholder {
-    color: #888;
-  }
-
-  @media (max-width: 480px) {
-    width: 100%;
-    padding: 20px 10px;
-    margin-left: -10px;
-    font-size: 1rem;
-    height: 100px;
   }
 `;
 

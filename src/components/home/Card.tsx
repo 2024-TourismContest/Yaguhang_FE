@@ -425,6 +425,7 @@ const StyledCard = styled.div<StyledCardProps>`
   padding: 1rem;
   margin: 0.5rem;
   border: 1px solid #ffffff;
+  cursor: pointer;
   transition: transform 0.3s ease, background-color 0.3s ease,
     box-shadow 0.3s ease;
 

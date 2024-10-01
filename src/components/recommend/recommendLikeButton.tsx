@@ -66,6 +66,7 @@ const Button = styled.button`
   padding: 0;
   z-index: 50;
   margin-right: -3px;
+  cursor: pointer;
   svg {
     width: 45px;
     height: 45px;
