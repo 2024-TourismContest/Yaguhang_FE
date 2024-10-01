@@ -120,6 +120,7 @@ export const TextWrapper = styled.div`
 export const Ul = styled.ul`
   color: white;
   display: flex;
+  align-items: start;
   gap: 10px;
   margin: 0;
   height: 50%;
@@ -129,7 +130,7 @@ export const Ul = styled.ul`
     text-align: center;
     display: flex;
     gap: 8px;
-    align-items: center;
+    /* align-items: center; */
   }
   svg {
     min-width: 25px;
