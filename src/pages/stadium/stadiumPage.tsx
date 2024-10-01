@@ -13,6 +13,8 @@ import Category from "../../components/stadium/Category";
 import useTeamStore from "../../store/TeamStore";
 import { teamLogos } from "../../types/teamLogos";
 import { TitleSection } from "./TitleSection";
+import title2 from "../../assets/images/stadiumBanner(mobile).svg";
+import title from "../../assets/images/stadiumBanner(Web).svg";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 
@@ -38,6 +40,24 @@ const StadiumPage = () => {
   const setSelectedTeam = useTeamStore((state) => state.setSelectedTeam);
   const teamToStadiumId = teamToStadiumMap[selectedTeam];
   const [stadiumId, setStadiumId] = useState<number>(0);
+  const [bannerSrc, setBannerSrc] = useState<string>(title);
+
+  // 화면 크기에 따라 배너 이미지를 동적으로 변경
+  useEffect(() => {
+    const updateBannerSrc = () => {
+      if (window.innerWidth <= 768) {
+        setBannerSrc(title2); // 모바일용 이미지
+      } else {
+        setBannerSrc(title); // 웹용 이미지
+      }
+    };
+
+    updateBannerSrc(); // 초기 로딩 시 배너 설정
+    window.addEventListener("resize", updateBannerSrc); // 창 크기 변경 시 배너 설정
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => window.removeEventListener("resize", updateBannerSrc);
+  }, []);
 
   useEffect(() => {
     if (selectedTeam === "전체" || selectedTeam === "not logined")
@@ -96,7 +116,10 @@ const StadiumPage = () => {
     navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
   };
   return (
-    <div style={{ width: "100vw", marginTop: "10vh", marginBottom:"20vh" }}>
+    <AppContainer>
+      <TopSection>
+        <img src={bannerSrc} alt="title" />
+      </TopSection>
       <Category filterSchedules={fetchSchedules} teamLogos={teamLogos} />'
       <TitleSection
         title={`맛잘알 ${selectedTeam} 프로야구선수들의 맛집은?`}
@@ -172,12 +195,47 @@ const StadiumPage = () => {
           handleImageClick(contentId, stadiumId, "문화")
         }
       />
-    </div>
+    </AppContainer>
   );
 };
 
 export default StadiumPage;
 
+const AppContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 8vh auto;
+  padding: 0 5vw;
+  box-sizing: border-box;
+  margin-bottom: 20vh;
+`;
+const TopSection = styled.section`
+  margin-top: -5vh;
+  width: 100%;
+  position: relative;
+  img {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  button {
+    position: absolute;
+    bottom: 20%;
+    left: 15%;
+  }
+
+  @media (max-width: 500px) {
+    margin-top: 0;
+    margin-bottom: 1vh;
+    button {
+      width: 50%;
+      font-size: x-small;
+    }
+  }
+`;
 const Hr = styled.hr`
   width: 70%;
   border-bottom: 0.3px solid #dfdfdf;

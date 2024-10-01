@@ -207,9 +207,9 @@ const Section = styled.section`
 `;
 
 const TopSection = styled.section`
+  margin-top: -5vh;
   width: 100%;
   position: relative;
-  margin-top: 5vh;
 
   img {
     width: 100%;
@@ -223,7 +223,7 @@ const TopSection = styled.section`
   }
 
   @media (max-width: 500px) {
-  margin-top: 0;
+    margin-top: 0;
     margin-bottom: 1vh;
     button {
       width: 50%;
