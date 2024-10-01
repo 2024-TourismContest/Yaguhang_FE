@@ -11,6 +11,7 @@ import SimilarSpots from "../../components/detail/SimilarSpots";
 import MenuContainer from "../../components/detail/MenuContainer";
 import { home } from "../../apis/main";
 import Review from "../../components/Review/Review";
+import useModalStore from "../../store/modalStore";
 
 export interface SpotDetailDto {
   contentId: number;
@@ -69,6 +70,8 @@ const DetailPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
+
+  const { openModal, closeModal } = useModalStore();
 
   useEffect(() => {
     const stadiumIdParam = queryParams.get("stadiumId");
@@ -147,13 +150,20 @@ const DetailPage = () => {
 
   const handleBookmarkToggle = async (contentId: number) => {
     const token = localStorage.getItem("token");
-
     if (!token) {
-      navigate("/login");
-      toast.error("로그인이 필요합니다");
-      return;
+      openModal({
+        title: "로그인 필요",
+        content: "북마크를 하기 위해 로그인이 필요합니다.",
+        onConfirm: () => {
+          navigate("/login");
+          closeModal();
+        },
+        onCancel: () => {
+          closeModal();
+        },
+        showCancel: true,
+      });
     }
-
     try {
       await home.bookmark(contentId, Number(stadiumId)); // stadiumId가 URL에서 추출된 상태를 사용
 
@@ -169,7 +179,9 @@ const DetailPage = () => {
       );
     } catch (error) {
       console.error("북마크 상태 변경 오류:", error);
-      toast.error("북마크 중 오류가 발생했습니다.");
+      if (token){
+        toast.error("북마크 중 오류가 발생했습니다.");
+      }
     }
   };
 
