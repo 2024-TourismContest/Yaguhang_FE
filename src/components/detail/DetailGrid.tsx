@@ -1,6 +1,6 @@
+import { BsBookmarkStar, BsBookmarkStarFill } from "react-icons/bs";
 import styled, { keyframes } from "styled-components";
 import { SpotDetailDto } from "../../pages/detail/DetailPage";
-import { BsBookmarkStarFill, BsBookmarkStar } from "react-icons/bs";
 import Share from "./Share";
 
 interface DetailGridProps {
@@ -35,8 +35,7 @@ const DetailGrid: React.FC<DetailGridProps> = ({
           <BookmarkIcon
             onClick={() =>
               detailData && handleBookmarkToggle(detailData.contentId)
-            }
-          >
+            }>
             {bookmarkStates[detailData?.contentId!] ? (
               <BsBookmarkStarFill style={{ fontSize: "2rem", color: "#fff" }} />
             ) : (
@@ -75,8 +74,7 @@ const DetailGrid: React.FC<DetailGridProps> = ({
                 <StyledLink
                   href={detailData.homepage}
                   target="_blank"
-                  rel="noopener noreferrer"
-                >
+                  rel="noopener noreferrer">
                   {getDisplayValue(detailData.homepage)}
                 </StyledLink>
               ) : (
@@ -380,7 +378,7 @@ const Address = styled.h3`
 const Description = styled.p`
   font-size: 1rem;
   color: #ccc;
-  line-height: 1.3;
+  line-height: 1.5;
 
   @media (max-width: 768px) {
     font-size: 0.7rem;

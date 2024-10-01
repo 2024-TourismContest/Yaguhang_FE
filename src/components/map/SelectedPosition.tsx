@@ -21,8 +21,7 @@ export const SelectedPosition = ({
 
   return (
     <Wrapper
-      onClick={() => onClickContent(position.contentId, position.stadiumId)}
-    >
+      onClick={() => onClickContent(position.contentId, position.stadiumId)}>
       <P>{position.stadiumName}</P>
       <Container>
         <ItemWrapper>
@@ -121,14 +120,20 @@ export const TextWrapper = styled.div`
 export const Ul = styled.ul`
   color: white;
   display: flex;
+  align-items: start;
   gap: 10px;
   margin: 0;
   height: 50%;
   flex-shrink: 0;
+  position: relative;
   li {
     text-align: center;
     display: flex;
-    gap: 3px;
+    gap: 8px;
+    /* align-items: center; */
+  }
+  svg {
+    min-width: 25px;
   }
 `;
 export const A = styled.a`

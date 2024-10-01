@@ -191,6 +191,7 @@ const HomePageContainer = styled.div`
   justify-content: center;
   z-index: 1;
   background-color: #fff;
+  padding-bottom: 20vh;
 `;
 
 const RoundBackground = styled.div`

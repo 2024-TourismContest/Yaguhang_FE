@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import { MouseEvent, useEffect, useRef, useState } from "react";
+import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { IoImageOutline } from "react-icons/io5";
-import { postReview, uploadToAws } from "../../apis/review"; // api에서 uploadToAws 가져오기
 import { toast } from "react-toastify";
-import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
-import { MouseEvent } from "react";
+import styled from "styled-components";
+import { postReview, uploadToAws } from "../../apis/review"; // api에서 uploadToAws 가져오기
 
 interface ReviewFormProps {
   contentId: number;
@@ -72,8 +71,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
           <div
             key={i}
             style={{ display: "inline-block" }}
-            onClick={(e) => handleStarClick(e, i)}
-          >
+            onClick={(e) => handleStarClick(e, i)}>
             {i < fullStars ? (
               <FaStar />
             ) : (
@@ -205,7 +203,7 @@ const ReviewInputContainer = styled.div`
 
   @media (max-width: 768px) {
     width: 450px;
-    mibn-height: 170px;
+    min-height: 170px;
   }
 `;
 
@@ -242,6 +240,7 @@ const ReviewInput = styled.textarea`
   resize: none;
   overflow-y: hidden;
   outline: none;
+  line-height: 1.5;
 
   @media (max-width: 1024px) {
     width: 98%;
@@ -314,13 +313,13 @@ const ImagePreviewContainer = styled.div`
   margin-top: 1rem;
   flex-wrap: wrap;
   @media (max-width: 1024px) {
-    width:100%
-    min-height:70px;
+    width: 100%;
+    min-height: 70px;
   }
 
   @media (max-width: 768px) {
-    width:100%
-    min-height:70px;
+    width: 100%;
+    min-height: 70px;
   }
 `;
 

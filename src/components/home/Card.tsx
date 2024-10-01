@@ -140,7 +140,9 @@ const Card: React.FC = () => {
       }
 
       toast.success(
-        isScraped ? "스크랩에 추가되었습니다." : "스크랩에서 제거되었습니다."
+        isScraped
+          ? "스크랩에 추가되었습니다. 경기 전날 이메일로 푸쉬알림을 보내드릴게요!"
+          : "스크랩에서 제거되었습니다."
       );
     } catch (error) {
       toast.error("스크랩 중 오류가 발생했습니다.");

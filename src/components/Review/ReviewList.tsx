@@ -1,9 +1,10 @@
+import { MouseEvent, useEffect, useRef, useState } from "react";
 import {
-  FaRegHeart,
   FaHeart,
+  FaRegHeart,
+  FaRegStar,
   FaStar,
   FaStarHalfAlt,
-  FaRegStar,
 } from "react-icons/fa";
 import { IoImageOutline } from "react-icons/io5";
 import styled from "styled-components";
@@ -14,7 +15,6 @@ import {
   updateReview,
   uploadToAws,
 } from "../../apis/review";
-import { useEffect, useRef, useState, MouseEvent } from "react";
 import ImageModal from "../../components/common/ImageModal";
 interface ReviewListProps {
   contentId: number;
@@ -240,8 +240,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                     <Star
                       key={i}
                       filled={i < Math.floor(editedStar)}
-                      onClick={(e) => handleStarClick(e, i)}
-                    >
+                      onClick={(e) => handleStarClick(e, i)}>
                       {i < Math.floor(editedStar) ? (
                         <FaStar color="#FFD700" />
                       ) : i === Math.floor(editedStar) &&
@@ -268,8 +267,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                           onClick={() => openModal(review, index)}
                         />
                         <DeleteImageButton
-                          onClick={() => handleImageDelete(index, false)}
-                        >
+                          onClick={() => handleImageDelete(index, false)}>
                           삭제
                         </DeleteImageButton>
                       </ImageWrapper>
@@ -285,15 +283,13 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                           alt={`New Image ${index}`}
                         />
                         <DeleteImageButton
-                          onClick={() => handleImageDelete(index, true)}
-                        >
+                          onClick={() => handleImageDelete(index, true)}>
                           삭제
                         </DeleteImageButton>
                       </ImageWrapper>
                     ))}
                     <AddImageButton
-                      onClick={() => fileInputRef.current?.click()}
-                    >
+                      onClick={() => fileInputRef.current?.click()}>
                       <IoImageOutline /> {/* 이미지 추가 버튼 */}
                     </AddImageButton>
                     <input
@@ -332,8 +328,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                     ))}
                     {review.images.length > 4 && (
                       <DarkenedImageContainer
-                        onClick={() => openModal(review, 4)}
-                      >
+                        onClick={() => openModal(review, 4)}>
                         <DarkenedImage
                           src={review.images[4]}
                           alt={`Review Image 5`}
@@ -432,7 +427,8 @@ const ImageCount = styled.span`
   align-items: center;
   justify-content: center;
   color: #fff;
-  z-index: 1 @media (max-width: 1024px) {
+  z-index: 1;
+  @media (max-width: 1024px) {
     font-size: 1.2rem;
   }
 
@@ -502,6 +498,7 @@ const Content = styled.p`
   word-break: break-word;
   padding: 10px;
   border-radius: 10px;
+  line-height: 1.5;
 
   @media (max-width: 768px) {
     font-size: 0.85rem;
@@ -594,12 +591,7 @@ const AddImageButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(
-    255,
-    255,
-    255,
-    0.1
-  ); 
+  background-color: rgba(255, 255, 255, 0.1);
   color: #fff;
   border: 1px dashed #ddd;
   cursor: pointer;
@@ -627,7 +619,8 @@ const AddImageButton = styled.button`
 
   svg {
     font-size: 2.5rem;
-    color: #fff; 
+    color: #fff;
+  }
 `;
 
 const ButtonContainer = styled.div`
