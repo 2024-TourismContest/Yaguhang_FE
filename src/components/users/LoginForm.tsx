@@ -5,6 +5,7 @@ import { auth } from "../../apis/auth";
 import useModalStore from "../../store/modalStore";
 const redirect_uri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 import useAuthStore from "../../store/authStore";
+import InputWithLabel from "../common/InputWithLabel";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
   const { openModal, closeModal } = useModalStore();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleKakaoLogin = () => {
     const kakaoLoginUrl = `https://yaguhang.kro.kr:8443/oauth2/authorization/kakao?redirect_uri=${redirect_uri}`;
@@ -53,28 +55,35 @@ const LoginForm = () => {
     }
   };
 
+  const handleTogglePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   return (
     <FormContainer>
       <Title>로그인</Title>
       <KaKaoButton onClick={handleKakaoLogin}>
         카카오톡으로 계속하기
       </KaKaoButton>
-      <Line />
+      <Line/>
       <InputContainer>
-        <Input
-          placeholder="Email"
+        <InputWithLabel
+          label="Email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          autoFocus
+          labelWidth="86px"
         />
-        <Input
-          placeholder="Password"
-          type="password"
+        <InputWithLabel
+          label="Password"
+          type={showPassword ? "text" : "password"}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          showPassword={showPassword}
+          onTogglePassword={handleTogglePassword}
+          labelWidth="86px"
+
         />
-        <LinkText href="#">비밀번호를 잃어버렸나요?</LinkText>
       </InputContainer>
       {error && <ErrorMessage>{error}</ErrorMessage>}
       <SubmitBtn onClick={handleSubmit}>LOGIN</SubmitBtn>
@@ -102,7 +111,7 @@ const Title = styled.h1`
 
 const KaKaoButton = styled.button`
   padding: 1em 1.5em;
-  width: 23em;
+  width: 100%;
   border-radius: 0.933rem;
   background-color: #ffdb1c;
   color: #000;
@@ -111,7 +120,6 @@ const KaKaoButton = styled.button`
   font-weight: 400;
   border: none;
   cursor: pointer;
-  margin-bottom: 1em;
 `;
 
 const Line = styled.div`
@@ -126,26 +134,6 @@ const InputContainer = styled.div`
   flex-direction: column;
   gap: 1em;
   width: 23em;
-`;
-
-const Input = styled.input`
-  padding: 1em 1.5em;
-  border-radius: 0.933rem;
-  border: 0.3px solid #fff;
-  background-color: #000;
-  color: #fff;
-  font-family: Inter, sans-serif;
-  font-size: 1.04rem;
-  font-weight: 400;
-  text-align: left;
-`;
-
-const LinkText = styled.a`
-  color: #fff;
-  text-align: center;
-  font-family: Inter, sans-serif;
-  font-size: 0.875rem; /* 14px */
-  font-weight: 400;
 `;
 
 const SubmitBtn = styled.button`

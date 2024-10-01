@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import SectionTitle from "../../components/common/SectionTitle";
-import InputWithLabel from "../../components/input/InputWithLabel";
+import InputWithLabel from "../../components/common/InputWithLabel";
 import { mypage } from "../../apis/mypage";
 import useModalStore from "../../store/modalStore";
+import { auth } from "../../apis/auth";
+import useAuthStore from "../../store/authStore";
+import { validatePassword, validateConfirmPassword, validateNickname } from "../../utils/validate";
 
 const MyAccount = () => {
   const [nickname, setNickname] = useState("");
@@ -11,15 +14,23 @@ const MyAccount = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-
+  const [showPassword, setShowPassword] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
   const [errors, setErrors] = useState({
     nickname: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
+  const [originalInfo, setOriginalInfo] = useState({
+    nickname: "",
+    email: "",
+  });
 
+  const logout = useAuthStore((state) => state.logout);
   const { openModal, closeModal } = useModalStore();
   const [, setIsLoading] = useState(true);
 
@@ -29,6 +40,10 @@ const MyAccount = () => {
         const myInfo = await mypage.getMyInfo();
         setNickname(myInfo.nickname);
         setEmail(myInfo.email);
+        setOriginalInfo({
+          nickname: myInfo.nickname,
+          email: myInfo.email,
+        });
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching MyPage data:", error);
@@ -38,32 +53,34 @@ const MyAccount = () => {
     fetchProfileData();
   }, []);
 
+  const handleTogglePasswordVisibility = (field: keyof typeof showPassword) => {
+    setShowPassword((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
+
   const validateInfo = () => {
     const newErrors = { ...errors };
-    newErrors.nickname =
-      nickname && nickname.trim() === "" ? "이름을 입력해 주세요." : "";
+    newErrors.nickname = validateNickname(nickname);
 
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === "");
   };
 
-  const validatePassword = () => {
+  const validatePasswordFields = () => {
     const newErrors = { ...errors };
     newErrors.currentPassword =
       currentPassword.trim() === "" ? "현재 비밀번호를 입력해 주세요." : "";
-
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    newErrors.newPassword = !passwordRegex.test(newPassword)
-      ? "비밀번호는 최소 8자 이상, 문자와 숫자를 포함해야 합니다."
-      : "";
-
-    newErrors.confirmPassword =
-      newPassword !== confirmPassword ? "비밀번호가 일치하지 않습니다." : "";
+    newErrors.newPassword = validatePassword(newPassword);
+    newErrors.confirmPassword = validateConfirmPassword(
+      newPassword,
+      confirmPassword
+    );
 
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === "");
   };
-
   const handleSaveInfo = async () => {
     if (validateInfo()) {
       try {
@@ -88,7 +105,7 @@ const MyAccount = () => {
       return;
     }
 
-    if (validatePassword()) {
+    if (validatePasswordFields()) {
       try {
         const isPasswordValid = await mypage.CheckPassword(currentPassword);
         if (!Boolean(isPasswordValid)) {
@@ -123,15 +140,39 @@ const MyAccount = () => {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    openModal({
+      title: "회원 탈퇴",
+      content: `
+            탈퇴 시 모든 북마크 및 저장된 정보가 영구히 삭제됩니다.\n
+            이 작업은 되돌릴 수 없어요. 정말 탈퇴하시겠어요?
+            `,
+      onConfirm: async () => {
+        try {
+          await auth.deleteAccount();
+          closeModal();
+          logout();
+        } catch (error) {
+          console.error("Error deleting account:", error);
+          openModal({
+            title: "탈퇴 실패",
+            content: "회원 탈퇴 중 문제가 발생했습니다. 다시 시도해 주세요.",
+            onConfirm: () => {
+              closeModal();
+            },
+          });
+        }
+      },
+      showCancel: true,
+    });
+  };
+
   const resetForm = () => {
-    setNickname("");
+    setNickname(originalInfo.nickname);
+    setEmail(originalInfo.email);
     setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");
-  };
-
-  const handleTogglePassword = () => {
-    setShowPassword((prev) => !prev);
   };
 
   return (
@@ -162,34 +203,40 @@ const MyAccount = () => {
       <Section>
         <InputWithLabel
           label="Current PW"
-          type={showPassword ? "text" : "password"}
+          type={showPassword.current ? "text" : "password"}
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
           error={errors.currentPassword}
-          onTogglePassword={handleTogglePassword}
+          onTogglePassword={() => handleTogglePasswordVisibility("current")}
         />
         <InputWithLabel
           label="New PW"
-          type={showPassword ? "text" : "password"}
+          type={showPassword.new ? "text" : "password"}
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
           error={errors.newPassword}
-          onTogglePassword={handleTogglePassword}
+          onTogglePassword={() => handleTogglePasswordVisibility("new")}
         />
         <InputWithLabel
           label="Confirm PW"
-          type={showPassword ? "text" : "password"}
+          type={showPassword.confirm ? "text" : "password"}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           error={errors.confirmPassword}
-          passwordMatch={newPassword === confirmPassword}
-          onTogglePassword={handleTogglePassword}
+          onTogglePassword={() => handleTogglePasswordVisibility("confirm")}
+          passwordMatch={confirmPassword === newPassword}
         />
       </Section>
       <ButtonContainer>
         <CancelButton onClick={resetForm}>취소</CancelButton>
         <SaveButton onClick={handleSavePassword}>저장</SaveButton>
       </ButtonContainer>
+
+      <Line />
+
+      <DeleteAccountButton onClick={handleDeleteAccount}>
+        회원 탈퇴
+      </DeleteAccountButton>
     </MainPageContainer>
   );
 };
@@ -200,7 +247,6 @@ const MainPageContainer = styled.div`
   display: flex;
   max-width: 100%;
   flex-direction: column;
-  gap: 2rem;
 `;
 
 const Line = styled.div`
@@ -229,12 +275,17 @@ const ButtonContainer = styled.div`
 const CancelButton = styled.button`
   padding: 0.5em 1em;
   background-color: transparent;
-  color: #000;
   border: 1px solid #ccc;
   color: #fff;
   border-radius: 0.5em;
   cursor: pointer;
   font-size: 1.2rem;
+  transition: 0.2s;
+
+  &:hover {
+    background-color: #222222;
+  }
+
   @media (max-width: 768px) {
     font-size: 1rem;
   }
@@ -244,10 +295,37 @@ const SaveButton = styled.button`
   padding: 0.5em 1em;
   background-color: #fff;
   color: #000;
-  border: none;
+  border: 1px solid #fff;
   border-radius: 0.5em;
   cursor: pointer;
   font-size: 1.2rem;
+  transition: 0.2s;
+
+  &:hover {
+    /* font-weight: 700; */
+    background-color: #c2c2c2;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+`;
+
+const DeleteAccountButton = styled.button`
+  padding: 0.5em 1em;
+  background-color: transparent;
+  border: 1px solid #a4a4a4;
+  color: #a4a4a4;
+  border-radius: 0.5em;
+  cursor: pointer;
+  font-size: 1.2rem;
+  width: fit-content;
+  margin-left: auto;
+  transition: 0.2s;
+
+  &:hover {
+  }
+
   @media (max-width: 768px) {
     font-size: 1rem;
   }

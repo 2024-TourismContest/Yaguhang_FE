@@ -103,7 +103,10 @@ const ModalTitle = styled.h2`
 const ModalBody = styled.div`
   margin-bottom: 2rem;
   font-size: 1rem;
-
+  p {
+    margin: 0;
+    white-space: pre-line;  // 줄 바꿈을 허용
+  }
   @media (max-width: 768px) {
     font-size: 0.875rem; 
   }

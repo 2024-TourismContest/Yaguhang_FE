@@ -46,7 +46,7 @@ const ContentWrapper = styled.div<{ variant?: string }>`
     `
       scroll-snap-align: start; 
       max-width: 230px; 
-      width: 100%; /* 너비를 100%로 설정하여 grid에서 유연하게 배치되도록 함 */
+      width: 100%;
       min-width: calc((100% - 10px * (4 - 1)) / 4); 
 
       @media (max-width: 1100px) {

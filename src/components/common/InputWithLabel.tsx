@@ -3,6 +3,7 @@ import styled from "styled-components";
 import eyeIcon from "../../assets/icons/eye.png";
 import eyeOffIcon from "../../assets/icons/eye-off.png";
 import checkIcon from "../../assets/icons/check.png";
+
 interface InputWithLabelProps {
   label?: string;
   value: string;
@@ -11,31 +12,36 @@ interface InputWithLabelProps {
   error?: string;
   showPassword?: boolean;
   onTogglePassword?: () => void;
-  showConfirmPassword?: boolean;
   passwordMatch?: boolean;
-  readOnly?: boolean; // 읽기 전용 여부
+  readOnly?: boolean;
   width?: string;
   placeholder?: string;
+  labelWidth?: string;
 }
+
 const InputWithLabel: React.FC<InputWithLabelProps> = ({
   label,
   value,
   onChange,
   type = "text",
   error,
+  showPassword = false,
   onTogglePassword,
   passwordMatch,
   readOnly = false,
   width,
   placeholder,
+  labelWidth,
 }) => {
   return (
     <InputWrapper>
       <InputContainer hasError={!!error} width={width}>
-        <Label>{label}</Label>
+        <LabelContainer>
+          <Label labelWidth={labelWidth}>{label}</Label>
+        </LabelContainer>
         <InputWrapperWithIcon>
           <Input
-            type={type}
+            type={showPassword ? "text" : type} // Change input type based on showPassword
             value={value}
             onChange={onChange}
             hasError={!!error}
@@ -43,10 +49,10 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
             placeholder={placeholder}
           />
           {passwordMatch && <CheckIcon src={checkIcon} alt="check" />}
-          {onTogglePassword && type === "password" && !readOnly && (
+          {onTogglePassword && !readOnly && (
             <TogglePasswordButton type="button" onClick={onTogglePassword}>
               <img
-                src={type === "password" ? eyeIcon : eyeOffIcon}
+                src={showPassword ? eyeOffIcon : eyeIcon} // Change icon based on showPassword
                 alt="toggle password visibility"
               />
             </TogglePasswordButton>
@@ -57,6 +63,9 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
     </InputWrapper>
   );
 };
+
+export default InputWithLabel;
+
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -67,14 +76,13 @@ const InputContainer = styled.div<{ hasError: boolean; width?: string }>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 1.2em 1.5em;
+  padding: 0.8rem 1.5em;
   border-radius: 0.933rem;
   background-color: #000;
   border: 0.3px solid ${({ hasError }) => (hasError ? "#ff4d4f" : "#fff")};
   gap: 10px;
   position: relative;
-
-  width: ${({ width }) => width || ""}; // customWidth를 사용하여 너비 조정
+  width: ${({ width }) => width || ""};
 `;
 
 const InputWrapperWithIcon = styled.div`
@@ -85,32 +93,33 @@ const InputWrapperWithIcon = styled.div`
   flex: 1;
 `;
 
-const Label = styled.div`
+const Label = styled.div<{ labelWidth?: string }>`
+  padding: 0.4rem 0;
   color: white;
   font-size: 1rem;
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  width: 110px; /* 라벨 너비 고정 */
+  width: ${({ labelWidth }) => labelWidth || "110px"};
   @media (max-width: 768px) {
     font-size: 0.8rem;
-  width: 90px; 
-
+    width: 90px;
   }
 `;
 
 const Input = styled.input<{ hasError: boolean }>`
-  flex: 1;
   border: none;
-  background-color: #000;
+  background-color: transparent;
   color: white;
   font-family: "Inter", sans-serif;
   font-size: 1rem;
   font-weight: 400;
   text-align: left;
-  padding-right: 2rem; /* 아이콘의 너비만큼 여백 추가 */
+  padding-right: 2rem;
+  height: 100%;
+  width: 100%;
   &:focus {
     outline: none;
-  }s
+  }
   &[readonly] {
     cursor: not-allowed;
   }
@@ -150,4 +159,9 @@ const ErrorText = styled.span`
   display: block;
 `;
 
-export default InputWithLabel;
+const LabelContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 100%;
+  border-right: 1px solid #cfcfcf;
+`;

@@ -160,7 +160,7 @@ const StyledSlider = styled(Slider)`
 
 const HeroContainer = styled.div<{ heroImage: string }>`
   width: 100vw;
-  height: calc(100vw * 9 / 16);
+  height: 97vh;
   position: relative;
   background: url(${(props) => props.heroImage}) no-repeat center center;
   background-size: cover;
@@ -171,6 +171,7 @@ const HeroContainer = styled.div<{ heroImage: string }>`
     right: 0;
     bottom: 0;
     left: 0;
+    height: 100vh;
     background: linear-gradient(
       to bottom,
       rgba(0, 0, 0, 0) 0%,
@@ -179,17 +180,11 @@ const HeroContainer = styled.div<{ heroImage: string }>`
       rgba(0, 0, 0, 0.9) 90%,
       rgb(0, 0, 0) 100%
     );
-    background-size: 100% 100%;
-    background-position: top;
   }
 
   & > * {
     position: relative;
     z-index: 2;
-  }
-
-  @media (max-width: 768px) {
-    height: 97vh;
   }
 `;
 const RowWrapper = styled.div`
