@@ -116,7 +116,7 @@ const StadiumPage = () => {
       <Hr />
       <TitleSection
         title="야구장 근처 숙소 추천!"
-        h4Text={`내 체력도 충전해야 ${selectedTeam} 응원도 열심히 하지!`}
+        h4Text={`${selectedTeam} 팬들을 위해 체력 충전할 숙소를 추천합니다!`}
         imageSrc={place}
         onMoreClick={() => handleMoreClick("숙소")}
       />
@@ -131,7 +131,7 @@ const StadiumPage = () => {
       <Hr />
       <TitleSection
         title="야구장 근처 맛집 추천!"
-        h4Text="구장 근처 맛집은 뭐가 있을까?"
+        h4Text={`어떤 맛집이 ${selectedTeam} 팬들을 기다리고 있을까요?`}
         imageSrc={restaurant}
         onMoreClick={() => handleMoreClick("맛집")}
       />
@@ -146,7 +146,7 @@ const StadiumPage = () => {
       <Hr />
       <TitleSection
         title="야구보고 쇼핑하고!"
-        h4Text="가볍게 왔다가 양손 가득 무겁게 돌아가기!"
+        h4Text={`경기 전후 ${selectedTeam} 팬들을 위한 완벽한 쇼핑 리스트!`}
         imageSrc={shopping}
         onMoreClick={() => handleMoreClick("쇼핑")}
       />
@@ -161,7 +161,7 @@ const StadiumPage = () => {
       <Hr />
       <TitleSection
         title="야구만큼 재밌는 문화생활!"
-        h4Text="야구보러온김에 문화체험도 하고갈래?"
+        h4Text={`야구와 함께하는 특별한 문화 체험, ${selectedTeam} 팬들을 위해 준비했어요!`}
         imageSrc={festival}
         onMoreClick={() => handleMoreClick("문화")}
       />
