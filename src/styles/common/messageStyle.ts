@@ -6,7 +6,7 @@ export const MoreLink = styled(Link)`
   text-align: center;
   color: #fff;
   font-size: 1rem;
-  margin-top: 1rem;
+  margin-top: 20px;
   text-decoration: none;
 `;
 

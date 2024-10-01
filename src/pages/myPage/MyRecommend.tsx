@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { mypage } from "../../apis/mypage";
 import { DeleteRecommendData } from "../../apis/recommend";
 import SectionTitle from "../../components/common/SectionTitle";
-import { Item } from "../../components/recommend/Item";
+import { Item } from "../../components/recommend/RecommendItem";
 import { NoDataMessage } from "../../styles/common/messageStyle";
 import { RecommendPreviewDto } from "../../types/myPageType";
 
