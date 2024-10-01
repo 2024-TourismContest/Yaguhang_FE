@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import SectionTitle from "../../components/common/SectionTitle";
 import InputWithLabel from "../../components/common/InputWithLabel";
@@ -6,6 +6,7 @@ import { mypage } from "../../apis/mypage";
 import useModalStore from "../../store/modalStore";
 import { auth } from "../../apis/auth";
 import useAuthStore from "../../store/authStore";
+import { validatePassword, validateConfirmPassword, validateNickname } from "../../utils/validate";
 
 const MyAccount = () => {
   const [nickname, setNickname] = useState("");
@@ -61,30 +62,25 @@ const MyAccount = () => {
 
   const validateInfo = () => {
     const newErrors = { ...errors };
-    newErrors.nickname =
-      nickname && nickname.trim() === "" ? "이름을 입력해 주세요." : "";
+    newErrors.nickname = validateNickname(nickname);
 
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === "");
   };
 
-  const validatePassword = () => {
+  const validatePasswordFields = () => {
     const newErrors = { ...errors };
     newErrors.currentPassword =
       currentPassword.trim() === "" ? "현재 비밀번호를 입력해 주세요." : "";
-
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    newErrors.newPassword = !passwordRegex.test(newPassword)
-      ? "비밀번호는 최소 8자 이상, 문자와 숫자를 포함해야 합니다."
-      : "";
-
-    newErrors.confirmPassword =
-      newPassword !== confirmPassword ? "비밀번호가 일치하지 않습니다." : "";
+    newErrors.newPassword = validatePassword(newPassword);
+    newErrors.confirmPassword = validateConfirmPassword(
+      newPassword,
+      confirmPassword
+    );
 
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === "");
   };
-
   const handleSaveInfo = async () => {
     if (validateInfo()) {
       try {
@@ -109,7 +105,7 @@ const MyAccount = () => {
       return;
     }
 
-    if (validatePassword()) {
+    if (validatePasswordFields()) {
       try {
         const isPasswordValid = await mypage.CheckPassword(currentPassword);
         if (!Boolean(isPasswordValid)) {
@@ -153,7 +149,7 @@ const MyAccount = () => {
             `,
       onConfirm: async () => {
         try {
-          await auth.deleteAccount(); // 회원 탈퇴 API 호출
+          await auth.deleteAccount();
           closeModal();
           logout();
         } catch (error) {
@@ -178,23 +174,6 @@ const MyAccount = () => {
     setNewPassword("");
     setConfirmPassword("");
   };
-
-  const renderPasswordInput = (
-    label: string | undefined,
-    value: string,
-    error: string | undefined,
-    field: "current" | "new" | "confirm",
-    onChange: ((e: React.ChangeEvent<HTMLInputElement>) => void) | undefined
-  ) => (
-    <InputWithLabel
-      label={label}
-      type={showPassword[field] ? "text" : "password"}
-      value={value}
-      onChange={onChange}
-      error={error}
-      onTogglePassword={() => handleTogglePasswordVisibility(field)}
-    />
-  );
 
   return (
     <MainPageContainer>

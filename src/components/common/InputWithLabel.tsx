@@ -3,6 +3,7 @@ import styled from "styled-components";
 import eyeIcon from "../../assets/icons/eye.png";
 import eyeOffIcon from "../../assets/icons/eye-off.png";
 import checkIcon from "../../assets/icons/check.png";
+
 interface InputWithLabelProps {
   label?: string;
   value: string;
@@ -11,33 +12,36 @@ interface InputWithLabelProps {
   error?: string;
   showPassword?: boolean;
   onTogglePassword?: () => void;
-  showConfirmPassword?: boolean;
   passwordMatch?: boolean;
   readOnly?: boolean;
   width?: string;
   placeholder?: string;
+  labelWidth?: string;
 }
+
 const InputWithLabel: React.FC<InputWithLabelProps> = ({
   label,
   value,
   onChange,
   type = "text",
   error,
+  showPassword = false,
   onTogglePassword,
   passwordMatch,
   readOnly = false,
   width,
   placeholder,
+  labelWidth,
 }) => {
   return (
     <InputWrapper>
       <InputContainer hasError={!!error} width={width}>
         <LabelContainer>
-          <Label>{label}</Label>
+          <Label labelWidth={labelWidth}>{label}</Label>
         </LabelContainer>
         <InputWrapperWithIcon>
           <Input
-            type={type}
+            type={showPassword ? "text" : type} // Change input type based on showPassword
             value={value}
             onChange={onChange}
             hasError={!!error}
@@ -48,7 +52,7 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
           {onTogglePassword && !readOnly && (
             <TogglePasswordButton type="button" onClick={onTogglePassword}>
               <img
-                src={type === "password" ? eyeIcon : eyeOffIcon}
+                src={showPassword ? eyeOffIcon : eyeIcon} // Change icon based on showPassword
                 alt="toggle password visibility"
               />
             </TogglePasswordButton>
@@ -59,6 +63,7 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
     </InputWrapper>
   );
 };
+
 export default InputWithLabel;
 
 const InputWrapper = styled.div`
@@ -77,7 +82,6 @@ const InputContainer = styled.div<{ hasError: boolean; width?: string }>`
   border: 0.3px solid ${({ hasError }) => (hasError ? "#ff4d4f" : "#fff")};
   gap: 10px;
   position: relative;
-
   width: ${({ width }) => width || ""};
 `;
 
@@ -89,13 +93,13 @@ const InputWrapperWithIcon = styled.div`
   flex: 1;
 `;
 
-const Label = styled.div`
+const Label = styled.div<{ labelWidth?: string }>`
   padding: 0.4rem 0;
   color: white;
   font-size: 1rem;
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  width: 110px;
+  width: ${({ labelWidth }) => labelWidth || "110px"};
   @media (max-width: 768px) {
     font-size: 0.8rem;
     width: 90px;
@@ -104,7 +108,7 @@ const Label = styled.div`
 
 const Input = styled.input<{ hasError: boolean }>`
   border: none;
-  background-color: #000;
+  background-color: transparent;
   color: white;
   font-family: "Inter", sans-serif;
   font-size: 1rem;
@@ -116,7 +120,7 @@ const Input = styled.input<{ hasError: boolean }>`
   &:focus {
     outline: none;
   }
-  s &[readonly] {
+  &[readonly] {
     cursor: not-allowed;
   }
   @media (max-width: 768px) {

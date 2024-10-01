@@ -4,6 +4,11 @@ import { useNavigate } from "react-router-dom";
 import InputWithLabel from "../common/InputWithLabel";
 import { auth } from "../../apis/auth";
 import ProfileImg from "../common/ProfileComponent";
+import {
+  validateEmail,
+  validatePassword,
+  validateConfirmPassword,
+} from "../../utils/validate";
 
 type Validators = {
   [key: string]: (value: string) => string;
@@ -26,21 +31,11 @@ const SignupForm = () => {
 
   const navigate = useNavigate();
 
-  const validateEmail = (email: string): boolean =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-  const validatePassword = (password: string): boolean =>
-    /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
-
   const validators: Validators = {
-    email: (value: string) =>
-      validateEmail(value) ? "" : "유효한 이메일 주소를 입력해주세요.",
-    password: (value: string) =>
-      validatePassword(value)
-        ? ""
-        : "비밀번호는 영문과 숫자를 포함하여 8자 이상이어야 합니다.",
+    email: validateEmail,
+    password: validatePassword,
     confirmPassword: (value: string) =>
-      value === password ? "" : "비밀번호가 일치하지 않습니다.",
+      validateConfirmPassword(password, value),
   };
 
   const validateField = (field: keyof Validators, value: string): string => {
@@ -52,6 +47,7 @@ const SignupForm = () => {
       email: validateField("email", email),
       password: validateField("password", password),
       confirmPassword: validateField("confirmPassword", confirmPassword),
+      nickname: validateField("nickname", nickname), 
     };
 
     setErrors(newErrors);
