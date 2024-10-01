@@ -10,7 +10,7 @@ import title2 from "../../assets/images/recommendBanner(mobile).svg";
 import title from "../../assets/images/recommendBanner(Web).svg";
 import { Button } from "../../components/button/Button";
 import { Filter } from "../../components/recommend/filter";
-import { Item } from "../../components/recommend/Item";
+import { Item } from "../../components/recommend/RecommendItem";
 import { Option } from "../../components/recommend/Option";
 import Pagenation from "../../components/recommend/pagenation";
 import { SearchInput } from "../../components/recommend/SearchInput";
