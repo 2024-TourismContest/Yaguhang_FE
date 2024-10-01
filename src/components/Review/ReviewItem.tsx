@@ -31,7 +31,7 @@ interface ReviewItemProps {
 }
 
 const ReviewItem: React.FC<ReviewItemProps> = ({
-  isMine = false, 
+  isMine = false,
   reviewId,
   spotId,
   spotName,
@@ -158,8 +158,20 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
           </Likes>
           {!isMine && (
             <Actions>
-              <TextBtn onClick={() => {/* 수정 로직 */}}>수정</TextBtn>
-              <TextBtn onClick={() => {/* 삭제 로직 */}}>삭제</TextBtn>
+              <TextBtn
+                onClick={() => {
+                  /* 수정 로직 */
+                }}
+              >
+                수정
+              </TextBtn>
+              <TextBtn
+                onClick={() => {
+                  /* 삭제 로직 */
+                }}
+              >
+                삭제
+              </TextBtn>
             </Actions>
           )}
         </Div>
@@ -183,6 +195,7 @@ const ReviewItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  cursor: pointer;
 
   @media (max-width: 768px) {
     padding: 1rem;
@@ -354,7 +367,6 @@ const Likes = styled.button`
   border: none;
   cursor: pointer;
   color: #e74c3c;
-
 
   svg {
     margin-right: 0.25rem;

@@ -50,6 +50,7 @@ const Img = styled.img`
   height: 100%;
   object-fit: cover;
   transition: 0.2s ease-in-out;
+  cursor: pointer;
 `;
 
 const Gradient = styled.div`

@@ -47,11 +47,13 @@ const SimilarSpots: React.FC<SimilarSpotsProps> = ({
                   handleBookmarkToggle(spot.contentId);
                 }}
               >
-                {bookmarkStates[spot.contentId] ? (
-                  <BsBookmarkFill style={{ fontSize: "1.5rem" }} />
-                ) : (
-                  <BsBookmarkStar style={{ fontSize: "1.5rem" }} />
-                )}
+                <BookmarkIconContainer>
+                  {bookmarkStates[spot.contentId] ? (
+                    <BsBookmarkFill style={{ fontSize: "1.5rem" }} />
+                  ) : (
+                    <BsBookmarkStar style={{ fontSize: "1.5rem" }} />
+                  )}
+                </BookmarkIconContainer>
               </BookmarkIcon>
               {spot.imageUrl ? (
                 <SpotImage src={spot.imageUrl} alt={spot.name} />
@@ -73,15 +75,16 @@ const SimilarSpots: React.FC<SimilarSpotsProps> = ({
 
 export default SimilarSpots;
 
-const shake = keyframes`
-  0% { transform: translateX(0); }
-  10% { transform: translateX(-2px); }
-  20% { transform: translateX(2px); }
-  30% { transform: translateX(-2px); }
-  40% { transform: translateX(2px); }
-  50% { transform: translateX(-2px); }
-  60% { transform: translateX(2px); }
-  100% { transform: translateX(0); }
+const pop = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 `;
 
 const Section = styled.div`
@@ -216,10 +219,6 @@ const BookmarkIcon = styled.div`
   color: #fff;
   transition: color 0.3s ease;
 
-  &:hover {
-    animation: ${shake} 0.6s ease-in-out;
-  }
-
   @media (max-width: 1024px) {
     width: 35px;
     height: 45px;
@@ -247,7 +246,11 @@ const BookmarkIcon = styled.div`
     }
   }
 `;
-
+const BookmarkIconContainer = styled.div`
+  &:hover {
+    animation: ${pop} 0.3s ease-in-out;
+  }
+`;
 const SpotImage = styled.img`
   width: 100%;
   height: 100%;

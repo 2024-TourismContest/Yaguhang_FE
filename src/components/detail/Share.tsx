@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FiShare } from "react-icons/fi";
 import { FaRegCopy, FaCheck } from "react-icons/fa";
 import { IoIosCloseCircleOutline } from "react-icons/io";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 interface ShareProps {
   name?: string;
@@ -140,7 +140,7 @@ const Share: React.FC<ShareProps> = ({ name, description, address }) => {
             </SNSIcons>
             <LinkContainer>
               <ShareLink>{window.location.href}</ShareLink>
-              <CopyButton onClick={handleCopy}>
+              <CopyButton onClick={handleCopy} isCopied={isCopied}>
                 {isCopied ? <FaCheck /> : <FaRegCopy />}
               </CopyButton>
             </LinkContainer>
@@ -153,13 +153,29 @@ const Share: React.FC<ShareProps> = ({ name, description, address }) => {
 
 export default Share;
 
+const pop = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
+
 const ShareIcon = styled.div`
   font-size: 1.5rem;
   cursor: pointer;
   transition: color 0.3s ease;
 
   &:hover {
-    color: #ccc;
+    animation: ${pop} 0.3s ease-in-out;
+  }
+
+  &:active {
+    transform: scale(1.2);
   }
 `;
 const Overlay = styled.div`
@@ -177,7 +193,8 @@ const SharePopup = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 300px;
+  width: 70%;
+  max-width: 280px;
   padding: 1rem;
   background-color: #2e2e2e;
   border-radius: 20px;
@@ -209,10 +226,24 @@ const SNSIcons = styled.div`
 `;
 
 const SNSButton = styled.button`
-  width: 60px;
-  height: 60px;
-  background-color: #2e2e2e;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
   cursor: pointer;
+  transition: transform 0.3s ease; // 트랜지션 추가
+
+  &:hover {
+    transform: scale(1.2); // 호버 시 커졌다가 원래 크기로 돌아오는 애니메이션
+  }
+
+  img {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 const LinkContainer = styled.div`
@@ -234,11 +265,13 @@ const ShareLink = styled.p`
   overflow: hidden;
   text-overflow: hidden;
 `;
-const CopyButton = styled.button`
+
+const CopyButton = styled.button<{ isCopied: boolean }>`
   border: 1px solid #dfdfdf;
   padding: 0.3rem 1rem;
   color: white;
   cursor: pointer;
-  background-color: #2e2e2e;
+  background-color: ${({ isCopied }) => (isCopied ? "#000" : "#2e2e2e")};
   font-size: 20px;
+  transition: background-color 0.3s ease;
 `;

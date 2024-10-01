@@ -39,6 +39,7 @@ export const Container = styled.div`
   width: 100vw;
   display: flex;
   font-family: Arial;
+  margin-bottom: 25vh;
 `;
 export const ItemList = styled.div`
   width: 65vw;
@@ -63,6 +64,7 @@ export const Img = styled.img`
   object-fit: fill;
   border-radius: 1.0417vw;
   background-color: #ffffff;
+  cursor: pointer;
 `;
 export const H3 = styled.h3`
   color: white;

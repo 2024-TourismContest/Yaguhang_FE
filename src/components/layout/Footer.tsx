@@ -5,16 +5,16 @@ import { Link } from "react-router-dom";
 export default function Footer() {
   return (
     <FooterContainer>
-        <LogoImg src={logo} alt="야구행 로고" />
-        <TextWrapper>
-          <FooterText>야구행</FooterText>
-          <HorizontalInfo>
-            <FaqLink to="/faq">자주 묻는 질문(FAQ)</FaqLink>
-            <Separator>|</Separator>
-            <FooterText>email: gd10080008@pukyong.ac.kr</FooterText>
-          </HorizontalInfo>
-          <FooterText>© 2024 yaguhang. All rights reserved.</FooterText>
-        </TextWrapper>
+      <LogoImg src={logo} alt="야구행 로고" />
+      <TextWrapper>
+        <FooterText>야구행</FooterText>
+        <HorizontalInfo>
+          <FaqLink to="/faq">자주 묻는 질문(FAQ)</FaqLink>
+          <Separator>|</Separator>
+          <FooterText>email: yaguhang@gmail.com</FooterText>
+        </HorizontalInfo>
+        <FooterText>© 2024 yaguhang. All rights reserved.</FooterText>
+      </TextWrapper>
     </FooterContainer>
   );
 }
