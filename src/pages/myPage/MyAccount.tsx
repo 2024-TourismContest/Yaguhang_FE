@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import styled from "styled-components";
 import SectionTitle from "../../components/common/SectionTitle";
 import InputWithLabel from "../../components/common/InputWithLabel";
@@ -13,7 +13,11 @@ const MyAccount = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
   const [errors, setErrors] = useState({
     nickname: "",
     currentPassword: "",
@@ -26,9 +30,9 @@ const MyAccount = () => {
   });
 
   const logout = useAuthStore((state) => state.logout);
-
   const { openModal, closeModal } = useModalStore();
   const [, setIsLoading] = useState(true);
+
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -47,6 +51,13 @@ const MyAccount = () => {
     };
     fetchProfileData();
   }, []);
+
+  const handleTogglePasswordVisibility = (field: keyof typeof showPassword) => {
+    setShowPassword((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
 
   const validateInfo = () => {
     const newErrors = { ...errors };
@@ -168,9 +179,22 @@ const MyAccount = () => {
     setConfirmPassword("");
   };
 
-  const handleTogglePassword = () => {
-    setShowPassword((prev) => !prev);
-  };
+  const renderPasswordInput = (
+    label: string | undefined,
+    value: string,
+    error: string | undefined,
+    field: "current" | "new" | "confirm",
+    onChange: ((e: React.ChangeEvent<HTMLInputElement>) => void) | undefined
+  ) => (
+    <InputWithLabel
+      label={label}
+      type={showPassword[field] ? "text" : "password"}
+      value={value}
+      onChange={onChange}
+      error={error}
+      onTogglePassword={() => handleTogglePasswordVisibility(field)}
+    />
+  );
 
   return (
     <MainPageContainer>
@@ -200,28 +224,28 @@ const MyAccount = () => {
       <Section>
         <InputWithLabel
           label="Current PW"
-          type={showPassword ? "text" : "password"}
+          type={showPassword.current ? "text" : "password"}
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
           error={errors.currentPassword}
-          onTogglePassword={handleTogglePassword}
+          onTogglePassword={() => handleTogglePasswordVisibility("current")}
         />
         <InputWithLabel
           label="New PW"
-          type={showPassword ? "text" : "password"}
+          type={showPassword.new ? "text" : "password"}
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
           error={errors.newPassword}
-          onTogglePassword={handleTogglePassword}
+          onTogglePassword={() => handleTogglePasswordVisibility("new")}
         />
         <InputWithLabel
           label="Confirm PW"
-          type={showPassword ? "text" : "password"}
+          type={showPassword.confirm ? "text" : "password"}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           error={errors.confirmPassword}
-          passwordMatch={newPassword === confirmPassword}
-          onTogglePassword={handleTogglePassword}
+          onTogglePassword={() => handleTogglePasswordVisibility("confirm")}
+          passwordMatch={confirmPassword === newPassword}
         />
       </Section>
       <ButtonContainer>
@@ -280,7 +304,6 @@ const CancelButton = styled.button`
   transition: 0.2s;
 
   &:hover {
-    /* font-weight: 700; */
     background-color: #222222;
   }
 

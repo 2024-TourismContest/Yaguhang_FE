@@ -13,7 +13,7 @@ interface InputWithLabelProps {
   onTogglePassword?: () => void;
   showConfirmPassword?: boolean;
   passwordMatch?: boolean;
-  readOnly?: boolean; // 읽기 전용 여부
+  readOnly?: boolean;
   width?: string;
   placeholder?: string;
 }
@@ -45,7 +45,7 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
             placeholder={placeholder}
           />
           {passwordMatch && <CheckIcon src={checkIcon} alt="check" />}
-          {onTogglePassword && type === "password" && !readOnly && (
+          {onTogglePassword && !readOnly && (
             <TogglePasswordButton type="button" onClick={onTogglePassword}>
               <img
                 src={type === "password" ? eyeIcon : eyeOffIcon}
@@ -78,7 +78,7 @@ const InputContainer = styled.div<{ hasError: boolean; width?: string }>`
   gap: 10px;
   position: relative;
 
-  width: ${({ width }) => width || ""}; // customWidth를 사용하여 너비 조정
+  width: ${({ width }) => width || ""};
 `;
 
 const InputWrapperWithIcon = styled.div`
@@ -112,6 +112,7 @@ const Input = styled.input<{ hasError: boolean }>`
   text-align: left;
   padding-right: 2rem;
   height: 100%;
+  width: 100%;
   &:focus {
     outline: none;
   }
