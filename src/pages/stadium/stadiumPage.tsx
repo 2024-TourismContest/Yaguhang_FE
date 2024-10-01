@@ -3,18 +3,18 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { stadium } from "../../apis/stadium";
 import { teamToStadiumMap } from "../../assets/data/data";
-import shopping from "../../assets/icons/Shopping_white.svg";
 import ball from "../../assets/icons/baseball.svg";
 import festival from "../../assets/icons/festival_white.svg";
 import place from "../../assets/icons/place_whtie.svg";
 import restaurant from "../../assets/icons/restaurant_white.svg";
+import shopping from "../../assets/icons/Shopping_white.svg";
+import title2 from "../../assets/images/stadiumBanner(mobile).svg";
+import title from "../../assets/images/stadiumBanner(Web).svg";
 import ImageSlider from "../../components/home/imageSlider";
 import Category from "../../components/stadium/Category";
 import useTeamStore from "../../store/TeamStore";
 import { teamLogos } from "../../types/teamLogos";
 import { TitleSection } from "./TitleSection";
-import title2 from "../../assets/images/stadiumBanner(mobile).svg";
-import title from "../../assets/images/stadiumBanner(Web).svg";
 
 type Category = "숙소" | "맛집" | "쇼핑" | "문화";
 
@@ -71,7 +71,7 @@ const StadiumPage = () => {
       category,
       pagesize: 4,
       pageindex: 0,
-      radius: 3,
+      radius: 10,
     };
 
     try {
