@@ -150,12 +150,6 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         onChange={(e) => setNewReview(e.target.value)}
       />
 
-      <ReviewTag
-        tags={currentTags} // 선택된 카테고리에 맞는 태그 데이터를 전달
-        selectedTags={selectedTags}
-        setSelectedTags={setSelectedTags}
-      />
-
       {images.length > 0 && (
         <ImagePreviewContainer>
           {images.map((image, index) => (
@@ -171,6 +165,11 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
           ))}
         </ImagePreviewContainer>
       )}
+      <ReviewTag
+        tags={currentTags} // 선택된 카테고리에 맞는 태그 데이터를 전달
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
+      />
       <SubmitContainer>
         <CameraIcon onClick={handleCameraClick}>
           <IoImageOutline />
