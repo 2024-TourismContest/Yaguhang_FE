@@ -219,6 +219,6 @@ const Container = styled.div`
   gap: 1.5vw;
 
   &:last-child {
-    margin-bottom: 25vh;
+    margin-bottom: 10vh;
   }
 `;
