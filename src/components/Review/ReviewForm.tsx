@@ -109,6 +109,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
     }
 
     try {
+      // 태그를 content에 포함
+      const tag =
+        selectedTags.length > 0 ? `\n\n[태그]: ${selectedTags.join(", ")}` : "";
       // 이미지 업로드
       const uploadedImageUrls = await Promise.all(
         images.map((image) => uploadToAws(image))
@@ -116,7 +119,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 
       const reviewData = {
         star: rating,
-        content: newReview,
+        content: newReview + tag,
         stadiumId,
         images: uploadedImageUrls,
         tags: selectedTags,

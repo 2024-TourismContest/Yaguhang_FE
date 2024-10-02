@@ -50,7 +50,8 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [currentReviewImages, setCurrentReviewImages] = useState<string[]>([]); // 모달에서 사용할 이미지 배열
+  const [currentReviewImages, setCurrentReviewImages] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   useEffect(() => {
     const loadReviews = async () => {
@@ -64,6 +65,22 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
 
     loadReviews();
   }, [contentId, sort]);
+
+  const parseReviewContent = (content: string) => {
+    const tagIndex = content.indexOf("[태그]:");
+
+    if (tagIndex === -1) {
+      return { text: content, tags: [] };
+    }
+
+    const text = content.slice(0, tagIndex).trim();
+    const tags = content
+      .slice(tagIndex + "[태그]:".length)
+      .trim()
+      .split(", ");
+
+    return { text, tags };
+  };
 
   const handleDelete = async (reviewId: number) => {
     const confirmDelete = window.confirm("이 리뷰를 삭제하시겠습니까?");
@@ -113,8 +130,12 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
 
       const updatedImages = [...editedImages, ...uploadedImageUrls];
 
+      // 태그를 content에 포함
+      const tag =
+        selectedTags.length > 0 ? `\n\n[태그]: ${selectedTags.join(", ")}` : "";
+
       await updateReview(reviewId, {
-        content: editedContent,
+        content: editedContent + tag,
         star: editedStar,
         images: updatedImages,
       });
@@ -126,7 +147,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
           review.reviewId === reviewId
             ? {
                 ...review,
-                content: editedContent,
+                content: editedContent + tag,
                 star: editedStar,
                 images: updatedImages,
               }
@@ -214,153 +235,172 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
           아직 리뷰가 없어요. 방문하고 리뷰를 남겨보세요!
         </EmptyMessage>
       ) : (
-        reviews.map((review) => (
-          <ReviewItem key={review.reviewId}>
-            <ReviewHeader>
-              <UserInfo>
-                <div style={{ position: "relative" }}>
-                  <UserImage src={review.user.image} alt="user" />
-                  <FanTeamImage src={review.user.fanTeam} alt="fanTeam" />
-                </div>
-                <UserDetails>
-                  <Nickname>{review.user.nickname}</Nickname>
-                  <ReviewDate>
-                    {new Date(review.createdAt).toLocaleString()}
-                  </ReviewDate>
-                </UserDetails>
-              </UserInfo>
-              <Rating>{renderStars(review.star)}</Rating>
-            </ReviewHeader>
+        reviews.map((review) => {
+          const { text, tags } = parseReviewContent(review.content);
 
-            {editingReviewId === review.reviewId ? (
-              <EditContainer>
-                {/* 수정 모드 처리 */}
-                <StarContainer>
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <Star
-                      key={i}
-                      filled={i < Math.floor(editedStar)}
-                      onClick={(e) => handleStarClick(e, i)}>
-                      {i < Math.floor(editedStar) ? (
-                        <FaStar color="#FFD700" />
-                      ) : i === Math.floor(editedStar) &&
-                        editedStar % 1 !== 0 ? (
-                        <FaStarHalfAlt color="#FFD700" />
-                      ) : (
-                        <FaRegStar color="#FFD700" />
-                      )}
-                    </Star>
-                  ))}
-                </StarContainer>
-                <EditInput
-                  value={editedContent}
-                  onChange={(e) => setEditedContent(e.target.value)}
-                />
+          return (
+            <ReviewItem key={review.reviewId}>
+              <ReviewHeader>
+                <UserInfo>
+                  <div style={{ position: "relative" }}>
+                    <UserImage src={review.user.image} alt="user" />
+                    <FanTeamImage src={review.user.fanTeam} alt="fanTeam" />
+                  </div>
+                  <UserDetails>
+                    <Nickname>{review.user.nickname}</Nickname>
+                    <ReviewDate>
+                      {new Date(review.createdAt).toLocaleString()}
+                    </ReviewDate>
+                  </UserDetails>
+                </UserInfo>
+                <Rating>{renderStars(review.star)}</Rating>
+              </ReviewHeader>
 
-                <ImagesWrapper>
-                  <ExistingImagesContainer>
-                    {editedImages.map((image, index) => (
-                      <ImageWrapper key={index}>
+              {editingReviewId === review.reviewId ? (
+                <EditContainer>
+                  {/* 수정 모드 처리 */}
+                  <StarContainer>
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <Star
+                        key={i}
+                        filled={i < Math.floor(editedStar)}
+                        onClick={(e) => handleStarClick(e, i)}
+                      >
+                        {i < Math.floor(editedStar) ? (
+                          <FaStar color="#FFD700" />
+                        ) : i === Math.floor(editedStar) &&
+                          editedStar % 1 !== 0 ? (
+                          <FaStarHalfAlt color="#FFD700" />
+                        ) : (
+                          <FaRegStar color="#FFD700" />
+                        )}
+                      </Star>
+                    ))}
+                  </StarContainer>
+                  <EditInput
+                    value={editedContent}
+                    onChange={(e) => setEditedContent(e.target.value)}
+                  />
+
+                  <ImagesWrapper>
+                    <ExistingImagesContainer>
+                      {editedImages.map((image, index) => (
+                        <ImageWrapper key={index}>
+                          <ReviewImage
+                            src={image}
+                            alt={`Review Image ${index + 1}`}
+                            onClick={() => openModal(review, index)}
+                          />
+                          <DeleteImageButton
+                            onClick={() => handleImageDelete(index, false)}
+                          >
+                            삭제
+                          </DeleteImageButton>
+                        </ImageWrapper>
+                      ))}
+                    </ExistingImagesContainer>
+
+                    {/* 새 이미지 추가 */}
+                    <NewImagesContainer>
+                      {newImages.map((image, index) => (
+                        <ImageWrapper key={index}>
+                          <ReviewImage
+                            src={URL.createObjectURL(image)}
+                            alt={`New Image ${index}`}
+                          />
+                          <DeleteImageButton
+                            onClick={() => handleImageDelete(index, true)}
+                          >
+                            삭제
+                          </DeleteImageButton>
+                        </ImageWrapper>
+                      ))}
+                      <AddImageButton
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <IoImageOutline /> {/* 이미지 추가 버튼 */}
+                      </AddImageButton>
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        ref={fileInputRef}
+                        style={{ display: "none" }}
+                        onChange={handleImageUpload}
+                      />
+                    </NewImagesContainer>
+                  </ImagesWrapper>
+
+                  <ButtonContainer>
+                    <SaveButton onClick={() => handleEditSave(review.reviewId)}>
+                      저장
+                    </SaveButton>
+                    <CancelButton onClick={handleCancelEdit}>
+                      수정 취소
+                    </CancelButton>
+                  </ButtonContainer>
+                </EditContainer>
+              ) : (
+                <>
+                  <Content>{text}</Content>
+
+                  {tags.length > 0 && (
+                    <TagContainer>
+                      {tags.map((tag, index) => (
+                        <Tag key={index}>{tag}</Tag>
+                      ))}
+                    </TagContainer>
+                  )}
+
+                  {review.images.length > 0 && (
+                    <ImagesContainer>
+                      {review.images.slice(0, 4).map((image, index) => (
                         <ReviewImage
+                          key={index}
                           src={image}
                           alt={`Review Image ${index + 1}`}
                           onClick={() => openModal(review, index)}
                         />
-                        <DeleteImageButton
-                          onClick={() => handleImageDelete(index, false)}>
-                          삭제
-                        </DeleteImageButton>
-                      </ImageWrapper>
-                    ))}
-                  </ExistingImagesContainer>
+                      ))}
+                      {review.images.length > 4 && (
+                        <DarkenedImageContainer
+                          onClick={() => openModal(review, 4)}
+                        >
+                          <DarkenedImage
+                            src={review.images[4]}
+                            alt={`Review Image 5`}
+                          />
+                          <ImageCount>+ {review.images.length - 4}</ImageCount>
+                        </DarkenedImageContainer>
+                      )}
+                    </ImagesContainer>
+                  )}
+                </>
+              )}
 
-                  {/* 새 이미지 추가 */}
-                  <NewImagesContainer>
-                    {newImages.map((image, index) => (
-                      <ImageWrapper key={index}>
-                        <ReviewImage
-                          src={URL.createObjectURL(image)}
-                          alt={`New Image ${index}`}
-                        />
-                        <DeleteImageButton
-                          onClick={() => handleImageDelete(index, true)}>
-                          삭제
-                        </DeleteImageButton>
-                      </ImageWrapper>
-                    ))}
-                    <AddImageButton
-                      onClick={() => fileInputRef.current?.click()}>
-                      <IoImageOutline /> {/* 이미지 추가 버튼 */}
-                    </AddImageButton>
-                    <input
-                      type="file"
-                      multiple
-                      accept="image/*"
-                      ref={fileInputRef}
-                      style={{ display: "none" }}
-                      onChange={handleImageUpload}
-                    />
-                  </NewImagesContainer>
-                </ImagesWrapper>
-
-                <ButtonContainer>
-                  <SaveButton onClick={() => handleEditSave(review.reviewId)}>
-                    저장
-                  </SaveButton>
-                  <CancelButton onClick={handleCancelEdit}>
-                    수정 취소
-                  </CancelButton>
-                </ButtonContainer>
-              </EditContainer>
-            ) : (
-              <>
-                <Content>{review.content}</Content>
-
-                {review.images.length > 0 && (
-                  <ImagesContainer>
-                    {review.images.slice(0, 4).map((image, index) => (
-                      <ReviewImage
-                        key={index}
-                        src={image}
-                        alt={`Review Image ${index + 1}`}
-                        onClick={() => openModal(review, index)}
-                      />
-                    ))}
-                    {review.images.length > 4 && (
-                      <DarkenedImageContainer
-                        onClick={() => openModal(review, 4)}>
-                        <DarkenedImage
-                          src={review.images[4]}
-                          alt={`Review Image 5`}
-                        />
-                        <ImageCount>+ {review.images.length - 4}</ImageCount>
-                      </DarkenedImageContainer>
-                    )}
-                  </ImagesContainer>
-                )}
-              </>
-            )}
-
-            {!isEditing && (
-              <ReviewFooter>
-                <Likes onClick={() => handleLikeToggle(review.reviewId)}>
-                  {review.isLiked ? <FaHeart /> : <FaRegHeart />}{" "}
-                  {review.likeCount}명에게 도움이 된 후기
-                </Likes>
-                {review.isMine && (
-                  <Actions>
-                    <EditButton onClick={() => handleEditClick(review)}>
-                      수정
-                    </EditButton>
-                    <DeleteButton onClick={() => handleDelete(review.reviewId)}>
-                      삭제
-                    </DeleteButton>
-                  </Actions>
-                )}
-              </ReviewFooter>
-            )}
-          </ReviewItem>
-        ))
+              {!isEditing && (
+                <ReviewFooter>
+                  <Likes onClick={() => handleLikeToggle(review.reviewId)}>
+                    {review.isLiked ? <FaHeart /> : <FaRegHeart />}{" "}
+                    {review.likeCount}명에게 도움이 된 후기
+                  </Likes>
+                  {review.isMine && (
+                    <Actions>
+                      <EditButton onClick={() => handleEditClick(review)}>
+                        수정
+                      </EditButton>
+                      <DeleteButton
+                        onClick={() => handleDelete(review.reviewId)}
+                      >
+                        삭제
+                      </DeleteButton>
+                    </Actions>
+                  )}
+                </ReviewFooter>
+              )}
+            </ReviewItem>
+          );
+        })
       )}
 
       {/* 이미지 모달 컴포넌트 */}
@@ -377,14 +417,41 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
 
 export default ReviewList;
 
+const TagContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+`;
+
+const Tag = styled.span`
+  background-color: #444444;
+  color: #ccc;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  display: inline-block;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #555555;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+  }
+`;
+
 const DarkenedImageContainer = styled.div`
   position: relative;
   width: 130px;
   height: 140px;
   cursor: pointer;
-  display: flex; /* 추가 */
-  align-items: center; /* 추가 */
-  justify-content: center; /* 추가 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     opacity: 0.8;
