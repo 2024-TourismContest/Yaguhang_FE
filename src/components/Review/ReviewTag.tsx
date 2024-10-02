@@ -7,17 +7,20 @@ interface ReviewTagProps {
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
+const MAX_TAG_SELECTION = 5;
+
 const ReviewTag: React.FC<ReviewTagProps> = ({
   tags,
   selectedTags,
   setSelectedTags,
 }) => {
   const handleTagClick = (tag: string) => {
+    // 선택된 태그가 5개 이상일 때 추가 선택을 막음
     if (selectedTags.includes(tag)) {
       setSelectedTags(
         selectedTags.filter((selectedTag) => selectedTag !== tag)
       );
-    } else {
+    } else if (selectedTags.length < MAX_TAG_SELECTION) {
       setSelectedTags([...selectedTags, tag]);
     }
   };
@@ -29,6 +32,10 @@ const ReviewTag: React.FC<ReviewTagProps> = ({
           key={index}
           isSelected={selectedTags.includes(tag)}
           onClick={() => handleTagClick(tag)}
+          disabled={
+            selectedTags.length >= MAX_TAG_SELECTION &&
+            !selectedTags.includes(tag)
+          }
         >
           {tag}
         </Tag>
@@ -89,12 +96,13 @@ const TagContainer = styled.div`
   }
 `;
 
-const Tag = styled.div<{ isSelected: boolean }>`
+const Tag = styled.div<{ isSelected: boolean; disabled: boolean }>`
   padding: 0.6rem 1rem;
   border-radius: 25px;
   background-color: ${({ isSelected }) => (isSelected ? "#3a8dff" : "#444444")};
   color: ${({ isSelected }) => (isSelected ? "#fff" : "#ccc")};
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
   font-size: 0.9rem;
   font-weight: bold;
   transition: all 0.3s ease;
@@ -102,9 +110,9 @@ const Tag = styled.div<{ isSelected: boolean }>`
     isSelected ? "0 4px 6px rgba(0, 0, 0, 0.2)" : "none"};
 
   &:hover {
-    background-color: ${({ isSelected }) =>
-      isSelected ? "#327ae6" : "#555555"};
-    transform: scale(1.05);
+    background-color: ${({ isSelected, disabled }) =>
+      disabled ? "#444444" : isSelected ? "#327ae6" : "#555555"};
+    transform: ${({ disabled }) => (disabled ? "none" : "scale(1.05)")};
   }
 
   @media (max-width: 768px) {
