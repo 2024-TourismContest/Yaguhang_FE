@@ -4,18 +4,9 @@ const getAuthToken = () => localStorage.getItem("token") || "";
 
 // 리뷰 리스트 가져오는 함수
 export const fetchReviews = async (contentId: number, sort: string = "new") => {
-  const token = getAuthToken();
-  if (!token) {
-    throw new Error("로그인이 필요합니다.");
-  }
-
   try {
     const response = await defaultApi.get(`/api/review/${contentId}`, {
       params: { sort }, // 정렬 기준
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
     });
     return response.data.reviews; // 리뷰 리스트 반환
   } catch (error) {

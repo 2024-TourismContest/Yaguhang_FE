@@ -27,13 +27,12 @@ export const RecommendLikeButton = ({
     if (!token) {
       openModal({
         title: "로그인 필요",
-        content: "로그인이 필요한 페이지입니다.",
+        content: "좋아요 기능은 로그인이 필요합니다.",
         onConfirm: () => {
           navigate("/login");
           closeModal();
         },
         onCancel: () => {
-          navigate("/");
           closeModal();
         },
         showCancel: true,

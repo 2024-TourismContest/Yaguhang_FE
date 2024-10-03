@@ -19,6 +19,8 @@ import ImageModal from "../../components/common/ImageModal";
 import { tagData } from "./tagData";
 import { useLocation } from "react-router-dom";
 import ReviewTag from "./ReviewTag";
+import useModalStore from "../../store/modalStore";
+import { useNavigate } from "react-router-dom";
 
 interface ReviewListProps {
   contentId: number;
@@ -63,6 +65,10 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     location.pathname.split("/")[2]
   ) as keyof typeof tagData;
   const availableTags = tagData[urlCategory] || []; // 해당 카테고리의 태그 목록을 가져옴
+
+  const { openModal, closeModal } = useModalStore();
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const loadReviews = async () => {
@@ -189,6 +195,21 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
   };
 
   const handleLikeToggle = async (reviewId: number) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      openModal({
+        title: "로그인 필요",
+        content: "좋아요 기능은 로그인이 필요합니다.",
+        onConfirm: () => {
+          navigate("/login");
+          closeModal();
+        },
+        onCancel: () => {
+          closeModal();
+        },
+        showCancel: true,
+      });
+    }
     const updatedLikeCount = await toggleLikeOnServer(reviewId);
 
     if (updatedLikeCount !== null) {
@@ -206,7 +227,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     }
   };
 
-  const openModal = (review: ReviewData, index: number) => {
+  const openImgModal = (review: ReviewData, index: number) => {
     setCurrentReviewImages(review.images); // 클릭한 리뷰의 이미지 배열 설정
     setCurrentImageIndex(index); // 클릭한 이미지 인덱스 설정
     setIsModalOpen(true);
@@ -224,7 +245,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     );
   };
 
-  const closeModal = () => setIsModalOpen(false);
+  const closeImgModal = () => setIsModalOpen(false);
 
   const handleStarClick = (e: MouseEvent, index: number) => {
     const starElement = e.currentTarget.getBoundingClientRect();
@@ -396,55 +417,110 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                           key={index}
                           src={image}
                           alt={`Review Image ${index + 1}`}
-                          onClick={() => openModal(review, index)}
+                          onClick={() => openImgModal(review, index)}
                         />
-                      ))}
-                      {review.images.length > 4 && (
-                        <DarkenedImageContainer
-                          onClick={() => openModal(review, 4)}
-                        >
-                          <DarkenedImage
-                            src={review.images[4]}
-                            alt={`Review Image 5`}
-                          />
-                          <ImageCount>+ {review.images.length - 4}</ImageCount>
-                        </DarkenedImageContainer>
-                      )}
-                    </ImagesContainer>
-                  )}
-                </>
-              )}
+                        <DeleteImageButton
+                          onClick={() => handleImageDelete(index, false)}>
+                          삭제
+                        </DeleteImageButton>
+                      </ImageWrapper>
+                    ))}
+                  </ExistingImagesContainer>
 
-              {!isEditing && (
-                <ReviewFooter>
-                  <Likes onClick={() => handleLikeToggle(review.reviewId)}>
-                    {review.isLiked ? <FaHeart /> : <FaRegHeart />}{" "}
-                    {review.likeCount}명에게 도움이 된 후기
-                  </Likes>
-                  {review.isMine && (
-                    <Actions>
-                      <EditButton onClick={() => handleEditClick(review)}>
-                        수정
-                      </EditButton>
-                      <DeleteButton
-                        onClick={() => handleDelete(review.reviewId)}
-                      >
-                        삭제
-                      </DeleteButton>
-                    </Actions>
-                  )}
-                </ReviewFooter>
-              )}
-            </ReviewItem>
-          );
-        })
+                  {/* 새 이미지 추가 */}
+                  <NewImagesContainer>
+                    {newImages.map((image, index) => (
+                      <ImageWrapper key={index}>
+                        <ReviewImage
+                          src={URL.createObjectURL(image)}
+                          alt={`New Image ${index}`}
+                        />
+                        <DeleteImageButton
+                          onClick={() => handleImageDelete(index, true)}>
+                          삭제
+                        </DeleteImageButton>
+                      </ImageWrapper>
+                    ))}
+                    <AddImageButton
+                      onClick={() => fileInputRef.current?.click()}>
+                      <IoImageOutline /> {/* 이미지 추가 버튼 */}
+                    </AddImageButton>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      ref={fileInputRef}
+                      style={{ display: "none" }}
+                      onChange={handleImageUpload}
+                    />
+                  </NewImagesContainer>
+                </ImagesWrapper>
+
+                <ButtonContainer>
+                  <SaveButton onClick={() => handleEditSave(review.reviewId)}>
+                    저장
+                  </SaveButton>
+                  <CancelButton onClick={handleCancelEdit}>
+                    수정 취소
+                  </CancelButton>
+                </ButtonContainer>
+              </EditContainer>
+            ) : (
+              <>
+                <Content>{review.content}</Content>
+
+                {review.images.length > 0 && (
+                  <ImagesContainer>
+                    {review.images.slice(0, 4).map((image, index) => (
+                      <ReviewImage
+                        key={index}
+                        src={image}
+                        alt={`Review Image ${index + 1}`}
+                        onClick={() => openImgModal(review, index)}
+                      />
+                    ))}
+                    {review.images.length > 4 && (
+                      <DarkenedImageContainer
+                        onClick={() => openImgModal(review, 4)}>
+                        <DarkenedImage
+                          src={review.images[4]}
+                          alt={`Review Image 5`}
+                        />
+                        <ImageCount>+ {review.images.length - 4}</ImageCount>
+                      </DarkenedImageContainer>
+                    )}
+                  </ImagesContainer>
+                )}
+              </>
+            )}
+
+            {!isEditing && (
+              <ReviewFooter>
+                <Likes onClick={() => handleLikeToggle(review.reviewId)}>
+                  {review.isLiked ? <FaHeart /> : <FaRegHeart />}{" "}
+                  {review.likeCount}명에게 도움이 된 후기
+                </Likes>
+                {review.isMine && (
+                  <Actions>
+                    <EditButton onClick={() => handleEditClick(review)}>
+                      수정
+                    </EditButton>
+                    <DeleteButton onClick={() => handleDelete(review.reviewId)}>
+                      삭제
+                    </DeleteButton>
+                  </Actions>
+                )}
+              </ReviewFooter>
+            )}
+          </ReviewItem>
+        ))
       )}
 
       {/* 이미지 모달 컴포넌트 */}
       <ImageModal
         isOpen={isModalOpen}
         image={currentReviewImages[currentImageIndex]} // 현재 이미지
-        onClose={closeModal}
+        onClose={closeImgModal}
         onNext={nextImage}
         onPrev={prevImage}
       />
