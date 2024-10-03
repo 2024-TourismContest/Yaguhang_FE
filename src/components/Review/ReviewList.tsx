@@ -122,7 +122,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     setEditedContent(parsedContent.text);
     setEditedStar(review.star);
     setEditedImages(review.images);
-    setSelectedTags(parsedContent.tags); // 태그는 별도로 설정
+    setSelectedTags(parsedContent.tags);
     setIsEditing(true);
   };
 
@@ -152,13 +152,18 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
       );
 
       const updatedImages = [...editedImages, ...uploadedImageUrls];
-
+      // 기존 content에서 태그 부분을 제거한 후 다시 태그를 붙임
+      const tagIndex = editedContent.indexOf("[태그]:");
+      const contentWithoutTags =
+        tagIndex !== -1
+          ? editedContent.slice(0, tagIndex).trim()
+          : editedContent;
       // 태그를 content에 포함
       const tag =
         selectedTags.length > 0 ? `\n\n[태그]: ${selectedTags.join(", ")}` : "";
-
+      const updatedContent = contentWithoutTags + tag; // 기존 태그를 제거한 후 새 태그를 다시 추가
       await updateReview(reviewId, {
-        content: editedContent + tag,
+        content: updatedContent,
         star: editedStar,
         images: updatedImages,
       });
@@ -170,7 +175,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
           review.reviewId === reviewId
             ? {
                 ...review,
-                content: editedContent + tag,
+                content: updatedContent,
                 star: editedStar,
                 images: updatedImages,
               }
