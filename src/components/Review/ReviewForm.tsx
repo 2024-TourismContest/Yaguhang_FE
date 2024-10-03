@@ -31,8 +31,6 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
     location.pathname.split("/")[2]
   ) as keyof typeof tagData;
 
-  console.log("URL Category:", urlCategory);
-
   useEffect(() => {
     // 텍스트 변경 시마다 textarea 높이 자동 조절
     if (textareaRef.current) {

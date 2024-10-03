@@ -16,6 +16,10 @@ import {
   uploadToAws,
 } from "../../apis/review";
 import ImageModal from "../../components/common/ImageModal";
+import { tagData } from "./tagData";
+import { useLocation } from "react-router-dom";
+import ReviewTag from "./ReviewTag";
+
 interface ReviewListProps {
   contentId: number;
   sort: string;
@@ -52,6 +56,13 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [currentReviewImages, setCurrentReviewImages] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const location = useLocation(); // URL에서 카테고리 추출
+
+  // URL에서 카테고리를 추출하고 해당 카테고리의 태그를 가져옴
+  const urlCategory = decodeURIComponent(
+    location.pathname.split("/")[2]
+  ) as keyof typeof tagData;
+  const availableTags = tagData[urlCategory] || []; // 해당 카테고리의 태그 목록을 가져옴
 
   useEffect(() => {
     const loadReviews = async () => {
@@ -82,6 +93,14 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
     return { text, tags };
   };
 
+  // const handleTagClick = (tag: string) => {
+  //   if (selectedTags.includes(tag)) {
+  //     setSelectedTags(selectedTags.filter((t) => t !== tag));
+  //   } else {
+  //     setSelectedTags([...selectedTags, tag]);
+  //   }
+  // };
+
   const handleDelete = async (reviewId: number) => {
     const confirmDelete = window.confirm("이 리뷰를 삭제하시겠습니까?");
     if (!confirmDelete) return;
@@ -96,10 +115,14 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
   };
 
   const handleEditClick = (review: ReviewData) => {
+    // parseReviewContent 함수를 사용하여 본문과 태그를 분리
+    const parsedContent = parseReviewContent(review.content);
+
     setEditingReviewId(review.reviewId);
-    setEditedContent(review.content);
+    setEditedContent(parsedContent.text);
     setEditedStar(review.star);
     setEditedImages(review.images);
+    setSelectedTags(parsedContent.tags); // 태그는 별도로 설정
     setIsEditing(true);
   };
 
@@ -181,7 +204,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
   const openModal = (review: ReviewData, index: number) => {
     setCurrentReviewImages(review.images); // 클릭한 리뷰의 이미지 배열 설정
     setCurrentImageIndex(index); // 클릭한 이미지 인덱스 설정
-    setIsModalOpen(true); // 모달 열기
+    setIsModalOpen(true);
   };
 
   const prevImage = () => {
@@ -277,10 +300,19 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                       </Star>
                     ))}
                   </StarContainer>
+
                   <EditInput
                     value={editedContent}
                     onChange={(e) => setEditedContent(e.target.value)}
                   />
+                  {/* 수정 중일 때 태그를 선택할 수 있도록 처리 */}
+                  <TagEditorContainer>
+                    <ReviewTag
+                      tags={availableTags}
+                      selectedTags={selectedTags}
+                      setSelectedTags={setSelectedTags}
+                    />
+                  </TagEditorContainer>
 
                   <ImagesWrapper>
                     <ExistingImagesContainer>
@@ -422,6 +454,10 @@ const TagContainer = styled.div`
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 10px;
+`;
+
+const TagEditorContainer = styled.div`
+  margin-top: 1rem;
 `;
 
 const Tag = styled.span`
