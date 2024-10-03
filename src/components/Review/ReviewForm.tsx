@@ -3,7 +3,10 @@ import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { IoImageOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
 import styled from "styled-components";
-import { postReview, uploadToAws } from "../../apis/review"; // api에서 uploadToAws 가져오기
+import { postReview, uploadToAws } from "../../apis/review";
+import { tagData } from "./tagData";
+import ReviewTag from "./ReviewTag";
+import { useLocation } from "react-router-dom";
 
 interface ReviewFormProps {
   contentId: number;
@@ -19,8 +22,14 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   const [newReview, setNewReview] = useState("");
   const [rating, setRating] = useState(0);
   const [images, setImages] = useState<File[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조
-  const textareaRef = useRef<HTMLTextAreaElement>(null); // textarea 참조
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const location = useLocation(); // URL에서 카테고리 추출
+  const urlCategory = decodeURIComponent(
+    location.pathname.split("/")[2]
+  ) as keyof typeof tagData;
 
   useEffect(() => {
     // 텍스트 변경 시마다 textarea 높이 자동 조절
@@ -71,7 +80,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
           <div
             key={i}
             style={{ display: "inline-block" }}
-            onClick={(e) => handleStarClick(e, i)}>
+            onClick={(e) => handleStarClick(e, i)}
+          >
             {i < fullStars ? (
               <FaStar />
             ) : (
@@ -97,6 +107,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
     }
 
     try {
+      // 태그를 content에 포함
+      const tag =
+        selectedTags.length > 0 ? `\n\n[태그]: ${selectedTags.join(", ")}` : "";
       // 이미지 업로드
       const uploadedImageUrls = await Promise.all(
         images.map((image) => uploadToAws(image))
@@ -104,9 +117,10 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 
       const reviewData = {
         star: rating,
-        content: newReview,
+        content: newReview + tag,
         stadiumId,
         images: uploadedImageUrls,
+        tags: selectedTags,
       };
 
       // 리뷰 작성
@@ -116,12 +130,16 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       setNewReview("");
       setRating(0);
       setImages([]);
+      setSelectedTags([]);
       onSubmitSuccess();
     } catch (error) {
       toast.error("이미지파일 용량이 너무 큽니다!");
       console.error("리뷰 작성 오류:", error);
     }
   };
+
+  // URL에서 추출한 카테고리를 기준으로 태그 데이터 결정
+  const currentTags = tagData[urlCategory] || [];
 
   return (
     <ReviewInputContainer>
@@ -148,6 +166,11 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
           ))}
         </ImagePreviewContainer>
       )}
+      <ReviewTag
+        tags={currentTags} // 선택된 카테고리에 맞는 태그 데이터를 전달
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
+      />
       <SubmitContainer>
         <CameraIcon onClick={handleCameraClick}>
           <IoImageOutline />
