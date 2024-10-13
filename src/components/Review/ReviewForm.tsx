@@ -4,6 +4,8 @@ import { IoImageOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import { postReview, uploadToAws } from "../../apis/review"; // api에서 uploadToAws 가져오기
+import useModalStore from "../../store/modalStore";
+import { useNavigate } from "react-router-dom";
 
 interface ReviewFormProps {
   contentId: number;
@@ -21,6 +23,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   const [images, setImages] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조
   const textareaRef = useRef<HTMLTextAreaElement>(null); // textarea 참조
+  const { openModal, closeModal } = useModalStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // 텍스트 변경 시마다 textarea 높이 자동 조절
@@ -95,6 +99,21 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       toast.error("별점과 리뷰를 모두 입력해주세요!");
       return;
     }
+    const token = localStorage.getItem("token");
+    if (!token) {
+      openModal({
+        title: "로그인 필요",
+        content: "좋아요 기능은 로그인이 필요합니다.",
+        onConfirm: () => {
+          navigate("/login");
+          closeModal();
+        },
+        onCancel: () => {
+          closeModal();
+        },
+        showCancel: true,
+      });
+    }
 
     try {
       // 이미지 업로드
@@ -118,8 +137,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       setImages([]);
       onSubmitSuccess();
     } catch (error) {
-      toast.error("이미지파일 용량이 너무 큽니다!");
-      console.error("리뷰 작성 오류:", error);
+      // toast.error("이미지파일 용량이 너무 큽니다!");
+      console.log("리뷰 작성 오류:", error);
     }
   };
 
