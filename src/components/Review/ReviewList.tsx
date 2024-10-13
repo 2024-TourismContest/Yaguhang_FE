@@ -285,7 +285,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ contentId, sort }) => {
                         <ReviewImage
                           src={image}
                           alt={`Review Image ${index + 1}`}
-                          onClick={() => openModal(review, index)}
+                          onClick={() => openImgModal(review, index)}
                         />
                         <DeleteImageButton
                           onClick={() => handleImageDelete(index, false)}>
