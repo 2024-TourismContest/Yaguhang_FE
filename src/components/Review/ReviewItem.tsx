@@ -13,6 +13,22 @@ import {
   FaRegStar,
 } from "react-icons/fa";
 
+// 태그와 본문을 분리하는 함수
+const parseReviewContent = (content: string) => {
+  const tagIndex = content.indexOf("[태그]:");
+  if (tagIndex === -1) {
+    return { text: content, tags: [] };
+  }
+
+  const text = content.slice(0, tagIndex).trim();
+  const tags = content
+    .slice(tagIndex + "[태그]:".length)
+    .trim()
+    .split(", ");
+
+  return { text, tags };
+};
+
 interface ReviewItemProps {
   reviewId: number;
   spotId: number;
@@ -51,6 +67,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
+  const { text, tags } = parseReviewContent(content);
 
   const toggleLike = async () => {
     const newLikeStatus = !isLiked;
@@ -132,7 +149,14 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
         <Rating>
           {renderStars(star)} <span>({formattedRating})</span>
         </Rating>
-        <ReviewText>{content}</ReviewText>
+        <ReviewText>{text}</ReviewText>
+        {tags.length > 0 && (
+          <TagContainer>
+            {tags.map((tag, index) => (
+              <Tag key={index}>{tag}</Tag>
+            ))}
+          </TagContainer>
+        )}
         {image.length > 0 && (
           <ImagesContainer>
             {image.slice(0, 4).map((img, index) => (
@@ -385,4 +409,31 @@ const TextBtn = styled.button`
   border: none;
   color: #ffffff;
   cursor: pointer;
+`;
+
+const TagContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+`;
+
+const Tag = styled.span`
+  background-color: #444444;
+  color: #ccc;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  display: inline-block;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #555555;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+  }
 `;

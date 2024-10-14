@@ -63,12 +63,15 @@ const MoreButton = styled.button`
     }
   }
 
-  @media screen and (max-width: 600px) {
-    font-size: 1.05em;
-    padding: 5px 12px;
+  @media screen and (max-width: 500px) {
+    font-size: 0.8em;
+    padding: 3px 5px;
+    height: 30px;
+    width: 85px;
+    gap: 5px;
     svg {
       height: 20px;
-      width: 20px;
+      width: 30px;
     }
   }
 `;

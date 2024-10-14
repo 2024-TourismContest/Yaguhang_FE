@@ -349,6 +349,11 @@ const NoScheduleText = styled.p`
   font-size: 1.2rem;
   margin-top: 2rem;
   color: #fff;
+    text-align: center;
+  white-space: pre-line;
+  word-break: keep-all;
+  margin: 0 auto;
+
 
   @media (max-width: 1024px) {
     font-size: 1rem;
