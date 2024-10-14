@@ -130,13 +130,15 @@ const ChartContainer = styled.div`
 
 const WeatherImagesContainer = styled.div`
   display: flex;
-  width: 97%;
+  width: 94%;
   justify-content: space-between;
-  padding: 10px 30px;
+  padding: 10px 20px;
+  box-sizing: border-box;
 `;
 
 const WeatherImage = styled.img`
-min-width: 20px;
+  min-width: 20px;
+  max-width: 40px;
   height: auto; 
   object-fit: contain;
 `;
