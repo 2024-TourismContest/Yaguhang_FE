@@ -3,10 +3,12 @@ import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { IoImageOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
 import styled from "styled-components";
-import { postReview, uploadToAws } from "../../apis/review";
+import { postReview, uploadToAws } from "../../apis/review"; // api에서 uploadToAws 가져오기
+import useModalStore from "../../store/modalStore";
+import { useLocation, useNavigate } from "react-router-dom";
 import { tagData } from "./tagData";
 import ReviewTag from "./ReviewTag";
-import { useLocation } from "react-router-dom";
+
 
 interface ReviewFormProps {
   contentId: number;
@@ -22,10 +24,12 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   const [newReview, setNewReview] = useState("");
   const [rating, setRating] = useState(0);
   const [images, setImages] = useState<File[]>([]);
+  const { openModal, closeModal } = useModalStore();
+  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-
+  
   const location = useLocation(); // URL에서 카테고리 추출
   const urlCategory = decodeURIComponent(
     location.pathname.split("/")[2]
@@ -105,6 +109,21 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       toast.error("별점과 리뷰를 모두 입력해주세요!");
       return;
     }
+    const token = localStorage.getItem("token");
+    if (!token) {
+      openModal({
+        title: "로그인 필요",
+        content: "좋아요 기능은 로그인이 필요합니다.",
+        onConfirm: () => {
+          navigate("/login");
+          closeModal();
+        },
+        onCancel: () => {
+          closeModal();
+        },
+        showCancel: true,
+      });
+    }
 
     try {
       // 태그를 content에 포함
@@ -133,8 +152,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       setSelectedTags([]);
       onSubmitSuccess();
     } catch (error) {
-      toast.error("이미지파일 용량이 너무 큽니다!");
-      console.error("리뷰 작성 오류:", error);
+      // toast.error("이미지파일 용량이 너무 큽니다!");
+      console.log("리뷰 작성 오류:", error);
     }
   };
 

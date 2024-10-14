@@ -415,7 +415,7 @@ const TagContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 10px;
+  margin: 10px 0;
 `;
 
 const Tag = styled.span`
