@@ -35,7 +35,8 @@ const DetailGrid: React.FC<DetailGridProps> = ({
           <BookmarkIcon
             onClick={() =>
               detailData && handleBookmarkToggle(detailData.contentId)
-            }>
+            }
+          >
             {bookmarkStates[detailData?.contentId!] ? (
               <BsBookmarkStarFill style={{ fontSize: "2rem", color: "#fff" }} />
             ) : (
@@ -74,7 +75,8 @@ const DetailGrid: React.FC<DetailGridProps> = ({
                 <StyledLink
                   href={detailData.homepage}
                   target="_blank"
-                  rel="noopener noreferrer">
+                  rel="noopener noreferrer"
+                >
                   {getDisplayValue(detailData.homepage)}
                 </StyledLink>
               ) : (
@@ -247,11 +249,11 @@ const GridContainer = styled.div`
   padding-bottom: 3vh;
 
   @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
   }
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
   }
 
   @media (max-width: 480px) {
@@ -261,13 +263,15 @@ const GridContainer = styled.div`
 
 const Box = styled.div`
   width: 16rem;
-  height: 6rem;
+  // height: 6rem;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   color: #fff;
+  // word-wrap: break-word;
+  word-break: break-all; /* 단어가 길어도 깨지지 않게 처리 */
 
   h2 {
     font-size: 1.2rem;

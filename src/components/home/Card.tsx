@@ -151,9 +151,14 @@ const Card: React.FC = () => {
       }
 
       toast.success(
-        isScraped
-          ? "스크랩에 추가되었습니다. 경기 전날 이메일로 푸쉬알림을 보내드릴게요!"
-          : "스크랩에서 제거되었습니다."
+        isScraped ? (
+          <ToastMessage>
+            <p>스크랩에 추가되었습니다.</p>
+            <p>경기 전날 이메일 알림을 보내드려요!</p>
+          </ToastMessage>
+        ) : (
+          "스크랩에서 제거되었습니다."
+        )
       );
     } catch (error) {
       if (token) {
@@ -282,6 +287,11 @@ const Card: React.FC = () => {
 };
 
 export default Card;
+const ToastMessage = styled.div`
+  white-space: pre-line;
+  font-size: 1rem;
+  line-height: 1.5;
+`;
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
