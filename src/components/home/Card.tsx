@@ -287,6 +287,7 @@ const Card: React.FC = () => {
 };
 
 export default Card;
+
 const ToastMessage = styled.div`
   white-space: pre-line;
   font-size: 1rem;
