@@ -169,7 +169,7 @@ const HomePage = () => {
           {selectedGame?.id && (
             <>
               <TitleSection
-                title={`현재 ${selectedGame?.stadium || "구장"}의 날씨는?`}
+                title={`경기 당일 ${selectedGame?.stadium || "구장"}의 날씨는?`}
                 description="오늘은 비가 안와야 할텐데.."
               />
               <WeatherContainer>
