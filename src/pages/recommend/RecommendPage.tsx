@@ -10,9 +10,9 @@ import title2 from "../../assets/images/recommendBanner(mobile).svg";
 import title from "../../assets/images/recommendBanner(Web).svg";
 import { Button } from "../../components/button/Button";
 import { Filter } from "../../components/recommend/filter";
-import { Item } from "../../components/recommend/RecommendItem";
 import { Option } from "../../components/recommend/Option";
 import Pagenation from "../../components/recommend/pagenation";
+import { Item } from "../../components/recommend/RecommendItem";
 import { SearchInput } from "../../components/recommend/SearchInput";
 import useAuthStore from "../../store/authStore";
 import useModalStore from "../../store/modalStore";
@@ -192,7 +192,7 @@ const AppContainer = styled.div`
 
 const ItemWrapper = styled.div`
   width: 60vw;
-  @media (max-width: 400px) {
+  @media (max-width: 500px) {
     width: 80vw;
   }
 `;

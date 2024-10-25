@@ -47,8 +47,7 @@ export default function RecommendDetail({
           key={item.contentId}
           onClick={() =>
             onClickContent(item.category, item.contentId, stadiumId)
-          }
-        >
+          }>
           <Div>
             <Img
               src={item.imageUrl ? item.imageUrl : DefaultImg}
