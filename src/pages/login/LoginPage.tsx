@@ -1,13 +1,17 @@
-import LoginForm from "../../components/users/LoginForm";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom"; 
+import AutoLogin from "../../components/users/AutoLogin";
+import LoginForm from "../../components/users/LoginForm";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-
+  const [searchParams] = useSearchParams();
+  const autoLogin = searchParams.get("autoLogin");
   const onClickSignup = async () => {
-      navigate("/signup");
+    navigate("/signup");
   };
+  console.log("autoLogin 파라미터 값:", autoLogin);
+
   return (
     <PageContainer>
       <Title>
@@ -21,7 +25,7 @@ const LoginPage = () => {
           <SubmitBtn onClick={onClickSignup}>SIGN UP</SubmitBtn>
         </LeftContainer>
         <LineVertical />
-        <LoginForm />
+        {autoLogin ? <AutoLogin /> : <LoginForm />}
       </RowContainer>
     </PageContainer>
   );
@@ -65,7 +69,7 @@ const LineVertical = styled.div`
   @media (max-width: 768px) {
     width: 100%;
     height: 1px;
-    margin-bottom: 48px
+    margin-bottom: 48px;
   }
 `;
 
@@ -150,7 +154,6 @@ const SubmitBtn = styled.button`
   font-weight: 400;
   cursor: pointer;
   margin-top: auto;
-  white-space: nowrap; 
-
+  white-space: nowrap;
 `;
 export default LoginPage;
