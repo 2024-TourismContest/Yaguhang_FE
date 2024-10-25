@@ -97,7 +97,7 @@ const ProfileImg = styled.img`
   aspect-ratio: 1/1;
   border-radius: 50%;
   @media (max-width: 500px) {
-    height: 30px;
+    height: 50px;
   }
 `;
 
@@ -116,8 +116,8 @@ const Title = styled.ul`
     @media (max-width: 900px) {
       font-size: 1.3em;
     }
-    @media (max-width: 500px) {
-      margin-bottom: 3vh;
+    @media (max-width: 740px) {
+      margin-bottom: 4vh;
     }
   }
 `;
@@ -143,6 +143,7 @@ const Container = styled.div`
     padding: 10px 0;
     @media (max-width: 900px) {
       font-size: 1em;
+      line-height: 1.5;
     }
   }
 `;
