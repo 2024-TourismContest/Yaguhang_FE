@@ -46,23 +46,29 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
 };
 
 // 카테고리 버튼들을 묶는 스타일
-const CategoryButtons = styled.div<{ color?: string }>`
+const CategoryButtons = styled.section<{ color?: string }>`
   display: flex;
   gap: 5%;
   margin: 4vh auto;
-  width: clamp(44vw, 51vw, 51vw);
+  width: clamp(55px, 51vw, 51vw);
   justify-content: center;
   padding-left: 2vw;
   padding-right: 2vw;
   box-sizing: border-box;
   color: ${(props) => props.color || "#ffffff"};
+
+  @media (max-width: 500px) {
+    width: 80vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+  }
 `;
 
 // 각각의 카테고리 버튼 스타일
 const CategoryButton = styled.button<{ active: boolean; color?: string }>`
   position: relative;
   width: clamp(100px, 11vw, 24px);
-  padding: 10px 20px;
+  padding: 10px 10px;
   border: none;
   background-color: transparent;
   border-bottom: ${(props) =>

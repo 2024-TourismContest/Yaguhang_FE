@@ -72,7 +72,7 @@ const Map: React.FC<MapTestProps> = ({
   return (
     <>
       <MapWrapper>
-        <div id="map" style={{ width: "65vw", height: "35vw" }}></div>
+        <div id="map"></div>
         {visible && (
           <Button onClick={handleButtonClick}>현 위치에서 검색</Button>
         )}
@@ -88,6 +88,14 @@ const MapWrapper = styled.div`
   display: flex;
   justify-content: center;
   position: relative;
+  div {
+    width: 65vw;
+    height: 35vw;
+    @media (max-width: 600px) {
+      width: 90vw;
+      height: 70vw;
+    }
+  }
 `;
 const Button = styled.button`
   position: absolute;
