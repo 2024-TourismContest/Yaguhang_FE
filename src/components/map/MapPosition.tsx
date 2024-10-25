@@ -37,11 +37,13 @@ export const MapPosition = ({
   );
 };
 
-export const Container = styled.div`
+export const Container = styled.section`
   width: 100vw;
   display: flex;
   font-family: Arial;
   margin-bottom: 25vh;
+  align-items: center;
+  justify-content: center;
 `;
 export const ItemList = styled.div`
   width: 65vw;
@@ -51,6 +53,11 @@ export const ItemList = styled.div`
   justify-items: center;
   align-items: center;
   margin: 0 auto;
+  @media (max-width: 600px) {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
 `;
 export const ItemWrapper = styled.div`
   width: 18vw;
@@ -59,6 +66,10 @@ export const ItemWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  @media (max-width: 600px) {
+    width: 80vw;
+    height: 78vw;
+  }
 `;
 export const Img = styled.img`
   width: 100%;
