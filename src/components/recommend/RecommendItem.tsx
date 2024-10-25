@@ -68,8 +68,7 @@ export const Item = ({
                         marginTop: "8px",
                         color: "#ccc",
                         fontSize: "12px",
-                      }}
-                    >
+                      }}>
                       {item.createdAt}
                     </h5>
                   </DateWrapper>
@@ -113,8 +112,12 @@ const Title = styled.ul`
     margin-right: auto;
     align-content: center;
     margin-bottom: 10px;
+    line-height: 1.3;
     @media (max-width: 900px) {
       font-size: 1.3em;
+    }
+    @media (max-width: 500px) {
+      margin-bottom: 3vh;
     }
   }
 `;
