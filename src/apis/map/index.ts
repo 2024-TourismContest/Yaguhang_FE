@@ -23,7 +23,7 @@ export const getStadiumCoordinate = async (stadiumId: number) => {
     const response = await defaultApi.get(`/api/stadiums/stadiumMap`, {
       params: { stadiumId },
     });
-
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error scrapping schedule:", error);
