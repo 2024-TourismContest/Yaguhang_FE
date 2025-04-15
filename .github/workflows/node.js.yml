@@ -14,38 +14,33 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: develop
-          
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: '20' # Node.js 20.x 버전 사용
-
+          node-version: '20'
 
       - name: Install Yarn
         run: curl -o- -L https://yarnpkg.com/install.sh | bash
-          
+
       - name: Add Yarn to PATH
         run: echo "$HOME/.yarn/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: yarn install
 
-      - name: Remove old build files
-        run: rm -rf ./dist
-
       - name: Copy .env File
         run: cp /home/mschoi/Desktop/tourismContest/Yaguhang-FE/.env /home/mschoi/actions-runner-FE/_work/Yaguhang_FE/Yaguhang_FE
-        
+
       - name: Build project
         run: yarn build
 
-      - name: Stop existing PM2 process if running
+      - name: Replace old build with new build
         run: |
-          if pm2 list | grep -q 'tourismContest'; then pm2 stop tourismContest; fi
+          rm -rf /home/mschoi/Desktop/tourismContest/Yaguhang-FE/dist
+          cp -r ./dist /home/mschoi/Desktop/tourismContest/Yaguhang-FE/
 
-      - name: Copy build files
+      - name: Set proper permissions for Nginx
         run: |
-          cp -r ./dist /home/mschoi/Desktop/tourismContest/Yaguhang-FE
-
-      - name: Start server with PM2
-        run: pm2 start /home/mschoi/Desktop/tourismContest/Yaguhang-FE/server.js --name "tourismContest" --watch
+          sudo chmod -R o+r /home/mschoi/Desktop/tourismContest/Yaguhang-FE/dist
+          sudo find /home/mschoi/Desktop/tourismContest/Yaguhang-FE/dist -type d -exec chmod o+x {} \;
