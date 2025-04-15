@@ -74,9 +74,11 @@ const MapPage = () => {
 
   const navigate = useNavigate();
   const onClickContent = (contentId: number, stadiumId: number | string) => {
-    navigate(`/details/${category}/${contentId}?stadiumId=${stadiumId}`);
+    navigate(
+      `/details/${selectedCategory}/${contentId}?stadiumId=${stadiumId}`
+    );
     window.scrollTo(0, 0);
-  };
+  }; //
   return (
     <>
       <div style={{ width: "100vw", height: "14vh" }}></div>
