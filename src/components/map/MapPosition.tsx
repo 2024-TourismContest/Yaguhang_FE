@@ -7,6 +7,7 @@ export const MapPosition = ({
   onClickContent: (contentId: number, stadiumId: number) => void;
 }) => {
   const positions = usePositionsStore((state) => state.positions);
+  console.log(positions);
   return (
     <Container>
       <ItemList>
@@ -16,7 +17,8 @@ export const MapPosition = ({
             onClick={() => {
               // console.log("Position stadiumId:", position.stadiumId);
               onClickContent(position.contentId, position.stadiumId);
-            }}>
+            }}
+          >
             <Img
               src={
                 position.image
